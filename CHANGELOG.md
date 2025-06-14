@@ -53,6 +53,7 @@ Axon/
 ### v2.0.0 - Sistema de Formularios y Rediseño Completo (14 Jun 2025)
 
 #### 🎯 **INTEGRACIÓN DE SISTEMA DE FORMULARIOS**
+
 - ✅ **EmailJS Integration**: Sistema completo de envío de emails
 - ✅ **Formulario de Contacto**: Conectado a axonapp.info@gmail.com
 - ✅ **Modal de Cotización**: Formulario detallado para solicitudes de presupuesto
@@ -61,6 +62,7 @@ Axon/
 - ✅ **Modo Demo**: Sistema funcional para desarrollo y testing
 
 #### 🎨 **REDISEÑO COMPLETO DE SECCIONES**
+
 - ✅ **Sección Misión/Visión**: Rediseño profesional con gradientes y valores
 - ✅ **Sección Servicios**: Grid unificado con 6 servicios principales
 - ✅ **Modales de Servicios**: Información detallada con procesos y tecnologías
@@ -68,6 +70,7 @@ Axon/
 - ✅ **Diseño Responsive**: Optimizado para todos los dispositivos
 
 #### 🔧 **MEJORAS TÉCNICAS**
+
 - ✅ **Vite Configuration**: Configuración optimizada para GitHub Pages
 - ✅ **Logo Integration**: Logo profesional integrado en navbar y componentes
 - ✅ **Favicon**: Icon personalizado para el sitio web
@@ -75,6 +78,7 @@ Axon/
 - ✅ **Error Handling**: Manejo robusto de errores en formularios
 
 #### 📧 **INFORMACIÓN DE CONTACTO**
+
 - ✅ **Email Principal**: axonapp.info@gmail.com visible en múltiples secciones
 - ✅ **Footer Mejorado**: Información de contacto prominente
 - ✅ **Sección Contacto**: Actualizada con email correcto y promesas de servicio

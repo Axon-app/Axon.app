@@ -137,7 +137,8 @@ export const ContactForm = () => {
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsSubmitting(true);    try {
+    setIsSubmitting(true);
+    try {
       // Importación dinámica del servicio de email
       const { sendEmailDemo } = await import("../services/emailService");
 
@@ -145,10 +146,11 @@ export const ContactForm = () => {
 
       if (result.success) {
         setFormData({ name: "", email: "", message: "" });
-        
+
         // Crear modal personalizado de confirmación
-        const confirmationModal = document.createElement('div');
-        confirmationModal.className = 'fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm';
+        const confirmationModal = document.createElement("div");
+        confirmationModal.className =
+          "fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm";
         confirmationModal.innerHTML = `
           <div class="bg-gradient-to-br from-green-900 to-emerald-900 rounded-2xl p-8 max-w-md w-full border border-green-500/30 shadow-2xl">
             <div class="text-center">
@@ -1107,10 +1109,12 @@ export const QuoteRequestModal = ({ isOpen, onClose, serviceName }) => {
       // Importación dinámica del servicio de email
       const { sendEmailDemo } = await import("../services/emailService");
 
-      const result = await sendEmailDemo("quote", formData, serviceName);      if (result.success) {
+      const result = await sendEmailDemo("quote", formData, serviceName);
+      if (result.success) {
         // Crear modal personalizado de confirmación para cotización
-        const confirmationModal = document.createElement('div');
-        confirmationModal.className = 'fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm';
+        const confirmationModal = document.createElement("div");
+        confirmationModal.className =
+          "fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm";
         confirmationModal.innerHTML = `
           <div class="bg-gradient-to-br from-blue-900 to-cyan-900 rounded-2xl p-8 max-w-md w-full border border-blue-500/30 shadow-2xl">
             <div class="text-center">
@@ -1140,7 +1144,7 @@ export const QuoteRequestModal = ({ isOpen, onClose, serviceName }) => {
           </div>
         `;
         document.body.appendChild(confirmationModal);
-        
+
         onClose();
         setFormData({
           name: "",
@@ -1363,10 +1367,12 @@ export const ConsultationModal = ({ isOpen, onClose, serviceName }) => {
       // Importación dinámica del servicio de email
       const { sendEmailDemo } = await import("../services/emailService");
 
-      const result = await sendEmailDemo("consultation", formData, serviceName);      if (result.success) {
+      const result = await sendEmailDemo("consultation", formData, serviceName);
+      if (result.success) {
         // Crear modal personalizado de confirmación para consulta
-        const confirmationModal = document.createElement('div');
-        confirmationModal.className = 'fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm';
+        const confirmationModal = document.createElement("div");
+        confirmationModal.className =
+          "fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm";
         confirmationModal.innerHTML = `
           <div class="bg-gradient-to-br from-purple-900 to-pink-900 rounded-2xl p-8 max-w-md w-full border border-purple-500/30 shadow-2xl">
             <div class="text-center">
@@ -1396,7 +1402,7 @@ export const ConsultationModal = ({ isOpen, onClose, serviceName }) => {
           </div>
         `;
         document.body.appendChild(confirmationModal);
-        
+
         onClose();
         setFormData({
           name: "",

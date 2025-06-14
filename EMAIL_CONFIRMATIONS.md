@@ -1,6 +1,7 @@
 # 📧 Configuración de Emails de Confirmación - Axon.App
 
 ## 🎯 Objetivo
+
 Implementar un sistema de confirmación automática que envíe emails tanto a la empresa (axonapp.info@gmail.com) como al cliente para confirmar la recepción de su solicitud.
 
 ## 📋 Templates de Email para Clientes
@@ -96,11 +97,13 @@ Detalles de tu consulta:
 ### Características Implementadas:
 
 1. **Modales Personalizados por Tipo:**
+
    - 🟢 Verde para contacto general
-   - 🔵 Azul para cotizaciones 
+   - 🔵 Azul para cotizaciones
    - 🟣 Morado para consultas
 
 2. **Información Detallada:**
+
    - ✅ Confirmación de envío al equipo
    - ✅ Confirmación de email al cliente
    - ⏰ Tiempos de respuesta garantizados
@@ -117,38 +120,45 @@ Detalles de tu consulta:
 ### Para Activar Emails Reales:
 
 1. **Configurar EmailJS:**
+
    ```javascript
    // Cambiar en emailService.js
-   const EMAIL_SERVICE_ID = 'service_real_id';
-   const EMAIL_PUBLIC_KEY = 'real_public_key';
+   const EMAIL_SERVICE_ID = "service_real_id";
+   const EMAIL_PUBLIC_KEY = "real_public_key";
    ```
 
 2. **Templates en EmailJS:**
+
    - `template_contact_confirmation` - Para clientes (contacto)
    - `template_quote_confirmation` - Para clientes (cotización)
    - `template_consultation_confirmation` - Para clientes (consulta)
 
 3. **Modificar Funciones:**
+
    ```javascript
    // Cambiar de sendEmailDemo a funciones reales
-   const { sendContactEmail, sendClientConfirmation } = await import('../services/emailService');
-   
+   const { sendContactEmail, sendClientConfirmation } = await import(
+     "../services/emailService"
+   );
+
    // Enviar a empresa
    await sendContactEmail(formData);
-   
+
    // Enviar confirmación al cliente
-   await sendClientConfirmation(formData.email, 'contact');
+   await sendClientConfirmation(formData.email, "contact");
    ```
 
 ## 📊 Sistema de Logging
 
 ### En Modo Demo (Actual):
+
 ```javascript
 console.log(`📧 [DEMO] Email contact enviado a axonapp.info@gmail.com`);
 console.log(`📧 [DEMO] Email de confirmación enviado a cliente@email.com`);
 ```
 
 ### Variables de Template:
+
 - `{{client_name}}` - Nombre del cliente
 - `{{client_email}}` - Email del cliente
 - `{{service_name}}` - Servicio específico
@@ -160,12 +170,14 @@ console.log(`📧 [DEMO] Email de confirmación enviado a cliente@email.com`);
 ## 🎯 Beneficios del Sistema
 
 1. **Para el Cliente:**
+
    - Confirmación inmediata de recepción
    - Tranquilidad sobre tiempos de respuesta
    - Información clara del siguiente paso
    - Email de referencia para seguimiento
 
 2. **Para Axon.App:**
+
    - Profesionalización del proceso
    - Reducción de consultas de seguimiento
    - Mejor experiencia de usuario

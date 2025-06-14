@@ -32,10 +32,12 @@ export default defineConfig({
 ## 🔨 Solución Aplicada
 
 1. **Corregir vite.config.js**
+
    - Cambiar `base: "/"` por `base: "/Axon.app/"`
    - Esto es necesario porque GitHub Pages sirve el sitio desde `/[nombre-del-repo]/`
 
 2. **Verificar Build Local**
+
    - ✅ `npm run build` - Exitoso sin errores
    - ✅ `npm run preview` - Servidor local funcionando en http://localhost:4173/Axon.app/
 
@@ -80,6 +82,7 @@ npm run preview
 ## 📈 Estado Esperado
 
 Una vez que el despliegue se complete, el sitio debería:
+
 - ✅ Cargar completamente sin pantalla en blanco
 - ✅ Mostrar el logo y todas las imágenes
 - ✅ Funcionar todos los formularios

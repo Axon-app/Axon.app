@@ -24,22 +24,25 @@ src/
 ## 🧩 Componentes Principales
 
 ### `AxonLogo`
+
 - **Función**: Logo principal con gradiente y tipografía personalizada
 - **Props**: Ninguna
-- **Características**: 
+- **Características**:
   - Logo PNG + texto estilizado
   - Gradiente from-blue-400 to-cyan-400
   - Tipografías: Orbitron (Axon) + Rajdhani (.app)
 
 ### `AnimatedBackground`
+
 - **Función**: Fondo animado con efectos visuales
 - **Props**: Ninguna
-- **Características**: 
+- **Características**:
   - Círculos animados con blur y pulso
   - Colores: blue, purple, indigo
   - Posicionamiento absoluto
 
 ### `ServiceCard`
+
 - **Función**: Tarjeta de servicio con hover effects
 - **Props**:
   - `icon` (string): Emoji del servicio
@@ -53,6 +56,7 @@ src/
   - Botón "Más Información"
 
 ### `ServiceDetailModal`
+
 - **Función**: Modal detallado de información de servicios
 - **Props**:
   - `service` (object): Datos completos del servicio
@@ -66,9 +70,10 @@ src/
   - Scroll interno para contenido extenso
 
 ### `ContactForm`
+
 - **Función**: Formulario de contacto principal
 - **Estado**: Formulario controlado con useState
-- **Características**: 
+- **Características**:
   - Validación HTML5
   - Integración con emailService
   - Estados de carga (isSubmitting)
@@ -76,6 +81,7 @@ src/
   - Email de contacto directo visible
 
 ### `QuoteRequestModal`
+
 - **Función**: Modal para solicitudes de cotización
 - **Props**:
   - `isOpen` (boolean): Estado de visibilidad
@@ -90,6 +96,7 @@ src/
   - Contexto del servicio específico
 
 ### `ConsultationModal`
+
 - **Función**: Modal para agendar consultas
 - **Props**:
   - `isOpen` (boolean): Estado de visibilidad

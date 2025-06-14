@@ -13,6 +13,7 @@
 ## ✨ Características Principales
 
 ### 🎨 **Diseño y UX**
+
 - ✅ **Diseño Moderno y Profesional** - Interfaz elegante con gradientes y animaciones
 - ✅ **Totalmente Responsivo** - Optimizado para móviles, tablets y desktop
 - ✅ **Animaciones Suaves** - Transiciones y efectos visuales atractivos
@@ -20,6 +21,7 @@
 - ✅ **Favicon Personalizado** - Icono profesional del sitio
 
 ### 📧 **Sistema de Formularios**
+
 - ✅ **Formulario de Contacto** - Contacto directo desde el sitio
 - ✅ **Solicitud de Cotización** - Formulario detallado para presupuestos
 - ✅ **Agendar Consulta** - Sistema de agendamiento de citas
@@ -27,6 +29,7 @@
 - ✅ **Validación Completa** - Validación HTML5 y feedback visual
 
 ### � **Contenido Empresarial**
+
 - ✅ **Sección Misión y Visión** - Rediseñada con valores y objetivos
 - ✅ **6 Servicios Principales** - Desarrollo Web, Apps, AI, etc.
 - ✅ **Modales Detallados** - Información completa de cada servicio
@@ -34,6 +37,7 @@
 - ✅ **Información de Contacto** - Visible en múltiples secciones
 
 ### ⚡ **Rendimiento y Técnica**
+
 - ✅ **Alto Rendimiento** - Construido con Vite para máxima velocidad
 - ✅ **Arquitectura Modular** - Componentes React reutilizables
 - ✅ **Despliegue Automático** - CI/CD con GitHub Actions

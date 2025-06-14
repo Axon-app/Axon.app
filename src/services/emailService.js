@@ -135,14 +135,14 @@ export const sendEmailFallback = async (type, data, serviceName = "") => {
 export const sendEmailDemo = async (type, data, serviceName = "") => {
   return new Promise((resolve) => {
     setTimeout(() => {
-      const timestamp = new Date().toLocaleString('es-ES', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit'
+      const timestamp = new Date().toLocaleString("es-ES", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
       });
-      
+
       console.log(`📧 [DEMO] Email ${type} enviado a axonapp.info@gmail.com:`, {
         service: serviceName,
         data: data,
@@ -151,30 +151,34 @@ export const sendEmailDemo = async (type, data, serviceName = "") => {
 
       // Simular envío de confirmación al cliente
       console.log(`📧 [DEMO] Email de confirmación enviado a ${data.email}:`, {
-        type: 'confirmation',
+        type: "confirmation",
         clientEmail: data.email,
         timestamp: timestamp,
       });
-      
-      resolve({ 
-        success: true, 
+
+      resolve({
+        success: true,
         demo: true,
         confirmationSent: true,
-        timestamp: timestamp
+        timestamp: timestamp,
       });
     }, 1000);
   });
 };
 
 // Función para enviar email de confirmación al cliente
-export const sendClientConfirmation = async (clientEmail, type, serviceName = '') => {
+export const sendClientConfirmation = async (
+  clientEmail,
+  type,
+  serviceName = ""
+) => {
   try {
-    let subject = '';
-    let message = '';
-    
+    let subject = "";
+    let message = "";
+
     switch (type) {
-      case 'contact':
-        subject = '✅ Confirmación: Hemos recibido tu mensaje - Axon.App';
+      case "contact":
+        subject = "✅ Confirmación: Hemos recibido tu mensaje - Axon.App";
         message = `Hola,
 
 ¡Gracias por contactarnos! Hemos recibido tu mensaje y nos pondremos en contacto contigo dentro de las próximas 24 horas.
@@ -188,8 +192,8 @@ Si tienes alguna pregunta urgente, puedes contactarnos directamente en axonapp.i
 Saludos cordiales,
 El equipo de Axon.App`;
         break;
-        
-      case 'quote':
+
+      case "quote":
         subject = `✅ Confirmación: Solicitud de cotización recibida - ${serviceName}`;
         message = `Hola,
 
@@ -210,8 +214,8 @@ Si tienes información adicional que quieras compartir, responde directamente a 
 Saludos cordiales,
 El equipo de Axon.App`;
         break;
-        
-      case 'consultation':
+
+      case "consultation":
         subject = `✅ Confirmación: Solicitud de consulta recibida - ${serviceName}`;
         message = `Hola,
 
@@ -235,12 +239,12 @@ El equipo de Axon.App`;
     console.log(`📧 [DEMO] Confirmación al cliente (${clientEmail}):`, {
       subject,
       message,
-      timestamp: new Date().toLocaleString('es-ES')
+      timestamp: new Date().toLocaleString("es-ES"),
     });
 
     return { success: true, demo: true };
   } catch (error) {
-    console.error('Error enviando confirmación al cliente:', error);
+    console.error("Error enviando confirmación al cliente:", error);
     return { success: false, error };
   }
 };
