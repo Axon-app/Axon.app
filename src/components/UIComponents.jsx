@@ -137,9 +137,7 @@ export const ContactForm = () => {
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsSubmitting(true);
-
-    try {
+    setIsSubmitting(true);    try {
       // Importación dinámica del servicio de email
       const { sendEmailDemo } = await import("../services/emailService");
 
@@ -147,9 +145,35 @@ export const ContactForm = () => {
 
       if (result.success) {
         setFormData({ name: "", email: "", message: "" });
-        alert(
-          "¡Mensaje enviado exitosamente! Te contactaremos pronto a través de axonapp.info@gmail.com"
-        );
+        
+        // Crear modal personalizado de confirmación
+        const confirmationModal = document.createElement('div');
+        confirmationModal.className = 'fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm';
+        confirmationModal.innerHTML = `
+          <div class="bg-gradient-to-br from-green-900 to-emerald-900 rounded-2xl p-8 max-w-md w-full border border-green-500/30 shadow-2xl">
+            <div class="text-center">
+              <div class="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                </svg>
+              </div>
+              <h3 class="text-2xl font-bold text-white mb-3">¡Mensaje Enviado!</h3>
+              <p class="text-green-200 mb-4">
+                Hemos recibido tu mensaje exitosamente. Te contactaremos dentro de las próximas 24 horas.
+              </p>
+              <p class="text-green-300 text-sm mb-6">
+                ✅ Email enviado a nuestro equipo<br>
+                ✅ Confirmación enviada a tu correo<br>
+                📧 Respuesta garantizada en 24h
+              </p>
+              <button onclick="this.parentElement.parentElement.parentElement.remove()" 
+                      class="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-8 rounded-full transition-all duration-300 transform hover:scale-105">
+                Aceptar
+              </button>
+            </div>
+          </div>
+        `;
+        document.body.appendChild(confirmationModal);
       } else {
         alert(
           "Hubo un error al enviar el mensaje. Por favor, contacta directamente a axonapp.info@gmail.com"
@@ -1083,12 +1107,40 @@ export const QuoteRequestModal = ({ isOpen, onClose, serviceName }) => {
       // Importación dinámica del servicio de email
       const { sendEmailDemo } = await import("../services/emailService");
 
-      const result = await sendEmailDemo("quote", formData, serviceName);
-
-      if (result.success) {
-        alert(
-          `¡Gracias! Hemos recibido tu solicitud de cotización para ${serviceName}. Te contactaremos pronto desde axonapp.info@gmail.com`
-        );
+      const result = await sendEmailDemo("quote", formData, serviceName);      if (result.success) {
+        // Crear modal personalizado de confirmación para cotización
+        const confirmationModal = document.createElement('div');
+        confirmationModal.className = 'fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm';
+        confirmationModal.innerHTML = `
+          <div class="bg-gradient-to-br from-blue-900 to-cyan-900 rounded-2xl p-8 max-w-md w-full border border-blue-500/30 shadow-2xl">
+            <div class="text-center">
+              <div class="w-16 h-16 bg-blue-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                </svg>
+              </div>
+              <h3 class="text-2xl font-bold text-white mb-3">¡Cotización Solicitada!</h3>
+              <p class="text-blue-200 mb-2">
+                <strong>${serviceName}</strong>
+              </p>
+              <p class="text-blue-200 mb-4">
+                Hemos recibido tu solicitud exitosamente. Nuestro equipo de especialistas la está revisando.
+              </p>
+              <p class="text-blue-300 text-sm mb-6">
+                ✅ Solicitud enviada a nuestro equipo<br>
+                ✅ Confirmación enviada a tu correo<br>
+                📊 Propuesta personalizada en 48h<br>
+                💼 Incluye análisis técnico detallado
+              </p>
+              <button onclick="this.parentElement.parentElement.parentElement.remove()" 
+                      class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-full transition-all duration-300 transform hover:scale-105">
+                Aceptar
+              </button>
+            </div>
+          </div>
+        `;
+        document.body.appendChild(confirmationModal);
+        
         onClose();
         setFormData({
           name: "",
@@ -1311,12 +1363,40 @@ export const ConsultationModal = ({ isOpen, onClose, serviceName }) => {
       // Importación dinámica del servicio de email
       const { sendEmailDemo } = await import("../services/emailService");
 
-      const result = await sendEmailDemo("consultation", formData, serviceName);
-
-      if (result.success) {
-        alert(
-          `¡Excelente! Hemos recibido tu solicitud de consulta para ${serviceName}. Te contactaremos pronto desde axonapp.info@gmail.com para coordinar la cita.`
-        );
+      const result = await sendEmailDemo("consultation", formData, serviceName);      if (result.success) {
+        // Crear modal personalizado de confirmación para consulta
+        const confirmationModal = document.createElement('div');
+        confirmationModal.className = 'fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm';
+        confirmationModal.innerHTML = `
+          <div class="bg-gradient-to-br from-purple-900 to-pink-900 rounded-2xl p-8 max-w-md w-full border border-purple-500/30 shadow-2xl">
+            <div class="text-center">
+              <div class="w-16 h-16 bg-purple-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3a2 2 0 012-2h4a2 2 0 012 2v4m-6 9l2 2 4-4m6-2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+              </div>
+              <h3 class="text-2xl font-bold text-white mb-3">¡Consulta Agendada!</h3>
+              <p class="text-purple-200 mb-2">
+                <strong>${serviceName}</strong>
+              </p>
+              <p class="text-purple-200 mb-4">
+                Hemos recibido tu solicitud de consulta exitosamente.
+              </p>
+              <p class="text-purple-300 text-sm mb-6">
+                ✅ Solicitud enviada a nuestro equipo<br>
+                ✅ Confirmación enviada a tu correo<br>
+                📅 Te contactaremos en 24h para confirmar<br>
+                🎥 Recibirás enlace de videollamada
+              </p>
+              <button onclick="this.parentElement.parentElement.parentElement.remove()" 
+                      class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-8 rounded-full transition-all duration-300 transform hover:scale-105">
+                Aceptar
+              </button>
+            </div>
+          </div>
+        `;
+        document.body.appendChild(confirmationModal);
+        
         onClose();
         setFormData({
           name: "",

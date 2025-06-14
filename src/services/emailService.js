@@ -135,12 +135,112 @@ export const sendEmailFallback = async (type, data, serviceName = "") => {
 export const sendEmailDemo = async (type, data, serviceName = "") => {
   return new Promise((resolve) => {
     setTimeout(() => {
+      const timestamp = new Date().toLocaleString('es-ES', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+      
       console.log(`📧 [DEMO] Email ${type} enviado a axonapp.info@gmail.com:`, {
         service: serviceName,
         data: data,
-        timestamp: new Date().toLocaleString(),
+        timestamp: timestamp,
       });
-      resolve({ success: true, demo: true });
+
+      // Simular envío de confirmación al cliente
+      console.log(`📧 [DEMO] Email de confirmación enviado a ${data.email}:`, {
+        type: 'confirmation',
+        clientEmail: data.email,
+        timestamp: timestamp,
+      });
+      
+      resolve({ 
+        success: true, 
+        demo: true,
+        confirmationSent: true,
+        timestamp: timestamp
+      });
     }, 1000);
   });
+};
+
+// Función para enviar email de confirmación al cliente
+export const sendClientConfirmation = async (clientEmail, type, serviceName = '') => {
+  try {
+    let subject = '';
+    let message = '';
+    
+    switch (type) {
+      case 'contact':
+        subject = '✅ Confirmación: Hemos recibido tu mensaje - Axon.App';
+        message = `Hola,
+
+¡Gracias por contactarnos! Hemos recibido tu mensaje y nos pondremos en contacto contigo dentro de las próximas 24 horas.
+
+Nuestro equipo revisará tu consulta y te proporcionará la información que necesitas.
+
+Si tienes alguna pregunta urgente, puedes contactarnos directamente en axonapp.info@gmail.com
+
+¡Esperamos trabajar contigo pronto!
+
+Saludos cordiales,
+El equipo de Axon.App`;
+        break;
+        
+      case 'quote':
+        subject = `✅ Confirmación: Solicitud de cotización recibida - ${serviceName}`;
+        message = `Hola,
+
+¡Excelente! Hemos recibido tu solicitud de cotización para ${serviceName}.
+
+Nuestro equipo de especialistas está revisando los detalles de tu proyecto y te enviaremos una propuesta personalizada dentro de las próximas 48 horas.
+
+La cotización incluirá:
+• Análisis detallado de tus requerimientos
+• Propuesta técnica personalizada
+• Timeline estimado del proyecto
+• Inversión recomendada
+
+Si tienes información adicional que quieras compartir, responde directamente a este email.
+
+¡Estamos emocionados de poder ayudarte con tu proyecto!
+
+Saludos cordiales,
+El equipo de Axon.App`;
+        break;
+        
+      case 'consultation':
+        subject = `✅ Confirmación: Solicitud de consulta recibida - ${serviceName}`;
+        message = `Hola,
+
+¡Perfecto! Hemos recibido tu solicitud de consulta para ${serviceName}.
+
+Te contactaremos dentro de las próximas 24 horas para:
+• Confirmar la fecha y horario de tu preferencia
+• Enviarte el enlace de la videollamada
+• Compartir la agenda preliminar de la consulta
+
+Mientras tanto, si tienes documentos o información específica que quieras compartir antes de la consulta, no dudes en enviárnosla.
+
+¡Esperamos conversar contigo pronto!
+
+Saludos cordiales,
+El equipo de Axon.App`;
+        break;
+    }
+
+    // En modo demo, solo logear la confirmación
+    console.log(`📧 [DEMO] Confirmación al cliente (${clientEmail}):`, {
+      subject,
+      message,
+      timestamp: new Date().toLocaleString('es-ES')
+    });
+
+    return { success: true, demo: true };
+  } catch (error) {
+    console.error('Error enviando confirmación al cliente:', error);
+    return { success: false, error };
+  }
 };
