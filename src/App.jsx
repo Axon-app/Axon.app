@@ -12,6 +12,7 @@ import {
   ServiceDetailModal,
   QuoteRequestModal,
   ConsultationModal,
+  AnimatedCounter,
 } from "./components/UIComponents";
 import { technologies } from "./data/content";
 import { servicesData } from "./data/servicesData";
@@ -557,33 +558,369 @@ const App = () => {
         </div>
       </section>
 
-      {/* Technologies Section */}
+      {/* Tech Stack Section - Diseño Elegante y Compacto */}
       <section
         id="technologies"
-        className="py-20 md:py-32 bg-gradient-to-br from-gray-800 to-gray-900 relative overflow-hidden"
+        className="py-16 md:py-24 relative bg-gradient-to-br from-gray-900 via-slate-900 to-black overflow-hidden"
       >
-        {/* Efectos de fondo */}
-        <div className="absolute inset-0 opacity-5">
-          <div className="absolute top-10 left-10 w-40 h-40 bg-blue-500 rounded-full blur-3xl animate-pulse"></div>
-          <div className="absolute bottom-20 right-20 w-60 h-60 bg-purple-500 rounded-full blur-3xl animate-pulse animation-delay-2000"></div>
+        {/* Efectos de fondo minimalistas */}
+        <div className="absolute inset-0">
+          <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-900/20 via-transparent to-transparent"></div>
+          <div className="absolute bottom-0 right-0 w-96 h-96 bg-gradient-to-tl from-cyan-900/10 to-transparent blur-3xl"></div>
         </div>
 
         <div className="container mx-auto px-4 relative z-10">
-          {/* Header simplificado */}
-          <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-6xl font-bold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-400 animate-fadeIn">
-              Tecnologías
+          {/* Header Minimalista */}
+          <div className="text-center mb-12">
+            <div className="inline-flex items-center bg-gray-800/50 backdrop-blur-sm rounded-full px-4 py-2 mb-4 border border-gray-700/50">
+              <div className="w-2 h-2 bg-blue-400 rounded-full mr-2 animate-pulse"></div>
+              <span className="text-gray-300 text-sm font-medium">
+                Tech Stack
+              </span>
+            </div>
+
+            <h2 className="text-4xl md:text-5xl font-bold mb-4 text-white">
+              Tecnologías que
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400">
+                {" "}
+                Dominamos
+              </span>
             </h2>
-            <p className="text-xl md:text-2xl text-gray-300 max-w-4xl mx-auto animate-fadeIn delay-200 leading-relaxed">
-              Dominamos las herramientas más{" "}
-              <span className="text-cyan-400 font-semibold">avanzadas</span> del
-              ecosistema tecnológico
+
+            <p className="text-lg text-gray-400 max-w-2xl mx-auto">
+              Stack moderno para soluciones escalables y de alto rendimiento
             </p>
           </div>
 
-          {/* Carrusel de tecnologías */}
-          <div className="animate-fadeIn delay-400">
-            <TechCarousel technologies={technologies} />
+          {/* Tech Grid Compacto y Elegante */}
+          <div className="max-w-6xl mx-auto">
+            {/* Primera fila - Frontend & Frameworks */}
+            <div className="mb-8">
+              <div className="flex items-center mb-4">
+                <span className="text-blue-400 font-semibold text-sm uppercase tracking-wider">
+                  Frontend & Frameworks
+                </span>
+                <div className="flex-1 h-px bg-gradient-to-r from-blue-400/50 to-transparent ml-4"></div>
+              </div>
+              <div className="flex flex-wrap gap-3">
+                {technologies
+                  .filter((tech) =>
+                    ["Frontend", "Programming"].includes(tech.category)
+                  )
+                  .map((tech) => (
+                    <div
+                      key={tech.name}
+                      className="group flex items-center bg-gray-800/40 hover:bg-gray-700/60 backdrop-blur-sm rounded-lg px-4 py-3 border border-gray-700/30 hover:border-blue-500/50 transition-all duration-300 hover:scale-105"
+                    >
+                      <span className="text-2xl mr-3 group-hover:scale-110 transition-transform duration-300">
+                        {tech.icon}
+                      </span>
+                      <div>
+                        <div className="text-white font-medium text-sm">
+                          {tech.name}
+                        </div>
+                        <div
+                          className={`text-xs ${
+                            tech.level === "Expert"
+                              ? "text-emerald-400"
+                              : "text-blue-400"
+                          }`}
+                        >
+                          {tech.level}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+              </div>
+            </div>
+
+            {/* Segunda fila - Backend & APIs */}
+            <div className="mb-8">
+              <div className="flex items-center mb-4">
+                <span className="text-emerald-400 font-semibold text-sm uppercase tracking-wider">
+                  Backend & APIs
+                </span>
+                <div className="flex-1 h-px bg-gradient-to-r from-emerald-400/50 to-transparent ml-4"></div>
+              </div>
+              <div className="flex flex-wrap gap-3">
+                {technologies
+                  .filter((tech) => ["Backend", "API"].includes(tech.category))
+                  .map((tech) => (
+                    <div
+                      key={tech.name}
+                      className="group flex items-center bg-gray-800/40 hover:bg-gray-700/60 backdrop-blur-sm rounded-lg px-4 py-3 border border-gray-700/30 hover:border-emerald-500/50 transition-all duration-300 hover:scale-105"
+                    >
+                      <span className="text-2xl mr-3 group-hover:scale-110 transition-transform duration-300">
+                        {tech.icon}
+                      </span>
+                      <div>
+                        <div className="text-white font-medium text-sm">
+                          {tech.name}
+                        </div>
+                        <div
+                          className={`text-xs ${
+                            tech.level === "Expert"
+                              ? "text-emerald-400"
+                              : "text-blue-400"
+                          }`}
+                        >
+                          {tech.level}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+              </div>
+            </div>
+
+            {/* Tercera fila - Infrastructure */}
+            <div className="mb-8">
+              <div className="flex items-center mb-4">
+                <span className="text-purple-400 font-semibold text-sm uppercase tracking-wider">
+                  Infrastructure & Data
+                </span>
+                <div className="flex-1 h-px bg-gradient-to-r from-purple-400/50 to-transparent ml-4"></div>
+              </div>
+              <div className="flex flex-wrap gap-3">
+                {technologies
+                  .filter((tech) =>
+                    ["Cloud", "DevOps", "Database", "Cache", "IA/ML"].includes(
+                      tech.category
+                    )
+                  )
+                  .map((tech) => (
+                    <div
+                      key={tech.name}
+                      className="group flex items-center bg-gray-800/40 hover:bg-gray-700/60 backdrop-blur-sm rounded-lg px-4 py-3 border border-gray-700/30 hover:border-purple-500/50 transition-all duration-300 hover:scale-105"
+                    >
+                      <span className="text-2xl mr-3 group-hover:scale-110 transition-transform duration-300">
+                        {tech.icon}
+                      </span>
+                      <div>
+                        <div className="text-white font-medium text-sm">
+                          {tech.name}
+                        </div>
+                        <div
+                          className={`text-xs ${
+                            tech.level === "Expert"
+                              ? "text-emerald-400"
+                              : "text-blue-400"
+                          }`}
+                        >
+                          {tech.level}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+              </div>
+            </div>
+
+            {/* Stats compactos y CTA */}
+            <div className="flex flex-col md:flex-row items-center justify-between mt-12 pt-8 border-t border-gray-800/50">
+              {/* Stats minimalistas */}
+              <div className="flex items-center space-x-8 mb-6 md:mb-0">
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-blue-400">20+</div>
+                  <div className="text-xs text-gray-500 uppercase tracking-wide">
+                    Tecnologías
+                  </div>
+                </div>
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-emerald-400">5+</div>
+                  <div className="text-xs text-gray-500 uppercase tracking-wide">
+                    Años Exp
+                  </div>
+                </div>
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-purple-400">100%</div>
+                  <div className="text-xs text-gray-500 uppercase tracking-wide">
+                    Actualizados
+                  </div>
+                </div>
+              </div>
+
+              {/* CTA compacto */}
+              <div className="flex space-x-3">
+                <button
+                  onClick={() => setShowQuoteModal(true)}
+                  className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-medium py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 text-sm"
+                >
+                  Cotización
+                </button>
+                <button
+                  onClick={() => setShowConsultationModal(true)}
+                  className="bg-transparent border border-gray-600 hover:border-gray-500 text-gray-300 hover:text-white font-medium py-3 px-6 rounded-lg transition-all duration-300 text-sm"
+                >
+                  Consulta
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Stats Counter Section - Logros y Proyectos */}
+      <section className="py-16 md:py-20 bg-gradient-to-br from-gray-800 to-slate-800 relative overflow-hidden">
+        {/* Efectos de fondo */}
+        <div className="absolute inset-0">
+          <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-blue-600/10 rounded-full blur-3xl animate-pulse"></div>
+          <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-emerald-600/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
+        </div>
+
+        <div className="container mx-auto px-4 relative z-10">
+          {/* Header */}
+          <div className="text-center mb-12">
+            <div className="inline-flex items-center bg-gray-700/30 backdrop-blur-sm rounded-full px-4 py-2 mb-4 border border-gray-600/30">
+              <div className="w-2 h-2 bg-emerald-400 rounded-full mr-2 animate-pulse"></div>
+              <span className="text-gray-300 text-sm font-medium">
+                Nuestros Logros
+              </span>
+            </div>
+
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-white">
+              Proyectos que
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-blue-400">
+                {" "}
+                Transforman
+              </span>
+            </h2>
+
+            <p className="text-gray-400 max-w-2xl mx-auto">
+              Cada número representa la confianza de nuestros clientes y nuestro
+              compromiso con la excelencia
+            </p>
+          </div>
+
+          {/* Contadores Grid */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
+            {/* Proyectos Completados */}
+            <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm rounded-xl p-6 border border-gray-700/30 text-center group hover:border-blue-500/50 transition-all duration-300 hover:scale-105">
+              <div className="text-3xl md:text-4xl font-bold text-blue-400 mb-2 group-hover:scale-110 transition-transform duration-300">
+                <AnimatedCounter endValue={150} suffix="+" duration={2500} />
+              </div>
+              <div className="text-gray-300 font-medium mb-1">Proyectos</div>
+              <div className="text-xs text-gray-500">Completados</div>
+              <div className="w-full bg-gray-700 rounded-full h-1.5 mt-3">
+                <div className="bg-gradient-to-r from-blue-500 to-cyan-500 h-1.5 rounded-full w-4/5"></div>
+              </div>
+            </div>
+
+            {/* Clientes Satisfechos */}
+            <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm rounded-xl p-6 border border-gray-700/30 text-center group hover:border-emerald-500/50 transition-all duration-300 hover:scale-105">
+              <div className="text-3xl md:text-4xl font-bold text-emerald-400 mb-2 group-hover:scale-110 transition-transform duration-300">
+                <AnimatedCounter endValue={120} suffix="+" duration={2200} />
+              </div>
+              <div className="text-gray-300 font-medium mb-1">Clientes</div>
+              <div className="text-xs text-gray-500">Satisfechos</div>
+              <div className="w-full bg-gray-700 rounded-full h-1.5 mt-3">
+                <div className="bg-gradient-to-r from-emerald-500 to-green-500 h-1.5 rounded-full w-full"></div>
+              </div>
+            </div>
+
+            {/* Años de Experiencia */}
+            <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm rounded-xl p-6 border border-gray-700/30 text-center group hover:border-purple-500/50 transition-all duration-300 hover:scale-105">
+              <div className="text-3xl md:text-4xl font-bold text-purple-400 mb-2 group-hover:scale-110 transition-transform duration-300">
+                <AnimatedCounter endValue={5} suffix="+" duration={1800} />
+              </div>
+              <div className="text-gray-300 font-medium mb-1">Años</div>
+              <div className="text-xs text-gray-500">Experiencia</div>
+              <div className="w-full bg-gray-700 rounded-full h-1.5 mt-3">
+                <div className="bg-gradient-to-r from-purple-500 to-pink-500 h-1.5 rounded-full w-3/4"></div>
+              </div>
+            </div>
+
+            {/* Uptime/Disponibilidad */}
+            <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm rounded-xl p-6 border border-gray-700/30 text-center group hover:border-amber-500/50 transition-all duration-300 hover:scale-105">
+              <div className="text-3xl md:text-4xl font-bold text-amber-400 mb-2 group-hover:scale-110 transition-transform duration-300">
+                <AnimatedCounter
+                  endValue={99.9}
+                  suffix="%"
+                  duration={3000}
+                  decimals={1}
+                />
+              </div>
+              <div className="text-gray-300 font-medium mb-1">Uptime</div>
+              <div className="text-xs text-gray-500">Disponibilidad</div>
+              <div className="w-full bg-gray-700 rounded-full h-1.5 mt-3">
+                <div className="bg-gradient-to-r from-amber-500 to-orange-500 h-1.5 rounded-full w-full"></div>
+              </div>
+            </div>
+          </div>
+
+          {/* Logros adicionales en formato horizontal */}
+          <div className="mt-12 bg-gradient-to-r from-gray-800/30 to-gray-700/30 backdrop-blur-sm rounded-xl p-6 border border-gray-700/20">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
+              <div className="flex items-center justify-center space-x-3">
+                <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full flex items-center justify-center">
+                  <svg
+                    className="w-5 h-5 text-white"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M13 10V3L4 14h7v7l9-11h-7z"
+                    />
+                  </svg>
+                </div>
+                <div>
+                  <div className="text-lg font-bold text-white">
+                    Respuesta &lt; 24h
+                  </div>
+                  <div className="text-sm text-gray-400">Garantizada</div>
+                </div>
+              </div>
+
+              <div className="flex items-center justify-center space-x-3">
+                <div className="w-10 h-10 bg-gradient-to-r from-emerald-500 to-green-500 rounded-full flex items-center justify-center">
+                  <svg
+                    className="w-5 h-5 text-white"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                    />
+                  </svg>
+                </div>
+                <div>
+                  <div className="text-lg font-bold text-white">
+                    100% Seguro
+                  </div>
+                  <div className="text-sm text-gray-400">SSL & Cifrado</div>
+                </div>
+              </div>
+
+              <div className="flex items-center justify-center space-x-3">
+                <div className="w-10 h-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center">
+                  <svg
+                    className="w-5 h-5 text-white"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"
+                    />
+                  </svg>
+                </div>
+                <div>
+                  <div className="text-lg font-bold text-white">
+                    Soporte 24/7
+                  </div>
+                  <div className="text-sm text-gray-400">Técnico Dedicado</div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>

@@ -1622,3 +1622,81 @@ export const ConsultationModal = ({ isOpen, onClose, serviceName }) => {
     </div>
   );
 };
+
+// Componente de contador animado
+export const AnimatedCounter = ({
+  endValue,
+  duration = 2000,
+  suffix = "",
+  prefix = "",
+  decimals = 0,
+}) => {
+  const [count, setCount] = useState(0);
+  const [isVisible, setIsVisible] = useState(false);
+
+  const animateCounter = React.useCallback(() => {
+    const startTime = Date.now();
+    const startValue = 0;
+
+    const updateCounter = () => {
+      const currentTime = Date.now();
+      const elapsed = currentTime - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+
+      // Usar easing function para animación más suave
+      const easeOutQuart = 1 - Math.pow(1 - progress, 4);
+      const currentValue = startValue + (endValue - startValue) * easeOutQuart;
+
+      // Formatear según decimales
+      const formattedValue =
+        decimals > 0
+          ? parseFloat(currentValue.toFixed(decimals))
+          : Math.floor(currentValue);
+
+      setCount(formattedValue);
+
+      if (progress < 1) {
+        requestAnimationFrame(updateCounter);
+      }
+    };
+
+    requestAnimationFrame(updateCounter);
+  }, [endValue, duration, decimals]);
+
+  React.useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !isVisible) {
+          setIsVisible(true);
+          animateCounter();
+        }
+      },
+      { threshold: 0.3 }
+    );
+
+    const counterRef = document.getElementById(`counter-${endValue}-${suffix}`);
+    if (counterRef) {
+      observer.observe(counterRef);
+    }
+
+    return () => {
+      if (counterRef) {
+        observer.unobserve(counterRef);
+      }
+    };
+  }, [endValue, suffix, isVisible, animateCounter]);
+
+  // Reset counter when page reloads
+  React.useEffect(() => {
+    setCount(0);
+    setIsVisible(false);
+  }, []);
+
+  return (
+    <span id={`counter-${endValue}-${suffix}`} className="tabular-nums">
+      {prefix}
+      {count}
+      {suffix}
+    </span>
+  );
+};
