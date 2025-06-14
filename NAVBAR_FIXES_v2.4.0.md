@@ -6,12 +6,14 @@
 
 **Síntoma:** El ícono SVG de la casita no aparecía en el navbar desktop.
 
-**Causa Raíz:** 
+**Causa Raíz:**
+
 - Componente `NavLink` tenía lógica incorrecta de renderizado
 - En modo desktop solo renderizaba `{desktopEffect}` sin los `{children}`
 - Los `children` contienen los íconos SVG + texto
 
 **Solución Implementada:**
+
 ```jsx
 // ANTES (INCORRECTO):
 return (
@@ -45,11 +47,13 @@ return (
 
 **Síntoma:** Al hacer clic en enlaces del navbar, el texto se volvía invisible.
 
-**Causa Raíz:** 
+**Causa Raíz:**
+
 - Estado activo usaba `text-transparent` con gradiente
 - El gradiente no se aplicaba correctamente, dejando texto invisible
 
 **Solución Implementada:**
+
 ```jsx
 // ANTES (PROBLEMÁTICO):
 className={`relative z-10 transition-all duration-300 ${
@@ -67,6 +71,7 @@ className={`relative z-10 transition-all duration-300 ${
 ```
 
 **Estados Finales:**
+
 - **Normal**: `text-gray-300` (gris)
 - **Hover**: `text-white` (blanco)
 - **Activo**: `text-blue-400 font-semibold` (azul + negrita)
@@ -79,17 +84,19 @@ className={`relative z-10 transition-all duration-300 ${
 
 **Síntoma:** Al hacer clic en "Testimonios", no navegaba a la sección correspondiente.
 
-**Causa Raíz:** 
+**Causa Raíz:**
+
 - La sección de testimonios no tenía el atributo `id="testimonials"`
 - El script de detección de sección activa buscaba ese ID
 
 **Solución Implementada:**
+
 ```jsx
 // ANTES (SIN ID):
 <section className="py-16 md:py-24 bg-gradient-to-br from-slate-900 via-gray-900 to-black relative overflow-hidden">
 
 // DESPUÉS (CON ID):
-<section 
+<section
   id="testimonials"
   className="py-16 md:py-24 bg-gradient-to-br from-slate-900 via-gray-900 to-black relative overflow-hidden"
 >
@@ -103,15 +110,15 @@ className={`relative z-10 transition-all duration-300 ${
 
 **Síntoma:** El botón hamburger solo mostraba el ícono, confundiendo a usuarios.
 
-**Causa Raíz:** 
+**Causa Raíz:**
+
 - Solo se renderizaba el SVG sin texto descriptivo
 
 **Solución Implementada:**
+
 ```jsx
 // AGREGADO:
-<span className="text-sm font-medium">
-  {showMenu ? "Cerrar" : "Menú"}
-</span>
+<span className="text-sm font-medium">{showMenu ? "Cerrar" : "Menú"}</span>
 ```
 
 **Resultado:** ✅ Botón con texto claro "Menú" / "Cerrar".
@@ -121,15 +128,18 @@ className={`relative z-10 transition-all duration-300 ${
 ## 🎯 Mejoras Adicionales Implementadas
 
 ### **Scroll Suave Optimizado**
+
 ```css
 /* Agregado en index.css */
 section[id] {
   scroll-margin-top: 80px;
 }
 ```
+
 **Beneficio:** Compensa la altura del navbar fijo.
 
 ### **Reorganización de Assets**
+
 - **Movidos:** `logo1.png`, `logo231.png` de `src/assets/` a `public/`
 - **Rutas actualizadas:** `import logo1 from "/logo1.png"`
 - **Resultado:** Sin errores 404, carga perfecta de logos.
@@ -139,6 +149,7 @@ section[id] {
 ## ✅ Estado Final del Navbar
 
 ### **Desktop Navigation**
+
 - ✅ Todos los íconos SVG visibles y funcionales
 - ✅ Texto permanece visible en todos los estados
 - ✅ Efectos visuales (gradientes, líneas, fondos) preservados
@@ -146,12 +157,14 @@ section[id] {
 - ✅ Smooth scroll con offset correcto
 
 ### **Mobile Navigation**
+
 - ✅ Botón de menú con texto claro
 - ✅ Menú desplegable funcional
 - ✅ Todos los enlaces navegan correctamente
 - ✅ Animaciones y transiciones suaves
 
 ### **Enlaces Verificados**
+
 - ✅ Inicio → `#hero`
 - ✅ Nosotros → `#about`
 - ✅ Servicios → `#services`
