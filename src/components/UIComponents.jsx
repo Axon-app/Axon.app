@@ -1623,6 +1623,104 @@ export const ConsultationModal = ({ isOpen, onClose, serviceName }) => {
   );
 };
 
+// Componente de banner de testimonios con scroll automático
+export const TestimonialsBanner = ({ testimonials }) => {
+  return (
+    <div className="relative overflow-hidden">
+      {/* Gradientes laterales para efecto de fade */}
+      <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-slate-900 to-transparent z-10"></div>
+      <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-slate-900 to-transparent z-10"></div>
+
+      {/* Banner con scroll automático */}
+      <div className="flex animate-scroll-testimonials">
+        {" "}
+        {/* Primera instancia de testimonios */}
+        {testimonials.map((testimonial) => (
+          <BannerTestimonialCard
+            key={`first-${testimonial.id}`}
+            testimonial={testimonial}
+          />
+        ))}
+        {/* Segunda instancia para efecto infinito */}
+        {testimonials.map((testimonial) => (
+          <BannerTestimonialCard
+            key={`second-${testimonial.id}`}
+            testimonial={testimonial}
+          />
+        ))}
+      </div>
+    </div>
+  );
+};
+
+// Tarjeta individual de testimonial para el banner
+const BannerTestimonialCard = ({ testimonial }) => {
+  return (
+    <div className="flex-shrink-0 bg-gradient-to-br from-gray-800/40 to-slate-800/40 backdrop-blur-sm rounded-2xl p-6 border border-gray-700/30 mx-4 w-80 md:w-96 relative overflow-hidden group hover:scale-105 transition-transform duration-300">
+      {/* Efecto de fondo con gradiente del testimonial */}
+      <div
+        className={`absolute inset-0 bg-gradient-to-br ${testimonial.gradient} opacity-5 group-hover:opacity-10 transition-opacity duration-300`}
+      ></div>
+
+      <div className="relative z-10">
+        {/* Header con avatar y rating */}
+        <div className="flex items-center mb-4">
+          {/* Avatar */}
+          <div
+            className={`w-14 h-14 rounded-full bg-gradient-to-r ${testimonial.gradient} flex items-center justify-center text-white font-bold text-lg mr-4 shadow-lg`}
+          >
+            {testimonial.avatar}
+          </div>
+
+          {/* Info del cliente */}
+          <div className="flex-1">
+            <div className="text-white font-semibold">{testimonial.name}</div>
+            <div className="text-gray-400 text-sm">{testimonial.position}</div>
+            <div className="text-gray-500 text-xs">{testimonial.company}</div>
+          </div>
+
+          {/* Rating */}
+          <div className="flex">
+            {[...Array(testimonial.rating)].map((_, i) => (
+              <svg
+                key={i}
+                className="w-4 h-4 text-yellow-400"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+              >
+                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+              </svg>
+            ))}
+          </div>
+        </div>
+
+        {/* Testimonial text */}
+        <blockquote className="text-gray-300 text-sm leading-relaxed mb-4 italic">
+          "
+          {testimonial.text.length > 150
+            ? testimonial.text.substring(0, 150) + "..."
+            : testimonial.text}
+          "
+        </blockquote>
+
+        {/* Project tag */}
+        <div
+          className={`inline-block px-3 py-1 rounded-full bg-gradient-to-r ${testimonial.gradient} bg-opacity-20 border border-opacity-30`}
+        >
+          <span className="text-xs font-medium text-gray-300">
+            {testimonial.project}
+          </span>
+        </div>
+
+        {/* Quote icon decorativo */}
+        <div className="absolute top-2 right-2 text-4xl text-gray-700/20">
+          "
+        </div>
+      </div>
+    </div>
+  );
+};
+
 // Componente de contador animado
 export const AnimatedCounter = ({
   endValue,

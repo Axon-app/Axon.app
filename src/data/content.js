@@ -198,104 +198,78 @@ export const getLevels = () => Object.values(LEVELS);
 export const TECH_CATEGORIES = CATEGORIES;
 export const TECH_LEVELS = LEVELS;
 
+// Testimonios de clientes
 export const testimonials = [
   {
+    id: 1,
     name: "María González",
-    role: "CEO de TechStart",
-    avatar:
-      "https://images.unsplash.com/photo-1494790108755-2616b612b5bc?w=100&h=100&fit=crop&crop=face",
+    position: "CEO",
+    company: "TechStart Solutions",
+    avatar: "MG",
     rating: 5,
-    review:
-      "Axon.App transformó completamente nuestra presencia digital. Su equipo no solo entregó un producto excepcional, sino que nos acompañó en todo el proceso de digitalización.",
+    text: "Axon transformó completamente nuestra presencia digital. Su equipo no solo entregó una plataforma excepcional, sino que superó todas nuestras expectativas. El nivel de profesionalismo y atención al detalle es impresionante.",
+    project: "Plataforma E-commerce",
+    gradient: "from-blue-500 to-cyan-500",
   },
   {
-    name: "Carlos Ruiz",
-    role: "Fundador de InnovaCorp",
-    avatar:
-      "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop&crop=face",
+    id: 2,
+    name: "Carlos Mendoza",
+    position: "CTO",
+    company: "InnovateLab",
+    avatar: "CM",
     rating: 5,
-    review:
-      "La aplicación móvil que desarrollaron superó todas nuestras expectativas. La atención al detalle y la calidad del código son impresionantes.",
+    text: "La experiencia trabajando con Axon ha sido extraordinaria. Desarrollaron una aplicación web compleja con integraciones avanzadas en tiempo récord. Su expertise técnico es de clase mundial.",
+    project: "Sistema de Gestión Empresarial",
+    gradient: "from-emerald-500 to-green-500",
   },
   {
-    name: "Ana Martín",
-    role: "Directora de Marketing Digital",
-    avatar:
-      "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop&crop=face",
+    id: 3,
+    name: "Ana Rodríguez",
+    position: "Directora de Marketing",
+    company: "Digital Boost",
+    avatar: "AR",
     rating: 5,
-    review:
-      "Profesionales excepcionales. Nos ayudaron a automatizar nuestros procesos y aumentar la eficiencia del equipo en un 300%.",
+    text: "Axon no solo construyó nuestro sitio web, creó una experiencia digital que convierte visitantes en clientes. El ROI ha sido increíble y el soporte post-lanzamiento es excepcional.",
+    project: "Landing Page & Marketing",
+    gradient: "from-purple-500 to-pink-500",
   },
   {
-    name: "Luis Herrera",
-    role: "CTO de DataFlow",
-    avatar:
-      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop&crop=face",
-    rating: 5,
-    review:
-      "Su expertise en inteligencia artificial nos permitió implementar soluciones que pensábamos eran imposibles. Altamente recomendados.",
-  },
-  {
-    name: "Sofia Ramírez",
-    role: "Gerente de Operaciones",
-    avatar:
-      "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&h=100&fit=crop&crop=face",
-    rating: 5,
-    review:
-      "La plataforma e-commerce que crearon nos ha permitido triplicar nuestras ventas online. Su soporte post-lanzamiento es excelente.",
-  },
-  {
+    id: 4,
     name: "Roberto Silva",
-    role: "Director de Producto",
-    avatar:
-      "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=100&h=100&fit=crop&crop=face",
+    position: "Fundador",
+    company: "StartupX",
+    avatar: "RS",
     rating: 5,
-    review:
-      "Trabajar con Axon.App fue una experiencia increíble. Su enfoque ágil y comunicación constante hicieron que el proyecto fuera un éxito total.",
+    text: "Como startup, necesitábamos un socio tecnológico confiable. Axon nos ayudó a escalar desde una idea hasta una plataforma robusta con miles de usuarios. Su visión estratégica es invaluable.",
+    project: "MVP & Escalamiento",
+    gradient: "from-amber-500 to-orange-500",
+  },
+  {
+    id: 5,
+    name: "Lucía Fernández",
+    position: "Gerente General",
+    company: "RetailPro",
+    avatar: "LF",
+    rating: 5,
+    text: "La migración a la nube que realizó Axon mejoró nuestra eficiencia operativa en un 40%. Su enfoque en la seguridad y la escalabilidad nos da total tranquilidad para el futuro.",
+    project: "Migración Cloud & DevOps",
+    gradient: "from-indigo-500 to-blue-500",
+  },
+  {
+    id: 6,
+    name: "Diego Morales",
+    position: "VP Technology",
+    company: "FinanceNext",
+    avatar: "DM",
+    rating: 5,
+    text: "Implementaron un sistema de IA que revolucionó nuestro análisis de datos. Los insights que obtenemos ahora nos permiten tomar decisiones más inteligentes y oportunas.",
+    project: "IA & Machine Learning",
+    gradient: "from-teal-500 to-cyan-500",
   },
 ];
 
-export const services = [
-  {
-    id: "desarrollo-web",
-    title: "Desarrollo Web",
-    icon: "💻",
-    description:
-      "Creamos sitios web y aplicaciones web modernas, responsivas y optimizadas para SEO, utilizando las últimas tecnologías.",
-  },
-  {
-    id: "desarrollo-movil",
-    title: "Desarrollo Móvil",
-    icon: "📱",
-    description:
-      "Aplicaciones móviles nativas e híbridas para iOS y Android que ofrecen experiencias de usuario excepcionales.",
-  },
-  {
-    id: "ui-ux-design",
-    title: "Diseño UI/UX",
-    icon: "🎨",
-    description:
-      "Diseños centrados en el usuario que combinan estética moderna con funcionalidad intuitiva y accesible.",
-  },
-  {
-    id: "cloud-solutions",
-    title: "Soluciones Cloud",
-    icon: "☁️",
-    description:
-      "Infraestructura escalable y segura en la nube para optimizar el rendimiento y reducir costos operativos.",
-  },
-  {
-    id: "inteligencia-artificial",
-    title: "Inteligencia Artificial",
-    icon: "🧠",
-    description:
-      "Implementamos IA y Machine Learning para automatizar procesos y extraer insights valiosos de los datos.",
-  },
-  {
-    id: "ciberseguridad",
-    title: "Ciberseguridad",
-    icon: "🔒",
-    description:
-      "Protección integral de activos digitales con las mejores prácticas de seguridad y monitoreo continuo.",
-  },
-];
+// Función para obtener testimonios aleatorios
+export const getRandomTestimonials = (count = 3) => {
+  const shuffled = [...testimonials].sort(() => 0.5 - Math.random());
+  return shuffled.slice(0, count);
+};

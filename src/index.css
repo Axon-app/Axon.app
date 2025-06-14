@@ -405,6 +405,25 @@ body {
   animation: scroll 30s linear infinite;
 }
 
+/* Animación para banner de testimonios */
+@keyframes scroll-testimonials {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-scroll-testimonials {
+  animation: scroll-testimonials 45s linear infinite;
+}
+
+/* Pausa la animación al hacer hover */
+.animate-scroll-testimonials:hover {
+  animation-play-state: paused;
+}
+
 /* Pausa la animación al hacer hover */
 .animate-scroll:hover {
   animation-play-state: paused;
