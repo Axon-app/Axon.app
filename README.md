@@ -1,4 +1,4 @@
-# 🚀 Axon.App - Sitio Web Corporativo v2.2.1
+# 🚀 Axon.App - Sitio Web Corporativo v2.3.0
 
 [![Vite](https://img.shields.io/badge/Vite-6.3.5-646CFF?logo=vite&logoColor=white)](https://vitejs.dev/)
 [![React](https://img.shields.io/badge/React-18+-61DAFB?logo=react&logoColor=white)](https://reactjs.org/)

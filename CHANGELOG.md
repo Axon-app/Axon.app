@@ -2,7 +2,7 @@
 
 ## 📊 Estado del Proyecto
 
-**Versión Actual:** 2.2.1  
+**Versión Actual:** 2.3.0  
 **Última Actualización:** 14 de Junio, 2025
 **Estado:** ✅ Funcional - Desplegado en GitHub Pages  
 **URL de Producción:** https://axon-app.github.io/Axon.app/  
@@ -10,9 +10,42 @@
 
 ---
 
+## 🆕 Versión 2.3.0 - Logos Animados con Efectos 3D Profesionales
+
+### ✨ Sistema de Logos Dual Implementado
+- **Doble logo en navbar y footer**: Logo1.png + Logo231.png funcionando juntos
+- **Tamaños optimizados**:
+  - Navbar: Logo1 (48×48px) + Logo231 (56px altura)  
+  - Footer: Logo1 (64×64px) + Logo231 (80px altura)
+- **Centrado perfecto**: Alineación mejorada con texto y contenido
+
+### 🎭 Animaciones 3D Avanzadas
+- **Rotación horizontal suave**: 
+  - Logo1: 12 segundos con ease-in-out
+  - Logo231: 15 segundos inverso con ease-in-out
+- **Efectos de luz profesionales**:
+  - Iluminación directa con `filter: brightness()` 
+  - Drop-shadow blanco brillante que realza los logos
+  - Sincronización independiente (5s y 4s con delay)
+
+### 🎨 Mejoras Visuales
+- **Brillo dinámico**: Hasta 160% brightness en picos de iluminación
+- **Efecto 3D**: `transform-style: preserve-3d` para rotaciones naturales
+- **Visibilidad mejorada**: Logos más claros en navbar oscuro
+- **Movimiento profesional**: Transiciones suaves sin efectos bruscos
+
+### 🔧 Mejoras Técnicas
+- **Nuevo asset**: logo231.png agregado (485.80 kB)
+- **Imports optimizados**: Ambos logos desde assets
+- **Error handling**: Manejo de errores para ambos logos
+- **Performance**: Animaciones CSS optimizadas
+
+---
+
 ## 🆕 Versión 2.2.1 - Footer Profesional y Colores Mejorados
 
 ### ✨ Footer Completamente Rediseñado
+
 - **Footer moderno y profesional** con 4 secciones organizadas
 - **Logo corporativo integrado** con gradientes de colores
 - **Información de contacto completa** incluyendo teléfono colombiano (+57 323-393-2071)
@@ -24,6 +57,7 @@
 - **Copyright dinámico** con año automático
 
 ### 🎨 Mejoras de Colores y Branding
+
 - **Colores del logo unificados** en navbar y footer:
   - "Axon" en cyan brillante (`text-cyan-300`)
   - ".App" en verde esmeralda (`text-emerald-400`)
@@ -31,6 +65,7 @@
 - **Gradientes y efectos** para mejor presentación visual
 
 ### 🔧 Mejoras Técnicas
+
 - **Estructura responsive** optimizada para móviles
 - **Iconos SVG integrados** para mejor rendimiento
 - **Enlaces preparados** para futuras integraciones

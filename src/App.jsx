@@ -18,6 +18,7 @@ import {
 import { technologies, testimonials } from "./data/content";
 import { servicesData } from "./data/servicesData";
 import logo1 from "./assets/logo1.png";
+import logo231 from "./assets/logo231.png";
 
 const App = () => {
   const [showMenu, setShowMenu] = useState(false);
@@ -74,27 +75,28 @@ const App = () => {
       {/* Navbar */}
       <nav className="fixed w-full z-50 bg-gray-900 bg-opacity-80 backdrop-blur-lg shadow-lg">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-          <a
-            href="#hero"
-            className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-green-400"
-          >
-            {/* Logo de Axon.App */}
-            <div className="flex items-center">
-              {!logoError ? (
-                <img
-                  src={logo1}
-                  alt="Axon.App Logo"
-                  className="h-10 w-auto mr-2"
-                  onError={handleLogoError}
-                  onLoad={() => console.log("Logo loaded successfully")}
-                />
-              ) : (
-                <LogoSVG className="h-10 w-10 mr-2" />
-              )}
-              <span className="text-2xl font-bold">
-                <span className="text-cyan-300">Axon</span>
-                <span className="text-emerald-400">.App</span>
-              </span>
+          <a href="#hero" className="flex items-center">
+            {/* Logos de Axon.App */}
+            <div className="flex items-center space-x-3">
+              <img
+                src={logo1}
+                alt="Axon Logo Original"
+                className="h-12 w-12 logo-rotate-1 rounded-lg"
+                onError={(e) => {
+                  console.error("Error loading logo1:", e);
+                  e.target.style.display = "none";
+                }}
+              />
+              <img
+                src={logo231}
+                alt="Axon.App Logo 3D"
+                className="h-14 w-auto logo-rotate-2 rounded-lg"
+                onError={(e) => {
+                  console.error("Error loading logo231:", e);
+                  e.target.style.display = "none";
+                }}
+                onLoad={() => console.log("Logo231 loaded successfully")}
+              />
             </div>
           </a>
           <div className="hidden md:flex space-x-8">
@@ -1405,29 +1407,33 @@ const App = () => {
           {/* Main Footer Content */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
             {/* Columna 1: Información de la Empresa */}
-            <div className="space-y-6">
-              <div className="flex items-center space-x-3">
+            <div className="space-y-6 text-center">
+              <div className="flex items-center justify-center space-x-4 mb-4">
                 <img
-                  src="/Axon.app/logo1.png"
-                  alt="Axon.App Logo"
-                  className="h-12 w-12 object-contain"
+                  src={logo1}
+                  alt="Axon Logo Original"
+                  className="h-16 w-16 object-contain logo-rotate-1 rounded-lg"
+                  onError={(e) => {
+                    console.error("Error loading logo1 in footer:", e);
+                    e.target.style.display = "none";
+                  }}
                 />
-                <div>
-                  <h3 className="text-2xl font-bold text-white font-orbitron">
-                    <span className="text-cyan-300">Axon</span>
-                    <span className="text-emerald-400">.App</span>
-                  </h3>
-                  <p className="text-sm text-gray-400">
-                    Soluciones Tecnológicas
-                  </p>
-                </div>
+                <img
+                  src={logo231}
+                  alt="Axon.App Logo 3D"
+                  className="h-20 w-auto object-contain logo-rotate-2 rounded-lg"
+                  onError={(e) => {
+                    console.error("Error loading logo231 in footer:", e);
+                    e.target.style.display = "none";
+                  }}
+                />
               </div>
-              <p className="text-gray-300 text-sm leading-relaxed">
+              <p className="text-gray-300 text-sm leading-relaxed text-center">
                 Transformamos ideas en soluciones digitales innovadoras.
                 Desarrollo web, aplicaciones móviles, inteligencia artificial y
                 más.
               </p>
-              <div className="flex items-center space-x-2 text-sm text-gray-400">
+              <div className="flex items-center justify-center space-x-2 text-sm text-gray-400">
                 <svg
                   className="w-4 h-4 text-purple-400"
                   fill="currentColor"
