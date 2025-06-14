@@ -22,38 +22,38 @@ async function createWhatsAppPreview() {
       const logoSize = 250; // Logo grande para WhatsApp
       const logoX = (400 - logoSize) / 2;
       const logoY = (400 - logoSize) / 2;
-      
+
       // Configurar alta calidad
       ctx.imageSmoothingEnabled = true;
-      ctx.imageSmoothingQuality = 'high';
-      
+      ctx.imageSmoothingQuality = "high";
+
       // Fondo circular sutil detrás del logo
       ctx.globalAlpha = 0.15;
       ctx.fillStyle = "#ffffff";
       ctx.beginPath();
-      ctx.arc(200, 200, logoSize/2 + 15, 0, Math.PI * 2);
+      ctx.arc(200, 200, logoSize / 2 + 15, 0, Math.PI * 2);
       ctx.fill();
       ctx.globalAlpha = 1;
-      
+
       // Sombra para el logo
       ctx.shadowColor = "rgba(0, 0, 0, 0.3)";
       ctx.shadowBlur = 10;
       ctx.shadowOffsetX = 2;
       ctx.shadowOffsetY = 2;
-      
+
       // Dibujar logo
       ctx.drawImage(logo1, logoX, logoY, logoSize, logoSize);
-      
+
       // Resetear efectos
       ctx.shadowColor = "transparent";
       ctx.shadowBlur = 0;
       ctx.shadowOffsetX = 0;
       ctx.shadowOffsetY = 0;
-      
+
       console.log("✅ Logo para WhatsApp cargado correctamente");
     } catch (error) {
       console.log("❌ Error cargando logo para WhatsApp:", error.message);
-      
+
       // Fallback: texto centrado
       ctx.fillStyle = "#ffffff";
       ctx.font = "bold 48px Arial, sans-serif";
@@ -69,7 +69,6 @@ async function createWhatsAppPreview() {
     console.log("✅ Imagen para WhatsApp creada: whatsapp-image.png");
     console.log(`   Dimensiones: ${canvas.width}x${canvas.height}px`);
     console.log(`   Tamaño: ${(buffer.length / 1024).toFixed(2)} KB`);
-
   } catch (error) {
     console.error("❌ Error creando imagen para WhatsApp:", error);
   }

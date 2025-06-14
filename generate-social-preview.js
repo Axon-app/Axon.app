@@ -34,47 +34,55 @@ async function createSocialPreview() {
     ctx.arc(900, 120, 40, 0, Math.PI * 2);
     ctx.fill();
 
-    ctx.globalAlpha = 1;    // Cargar y dibujar logo principal centrado con alta calidad
+    ctx.globalAlpha = 1; // Cargar y dibujar logo principal centrado con alta calidad
     try {
       // Logo principal (logo1.png) - optimizado para redes sociales
       const logo1 = await loadImage("./public/logo1.png");
       const logo1Size = 220; // Tamaño aún más grande para mejor visibilidad
       const logoX = (1200 - logo1Size) / 2; // Centrado horizontalmente
       const logoY = 120; // Posición vertical superior
-      
+
       // Configurar alta calidad de renderizado
       ctx.imageSmoothingEnabled = true;
-      ctx.imageSmoothingQuality = 'high';
-      
+      ctx.imageSmoothingQuality = "high";
+
       // Agregar un fondo circular suave detrás del logo para mejor contraste
       ctx.globalAlpha = 0.1;
       ctx.fillStyle = "#ffffff";
       ctx.beginPath();
-      ctx.arc(logoX + logo1Size/2, logoY + logo1Size/2, logo1Size/2 + 20, 0, Math.PI * 2);
+      ctx.arc(
+        logoX + logo1Size / 2,
+        logoY + logo1Size / 2,
+        logo1Size / 2 + 20,
+        0,
+        Math.PI * 2
+      );
       ctx.fill();
       ctx.globalAlpha = 1;
-      
+
       // Sombra del logo para mejor contraste
       ctx.shadowColor = "rgba(0, 0, 0, 0.4)";
       ctx.shadowBlur = 15;
       ctx.shadowOffsetX = 3;
       ctx.shadowOffsetY = 3;
-      
+
       // Dibujar el logo con alta calidad
       ctx.drawImage(logo1, logoX, logoY, logo1Size, logo1Size);
-      
+
       // Resetear configuraciones
       ctx.shadowColor = "transparent";
       ctx.shadowBlur = 0;
       ctx.shadowOffsetX = 0;
       ctx.shadowOffsetY = 0;
       ctx.imageSmoothingEnabled = true;
-      
-      console.log("✅ Logo principal cargado con alta calidad y centrado correctamente");
+
+      console.log(
+        "✅ Logo principal cargado con alta calidad y centrado correctamente"
+      );
     } catch (error) {
       console.log("❌ Error cargando logo1.png:", error.message);
       console.log("Usando texto alternativo");
-    }    // Texto principal - ajustado para el logo más grande
+    } // Texto principal - ajustado para el logo más grande
     ctx.fillStyle = "#ffffff";
     ctx.font = "bold 58px Arial, sans-serif";
     ctx.textAlign = "center";

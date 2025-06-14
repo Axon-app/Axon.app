@@ -1,5 +1,5 @@
 console.log("🚀 GUÍA PARA ACTUALIZAR LAS IMÁGENES EN REDES SOCIALES");
-console.log("=" .repeat(60));
+console.log("=".repeat(60));
 
 console.log("\n✅ PASO 1: Verificar archivos locales");
 console.log("Las imágenes han sido regeneradas con el logo1.png correcto:");
@@ -52,4 +52,6 @@ console.log("- Sombra para mejor contraste");
 console.log("- Renderizado en alta calidad");
 console.log("- Optimizado para todas las plataformas");
 
-console.log("\n✨ ¡Tu logo ahora debería verse perfecto en todas las redes sociales!");
+console.log(
+  "\n✨ ¡Tu logo ahora debería verse perfecto en todas las redes sociales!"
+);

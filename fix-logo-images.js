@@ -8,12 +8,16 @@ async function verifyImagesWithLogo() {
   try {
     // Cargar el logo original para comparar
     const originalLogo = await loadImage("./public/logo1.png");
-    console.log(`✅ Logo original cargado: ${originalLogo.width}x${originalLogo.height}px`);
+    console.log(
+      `✅ Logo original cargado: ${originalLogo.width}x${originalLogo.height}px`
+    );
 
     // Verificar og-image.png
     if (fs.existsSync("./public/og-image.png")) {
       const ogImage = await loadImage("./public/og-image.png");
-      console.log(`✅ og-image.png existe: ${ogImage.width}x${ogImage.height}px`);
+      console.log(
+        `✅ og-image.png existe: ${ogImage.width}x${ogImage.height}px`
+      );
     } else {
       console.log("❌ og-image.png no existe");
     }
@@ -21,7 +25,9 @@ async function verifyImagesWithLogo() {
     // Verificar twitter-image.png
     if (fs.existsSync("./public/twitter-image.png")) {
       const twitterImage = await loadImage("./public/twitter-image.png");
-      console.log(`✅ twitter-image.png existe: ${twitterImage.width}x${twitterImage.height}px`);
+      console.log(
+        `✅ twitter-image.png existe: ${twitterImage.width}x${twitterImage.height}px`
+      );
     } else {
       console.log("❌ twitter-image.png no existe");
     }
@@ -29,13 +35,14 @@ async function verifyImagesWithLogo() {
     // Verificar whatsapp-image.png
     if (fs.existsSync("./public/whatsapp-image.png")) {
       const whatsappImage = await loadImage("./public/whatsapp-image.png");
-      console.log(`✅ whatsapp-image.png existe: ${whatsappImage.width}x${whatsappImage.height}px`);
+      console.log(
+        `✅ whatsapp-image.png existe: ${whatsappImage.width}x${whatsappImage.height}px`
+      );
     } else {
       console.log("❌ whatsapp-image.png no existe");
     }
 
     console.log("\n🔄 Regenerando todas las imágenes con timestamp...");
-    
   } catch (error) {
     console.error("❌ Error verificando imágenes:", error);
   }
@@ -44,7 +51,7 @@ async function verifyImagesWithLogo() {
 // Función para regenerar con timestamp
 async function regenerateWithTimestamp() {
   const timestamp = Date.now();
-  
+
   try {
     // Canvas para og-image con logo grande y centrado
     const canvas = createCanvas(1200, 630);
@@ -64,28 +71,34 @@ async function regenerateWithTimestamp() {
     const logoSize = 220;
     const logoX = (1200 - logoSize) / 2;
     const logoY = 120;
-    
+
     // Configurar alta calidad
     ctx.imageSmoothingEnabled = true;
-    ctx.imageSmoothingQuality = 'high';
-    
+    ctx.imageSmoothingQuality = "high";
+
     // Fondo circular para el logo
     ctx.globalAlpha = 0.1;
     ctx.fillStyle = "#ffffff";
     ctx.beginPath();
-    ctx.arc(logoX + logoSize/2, logoY + logoSize/2, logoSize/2 + 20, 0, Math.PI * 2);
+    ctx.arc(
+      logoX + logoSize / 2,
+      logoY + logoSize / 2,
+      logoSize / 2 + 20,
+      0,
+      Math.PI * 2
+    );
     ctx.fill();
     ctx.globalAlpha = 1;
-    
+
     // Sombra
     ctx.shadowColor = "rgba(0, 0, 0, 0.4)";
     ctx.shadowBlur = 15;
     ctx.shadowOffsetX = 3;
     ctx.shadowOffsetY = 3;
-    
+
     // Dibujar logo
     ctx.drawImage(logo1, logoX, logoY, logoSize, logoSize);
-    
+
     // Resetear efectos
     ctx.shadowColor = "transparent";
     ctx.shadowBlur = 0;
@@ -104,7 +117,11 @@ async function regenerateWithTimestamp() {
 
     ctx.fillStyle = "#60a5fa";
     ctx.font = "20px Arial, sans-serif";
-    ctx.fillText("Soluciones Tecnológicas Innovadoras | Desarrollo Full-Stack", 600, 500);
+    ctx.fillText(
+      "Soluciones Tecnológicas Innovadoras | Desarrollo Full-Stack",
+      600,
+      500
+    );
 
     ctx.fillStyle = "#10b981";
     ctx.font = "16px Arial, sans-serif";
@@ -123,7 +140,7 @@ async function regenerateWithTimestamp() {
     // Guardar
     const buffer = canvas.toBuffer("image/png");
     fs.writeFileSync("./public/og-image.png", buffer);
-    
+
     console.log(`✅ og-image.png actualizada con timestamp ${timestamp}`);
     console.log(`   Logo usado: logo1.png (${logoSize}x${logoSize}px)`);
     console.log(`   Posición: centrado en ${logoX}, ${logoY}`);
@@ -132,11 +149,10 @@ async function regenerateWithTimestamp() {
     const twitterCanvas = createCanvas(800, 418);
     const twitterCtx = twitterCanvas.getContext("2d");
     twitterCtx.drawImage(canvas, 0, 0, 1200, 630, 0, 0, 800, 418);
-    
+
     const twitterBuffer = twitterCanvas.toBuffer("image/png");
     fs.writeFileSync("./public/twitter-image.png", twitterBuffer);
     console.log(`✅ twitter-image.png actualizada`);
-
   } catch (error) {
     console.error("❌ Error regenerando imágenes:", error);
   }
@@ -145,7 +161,7 @@ async function regenerateWithTimestamp() {
 async function main() {
   await verifyImagesWithLogo();
   await regenerateWithTimestamp();
-  
+
   console.log("\n🎯 IMPORTANTE:");
   console.log("1. Sube los cambios a GitHub");
   console.log("2. Espera unos minutos para que GitHub Pages se actualice");
