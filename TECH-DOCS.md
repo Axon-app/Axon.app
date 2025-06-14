@@ -2,7 +2,54 @@
 
 ## 📋 Registro de Cambios Detallado
 
-_Actualizado: 14 de Junio, 2025_
+_Actualizado: 14 de Junio, 2025 - v1.1.0_
+
+---
+
+## 🆕 ÚLTIMOS CAMBIOS - v1.1.0 (14 Jun 2025)
+
+### 🎭 **MODALES LEGALES MEJORADOS**
+
+#### Nuevos Componentes Implementados:
+1. **EnhancedPrivacyModal** (líneas 181-515 en UIComponents.jsx)
+   - Props: `{ isOpen, onClose }`
+   - Estado interno: `isClosing` para animaciones
+   - Características: Tabla de contenido, 8 secciones, función imprimir
+
+2. **EnhancedTermsModal** (líneas 517-815 en UIComponents.jsx)
+   - Props: `{ isOpen, onClose }`
+   - Estado interno: `isClosing` para animaciones
+   - Características: SLA, resolución de disputas, información legal
+
+#### Mejoras Técnicas:
+- **Animaciones CSS:** Transiciones de 300ms con easing
+- **Z-index:** 9999 para máxima prioridad
+- **Backdrop:** Blur effect con opacidad variable
+- **Responsive:** max-w-4xl con altura máxima 90vh
+- **Scrollbar:** Custom scrollbar con gradientes
+
+#### Correcciones de Bugs:
+- **Import Error:** Corregido `React.useState` → `useState`
+- **Runtime Error:** Solucionado error que causaba página en blanco
+- **State Management:** Mejorado manejo de estados de cierre
+
+### 🎨 **ESTILOS CSS AGREGADOS**
+
+#### Nuevas Clases en index.css:
+```css
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #4f46e5 #374151;
+}
+
+.modal-enter {
+  animation: modalSlideIn 0.3s ease-out forwards;
+}
+
+.modal-exit {
+  animation: modalSlideOut 0.3s ease-out forwards;
+}
+```
 
 ---
 
@@ -157,6 +204,20 @@ Axon/
    - Props: `{ isVisible, onClick }`
    - Función: Botón flotante para scroll to top
    - Features: Animaciones de visibilidad, posición fija
+
+8. **`EnhancedPrivacyModal`** (líneas 181-515)
+
+   - Props: `{ isOpen, onClose }`
+   - Estado: `isClosing` (interno)
+   - Función: Modal de política de privacidad mejorado
+   - Features: Tabla de contenido, 8 secciones, función imprimir
+
+9. **`EnhancedTermsModal`** (líneas 517-815)
+
+   - Props: `{ isOpen, onClose }`
+   - Estado: `isClosing` (interno)
+   - Función: Modal de términos y condiciones mejorado
+   - Features: SLA, resolución de disputas, información legal
 
 ### 2. **App.jsx** (643 líneas)
 
@@ -365,11 +426,11 @@ git push origin main                 # Dispara deploy automático
 
 ### Líneas de Código
 
-- **App.jsx:** 643 líneas
-- **UIComponents.jsx:** 167 líneas
-- **Total React:** ~810 líneas
-- **Archivos de config:** ~150 líneas
-- **Documentación:** ~400+ líneas
+- **App.jsx:** 442 líneas (↓ limpieza modales antiguos)
+- **UIComponents.jsx:** 815 líneas (↑ +650 modales mejorados)
+- **Total React:** ~1,257 líneas (↑ +447 líneas)
+- **Archivos de config:** ~180 líneas (↑ CSS custom)
+- **Documentación:** ~800+ líneas (↑ +400 líneas)
 
 ### Tiempo de Build
 

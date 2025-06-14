@@ -2,8 +2,8 @@
 
 ## 📊 Estado del Proyecto
 
-**Versión Actual:** 1.0.0  
-**Última Actualización:** 14 de Junio, 2025  
+**Versión Actual:** 1.1.0  
+**Última Actualización:** 14 de Junio, 2025
 **Estado:** ✅ Funcional - Desplegado en GitHub Pages  
 **URL de Producción:** [axon.app](https://github.com/[usuario]/Axon.app) (GitHub Pages)  
 **URL de Desarrollo:** http://localhost:5173/Axon.app/
@@ -45,6 +45,43 @@ Axon/
 
 ## 📈 Historial de Cambios
 
+### v1.1.0 - Modales Legales Mejorados (14 Jun 2025)
+
+#### ✅ **MODALES MEJORADOS**
+- [x] **EnhancedPrivacyModal:** Modal de privacidad completamente rediseñado
+- [x] **EnhancedTermsModal:** Modal de términos y condiciones mejorado
+- [x] **Animaciones Avanzadas:** Transiciones suaves de entrada/salida (300ms)
+- [x] **Efectos Visuales:** Blur backdrop, scale transforms, gradientes
+- [x] **Responsive Design:** Optimizado para móviles y tablets
+
+#### ✅ **CONTENIDO LEGAL EXPANDIDO**
+- [x] **Más Secciones:** Agregadas 8+ nuevas secciones legales
+- [x] **Política de Cookies:** Información detallada sobre uso de cookies
+- [x] **Protección de Menores:** Sección específica para menores de edad
+- [x] **Tabla de Contenido:** Navegación interna con enlaces
+- [x] **Información de Contacto:** Datos del DPO y tiempos de respuesta
+- [x] **SLA y Resolución:** Niveles de servicio y proceso de disputas
+
+#### ✅ **EXPERIENCIA DE USUARIO (UX)**
+- [x] **Scrollbar Personalizado:** Diseño custom con gradientes
+- [x] **Botones Mejorados:** Imprimir, cerrar, aceptar con iconos
+- [x] **Headers con Gradiente:** Azul para privacidad, verde para términos
+- [x] **Iconografía:** SVG icons para mejor accesibilidad
+- [x] **Tipografía:** Jerarquía visual mejorada con colores temáticos
+
+#### ✅ **FUNCIONALIDADES ADICIONALES**
+- [x] **Función de Impresión:** Botón para imprimir contenido legal
+- [x] **Click Outside:** Cerrar modal haciendo click fuera
+- [x] **Animación de Cierre:** Transición suave con delay
+- [x] **Estados de Loading:** Animaciones de entrada y salida
+- [x] **Footer Informativo:** Versión, fecha y acciones rápidas
+
+#### 🐛 **CORRECCIONES TÉCNICAS**
+- [x] **Import React Hooks:** Corregido `useState` import en UIComponents
+- [x] **Runtime Errors:** Solucionado error que causaba página en blanco
+- [x] **State Management:** Mejora en manejo de estados de modales
+- [x] **Performance:** Optimizado renderizado condicional
+
 ### v1.0.0 - Versión Inicial Completa (14 Jun 2025)
 
 #### ✅ **CONFIGURACIÓN INICIAL**
@@ -72,6 +109,8 @@ Axon/
 5. **TechItem** - Items de tecnología
 6. **ContactForm** - Formulario de contacto funcional
 7. **ScrollToTopButton** - Botón de scroll hacia arriba
+8. **EnhancedPrivacyModal** - Modal mejorado de privacidad (✅ nuevo)
+9. **EnhancedTermsModal** - Modal mejorado de términos (✅ nuevo)
 
 **App.jsx - Estructura Principal:**
 
@@ -79,8 +118,8 @@ Axon/
 - [x] Hero section con CTA
 - [x] Sección de servicios (6 servicios)
 - [x] Sección de contacto
-- [x] Footer completo
-- [x] Modales de Política de Privacidad y Términos
+- [x] Footer completo con enlaces a modales
+- [x] Modales legales mejorados con animaciones (✅ actualizado)
 
 #### ✅ **DATOS Y CONTENIDO**
 
@@ -106,25 +145,33 @@ Axon/
 ## 🎨 Funcionalidades Implementadas
 
 ### 🖥️ **Interfaz de Usuario**
-
 - **✅ Diseño Responsivo:** Mobile-first, adaptable a todas las pantallas
 - **✅ Tema Oscuro:** Gradientes oscuros con acentos de color
 - **✅ Animaciones Suaves:** Transiciones CSS y efectos hover
 - **✅ Tipografía Moderna:** Orbitron + Rajdhani para jerarquía visual
+- **✅ Modales Avanzados:** Animaciones de entrada/salida con blur (✅ nuevo)
 
 ### 🧭 **Navegación**
-
 - **✅ Navbar Fijo:** Sticky navigation con transparencia
 - **✅ Menú Móvil:** Hamburger menu para dispositivos pequeños
 - **✅ Scroll Suave:** Navegación entre secciones
 - **✅ Scroll to Top:** Botón para volver arriba
+- **✅ Enlaces Footer:** Navegación a modales legales (✅ nuevo)
 
 ### 📄 **Secciones de Contenido**
-
 1. **✅ Hero Section:** Presentación principal con CTA
 2. **✅ Servicios:** 6 servicios con iconos y descripciones
 3. **✅ Contacto:** Formulario funcional con validación
 4. **✅ Footer:** Links, información legal y redes sociales
+5. **✅ Modales Legales:** Privacidad y Términos expandidos (✅ nuevo)
+
+### ⚖️ **Funcionalidades Legales (Nuevo v1.1.0)**
+- **✅ Política de Privacidad:** 8 secciones con tabla de contenido
+- **✅ Términos y Condiciones:** Contenido legal completo con SLA
+- **✅ Política de Cookies:** Información detallada sobre cookies
+- **✅ Protección de Menores:** Sección específica para <18 años
+- **✅ Función de Impresión:** Exportar documentos legales
+- **✅ Navegación Interna:** Enlaces anchor dentro de modales
 
 ### 🔧 **Funcionalidades Técnicas**
 
