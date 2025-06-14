@@ -1,13 +1,20 @@
 import { createCanvas, loadImage } from "canvas";
 import fs from "fs";
+import process from "process";
 
 // Script para verificar que las imágenes contienen el logo correcto
 async function verifyImagesWithLogo() {
   console.log("🔍 Verificando que las imágenes contengan el logo1.png...\n");
 
   try {
+    // Verificar que logo1.png existe
+    const logoPath = "./public/logo1.png";
+    if (!fs.existsSync(logoPath)) {
+      throw new Error("Logo principal logo1.png no encontrado");
+    }
+
     // Cargar el logo original para comparar
-    const originalLogo = await loadImage("./public/logo1.png");
+    const originalLogo = await loadImage(logoPath);
     console.log(
       `✅ Logo original cargado: ${originalLogo.width}x${originalLogo.height}px`
     );
@@ -143,9 +150,7 @@ async function regenerateWithTimestamp() {
 
     console.log(`✅ og-image.png actualizada con timestamp ${timestamp}`);
     console.log(`   Logo usado: logo1.png (${logoSize}x${logoSize}px)`);
-    console.log(`   Posición: centrado en ${logoX}, ${logoY}`);
-
-    // Crear versión para Twitter
+    console.log(`   Posición: centrado en ${logoX}, ${logoY}`); // Crear versión para Twitter
     const twitterCanvas = createCanvas(800, 418);
     const twitterCtx = twitterCanvas.getContext("2d");
     twitterCtx.drawImage(canvas, 0, 0, 1200, 630, 0, 0, 800, 418);
@@ -153,22 +158,47 @@ async function regenerateWithTimestamp() {
     const twitterBuffer = twitterCanvas.toBuffer("image/png");
     fs.writeFileSync("./public/twitter-image.png", twitterBuffer);
     console.log(`✅ twitter-image.png actualizada`);
+
+    // Crear versión para WhatsApp (más ligera)
+    const whatsappCanvas = createCanvas(800, 420);
+    const whatsappCtx = whatsappCanvas.getContext("2d");
+    whatsappCtx.drawImage(canvas, 0, 0, 1200, 630, 0, 0, 800, 420);
+
+    const whatsappBuffer = whatsappCanvas.toBuffer("image/png");
+    fs.writeFileSync("./public/whatsapp-image.png", whatsappBuffer);
+    console.log(`✅ whatsapp-image.png actualizada`);
   } catch (error) {
     console.error("❌ Error regenerando imágenes:", error);
   }
 }
 
 async function main() {
-  await verifyImagesWithLogo();
-  await regenerateWithTimestamp();
+  try {
+    console.log(
+      "🚀 Iniciando proceso de regeneración de imágenes sociales...\n"
+    );
 
-  console.log("\n🎯 IMPORTANTE:");
-  console.log("1. Sube los cambios a GitHub");
-  console.log("2. Espera unos minutos para que GitHub Pages se actualice");
-  console.log("3. Limpia la caché del navegador (Ctrl+F5)");
-  console.log("4. Usa el Facebook Debugger para forzar la actualización:");
-  console.log("   https://developers.facebook.com/tools/debug/");
-  console.log("5. Ingresa tu URL: https://axon-app.github.io/Axon.app/");
+    await verifyImagesWithLogo();
+    await regenerateWithTimestamp();
+
+    console.log("\n✅ Proceso completado exitosamente!");
+    console.log("\n🎯 IMPORTANTE:");
+    console.log("1. Sube los cambios a GitHub");
+    console.log("2. Espera unos minutos para que GitHub Pages se actualice");
+    console.log("3. Limpia la caché del navegador (Ctrl+F5)");
+    console.log("4. Usa el Facebook Debugger para forzar la actualización:");
+    console.log("   https://developers.facebook.com/tools/debug/");
+    console.log("5. Ingresa tu URL: https://axon-app.github.io/Axon.app/");
+  } catch (error) {
+    console.error("\n❌ Error en el proceso principal:", error.message);
+    console.log("\n💡 SOLUCIONES:");
+    console.log(
+      "1. Asegúrate de que 'canvas' esté instalado: npm install canvas"
+    );
+    console.log("2. Verifica que logo1.png existe en ./public/");
+    console.log("3. Ejecuta el script desde la raíz del proyecto");
+    process.exit(1);
+  }
 }
 
 main();

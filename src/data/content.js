@@ -203,66 +203,78 @@ export const testimonials = [
   {
     id: 1,
     name: "María González",
-    position: "CEO",
+    role: "CEO - TechStart Solutions",
     company: "TechStart Solutions",
-    avatar: "MG",
+    avatar:
+      "https://ui-avatars.com/api/?name=Maria+Gonzalez&background=0ea5e9&color=fff&size=128&bold=true",
     rating: 5,
-    text: "Axon transformó completamente nuestra presencia digital. Su equipo no solo entregó una plataforma excepcional, sino que superó todas nuestras expectativas. El nivel de profesionalismo y atención al detalle es impresionante.",
+    review:
+      "Axon transformó completamente nuestra presencia digital. Su equipo no solo entregó una plataforma excepcional, sino que superó todas nuestras expectativas. El nivel de profesionalismo y atención al detalle es impresionante.",
     project: "Plataforma E-commerce",
     gradient: "from-blue-500 to-cyan-500",
   },
   {
     id: 2,
     name: "Carlos Mendoza",
-    position: "CTO",
+    role: "CTO - InnovateLab",
     company: "InnovateLab",
-    avatar: "CM",
+    avatar:
+      "https://ui-avatars.com/api/?name=Carlos+Mendoza&background=10b981&color=fff&size=128&bold=true",
     rating: 5,
-    text: "La experiencia trabajando con Axon ha sido extraordinaria. Desarrollaron una aplicación web compleja con integraciones avanzadas en tiempo récord. Su expertise técnico es de clase mundial.",
+    review:
+      "La experiencia trabajando con Axon ha sido extraordinaria. Desarrollaron una aplicación web compleja con integraciones avanzadas en tiempo récord. Su expertise técnico es de clase mundial.",
     project: "Sistema de Gestión Empresarial",
     gradient: "from-emerald-500 to-green-500",
   },
   {
     id: 3,
     name: "Ana Rodríguez",
-    position: "Directora de Marketing",
+    role: "Directora de Marketing - Digital Boost",
     company: "Digital Boost",
-    avatar: "AR",
+    avatar:
+      "https://ui-avatars.com/api/?name=Ana+Rodriguez&background=a855f7&color=fff&size=128&bold=true",
     rating: 5,
-    text: "Axon no solo construyó nuestro sitio web, creó una experiencia digital que convierte visitantes en clientes. El ROI ha sido increíble y el soporte post-lanzamiento es excepcional.",
+    review:
+      "Axon no solo construyó nuestro sitio web, creó una experiencia digital que convierte visitantes en clientes. El ROI ha sido increíble y el soporte post-lanzamiento es excepcional.",
     project: "Landing Page & Marketing",
     gradient: "from-purple-500 to-pink-500",
   },
   {
     id: 4,
     name: "Roberto Silva",
-    position: "Fundador",
+    role: "Fundador - StartupX",
     company: "StartupX",
-    avatar: "RS",
+    avatar:
+      "https://ui-avatars.com/api/?name=Roberto+Silva&background=f59e0b&color=fff&size=128&bold=true",
     rating: 5,
-    text: "Como startup, necesitábamos un socio tecnológico confiable. Axon nos ayudó a escalar desde una idea hasta una plataforma robusta con miles de usuarios. Su visión estratégica es invaluable.",
+    review:
+      "Como startup, necesitábamos un socio tecnológico confiable. Axon nos ayudó a escalar desde una idea hasta una plataforma robusta con miles de usuarios. Su visión estratégica es invaluable.",
     project: "MVP & Escalamiento",
     gradient: "from-amber-500 to-orange-500",
   },
   {
     id: 5,
     name: "Lucía Fernández",
-    position: "Gerente General",
+    role: "Gerente General - RetailPro",
     company: "RetailPro",
-    avatar: "LF",
+    avatar:
+      "https://ui-avatars.com/api/?name=Lucia+Fernandez&background=6366f1&color=fff&size=128&bold=true",
     rating: 5,
-    text: "La migración a la nube que realizó Axon mejoró nuestra eficiencia operativa en un 40%. Su enfoque en la seguridad y la escalabilidad nos da total tranquilidad para el futuro.",
+    review:
+      "La migración a la nube que realizó Axon mejoró nuestra eficiencia operativa en un 40%. Su enfoque en la seguridad y la escalabilidad nos da total tranquilidad para el futuro.",
     project: "Migración Cloud & DevOps",
     gradient: "from-indigo-500 to-blue-500",
   },
   {
     id: 6,
     name: "Diego Morales",
-    position: "VP Technology",
+    role: "VP Technology - FinanceNext",
     company: "FinanceNext",
-    avatar: "DM",
+    avatar:
+      "https://ui-avatars.com/api/?name=Diego+Morales&background=06b6d4&color=fff&size=128&bold=true",
     rating: 5,
-    text: "Implementaron un sistema de IA que revolucionó nuestro análisis de datos. Los insights que obtenemos ahora nos permiten tomar decisiones más inteligentes y oportunas.",
+    review:
+      "Implementaron un sistema de IA que revolucionó nuestro análisis de datos. Los insights que obtenemos ahora nos permiten tomar decisiones más inteligentes y oportunas.",
     project: "IA & Machine Learning",
     gradient: "from-teal-500 to-cyan-500",
   },

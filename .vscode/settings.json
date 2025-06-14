@@ -1,0 +1,80 @@
+{
+    // React y JavaScript
+    "files.associations": {
+        "*.jsx": "javascriptreact",
+        "*.js": "javascript",
+        "*.ts": "typescript",
+        "*.tsx": "typescriptreact"
+    },
+    "emmet.includeLanguages": {
+        "javascriptreact": "html"
+    },
+    "emmet.triggerExpansionOnTab": true,
+    // ESLint optimizado
+    "eslint.workingDirectories": [
+        {
+            "directory": ".",
+            "changeProcessCWD": true
+        }
+    ],
+    "eslint.validate": [
+        "javascript",
+        "javascriptreact"
+    ],
+    "eslint.format.enable": true,
+    // TypeScript/JavaScript
+    "typescript.preferences.includePackageJsonAutoImports": "off",
+    "javascript.preferences.quoteStyle": "double",
+    "typescript.preferences.quoteStyle": "double",
+    // Tailwind CSS
+    "tailwindCSS.includeLanguages": {
+        "html": "html",
+        "javascript": "javascript",
+        "javascriptreact": "javascriptreact"
+    },
+    "tailwindCSS.experimental.classRegex": [
+        [
+            "clsx\\(([^)]*)\\)",
+            "(?:'|\"|`)([^']*)(?:'|\"|`)"
+        ],
+        [
+            "className\\s*:\\s*['\"`]([^'\"`]*)['\"`]"
+        ]
+    ],
+    // Formateo automático optimizado
+    "editor.formatOnSave": true,
+    "editor.formatOnPaste": true,
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": "explicit",
+        "source.organizeImports": "explicit"
+    },
+    // Rendimiento y productividad
+    "editor.quickSuggestions": {
+        "strings": true
+    },
+    "editor.suggest.insertMode": "replace",
+    "editor.acceptSuggestionOnCommitCharacter": false,
+    "editor.tabCompletion": "on",
+    // Archivos y exclusiones
+    "files.exclude": {
+        "**/node_modules": true,
+        "**/dist": true,
+        "**/.git": true,
+        "**/.DS_Store": true,
+        "**/Thumbs.db": true
+    },
+    "search.exclude": {
+        "**/node_modules": true,
+        "**/dist": true
+    },
+    // CSS y estilos
+    "css.validate": false,
+    "scss.validate": false,
+    "less.validate": false,
+    // Terminal optimizado
+    "terminal.integrated.defaultProfile.windows": "PowerShell",
+    "terminal.integrated.fontSize": 14,
+    // Vite y desarrollo
+    "vite.devCommand": "npm run dev",
+    "vite.buildCommand": "npm run build"
+}

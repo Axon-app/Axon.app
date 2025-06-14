@@ -3,8 +3,14 @@ const path = require("path");
 
 console.log("🔍 Validación completa de imágenes y meta tags...\n");
 
-// Leer HTML
+// Verificar que el archivo HTML existe
 const htmlPath = path.join(__dirname, "index.html");
+if (!fs.existsSync(htmlPath)) {
+  console.error("❌ Error: No se encontró index.html");
+  process.exit(1);
+}
+
+// Leer HTML
 const htmlContent = fs.readFileSync(htmlPath, "utf8");
 
 // Función para buscar meta tags con formato flexible
@@ -105,8 +111,20 @@ images.forEach(({ name, purpose, size }) => {
     const sizeKB = (stats.size / 1024).toFixed(2);
     const sizeMB = (stats.size / (1024 * 1024)).toFixed(2);
 
+    // Validar tamaño recomendado para imágenes sociales
+    let sizeWarning = "";
+    if (name.includes("og-image") || name.includes("twitter-image")) {
+      if (stats.size > 8 * 1024 * 1024) {
+        // > 8MB
+        sizeWarning = " ⚠️ Muy grande";
+      } else if (stats.size < 50 * 1024) {
+        // < 50KB
+        sizeWarning = " ⚠️ Muy pequeña";
+      }
+    }
+
     console.log(`✅ ${name.padEnd(20)} ${purpose}`);
-    console.log(`${"".padEnd(25)} → ${size} • ${sizeKB} KB`);
+    console.log(`${"".padEnd(25)} → ${size} • ${sizeKB} KB${sizeWarning}`);
   } else {
     console.log(`❌ ${name.padEnd(20)} ${purpose}`);
     console.log(`${"".padEnd(25)} → No encontrado`);
@@ -147,5 +165,16 @@ console.log("   1. Abre WhatsApp y envía el enlace en cualquier chat");
 console.log("   2. Crea un post en Facebook con el enlace");
 console.log("   3. Escribe un tweet con el enlace");
 console.log("   4. Comparte en LinkedIn");
+
+console.log("\n🔗 Herramientas de validación:");
+console.log(
+  "   • Facebook Debugger: https://developers.facebook.com/tools/debug/"
+);
+console.log(
+  "   • Twitter Card Validator: https://cards-dev.twitter.com/validator"
+);
+console.log(
+  "   • LinkedIn Post Inspector: https://www.linkedin.com/post-inspector/"
+);
 
 console.log("\n✨ ¡Las imágenes ya no se ven pixeladas y son de alta calidad!");

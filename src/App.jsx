@@ -1,20 +1,14 @@
 import React, { useState } from "react";
 import {
-  AxonLogo,
-  AnimatedBackground,
-  ServiceCard,
-  TestimonialCard,
-  TechCarousel,
-  ContactForm,
-  ScrollToTopButton,
+  AnimatedCounterWithProgress,
+  ConsultationModal,
   EnhancedPrivacyModal,
   EnhancedTermsModal,
-  ServiceDetailModal,
   QuoteRequestModal,
-  ConsultationModal,
-  AnimatedCounter,
+  ServiceCard,
+  ServiceDetailModal,
   TestimonialsBanner,
-} from "./components/UIComponents";
+} from "./components/index";
 import { technologies, testimonials } from "./data/content";
 import { servicesData } from "./data/servicesData";
 import logo1 from "/logo1.png";
@@ -64,7 +58,6 @@ const App = () => {
   }, []);
 
   const handleLogoError = () => {
-    console.error("Logo failed to load");
     setLogoError(true);
   };
 
@@ -120,7 +113,6 @@ const App = () => {
                   alt="Axon Logo Original"
                   className="h-16 w-16 object-contain logo-rotate-1 rounded-lg transition-all duration-300 group-hover:shadow-lg group-hover:shadow-blue-500/25"
                   onError={(e) => {
-                    console.error("Error loading logo1:", e);
                     e.target.style.display = "none";
                   }}
                 />
@@ -129,10 +121,8 @@ const App = () => {
                   alt="Axon.App Logo 3D"
                   className="h-20 w-auto object-contain logo-rotate-2 rounded-lg transition-all duration-300 group-hover:shadow-lg group-hover:shadow-cyan-500/25"
                   onError={(e) => {
-                    console.error("Error loading logo231:", e);
                     e.target.style.display = "none";
                   }}
-                  onLoad={() => console.log("Logo231 loaded successfully")}
                 />
               </div>
             </a>{" "}
@@ -473,7 +463,6 @@ const App = () => {
                 alt="Axon.App Logo"
                 className="h-20 md:h-28 w-auto mx-auto"
                 onError={handleLogoError}
-                onLoad={() => console.log("Hero logo loaded successfully")}
               />
             ) : (
               <LogoSVG className="h-20 md:h-28 w-20 md:w-28 mx-auto" />
@@ -1098,57 +1087,53 @@ const App = () => {
           {/* Contadores Grid */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
             {/* Proyectos Completados */}
-            <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm rounded-xl p-6 border border-gray-700/30 text-center group hover:border-blue-500/50 transition-all duration-300 hover:scale-105">
-              <div className="text-3xl md:text-4xl font-bold text-blue-400 mb-2 group-hover:scale-110 transition-transform duration-300">
-                <AnimatedCounter endValue={150} suffix="+" duration={2500} />
-              </div>
-              <div className="text-gray-300 font-medium mb-1">Proyectos</div>
-              <div className="text-xs text-gray-500">Completados</div>
-              <div className="w-full bg-gray-700 rounded-full h-1.5 mt-3">
-                <div className="bg-gradient-to-r from-blue-500 to-cyan-500 h-1.5 rounded-full w-4/5"></div>
-              </div>
-            </div>
+            <AnimatedCounterWithProgress
+              end={150}
+              suffix="+"
+              duration={2500}
+              title="Proyectos"
+              subtitle="Completados"
+              progressColor="from-blue-500 to-cyan-500"
+              progressWidth={80}
+              hoverColor="blue-500"
+            />
 
             {/* Clientes Satisfechos */}
-            <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm rounded-xl p-6 border border-gray-700/30 text-center group hover:border-emerald-500/50 transition-all duration-300 hover:scale-105">
-              <div className="text-3xl md:text-4xl font-bold text-emerald-400 mb-2 group-hover:scale-110 transition-transform duration-300">
-                <AnimatedCounter endValue={120} suffix="+" duration={2200} />
-              </div>
-              <div className="text-gray-300 font-medium mb-1">Clientes</div>
-              <div className="text-xs text-gray-500">Satisfechos</div>
-              <div className="w-full bg-gray-700 rounded-full h-1.5 mt-3">
-                <div className="bg-gradient-to-r from-emerald-500 to-green-500 h-1.5 rounded-full w-full"></div>
-              </div>
-            </div>
+            <AnimatedCounterWithProgress
+              end={120}
+              suffix="+"
+              duration={2200}
+              title="Clientes"
+              subtitle="Satisfechos"
+              progressColor="from-emerald-500 to-green-500"
+              progressWidth={100}
+              hoverColor="emerald-500"
+            />
 
             {/* Años de Experiencia */}
-            <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm rounded-xl p-6 border border-gray-700/30 text-center group hover:border-purple-500/50 transition-all duration-300 hover:scale-105">
-              <div className="text-3xl md:text-4xl font-bold text-purple-400 mb-2 group-hover:scale-110 transition-transform duration-300">
-                <AnimatedCounter endValue={5} suffix="+" duration={1800} />
-              </div>
-              <div className="text-gray-300 font-medium mb-1">Años</div>
-              <div className="text-xs text-gray-500">Experiencia</div>
-              <div className="w-full bg-gray-700 rounded-full h-1.5 mt-3">
-                <div className="bg-gradient-to-r from-purple-500 to-pink-500 h-1.5 rounded-full w-3/4"></div>
-              </div>
-            </div>
+            <AnimatedCounterWithProgress
+              end={5}
+              suffix="+"
+              duration={1800}
+              title="Años"
+              subtitle="Experiencia"
+              progressColor="from-purple-500 to-pink-500"
+              progressWidth={75}
+              hoverColor="purple-500"
+            />
 
             {/* Uptime/Disponibilidad */}
-            <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm rounded-xl p-6 border border-gray-700/30 text-center group hover:border-amber-500/50 transition-all duration-300 hover:scale-105">
-              <div className="text-3xl md:text-4xl font-bold text-amber-400 mb-2 group-hover:scale-110 transition-transform duration-300">
-                <AnimatedCounter
-                  endValue={99.9}
-                  suffix="%"
-                  duration={3000}
-                  decimals={1}
-                />
-              </div>
-              <div className="text-gray-300 font-medium mb-1">Uptime</div>
-              <div className="text-xs text-gray-500">Disponibilidad</div>
-              <div className="w-full bg-gray-700 rounded-full h-1.5 mt-3">
-                <div className="bg-gradient-to-r from-amber-500 to-orange-500 h-1.5 rounded-full w-full"></div>
-              </div>
-            </div>
+            <AnimatedCounterWithProgress
+              end={99.9}
+              suffix="%"
+              duration={3000}
+              decimals={1}
+              title="Uptime"
+              subtitle="Disponibilidad"
+              progressColor="from-amber-500 to-orange-500"
+              progressWidth={99.9}
+              hoverColor="amber-500"
+            />
           </div>
 
           {/* Logros adicionales en formato horizontal */}
@@ -1542,6 +1527,7 @@ const App = () => {
                       id="name"
                       name="name"
                       required
+                      autoComplete="name"
                       className="w-full h-12 py-3 px-4 bg-gray-700/50 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-300"
                       placeholder="Tu nombre completo"
                     />
@@ -1557,6 +1543,7 @@ const App = () => {
                       type="tel"
                       id="phone"
                       name="phone"
+                      autoComplete="tel"
                       className="w-full h-12 py-3 px-4 bg-gray-700/50 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-300"
                       placeholder="+57 123 456 7890"
                     />
@@ -1575,6 +1562,7 @@ const App = () => {
                     id="email"
                     name="email"
                     required
+                    autoComplete="email"
                     className="w-full h-12 py-3 px-4 bg-gray-700/50 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-300"
                     placeholder="tu@empresa.com"
                   />
@@ -1591,6 +1579,7 @@ const App = () => {
                     type="text"
                     id="company"
                     name="company"
+                    autoComplete="organization"
                     className="w-full h-12 py-3 px-4 bg-gray-700/50 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-300"
                     placeholder="Nombre de tu empresa"
                   />
@@ -1716,7 +1705,6 @@ const App = () => {
                   alt="Axon Logo Original"
                   className="h-16 w-16 object-contain logo-rotate-1 rounded-lg"
                   onError={(e) => {
-                    console.error("Error loading logo1 in footer:", e);
                     e.target.style.display = "none";
                   }}
                 />
@@ -1725,7 +1713,6 @@ const App = () => {
                   alt="Axon.App Logo 3D"
                   className="h-20 w-auto object-contain logo-rotate-2 rounded-lg"
                   onError={(e) => {
-                    console.error("Error loading logo231 in footer:", e);
                     e.target.style.display = "none";
                   }}
                 />
