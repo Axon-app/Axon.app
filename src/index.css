@@ -215,3 +215,62 @@ body {
   font-weight: bold;
   margin-right: 12px;
 }
+
+/* Animaciones para la sección de tecnologías */
+@keyframes techFloat {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes techGlow {
+  0%,
+  100% {
+    box-shadow: 0 0 5px rgba(59, 130, 246, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(59, 130, 246, 0.6),
+      0 0 40px rgba(59, 130, 246, 0.3);
+  }
+}
+
+.tech-float {
+  animation: techFloat 3s ease-in-out infinite;
+}
+
+.tech-glow-hover:hover {
+  animation: techGlow 1.5s ease-in-out infinite;
+}
+
+/* Efecto de grid dinámico para las tecnologías */
+.tech-grid-item {
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.tech-grid-item:hover {
+  transform: translateY(-8px) scale(1.05);
+  z-index: 10;
+}
+
+/* Animación para carrusel infinito de tecnologías */
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-scroll {
+  animation: scroll 30s linear infinite;
+}
+
+/* Pausa la animación al hacer hover */
+.animate-scroll:hover {
+  animation-play-state: paused;
+}

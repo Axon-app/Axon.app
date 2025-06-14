@@ -11,7 +11,9 @@ _Actualizado: 14 de Junio, 2025 - v1.1.0_
 ### 🎭 **MODALES LEGALES MEJORADOS**
 
 #### Nuevos Componentes Implementados:
+
 1. **EnhancedPrivacyModal** (líneas 181-515 en UIComponents.jsx)
+
    - Props: `{ isOpen, onClose }`
    - Estado interno: `isClosing` para animaciones
    - Características: Tabla de contenido, 8 secciones, función imprimir
@@ -22,6 +24,7 @@ _Actualizado: 14 de Junio, 2025 - v1.1.0_
    - Características: SLA, resolución de disputas, información legal
 
 #### Mejoras Técnicas:
+
 - **Animaciones CSS:** Transiciones de 300ms con easing
 - **Z-index:** 9999 para máxima prioridad
 - **Backdrop:** Blur effect con opacidad variable
@@ -29,6 +32,7 @@ _Actualizado: 14 de Junio, 2025 - v1.1.0_
 - **Scrollbar:** Custom scrollbar con gradientes
 
 #### Correcciones de Bugs:
+
 - **Import Error:** Corregido `React.useState` → `useState`
 - **Runtime Error:** Solucionado error que causaba página en blanco
 - **State Management:** Mejorado manejo de estados de cierre
@@ -36,6 +40,7 @@ _Actualizado: 14 de Junio, 2025 - v1.1.0_
 ### 🎨 **ESTILOS CSS AGREGADOS**
 
 #### Nuevas Clases en index.css:
+
 ```css
 .custom-scrollbar {
   scrollbar-width: thin;
@@ -201,6 +206,7 @@ Axon/
    - Features: Validación HTML5, submit handler, responsive grid
 
 7. **`ScrollToTopButton`** (líneas 137-167)
+
    - Props: `{ isVisible, onClick }`
    - Función: Botón flotante para scroll to top
    - Features: Animaciones de visibilidad, posición fija

@@ -1,30 +1,202 @@
+/* cspell:disable */
+/* Este archivo contiene texto en español que puede ser marcado como error por el linter */
+
 // Datos para las secciones de la página
 
+// Constantes para niveles de experiencia
+const LEVELS = {
+  EXPERT: "Expert",
+  ADVANCED: "Advanced",
+};
+
+// Constantes para categorías
+const CATEGORIES = {
+  FRONTEND: "Frontend",
+  BACKEND: "Backend",
+  DEVOPS: "DevOps",
+  DATABASE: "Database",
+  CLOUD: "Cloud",
+  AI_ML: "IA/ML",
+  API: "API",
+  PROGRAMMING: "Programming",
+  CACHE: "Cache",
+};
+
+// Índices para búsqueda rápida
+const categoryIndex = new Map();
+const levelIndex = new Map();
+
 export const technologies = [
-  // Frontend
-  { name: "React", icon: "⚛️", category: "Frontend" },
-  { name: "Vue.js", icon: "💚", category: "Frontend" },
-  { name: "Angular", icon: "🅰️", category: "Frontend" },
-  { name: "TypeScript", icon: "📘", category: "Frontend" },
-  { name: "Next.js", icon: "▲", category: "Frontend" },
-  { name: "Vite", icon: "⚡", category: "Frontend" },
-
-  // Backend
-  { name: "Node.js", icon: "🟢", category: "Backend" },
-  { name: "Python", icon: "🐍", category: "Backend" },
-  { name: "Django", icon: "🎯", category: "Backend" },
-  { name: "Express", icon: "🚀", category: "Backend" },
-  { name: "FastAPI", icon: "⚡", category: "Backend" },
-  { name: "PostgreSQL", icon: "🐘", category: "Backend" },
-
-  // Cloud & DevOps
-  { name: "AWS", icon: "☁️", category: "Cloud & DevOps" },
-  { name: "Docker", icon: "🐳", category: "Cloud & DevOps" },
-  { name: "Kubernetes", icon: "☸️", category: "Cloud & DevOps" },
-  { name: "GitHub", icon: "🐙", category: "Cloud & DevOps" },
-  { name: "CI/CD", icon: "🔄", category: "Cloud & DevOps" },
-  { name: "Vercel", icon: "🔺", category: "Cloud & DevOps" },
+  {
+    name: "React",
+    category: CATEGORIES.FRONTEND,
+    icon: "⚛️",
+    description: "Biblioteca para interfaces de usuario",
+    gradient: "from-blue-500 to-cyan-400",
+    level: LEVELS.EXPERT,
+  },
+  {
+    name: "Node.js",
+    category: CATEGORIES.BACKEND,
+    icon: "�",
+    description: "Runtime de JavaScript del lado del servidor",
+    gradient: "from-green-500 to-emerald-400",
+    level: LEVELS.EXPERT,
+  },
+  {
+    name: "Python",
+    category: CATEGORIES.AI_ML,
+    icon: "🐍",
+    description: "Lenguaje versátil para desarrollo y análisis",
+    gradient: "from-yellow-500 to-orange-400",
+    level: LEVELS.EXPERT,
+  },
+  {
+    name: "AWS",
+    category: CATEGORIES.CLOUD,
+    icon: "☁️",
+    description: "Servicios de computación en la nube",
+    gradient: "from-orange-500 to-red-400",
+    level: LEVELS.ADVANCED,
+  },
+  {
+    name: "Docker",
+    category: CATEGORIES.DEVOPS,
+    icon: "�",
+    description: "Plataforma de containerización",
+    gradient: "from-blue-600 to-indigo-500",
+    level: LEVELS.EXPERT,
+  },
+  {
+    name: "Kubernetes",
+    category: CATEGORIES.DEVOPS,
+    icon: "☸️",
+    description: "Orquestación de contenedores",
+    gradient: "from-purple-500 to-pink-400",
+    level: LEVELS.ADVANCED,
+  },
+  {
+    name: "PostgreSQL",
+    category: CATEGORIES.DATABASE,
+    icon: "🐘",
+    description: "Base de datos relacional avanzada",
+    gradient: "from-blue-700 to-blue-500",
+    level: LEVELS.EXPERT,
+  },
+  {
+    name: "TensorFlow",
+    category: CATEGORIES.AI_ML,
+    icon: "🧠",
+    description: "Framework de machine learning",
+    gradient: "from-orange-600 to-yellow-500",
+    level: LEVELS.ADVANCED,
+  },
+  {
+    name: "TypeScript",
+    category: CATEGORIES.PROGRAMMING,
+    icon: "�",
+    description: "JavaScript con tipado estático",
+    gradient: "from-blue-500 to-blue-700",
+    level: LEVELS.EXPERT,
+  },
+  {
+    name: "MongoDB",
+    category: CATEGORIES.DATABASE,
+    icon: "�",
+    description: "Base de datos NoSQL flexible",
+    gradient: "from-green-600 to-green-400",
+    level: LEVELS.EXPERT,
+  },
+  {
+    name: "Redis",
+    category: CATEGORIES.CACHE,
+    icon: "�",
+    description: "Almacén de datos en memoria",
+    gradient: "from-red-500 to-red-400",
+    level: LEVELS.ADVANCED,
+  },
+  {
+    name: "GraphQL",
+    category: CATEGORIES.API,
+    icon: "🔗",
+    description: "Lenguaje de consulta para APIs",
+    gradient: "from-pink-500 to-purple-500",
+    level: LEVELS.ADVANCED,
+  },
+  // Tecnologías adicionales para completar el ecosistema
+  {
+    name: "Vue.js",
+    category: CATEGORIES.FRONTEND,
+    icon: "�",
+    description: "Framework progresivo para interfaces",
+    gradient: "from-green-400 to-emerald-500",
+    level: LEVELS.ADVANCED,
+  },
+  {
+    name: "Angular",
+    category: CATEGORIES.FRONTEND,
+    icon: "🅰️",
+    description: "Plataforma para aplicaciones web",
+    gradient: "from-red-500 to-pink-500",
+    level: LEVELS.ADVANCED,
+  },
+  {
+    name: "Next.js",
+    category: CATEGORIES.FRONTEND,
+    icon: "▲",
+    description: "Framework de React para producción",
+    gradient: "from-gray-800 to-gray-600",
+    level: LEVELS.EXPERT,
+  },
+  {
+    name: "Express",
+    category: CATEGORIES.BACKEND,
+    icon: "🚀",
+    description: "Framework web minimalista para Node.js",
+    gradient: "from-gray-600 to-gray-800",
+    level: LEVELS.EXPERT,
+  },
+  {
+    name: "Django",
+    category: CATEGORIES.BACKEND,
+    icon: "🎯",
+    description: "Framework web de alto nivel para Python",
+    gradient: "from-green-700 to-green-900",
+    level: LEVELS.ADVANCED,
+  },
+  {
+    name: "FastAPI",
+    category: CATEGORIES.BACKEND,
+    icon: "⚡",
+    description: "Framework moderno y rápido para APIs",
+    gradient: "from-teal-500 to-cyan-600",
+    level: LEVELS.ADVANCED,
+  },
 ];
+
+// Crear índices para búsqueda rápida
+technologies.forEach((tech) => {
+  // Índice por categoría
+  if (!categoryIndex.has(tech.category)) {
+    categoryIndex.set(tech.category, []);
+  }
+  categoryIndex.get(tech.category).push(tech);
+
+  // Índice por nivel
+  if (!levelIndex.has(tech.level)) {
+    levelIndex.set(tech.level, []);
+  }
+  levelIndex.get(tech.level).push(tech);
+});
+
+// Funciones de ayuda para filtrado rápido
+export const getTechnologiesByCategory = (category) =>
+  categoryIndex.get(category) || [];
+export const getTechnologiesByLevel = (level) => levelIndex.get(level) || [];
+export const getCategories = () => Object.values(CATEGORIES);
+export const getLevels = () => Object.values(LEVELS);
+export const TECH_CATEGORIES = CATEGORIES;
+export const TECH_LEVELS = LEVELS;
 
 export const testimonials = [
   {

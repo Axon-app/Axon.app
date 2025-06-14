@@ -79,14 +79,41 @@ export const TestimonialCard = ({ testimonial }) => {
   );
 };
 
-// Componente de tecnología
+// Componente de tecnología simplificado para carrusel
 export const TechItem = ({ tech }) => {
   return (
-    <div className="flex flex-col items-center p-3 hover:bg-purple-900/30 rounded-lg transition-all duration-300 transform hover:scale-110">
-      <span className="text-4xl mb-2 transition-transform duration-300">
-        {tech.icon}
-      </span>
-      <span className="text-sm text-gray-300 text-center">{tech.name}</span>
+    <div className="flex-shrink-0 bg-gray-800/50 hover:bg-gray-700/70 rounded-xl p-4 border border-gray-700/50 hover:border-blue-500/50 transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/20 hover:scale-105 mx-3">
+      <div className="flex flex-col items-center text-center space-y-2">
+        {/* Icono */}
+        <div className="text-3xl">{tech.icon}</div>
+
+        {/* Nombre */}
+        <h3 className="text-sm font-medium text-white">{tech.name}</h3>
+      </div>
+    </div>
+  );
+};
+
+// Componente de carrusel circular para tecnologías
+export const TechCarousel = ({ technologies }) => {
+  return (
+    <div className="relative overflow-hidden">
+      {/* Gradientes laterales para efecto de fade */}
+      <div className="absolute left-0 top-0 bottom-0 w-16 bg-gradient-to-r from-gray-900 to-transparent z-10"></div>
+      <div className="absolute right-0 top-0 bottom-0 w-16 bg-gradient-to-l from-gray-900 to-transparent z-10"></div>
+
+      {/* Carrusel infinito */}
+      <div className="flex animate-scroll">
+        {/* Primera instancia de las tecnologías */}
+        {technologies.map((tech) => (
+          <TechItem key={`first-${tech.name}`} tech={tech} />
+        ))}
+
+        {/* Segunda instancia para efecto infinito */}
+        {technologies.map((tech) => (
+          <TechItem key={`second-${tech.name}`} tech={tech} />
+        ))}
+      </div>
     </div>
   );
 };
@@ -262,9 +289,9 @@ export const EnhancedPrivacyModal = ({ isOpen, onClose }) => {
                 })}
               </p>
               <p className="text-gray-300 mt-2">
-                En Axon.App, valoramos su privacidad y nos comprometemos a proteger
-                su información personal. Esta política describe cómo recopilamos,
-                usamos y protegemos su información.
+                En Axon.App, valoramos su privacidad y nos comprometemos a
+                proteger su información personal. Esta política describe cómo
+                recopilamos, usamos y protegemos su información.
               </p>
             </div>
 
@@ -401,7 +428,8 @@ export const EnhancedPrivacyModal = ({ isOpen, onClose }) => {
               </h3>
               <div className="bg-gradient-to-r from-blue-900/20 to-cyan-900/20 rounded-lg p-6 border border-blue-500/30">
                 <p className="mb-4">
-                  Utilizamos su información para los siguientes propósitos legítimos:
+                  Utilizamos su información para los siguientes propósitos
+                  legítimos:
                 </p>
                 <div className="grid md:grid-cols-2 gap-4">
                   <div>
@@ -496,9 +524,10 @@ export const EnhancedPrivacyModal = ({ isOpen, onClose }) => {
                   <strong>
                     Nuestros servicios no están dirigidos a menores de 18 años.
                   </strong>{" "}
-                  No recopilamos intencionalmente información personal de menores.
-                  Si tiene conocimiento de que un menor nos ha proporcionado
-                  información personal, contáctenos inmediatamente.
+                  No recopilamos intencionalmente información personal de
+                  menores. Si tiene conocimiento de que un menor nos ha
+                  proporcionado información personal, contáctenos
+                  inmediatamente.
                 </p>
               </div>
             </section>
@@ -521,7 +550,9 @@ export const EnhancedPrivacyModal = ({ isOpen, onClose }) => {
                     Oficial de Protección de Datos:
                   </p>
                   <p className="text-blue-400">📧 dpo@axon.app</p>
-                  <p className="text-gray-400">Tiempo de respuesta: 72 horas máximo</p>
+                  <p className="text-gray-400">
+                    Tiempo de respuesta: 72 horas máximo
+                  </p>
                 </div>
               </div>
             </div>
@@ -633,8 +664,8 @@ export const EnhancedTermsModal = ({ isOpen, onClose }) => {
                 <strong>⚖️ Términos Legales Vinculantes</strong>
               </p>
               <p className="text-gray-300 mt-2">
-                Al utilizar nuestros servicios, usted acepta estos términos en su
-                totalidad. Por favor, léalos cuidadosamente.
+                Al utilizar nuestros servicios, usted acepta estos términos en
+                su totalidad. Por favor, léalos cuidadosamente.
               </p>
             </div>
 
@@ -649,7 +680,9 @@ export const EnhancedTermsModal = ({ isOpen, onClose }) => {
               <div className="bg-gray-800/30 rounded-lg p-6 border border-gray-700">
                 <div className="grid gap-4">
                   <div className="flex items-start space-x-3">
-                    <span className="text-green-400 font-bold">"Servicios":</span>
+                    <span className="text-green-400 font-bold">
+                      "Servicios":
+                    </span>
                     <span className="text-gray-300">
                       Todos los productos y servicios ofrecidos por Axon.App
                     </span>
@@ -661,7 +694,9 @@ export const EnhancedTermsModal = ({ isOpen, onClose }) => {
                     </span>
                   </div>
                   <div className="flex items-start space-x-3">
-                    <span className="text-green-400 font-bold">"Contenido":</span>
+                    <span className="text-green-400 font-bold">
+                      "Contenido":
+                    </span>
                     <span className="text-gray-300">
                       Toda información, datos, textos, software, música, sonido,
                       fotografías, gráficos, videos, mensajes u otros materiales
@@ -686,7 +721,9 @@ export const EnhancedTermsModal = ({ isOpen, onClose }) => {
                   <ul className="list-disc list-inside space-y-1 text-sm text-gray-300">
                     <li>Disponibilidad: 99.9% uptime garantizado</li>
                     <li>Soporte: 24/7 con respuesta en menos de 1 hora</li>
-                    <li>Mantenimiento: Ventanas programadas con 48h de aviso</li>
+                    <li>
+                      Mantenimiento: Ventanas programadas con 48h de aviso
+                    </li>
                   </ul>
                 </div>
                 <div className="bg-purple-900/20 border border-purple-500/30 rounded-lg p-4">
@@ -696,7 +733,9 @@ export const EnhancedTermsModal = ({ isOpen, onClose }) => {
                   <ul className="list-disc list-inside space-y-1 text-sm text-gray-300">
                     <li>Disponibilidad: 99.5% uptime garantizado</li>
                     <li>Soporte: Horario comercial con respuesta en 4 horas</li>
-                    <li>Mantenimiento: Ventanas programadas con 24h de aviso</li>
+                    <li>
+                      Mantenimiento: Ventanas programadas con 24h de aviso
+                    </li>
                   </ul>
                 </div>
               </div>
@@ -766,7 +805,9 @@ export const EnhancedTermsModal = ({ isOpen, onClose }) => {
                 </div>
                 <div>
                   <p className="text-gray-300 mb-2">Registro Mercantil:</p>
-                  <p className="text-green-400">🏢 Cámara de Comercio de Bogotá</p>
+                  <p className="text-green-400">
+                    🏢 Cámara de Comercio de Bogotá
+                  </p>
                   <p className="text-gray-400">NIT: 900.XXX.XXX-X</p>
                 </div>
               </div>

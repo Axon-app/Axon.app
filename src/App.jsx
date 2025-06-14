@@ -4,12 +4,13 @@ import {
   AnimatedBackground,
   ServiceCard,
   TestimonialCard,
-  TechItem,
+  TechCarousel,
   ContactForm,
   ScrollToTopButton,
   EnhancedPrivacyModal,
   EnhancedTermsModal,
 } from "./components/UIComponents";
+import { technologies } from "./data/content";
 
 const App = () => {
   const [showMenu, setShowMenu] = useState(false);
@@ -62,6 +63,7 @@ const App = () => {
             <NavLink href="#hero">Inicio</NavLink>
             <NavLink href="#about">Nosotros</NavLink>
             <NavLink href="#services">Servicios</NavLink>
+            <NavLink href="#technologies">Tecnologías</NavLink>
             <NavLink href="#contact">Contacto</NavLink>
           </div>
           <div className="md:hidden">
@@ -97,6 +99,13 @@ const App = () => {
             </NavLink>
             <NavLink href="#services" mobile onClick={() => setShowMenu(false)}>
               Servicios
+            </NavLink>
+            <NavLink
+              href="#technologies"
+              mobile
+              onClick={() => setShowMenu(false)}
+            >
+              Tecnologías
             </NavLink>
             <NavLink href="#contact" mobile onClick={() => setShowMenu(false)}>
               Contacto
@@ -209,6 +218,37 @@ const App = () => {
               title="Ciberseguridad"
               description="Protegemos tus activos digitales con las últimas estrategias y tecnologías de ciberseguridad, garantizando la integridad de tus datos."
             />
+          </div>
+        </div>
+      </section>
+
+      {/* Technologies Section */}
+      <section
+        id="technologies"
+        className="py-20 md:py-32 bg-gradient-to-br from-gray-800 to-gray-900 relative overflow-hidden"
+      >
+        {/* Efectos de fondo */}
+        <div className="absolute inset-0 opacity-5">
+          <div className="absolute top-10 left-10 w-40 h-40 bg-blue-500 rounded-full blur-3xl animate-pulse"></div>
+          <div className="absolute bottom-20 right-20 w-60 h-60 bg-purple-500 rounded-full blur-3xl animate-pulse animation-delay-2000"></div>
+        </div>
+
+        <div className="container mx-auto px-4 relative z-10">
+          {/* Header simplificado */}
+          <div className="text-center mb-16">
+            <h2 className="text-4xl md:text-6xl font-bold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-400 animate-fadeIn">
+              Tecnologías
+            </h2>
+            <p className="text-xl md:text-2xl text-gray-300 max-w-4xl mx-auto animate-fadeIn delay-200 leading-relaxed">
+              Dominamos las herramientas más{" "}
+              <span className="text-cyan-400 font-semibold">avanzadas</span> del
+              ecosistema tecnológico
+            </p>
+          </div>
+
+          {/* Carrusel de tecnologías */}
+          <div className="animate-fadeIn delay-400">
+            <TechCarousel technologies={technologies} />
           </div>
         </div>
       </section>
@@ -409,13 +449,13 @@ const App = () => {
       </footer>
 
       {/* Modals mejorados de Privacidad y Términos */}
-      <EnhancedPrivacyModal 
-        isOpen={showPrivacyModal} 
-        onClose={() => setShowPrivacyModal(false)} 
+      <EnhancedPrivacyModal
+        isOpen={showPrivacyModal}
+        onClose={() => setShowPrivacyModal(false)}
       />
-      <EnhancedTermsModal 
-        isOpen={showTermsModal} 
-        onClose={() => setShowTermsModal(false)} 
+      <EnhancedTermsModal
+        isOpen={showTermsModal}
+        onClose={() => setShowTermsModal(false)}
       />
     </div>
   );
