@@ -9,8 +9,12 @@ import {
   ScrollToTopButton,
   EnhancedPrivacyModal,
   EnhancedTermsModal,
+  ServiceDetailModal,
+  QuoteRequestModal,
+  ConsultationModal,
 } from "./components/UIComponents";
 import { technologies } from "./data/content";
+import { servicesData } from "./data/servicesData";
 import logo1 from "./assets/logo1.png";
 
 const App = () => {
@@ -18,10 +22,40 @@ const App = () => {
   const [showPrivacyModal, setShowPrivacyModal] = useState(false); // Estado para la modal de Privacidad
   const [showTermsModal, setShowTermsModal] = useState(false); // Estado para la modal de Términos
   const [logoError, setLogoError] = useState(false);
+  const [selectedService, setSelectedService] = useState(null);
+  const [showServiceModal, setShowServiceModal] = useState(false);
+  const [showQuoteModal, setShowQuoteModal] = useState(false);
+  const [showConsultationModal, setShowConsultationModal] = useState(false);
 
   const handleLogoError = () => {
     console.error("Logo failed to load");
     setLogoError(true);
+  };
+
+  const handleOpenServiceModal = (serviceId) => {
+    setSelectedService(servicesData[serviceId]);
+    setShowServiceModal(true);
+  };
+
+  const handleCloseServiceModal = () => {
+    setShowServiceModal(false);
+    setSelectedService(null);
+  };
+
+  const handleOpenQuoteModal = () => {
+    setShowQuoteModal(true);
+  };
+
+  const handleCloseQuoteModal = () => {
+    setShowQuoteModal(false);
+  };
+
+  const handleOpenConsultationModal = () => {
+    setShowConsultationModal(true);
+  };
+
+  const handleCloseConsultationModal = () => {
+    setShowConsultationModal(false);
   };
 
   // Logo SVG como fallback
@@ -341,46 +375,184 @@ const App = () => {
         </div>
       </section>
 
-      {/* Services Section */}
+      {/* Services Section - Professional Design */}
       <section
         id="services"
-        className="py-20 md:py-32 bg-gray-800 bg-opacity-70 backdrop-blur-md"
+        className="py-20 md:py-32 bg-gradient-to-br from-gray-800 via-gray-900 to-slate-900 relative overflow-hidden"
       >
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl md:text-5xl font-bold text-center mb-16 text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-cyan-400 animate-fadeIn title-hover-effect">
-            Lo Que Hacemos
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-            <ServiceCard
-              icon="💻"
-              title="Desarrollo Web"
-              description="Creamos sitios web y aplicaciones web a medida, responsivas y de alto rendimiento, optimizadas para la experiencia de usuario."
-            />
-            <ServiceCard
-              icon="📱"
-              title="Desarrollo de Apps Móviles"
-              description="Diseñamos y construimos aplicaciones móviles intuitivas para iOS y Android que cautivan a tus usuarios y amplían tu alcance."
-            />
-            <ServiceCard
-              icon="🎨"
-              title="Diseño UI/UX"
-              description="Transformamos conceptos en interfaces atractivas y experiencias de usuario fluidas que generan interacción y satisfacción."
-            />
-            <ServiceCard
-              icon="☁️"
-              title="Soluciones Cloud"
-              description="Implementamos infraestructuras escalables y seguras en la nube, optimizando tus operaciones y reduciendo costos."
-            />
-            <ServiceCard
-              icon="🧠"
-              title="Inteligencia Artificial"
-              description="Integramos soluciones de IA y Machine Learning para automatizar procesos, analizar datos y tomar decisiones inteligentes."
-            />
-            <ServiceCard
-              icon="🔒"
-              title="Ciberseguridad"
-              description="Protegemos tus activos digitales con las últimas estrategias y tecnologías de ciberseguridad, garantizando la integridad de tus datos."
-            />
+        {/* Background Effects */}
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute top-20 left-20 w-96 h-96 bg-blue-500 rounded-full blur-3xl animate-pulse"></div>
+          <div className="absolute bottom-20 right-20 w-80 h-80 bg-purple-500 rounded-full blur-3xl animate-pulse animation-delay-2000"></div>
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-72 h-72 bg-cyan-500 rounded-full blur-3xl animate-pulse animation-delay-4000"></div>
+        </div>
+
+        <div className="container mx-auto px-4 relative z-10">
+          {/* Section Header */}
+          <div className="text-center mb-20">
+            <h2 className="text-4xl md:text-6xl font-bold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-green-400 via-cyan-400 to-blue-400 animate-fadeIn">
+              Nuestros Servicios
+            </h2>
+            <p className="text-xl md:text-2xl text-gray-300 max-w-4xl mx-auto mb-8">
+              Soluciones tecnológicas integrales para impulsar tu negocio hacia
+              el futuro digital
+            </p>
+            <div className="w-32 h-1 bg-gradient-to-r from-green-400 to-cyan-400 mx-auto rounded-full"></div>
+          </div>
+
+          {/* Main Services Grid - Uniform Layout */}
+          <div className="mb-16">
+            <h3 className="text-2xl font-bold text-cyan-300 mb-8 flex items-center justify-center">
+              <span className="w-8 h-8 bg-gradient-to-r from-cyan-400 to-blue-400 rounded-full flex items-center justify-center mr-3 text-sm">
+                💻
+              </span>
+              Desarrollo & Tecnología Core
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              <ServiceCard
+                icon="🌐"
+                title="Desarrollo Web Full-Stack"
+                description="Aplicaciones web modernas con React, Node.js, Python y tecnologías de vanguardia. Desde landing pages hasta plataformas enterprise."
+                onOpenModal={handleOpenServiceModal}
+                id="desarrollo-web"
+              />
+              <ServiceCard
+                icon="📱"
+                title="Apps Móviles Nativas"
+                description="Desarrollo nativo para iOS y Android, React Native y Flutter. Experiencias móviles que conquistan usuarios."
+                onOpenModal={handleOpenServiceModal}
+                id="apps-moviles"
+              />
+              <ServiceCard
+                icon="☁️"
+                title="Arquitectura Cloud"
+                description="Infraestructura escalable en AWS, Azure y GCP. Microservicios, contenedores y despliegues automáticos."
+                onOpenModal={handleOpenServiceModal}
+                id="arquitectura-cloud"
+              />
+              <ServiceCard
+                icon="🔗"
+                title="APIs & Integración"
+                description="APIs RESTful y GraphQL robustas. Integración con sistemas empresariales y servicios de terceros."
+                onOpenModal={handleOpenServiceModal}
+                id="apis-integracion"
+              />
+              <ServiceCard
+                icon="🤖"
+                title="Inteligencia Artificial"
+                description="Machine Learning, NLP, Computer Vision. Automatización inteligente para tu negocio."
+                onOpenModal={handleOpenServiceModal}
+                id="inteligencia-artificial"
+              />
+              <ServiceCard
+                icon="🔒"
+                title="Ciberseguridad"
+                description="Auditorías, pentesting, implementación de protocolos de seguridad y compliance."
+                onOpenModal={handleOpenServiceModal}
+                id="ciberseguridad"
+              />
+            </div>
+          </div>
+
+          {/* Design & Strategy Services */}
+          <div className="mb-16">
+            <h3 className="text-2xl font-bold text-green-300 mb-8 flex items-center justify-center">
+              <span className="w-8 h-8 bg-gradient-to-r from-green-400 to-emerald-400 rounded-full flex items-center justify-center mr-3 text-sm">
+                🎨
+              </span>
+              Diseño & Estrategia Digital
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              <ServiceCard
+                icon="✨"
+                title="UI/UX Design"
+                description="Interfaces intuitivas y experiencias memorables. Diseño centrado en el usuario con metodologías ágiles."
+                onOpenModal={handleOpenServiceModal}
+                id="ui-ux-design"
+              />
+              <ServiceCard
+                icon="🎯"
+                title="Estrategia Digital"
+                description="Consultoría tecnológica, roadmaps de producto y transformación digital empresarial."
+                onOpenModal={handleOpenServiceModal}
+                id="estrategia-digital"
+              />
+              <ServiceCard
+                icon="📊"
+                title="Data Analytics"
+                description="Business Intelligence, dashboards interactivos y análisis predictivo para toma de decisiones."
+                onOpenModal={handleOpenServiceModal}
+                id="data-analytics"
+              />
+              <ServiceCard
+                icon="🔄"
+                title="DevOps & Automatización"
+                description="CI/CD, monitoreo, testing automatizado y optimización de procesos de desarrollo."
+                onOpenModal={handleOpenServiceModal}
+                id="devops-automatizacion"
+              />
+            </div>
+          </div>
+
+          {/* Emerging Technologies */}
+          <div className="bg-gradient-to-r from-slate-800/50 to-gray-800/50 backdrop-blur-sm rounded-2xl p-8 border border-gray-600/30">
+            <h3 className="text-2xl font-bold text-center text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-orange-400 mb-8">
+              🌟 Tecnologías Emergentes
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="text-center p-6 bg-gray-800/40 rounded-xl border border-gray-600/20 hover:border-yellow-400/40 transition-all duration-300 hover:transform hover:scale-105">
+                <div className="text-4xl mb-4">🔗</div>
+                <h4 className="text-lg font-bold text-yellow-300 mb-2">
+                  Blockchain & Web3
+                </h4>
+                <p className="text-gray-300 text-sm">
+                  Smart contracts, DApps y soluciones descentralizadas
+                </p>
+              </div>
+              <div className="text-center p-6 bg-gray-800/40 rounded-xl border border-gray-600/20 hover:border-purple-400/40 transition-all duration-300 hover:transform hover:scale-105">
+                <div className="text-4xl mb-4">🥽</div>
+                <h4 className="text-lg font-bold text-purple-300 mb-2">
+                  AR/VR & Metaverse
+                </h4>
+                <p className="text-gray-300 text-sm">
+                  Experiencias inmersivas y realidad extendida
+                </p>
+              </div>
+              <div className="text-center p-6 bg-gray-800/40 rounded-xl border border-gray-600/20 hover:border-green-400/40 transition-all duration-300 hover:transform hover:scale-105">
+                <div className="text-4xl mb-4">🌱</div>
+                <h4 className="text-lg font-bold text-green-300 mb-2">
+                  IoT & Edge Computing
+                </h4>
+                <p className="text-gray-300 text-sm">
+                  Dispositivos conectados y computación distribuida
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* CTA Section */}
+          <div className="text-center mt-16">
+            <h3 className="text-2xl font-bold text-white mb-6">
+              ¿Listo para transformar tu idea en realidad?
+            </h3>
+            <p className="text-gray-300 mb-8 max-w-2xl mx-auto">
+              Nuestro equipo de expertos está preparado para llevar tu proyecto
+              al siguiente nivel
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <a
+                href="#contact"
+                className="bg-gradient-to-r from-green-600 to-cyan-600 hover:from-green-700 hover:to-cyan-700 text-white font-bold py-4 px-8 rounded-full shadow-lg transition-all duration-300 transform hover:scale-105"
+              >
+                Iniciar Proyecto
+              </a>
+              <a
+                href="#technologies"
+                className="bg-transparent border-2 border-cyan-400 text-cyan-400 hover:bg-cyan-400 hover:text-gray-900 font-bold py-4 px-8 rounded-full transition-all duration-300 transform hover:scale-105"
+              >
+                Ver Tecnologías
+              </a>
+            </div>
           </div>
         </div>
       </section>
@@ -431,7 +603,7 @@ const App = () => {
                 ¿Listo para impulsar tu proyecto al futuro?
               </p>
               <p>Estamos aquí para ayudarte a hacer realidad tus ideas.</p>
-              <p className="flex items-center justify-center md:justify-start">
+              <div className="flex items-center justify-center md:justify-start">
                 <svg
                   className="w-6 h-6 mr-3 text-blue-400"
                   fill="currentColor"
@@ -441,20 +613,25 @@ const App = () => {
                   <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"></path>
                   <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"></path>
                 </svg>
-                info@axon.App.com
-              </p>
-              <p className="flex items-center justify-center md:justify-start">
+                <a
+                  href="mailto:axonapp.info@gmail.com"
+                  className="text-blue-400 hover:text-blue-300 transition duration-200"
+                >
+                  axonapp.info@gmail.com
+                </a>
+              </div>
+              <div className="flex items-center justify-center md:justify-start">
                 <svg
-                  className="w-6 h-6 mr-3 text-blue-400"
+                  className="w-6 h-6 mr-3 text-green-400"
                   fill="currentColor"
                   viewBox="0 0 20 20"
                   xmlns="http://www.w3.org/2000/svg"
                 >
-                  <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.774a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"></path>
+                  <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                 </svg>
-                +1 (555) 123-4567
-              </p>
-              <p className="flex items-center justify-center md:justify-start">
+                <span className="text-green-300">Respuesta en 24 horas</span>
+              </div>
+              <div className="flex items-center justify-center md:justify-start">
                 <svg
                   className="w-6 h-6 mr-3 text-blue-400"
                   fill="currentColor"
@@ -467,8 +644,8 @@ const App = () => {
                     clipRule="evenodd"
                   ></path>
                 </svg>
-                Bogotá, Colombia
-              </p>
+                Disponible globalmente
+              </div>
             </div>
             <div className="bg-gray-800 p-8 rounded-lg shadow-xl border border-gray-700">
               <form className="space-y-6">
@@ -532,6 +709,38 @@ const App = () => {
       {/* Footer */}
       <footer className="bg-gray-950 py-10 text-gray-400 text-center text-sm">
         <div className="container mx-auto px-4">
+          {/* Información de contacto */}
+          <div className="mb-6">
+            <h3 className="text-white text-lg font-semibold mb-3">
+              Contáctanos
+            </h3>
+            <div className="flex justify-center items-center space-x-2 mb-2">
+              <svg
+                className="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M3 8l7.89 7.89a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                ></path>
+              </svg>
+              <a
+                href="mailto:axonapp.info@gmail.com"
+                className="text-blue-400 hover:text-blue-300 transition duration-200"
+              >
+                axonapp.info@gmail.com
+              </a>
+            </div>
+            <p className="text-gray-500 text-xs">
+              Todas las consultas, cotizaciones y solicitudes de servicios
+              llegan directamente a nuestro equipo
+            </p>
+          </div>
+
           <p>
             &copy; {new Date().getFullYear()} Axon.App. Todos los derechos
             reservados.
@@ -619,6 +828,30 @@ const App = () => {
       <EnhancedTermsModal
         isOpen={showTermsModal}
         onClose={() => setShowTermsModal(false)}
+      />
+      {/* ServiceDetailModal temporalmente comentado para debug */}
+      {selectedService && showServiceModal && (
+        <ServiceDetailModal
+          service={selectedService}
+          isOpen={showServiceModal}
+          onClose={handleCloseServiceModal}
+          onOpenQuote={handleOpenQuoteModal}
+          onOpenConsultation={handleOpenConsultationModal}
+        />
+      )}
+
+      {/* Quote Request Modal */}
+      <QuoteRequestModal
+        isOpen={showQuoteModal}
+        onClose={handleCloseQuoteModal}
+        serviceName={selectedService?.title || "Servicio"}
+      />
+
+      {/* Consultation Modal */}
+      <ConsultationModal
+        isOpen={showConsultationModal}
+        onClose={handleCloseConsultationModal}
+        serviceName={selectedService?.title || "Servicio"}
       />
     </div>
   );

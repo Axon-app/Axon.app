@@ -33,7 +33,7 @@ export const AnimatedBackground = () => {
 // Componente de tarjeta de servicio
 export const ServiceCard = ({ icon, title, description, onOpenModal, id }) => {
   return (
-    <div className="bg-slate-800/60 backdrop-blur-sm rounded-xl p-6 flex flex-col items-center text-center transform transition-all duration-300 hover:shadow-blue-500/30 hover:-translate-y-2 shadow-xl border border-blue-500/30 group">
+    <div className="bg-slate-800/60 backdrop-blur-sm rounded-xl p-6 flex flex-col items-center text-center transform transition-all duration-300 hover:shadow-blue-500/30 hover:-translate-y-2 shadow-xl border border-blue-500/30 group h-full min-h-[320px]">
       <div className="w-20 h-20 mb-6 text-blue-400 flex items-center justify-center text-4xl transition-transform duration-300 group-hover:scale-110">
         {icon}
       </div>
@@ -44,7 +44,7 @@ export const ServiceCard = ({ icon, title, description, onOpenModal, id }) => {
       {onOpenModal && (
         <button
           onClick={() => onOpenModal(id)}
-          className="px-8 py-3 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white rounded-lg transition-all duration-300 transform hover:scale-105 text-lg font-semibold shadow-lg"
+          className="px-8 py-3 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white rounded-lg transition-all duration-300 transform hover:scale-105 text-lg font-semibold shadow-lg mt-auto"
         >
           Más Información
         </button>
@@ -122,10 +122,47 @@ export const TechCarousel = ({ technologies }) => {
 
 // Componente de formulario de contacto
 export const ContactForm = () => {
-  const handleSubmit = (e) => {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    message: "",
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Aquí puedes agregar la lógica de envío del formulario
-    alert("Mensaje enviado! (Esto es una demostración)");
+    setIsSubmitting(true);
+
+    try {
+      // Importación dinámica del servicio de email
+      const { sendEmailDemo } = await import("../services/emailService");
+
+      const result = await sendEmailDemo("contact", formData);
+
+      if (result.success) {
+        setFormData({ name: "", email: "", message: "" });
+        alert(
+          "¡Mensaje enviado exitosamente! Te contactaremos pronto a través de axonapp.info@gmail.com"
+        );
+      } else {
+        alert(
+          "Hubo un error al enviar el mensaje. Por favor, contacta directamente a axonapp.info@gmail.com"
+        );
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      alert(
+        "Hubo un error al enviar el mensaje. Por favor, contacta directamente a axonapp.info@gmail.com"
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -141,6 +178,9 @@ export const ContactForm = () => {
           <input
             type="text"
             id="name"
+            name="name"
+            value={formData.name}
+            onChange={handleChange}
             required
             className="w-full bg-slate-700/50 text-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
           />
@@ -152,6 +192,9 @@ export const ContactForm = () => {
           <input
             type="email"
             id="email"
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
             required
             className="w-full bg-slate-700/50 text-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
           />
@@ -163,6 +206,9 @@ export const ContactForm = () => {
         </label>
         <textarea
           id="message"
+          name="message"
+          value={formData.message}
+          onChange={handleChange}
           rows="4"
           required
           className="w-full bg-slate-700/50 text-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
@@ -170,10 +216,24 @@ export const ContactForm = () => {
       </div>
       <button
         type="submit"
-        className="mt-6 w-full px-6 py-3 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg"
+        disabled={isSubmitting}
+        className={`mt-6 w-full px-6 py-3 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg ${
+          isSubmitting ? "opacity-50 cursor-not-allowed" : ""
+        }`}
       >
-        Enviar Mensaje
+        {isSubmitting ? "Enviando..." : "Enviar Mensaje"}
       </button>
+
+      {/* Información de contacto directo */}
+      <div className="mt-4 text-center text-sm text-gray-400">
+        También puedes contactarnos directamente en:
+        <a
+          href="mailto:axonapp.info@gmail.com"
+          className="text-blue-400 hover:text-blue-300 ml-1"
+        >
+          axonapp.info@gmail.com
+        </a>
+      </div>
     </form>
   );
 };
@@ -850,6 +910,627 @@ export const EnhancedTermsModal = ({ isOpen, onClose }) => {
               Acepto ✓
             </button>
           </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// Componente Modal de Servicio Detallado
+export const ServiceDetailModal = ({
+  service,
+  isOpen,
+  onClose,
+  onOpenQuote,
+  onOpenConsultation,
+}) => {
+  if (!isOpen || !service) return null;
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+      <div className="bg-gradient-to-br from-gray-900 via-slate-900 to-gray-900 rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden border border-blue-500/30 shadow-2xl">
+        {/* Header */}
+        <div className="relative p-8 bg-gradient-to-r from-blue-900/50 to-purple-900/50 border-b border-gray-700/50">
+          <button
+            onClick={onClose}
+            className="absolute top-4 right-4 text-gray-400 hover:text-white text-2xl w-10 h-10 flex items-center justify-center rounded-full hover:bg-gray-700/50 transition-all duration-200"
+          >
+            ×
+          </button>
+          <div className="flex items-center mb-4">
+            <div className="text-5xl mr-6">{service.icon}</div>
+            <div>
+              <h2 className="text-3xl font-bold text-white mb-2">
+                {service.title}
+              </h2>
+              <p className="text-xl text-blue-300">{service.subtitle}</p>
+            </div>
+          </div>
+          <p className="text-gray-300 text-lg leading-relaxed">
+            {service.description}
+          </p>
+        </div>
+
+        {/* Content */}
+        <div className="overflow-y-auto max-h-[calc(90vh-200px)]">
+          <div className="p-8 space-y-8">
+            {/* Proceso de Trabajo */}
+            <div>
+              <h3 className="text-2xl font-bold text-cyan-300 mb-6 flex items-center">
+                <span className="w-8 h-8 bg-gradient-to-r from-cyan-400 to-blue-400 rounded-full flex items-center justify-center mr-3 text-sm">
+                  🔄
+                </span>
+                Nuestro Proceso
+              </h3>
+              <div className="space-y-4">
+                {service.process.map((step, index) => (
+                  <div
+                    key={index}
+                    className="bg-gray-800/50 rounded-lg p-6 border border-gray-700/30 hover:border-cyan-400/30 transition-all duration-300"
+                  >
+                    <h4 className="text-lg font-semibold text-cyan-300 mb-2">
+                      {step.step}
+                    </h4>
+                    <p className="text-gray-300 mb-3">{step.description}</p>
+                    <div className="flex flex-wrap gap-2">
+                      {step.tools.map((tool, toolIndex) => (
+                        <span
+                          key={toolIndex}
+                          className="px-3 py-1 bg-blue-600/20 text-blue-300 rounded-full text-sm border border-blue-500/30"
+                        >
+                          {tool}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Tecnologías */}
+            <div>
+              <h3 className="text-2xl font-bold text-green-300 mb-6 flex items-center">
+                <span className="w-8 h-8 bg-gradient-to-r from-green-400 to-emerald-400 rounded-full flex items-center justify-center mr-3 text-sm">
+                  💻
+                </span>
+                Tecnologías que Utilizamos
+              </h3>
+              <div className="flex flex-wrap gap-3">
+                {service.technologies.map((tech, index) => (
+                  <span
+                    key={index}
+                    className="px-4 py-2 bg-gradient-to-r from-green-600/20 to-emerald-600/20 text-green-300 rounded-lg font-medium border border-green-500/30 hover:border-green-400/50 transition-all duration-200"
+                  >
+                    {tech}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            {/* Características */}
+            <div>
+              <h3 className="text-2xl font-bold text-purple-300 mb-6 flex items-center">
+                <span className="w-8 h-8 bg-gradient-to-r from-purple-400 to-pink-400 rounded-full flex items-center justify-center mr-3 text-sm">
+                  ⭐
+                </span>
+                Características Principales
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {service.features.map((feature, index) => (
+                  <div
+                    key={index}
+                    className="flex items-center p-4 bg-gray-800/30 rounded-lg border border-gray-700/30"
+                  >
+                    <span className="text-purple-400 mr-3 text-lg">✓</span>
+                    <span className="text-gray-300">{feature}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* CTA */}
+            <div className="bg-gradient-to-r from-blue-900/30 to-purple-900/30 rounded-xl p-6 border border-blue-500/20 text-center">
+              <h3 className="text-xl font-bold text-white mb-3">
+                ¿Listo para comenzar?
+              </h3>
+              <p className="text-gray-300 mb-6">
+                Conversemos sobre cómo podemos ayudarte con este servicio
+              </p>{" "}
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <button
+                  onClick={() => {
+                    onClose(); // Cerrar el modal actual
+                    if (onOpenQuote) onOpenQuote(); // Abrir modal de cotización
+                  }}
+                  className="bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white font-bold py-3 px-8 rounded-full transition-all duration-300 transform hover:scale-105"
+                >
+                  Solicitar Cotización
+                </button>
+                <button
+                  onClick={() => {
+                    onClose(); // Cerrar el modal actual
+                    if (onOpenConsultation) onOpenConsultation(); // Abrir modal de consulta
+                  }}
+                  className="bg-transparent border-2 border-purple-400 text-purple-400 hover:bg-purple-400 hover:text-gray-900 font-bold py-3 px-8 rounded-full transition-all duration-300"
+                >
+                  Agendar Consulta
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// Modal de Solicitar Cotización
+export const QuoteRequestModal = ({ isOpen, onClose, serviceName }) => {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    company: "",
+    phone: "",
+    projectDescription: "",
+    budget: "",
+    timeline: "",
+    requirements: "",
+  });
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      // Importación dinámica del servicio de email
+      const { sendEmailDemo } = await import("../services/emailService");
+
+      const result = await sendEmailDemo("quote", formData, serviceName);
+
+      if (result.success) {
+        alert(
+          `¡Gracias! Hemos recibido tu solicitud de cotización para ${serviceName}. Te contactaremos pronto desde axonapp.info@gmail.com`
+        );
+        onClose();
+        setFormData({
+          name: "",
+          email: "",
+          company: "",
+          phone: "",
+          projectDescription: "",
+          budget: "",
+          timeline: "",
+          requirements: "",
+        });
+      } else {
+        alert(
+          "Hubo un error al enviar la solicitud. Por favor, contacta directamente a axonapp.info@gmail.com"
+        );
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      alert(
+        "Hubo un error al enviar la solicitud. Por favor, contacta directamente a axonapp.info@gmail.com"
+      );
+    }
+  };
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+      <div className="bg-gradient-to-br from-gray-900 to-slate-900 rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-hidden border border-blue-500/30 shadow-2xl">
+        {/* Header */}
+        <div className="p-6 bg-gradient-to-r from-blue-900/50 to-cyan-900/50 border-b border-gray-700/50">
+          <div className="flex justify-between items-center">
+            <div>
+              <h2 className="text-2xl font-bold text-white mb-2">
+                Solicitar Cotización
+              </h2>
+              <p className="text-blue-300">{serviceName}</p>
+            </div>
+            <button
+              onClick={onClose}
+              className="text-gray-400 hover:text-white text-2xl w-10 h-10 flex items-center justify-center rounded-full hover:bg-gray-700/50 transition-all duration-200"
+            >
+              ×
+            </button>
+          </div>
+        </div>
+
+        {/* Form */}
+        <div className="p-6 overflow-y-auto max-h-[calc(90vh-120px)]">
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">
+                  Nombre Completo *
+                </label>
+                <input
+                  type="text"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  required
+                  className="w-full px-4 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white focus:border-blue-500 focus:outline-none"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">
+                  Email *
+                </label>
+                <input
+                  type="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  required
+                  className="w-full px-4 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white focus:border-blue-500 focus:outline-none"
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">
+                  Empresa
+                </label>
+                <input
+                  type="text"
+                  name="company"
+                  value={formData.company}
+                  onChange={handleChange}
+                  className="w-full px-4 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white focus:border-blue-500 focus:outline-none"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">
+                  Teléfono
+                </label>
+                <input
+                  type="tel"
+                  name="phone"
+                  value={formData.phone}
+                  onChange={handleChange}
+                  className="w-full px-4 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white focus:border-blue-500 focus:outline-none"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-300 mb-2">
+                Descripción del Proyecto *
+              </label>
+              <textarea
+                name="projectDescription"
+                value={formData.projectDescription}
+                onChange={handleChange}
+                required
+                rows="4"
+                className="w-full px-4 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white focus:border-blue-500 focus:outline-none resize-none"
+                placeholder="Describe tu proyecto, objetivos y necesidades específicas..."
+              ></textarea>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">
+                  Presupuesto Estimado
+                </label>
+                <select
+                  name="budget"
+                  value={formData.budget}
+                  onChange={handleChange}
+                  className="w-full px-4 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white focus:border-blue-500 focus:outline-none"
+                >
+                  <option value="">Seleccionar rango</option>
+                  <option value="5k-15k">$5,000 - $15,000</option>
+                  <option value="15k-30k">$15,000 - $30,000</option>
+                  <option value="30k-50k">$30,000 - $50,000</option>
+                  <option value="50k+">$50,000+</option>
+                  <option value="custom">Personalizado</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">
+                  Timeline
+                </label>
+                <select
+                  name="timeline"
+                  value={formData.timeline}
+                  onChange={handleChange}
+                  className="w-full px-4 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white focus:border-blue-500 focus:outline-none"
+                >
+                  <option value="">Seleccionar timeline</option>
+                  <option value="urgent">Urgente (1-2 semanas)</option>
+                  <option value="fast">Rápido (1 mes)</option>
+                  <option value="normal">Normal (2-3 meses)</option>
+                  <option value="flexible">Flexible (3+ meses)</option>
+                </select>
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-300 mb-2">
+                Requerimientos Específicos
+              </label>
+              <textarea
+                name="requirements"
+                value={formData.requirements}
+                onChange={handleChange}
+                rows="3"
+                className="w-full px-4 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white focus:border-blue-500 focus:outline-none resize-none"
+                placeholder="Menciona tecnologías específicas, integraciones, características especiales..."
+              ></textarea>
+            </div>
+
+            <div className="flex flex-col sm:flex-row gap-4 pt-4">
+              <button
+                type="submit"
+                className="flex-1 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white font-bold py-3 px-6 rounded-full transition-all duration-300 transform hover:scale-105"
+              >
+                Enviar Solicitud
+              </button>
+              <button
+                type="button"
+                onClick={onClose}
+                className="flex-1 bg-transparent border-2 border-gray-500 text-gray-300 hover:bg-gray-700 hover:text-white font-bold py-3 px-6 rounded-full transition-all duration-300"
+              >
+                Cancelar
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// Modal de Agendar Consulta
+export const ConsultationModal = ({ isOpen, onClose, serviceName }) => {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    company: "",
+    phone: "",
+    preferredDate: "",
+    preferredTime: "",
+    consultationType: "",
+    topics: "",
+    experience: "",
+  });
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      // Importación dinámica del servicio de email
+      const { sendEmailDemo } = await import("../services/emailService");
+
+      const result = await sendEmailDemo("consultation", formData, serviceName);
+
+      if (result.success) {
+        alert(
+          `¡Excelente! Hemos recibido tu solicitud de consulta para ${serviceName}. Te contactaremos pronto desde axonapp.info@gmail.com para coordinar la cita.`
+        );
+        onClose();
+        setFormData({
+          name: "",
+          email: "",
+          company: "",
+          phone: "",
+          preferredDate: "",
+          preferredTime: "",
+          consultationType: "",
+          topics: "",
+          experience: "",
+        });
+      } else {
+        alert(
+          "Hubo un error al enviar la solicitud. Por favor, contacta directamente a axonapp.info@gmail.com"
+        );
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      alert(
+        "Hubo un error al enviar la solicitud. Por favor, contacta directamente a axonapp.info@gmail.com"
+      );
+    }
+  };
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+      <div className="bg-gradient-to-br from-gray-900 to-slate-900 rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-hidden border border-purple-500/30 shadow-2xl">
+        {/* Header */}
+        <div className="p-6 bg-gradient-to-r from-purple-900/50 to-pink-900/50 border-b border-gray-700/50">
+          <div className="flex justify-between items-center">
+            <div>
+              <h2 className="text-2xl font-bold text-white mb-2">
+                Agendar Consulta
+              </h2>
+              <p className="text-purple-300">{serviceName}</p>
+            </div>
+            <button
+              onClick={onClose}
+              className="text-gray-400 hover:text-white text-2xl w-10 h-10 flex items-center justify-center rounded-full hover:bg-gray-700/50 transition-all duration-200"
+            >
+              ×
+            </button>
+          </div>
+        </div>
+
+        {/* Form */}
+        <div className="p-6 overflow-y-auto max-h-[calc(90vh-120px)]">
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">
+                  Nombre Completo *
+                </label>
+                <input
+                  type="text"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  required
+                  className="w-full px-4 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white focus:border-purple-500 focus:outline-none"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">
+                  Email *
+                </label>
+                <input
+                  type="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  required
+                  className="w-full px-4 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white focus:border-purple-500 focus:outline-none"
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">
+                  Empresa/Organización
+                </label>
+                <input
+                  type="text"
+                  name="company"
+                  value={formData.company}
+                  onChange={handleChange}
+                  className="w-full px-4 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white focus:border-purple-500 focus:outline-none"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">
+                  Teléfono
+                </label>
+                <input
+                  type="tel"
+                  name="phone"
+                  value={formData.phone}
+                  onChange={handleChange}
+                  className="w-full px-4 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white focus:border-purple-500 focus:outline-none"
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">
+                  Fecha Preferida
+                </label>
+                <input
+                  type="date"
+                  name="preferredDate"
+                  value={formData.preferredDate}
+                  onChange={handleChange}
+                  min={new Date().toISOString().split("T")[0]}
+                  className="w-full px-4 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white focus:border-purple-500 focus:outline-none"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">
+                  Horario Preferido
+                </label>
+                <select
+                  name="preferredTime"
+                  value={formData.preferredTime}
+                  onChange={handleChange}
+                  className="w-full px-4 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white focus:border-purple-500 focus:outline-none"
+                >
+                  <option value="">Seleccionar horario</option>
+                  <option value="morning">Mañana (9:00 - 12:00)</option>
+                  <option value="afternoon">Tarde (13:00 - 17:00)</option>
+                  <option value="evening">Noche (18:00 - 20:00)</option>
+                </select>
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-300 mb-2">
+                Tipo de Consulta
+              </label>
+              <select
+                name="consultationType"
+                value={formData.consultationType}
+                onChange={handleChange}
+                className="w-full px-4 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white focus:border-purple-500 focus:outline-none"
+              >
+                <option value="">Seleccionar tipo</option>
+                <option value="discovery">
+                  Consulta de Discovery (30 min)
+                </option>
+                <option value="technical">Consulta Técnica (45 min)</option>
+                <option value="strategy">Consulta Estratégica (60 min)</option>
+                <option value="custom">Personalizada</option>
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-300 mb-2">
+                Temas a Tratar
+              </label>
+              <textarea
+                name="topics"
+                value={formData.topics}
+                onChange={handleChange}
+                rows="3"
+                className="w-full px-4 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white focus:border-purple-500 focus:outline-none resize-none"
+                placeholder="¿Qué temas específicos te gustaría discutir en la consulta?"
+              ></textarea>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-300 mb-2">
+                Experiencia Previa
+              </label>
+              <select
+                name="experience"
+                value={formData.experience}
+                onChange={handleChange}
+                className="w-full px-4 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white focus:border-purple-500 focus:outline-none"
+              >
+                <option value="">Seleccionar nivel</option>
+                <option value="beginner">Principiante en tecnología</option>
+                <option value="intermediate">Experiencia intermedia</option>
+                <option value="advanced">Avanzado/Técnico</option>
+                <option value="expert">Experto en el área</option>
+              </select>
+            </div>
+
+            <div className="flex flex-col sm:flex-row gap-4 pt-4">
+              <button
+                type="submit"
+                className="flex-1 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-bold py-3 px-6 rounded-full transition-all duration-300 transform hover:scale-105"
+              >
+                Agendar Consulta
+              </button>
+              <button
+                type="button"
+                onClick={onClose}
+                className="flex-1 bg-transparent border-2 border-gray-500 text-gray-300 hover:bg-gray-700 hover:text-white font-bold py-3 px-6 rounded-full transition-all duration-300"
+              >
+                Cancelar
+              </button>
+            </div>
+          </form>
         </div>
       </div>
     </div>
