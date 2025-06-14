@@ -2,11 +2,11 @@
 
 ## 📊 Estado del Proyecto
 
-**Versión Actual:** 1.1.0  
+**Versión Actual:** 2.0.0  
 **Última Actualización:** 14 de Junio, 2025
 **Estado:** ✅ Funcional - Desplegado en GitHub Pages  
-**URL de Producción:** [axon.app](https://github.com/[usuario]/Axon.app) (GitHub Pages)  
-**URL de Desarrollo:** http://localhost:5173/Axon.app/
+**URL de Producción:** https://axon-app.github.io/Axon.app/  
+**URL de Desarrollo:** http://localhost:5177/
 
 ---
 
@@ -18,6 +18,7 @@
 - **Build Tool:** Vite 6.3.5
 - **Styling:** Tailwind CSS 3.4+
 - **CSS Processing:** PostCSS + Autoprefixer
+- **Email Service:** EmailJS (modo demo)
 - **Fuentes:** Orbitron + Rajdhani (Google Fonts)
 - **Despliegue:** GitHub Pages con GitHub Actions
 - **Control de Versiones:** Git + GitHub
@@ -28,14 +29,18 @@
 Axon/
 ├── src/
 │   ├── components/
-│   │   └── UIComponents.jsx          # Componentes reutilizables
+│   │   └── UIComponents.jsx          # Componentes reutilizables y modales
 │   ├── data/
-│   │   └── content.js                # Datos centralizados
-│   ├── assets/                       # Recursos estáticos
+│   │   ├── content.js                # Datos centralizados
+│   │   └── servicesData.js           # Base de datos de servicios
+│   ├── services/
+│   │   └── emailService.js           # Servicio de integración de email
+│   ├── assets/                       # Recursos estáticos (logo, favicon)
 │   ├── App.jsx                       # Componente principal
 │   └── index.css                     # Estilos globales
 ├── public/                           # Archivos públicos
 ├── .github/workflows/                # CI/CD con GitHub Actions
+├── EMAIL_SETUP.md                    # Documentación de configuración de email
 ├── vite.config.js                    # Configuración de Vite
 ├── tailwind.config.js                # Configuración de Tailwind
 └── postcss.config.js                 # Configuración de PostCSS
@@ -44,6 +49,36 @@ Axon/
 ---
 
 ## 📈 Historial de Cambios
+
+### v2.0.0 - Sistema de Formularios y Rediseño Completo (14 Jun 2025)
+
+#### 🎯 **INTEGRACIÓN DE SISTEMA DE FORMULARIOS**
+- ✅ **EmailJS Integration**: Sistema completo de envío de emails
+- ✅ **Formulario de Contacto**: Conectado a axonapp.info@gmail.com
+- ✅ **Modal de Cotización**: Formulario detallado para solicitudes de presupuesto
+- ✅ **Modal de Consulta**: Sistema de agendamiento de citas
+- ✅ **Validación de Formularios**: Validación HTML5 y feedback visual
+- ✅ **Modo Demo**: Sistema funcional para desarrollo y testing
+
+#### 🎨 **REDISEÑO COMPLETO DE SECCIONES**
+- ✅ **Sección Misión/Visión**: Rediseño profesional con gradientes y valores
+- ✅ **Sección Servicios**: Grid unificado con 6 servicios principales
+- ✅ **Modales de Servicios**: Información detallada con procesos y tecnologías
+- ✅ **Base de Datos de Servicios**: Información completa y estructurada
+- ✅ **Diseño Responsive**: Optimizado para todos los dispositivos
+
+#### 🔧 **MEJORAS TÉCNICAS**
+- ✅ **Vite Configuration**: Configuración optimizada para GitHub Pages
+- ✅ **Logo Integration**: Logo profesional integrado en navbar y componentes
+- ✅ **Favicon**: Icon personalizado para el sitio web
+- ✅ **Email Service**: Servicio modular para manejo de emails
+- ✅ **Error Handling**: Manejo robusto de errores en formularios
+
+#### 📧 **INFORMACIÓN DE CONTACTO**
+- ✅ **Email Principal**: axonapp.info@gmail.com visible en múltiples secciones
+- ✅ **Footer Mejorado**: Información de contacto prominente
+- ✅ **Sección Contacto**: Actualizada con email correcto y promesas de servicio
+- ✅ **Backup Contact**: Email de contacto directo en caso de errores
 
 ### v1.1.0 - Modales Legales Mejorados (14 Jun 2025)
 

@@ -1,29 +1,54 @@
-# 🚀 Axon.App - Sitio Web Corporativo
+# 🚀 Axon.App - Sitio Web Corporativo v2.0.0
 
 [![Vite](https://img.shields.io/badge/Vite-6.3.5-646CFF?logo=vite&logoColor=white)](https://vitejs.dev/)
 [![React](https://img.shields.io/badge/React-18+-61DAFB?logo=react&logoColor=white)](https://reactjs.org/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind-3.4+-38B2AC?logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
+[![EmailJS](https://img.shields.io/badge/EmailJS-Integrated-FF6B35?logo=gmail&logoColor=white)](https://www.emailjs.com/)
 [![GitHub Pages](https://img.shields.io/badge/Deploy-GitHub%20Pages-222222?logo=github&logoColor=white)](https://pages.github.com/)
 
-> Sitio web profesional moderno para Axon.App - Soluciones tecnológicas innovadoras
+> **Sitio web profesional moderno para Axon.App** - Soluciones tecnológicas innovadoras con sistema completo de formularios y captación de leads
 
-## ✨ Características
+🌐 **[VER SITIO EN VIVO](https://axon-app.github.io/Axon.app/)** ← Click aquí para ver el resultado final
 
-- 🎨 **Diseño Moderno** - Interfaz elegante con gradientes y animaciones
-- 📱 **Totalmente Responsivo** - Optimizado para móviles, tablets y desktop
-- ⚡ **Alto Rendimiento** - Construido con Vite para máxima velocidad
-- 🎭 **Animaciones Suaves** - Transiciones y efectos visuales atractivos
-- 🧩 **Arquitectura Modular** - Componentes React reutilizables
-- 🚀 **Despliegue Automático** - CI/CD con GitHub Actions
+## ✨ Características Principales
+
+### 🎨 **Diseño y UX**
+- ✅ **Diseño Moderno y Profesional** - Interfaz elegante con gradientes y animaciones
+- ✅ **Totalmente Responsivo** - Optimizado para móviles, tablets y desktop
+- ✅ **Animaciones Suaves** - Transiciones y efectos visuales atractivos
+- ✅ **Logo y Branding Integrado** - Identidad visual consistente
+- ✅ **Favicon Personalizado** - Icono profesional del sitio
+
+### 📧 **Sistema de Formularios**
+- ✅ **Formulario de Contacto** - Contacto directo desde el sitio
+- ✅ **Solicitud de Cotización** - Formulario detallado para presupuestos
+- ✅ **Agendar Consulta** - Sistema de agendamiento de citas
+- ✅ **Integración de Email** - Conectado a `axonapp.info@gmail.com`
+- ✅ **Validación Completa** - Validación HTML5 y feedback visual
+
+### � **Contenido Empresarial**
+- ✅ **Sección Misión y Visión** - Rediseñada con valores y objetivos
+- ✅ **6 Servicios Principales** - Desarrollo Web, Apps, AI, etc.
+- ✅ **Modales Detallados** - Información completa de cada servicio
+- ✅ **Base de Datos de Servicios** - Procesos, tecnologías y características
+- ✅ **Información de Contacto** - Visible en múltiples secciones
+
+### ⚡ **Rendimiento y Técnica**
+- ✅ **Alto Rendimiento** - Construido con Vite para máxima velocidad
+- ✅ **Arquitectura Modular** - Componentes React reutilizables
+- ✅ **Despliegue Automático** - CI/CD con GitHub Actions
+- ✅ **Configuración Optimizada** - Vite configurado para GitHub Pages
 
 ## 🛠️ Stack Tecnológico
 
-- **Frontend:** React 18+ con Hooks
-- **Build Tool:** Vite 6.3.5
-- **Styling:** Tailwind CSS 3.4+
-- **Fuentes:** Orbitron + Rajdhani
-- **Despliegue:** GitHub Pages
-- **CI/CD:** GitHub Actions
+- **Frontend:** React 18+ con Hooks modernos
+- **Build Tool:** Vite 6.3.5 (ultra-rápido)
+- **Styling:** Tailwind CSS 3.4+ (utility-first)
+- **Email Service:** EmailJS (modo demo funcional)
+- **Fuentes:** Orbitron + Rajdhani (Google Fonts)
+- **Despliegue:** GitHub Pages con dominio personalizado
+- **CI/CD:** GitHub Actions (despliegue automático)
+- **Control de Versiones:** Git + GitHub
 
 ## 🏃‍♂️ Inicio Rápido
 
@@ -31,12 +56,13 @@
 
 - Node.js 18+
 - npm o yarn
+- Git
 
 ### Instalación
 
 ```bash
 # Clonar el repositorio
-git clone https://github.com/[tu-usuario]/Axon.app.git
+git clone https://github.com/axon-app/Axon.app.git
 cd Axon
 
 # Instalar dependencias
@@ -45,7 +71,7 @@ npm install
 # Iniciar servidor de desarrollo
 npm run dev
 
-# Abrir http://localhost:5173/Axon.app/
+# Abrir http://localhost:5177/
 ```
 
 ### Scripts Disponibles
