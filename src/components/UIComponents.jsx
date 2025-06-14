@@ -1,9 +1,11 @@
 import React, { useState } from "react";
+import logo1 from "../assets/logo1.png";
 
 // Componente del Logo de Axon
 export const AxonLogo = () => {
   return (
     <div className="flex items-center">
+      <img src={logo1} alt="Axon.App Logo" className="h-8 w-auto mr-2" />
       <span className="text-2xl font-orbitron font-bold tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400">
         Axon
       </span>

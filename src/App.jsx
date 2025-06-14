@@ -11,40 +11,26 @@ import {
   EnhancedTermsModal,
 } from "./components/UIComponents";
 import { technologies } from "./data/content";
+import logo1 from "./assets/logo1.png";
 
 const App = () => {
   const [showMenu, setShowMenu] = useState(false);
   const [showPrivacyModal, setShowPrivacyModal] = useState(false); // Estado para la modal de Privacidad
   const [showTermsModal, setShowTermsModal] = useState(false); // Estado para la modal de Términos
+  const [logoError, setLogoError] = useState(false);
 
-  // Logo de Axon.App como un SVG en línea para escalabilidad y personalización
-  const AxonAppLogoSVG = (
-    // Ajustado el viewBox de 200 a 250 para dar más espacio horizontal al texto
-    <svg
-      width="100%"
-      height="100%"
-      viewBox="0 0 250 60"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
+  const handleLogoError = () => {
+    console.error("Logo failed to load");
+    setLogoError(true);
+  };
+
+  // Logo SVG como fallback
+  const LogoSVG = ({ className }) => (
+    <div
+      className={`bg-gradient-to-r from-blue-400 via-cyan-400 to-green-400 rounded-lg flex items-center justify-center text-white font-bold ${className}`}
     >
-      <text
-        x="0"
-        y="45"
-        fontFamily="Inter, sans-serif"
-        fontSize="48"
-        fontWeight="bold"
-        fill="url(#gradient)"
-        letterSpacing="2"
-      >
-        Axon.App
-      </text>
-      <defs>
-        <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-          <stop offset="0%" stopColor="#00C9FF" />
-          <stop offset="100%" stopColor="#92FE9D" />
-        </linearGradient>
-      </defs>
-    </svg>
+      <span className="text-2xl">⚡</span>
+    </div>
   );
 
   return (
@@ -56,8 +42,21 @@ const App = () => {
             href="#hero"
             className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-green-400"
           >
-            {/* Ajustado el ancho del div para el logo en la navbar */}
-            <div className="w-40 h-12 md:w-48 md:h-14">{AxonAppLogoSVG}</div>
+            {/* Logo de Axon.App */}
+            <div className="flex items-center">
+              {!logoError ? (
+                <img
+                  src={logo1}
+                  alt="Axon.App Logo"
+                  className="h-10 w-auto mr-2"
+                  onError={handleLogoError}
+                  onLoad={() => console.log("Logo loaded successfully")}
+                />
+              ) : (
+                <LogoSVG className="h-10 w-10 mr-2" />
+              )}
+              <span className="text-2xl font-bold">Axon.App</span>
+            </div>
           </a>
           <div className="hidden md:flex space-x-8">
             <NavLink href="#hero">Inicio</NavLink>
@@ -126,9 +125,19 @@ const App = () => {
           <div className="absolute bottom-1/4 left-1/3 w-72 h-72 bg-green-500 rounded-full mix-blend-screen animate-blob"></div>
         </div>
         <div className="relative z-10 flex flex-col items-center max-w-4xl mx-auto">
-          {/* Ajustado el ancho del div para el logo en la sección Hero */}
-          <div className="w-72 h-28 md:w-96 md:h-36 mb-8 animate-fadeInScale">
-            {AxonAppLogoSVG}
+          {/* Logo de Axon.App en la sección Hero */}
+          <div className="mb-8 animate-fadeInScale">
+            {!logoError ? (
+              <img
+                src={logo1}
+                alt="Axon.App Logo"
+                className="h-20 md:h-28 w-auto mx-auto"
+                onError={handleLogoError}
+                onLoad={() => console.log("Hero logo loaded successfully")}
+              />
+            ) : (
+              <LogoSVG className="h-20 md:h-28 w-20 md:w-28 mx-auto" />
+            )}
           </div>
           <h1 className="text-4xl md:text-6xl font-extrabold mb-6 leading-tight animate-fadeInUp text-transparent bg-clip-text bg-gradient-to-r from-teal-400 to-blue-500">
             Desarrollamos el Futuro.
@@ -146,34 +155,188 @@ const App = () => {
         </div>
       </section>
 
-      {/* About Us Section */}
+      {/* About Us Section - Mission & Vision */}
       <section
         id="about"
-        className="py-20 md:py-32 bg-gray-900 bg-opacity-70 backdrop-blur-md"
+        className="py-20 md:py-32 bg-gray-900 bg-opacity-70 backdrop-blur-md relative overflow-hidden"
       >
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl md:text-5xl font-bold text-center mb-16 text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-orange-400 animate-fadeIn title-hover-effect">
-            Nuestra Visión
-          </h2>
-          <div className="max-w-3xl mx-auto text-lg md:text-xl leading-relaxed text-gray-300 text-center animate-fadeIn delay-200">
-            <p className="mb-6">
-              En Axon.App, somos pioneros en la creación de experiencias
-              digitales de vanguardia. Fusionamos la innovación con la
-              funcionalidad, diseñando soluciones de software y aplicaciones
-              móviles que no solo cumplen con las expectativas, sino que las
-              superan.
+        {/* Background decorative elements */}
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute top-20 left-20 w-40 h-40 bg-blue-500 rounded-full blur-3xl"></div>
+          <div className="absolute bottom-20 right-20 w-60 h-60 bg-purple-500 rounded-full blur-3xl"></div>
+        </div>
+
+        <div className="container mx-auto px-4 relative z-10">
+          {/* Section Header */}
+          <div className="text-center mb-20">
+            <h2 className="text-4xl md:text-6xl font-bold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-purple-400 to-cyan-400 animate-fadeIn">
+              Nuestra Esencia
+            </h2>
+            <p className="text-xl md:text-2xl text-gray-300 max-w-3xl mx-auto">
+              Transformamos ideas en soluciones digitales revolucionarias
             </p>
-            <p className="mb-6">
-              Nuestro equipo de expertos está dedicado a transformar tus ideas
-              más ambiciosas en productos tecnológicos robustos, escalables y
-              visualmente impactantes. Creemos en el poder de la tecnología para
-              redefinir el futuro.
-            </p>
-            <p>
-              Desde startups hasta empresas consolidadas, somos tu socio
-              estratégico para navegar el panorama digital en constante
-              evolución.
-            </p>
+          </div>
+
+          {/* Mission & Vision Grid */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-20">
+            {/* Mission */}
+            <div className="bg-gradient-to-br from-blue-900/50 to-purple-900/50 backdrop-blur-sm rounded-2xl p-8 border border-blue-400/20 hover:border-blue-400/40 transition-all duration-300 hover:transform hover:scale-105">
+              <div className="flex items-center mb-6">
+                <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full flex items-center justify-center mr-4">
+                  <span className="text-2xl">🎯</span>
+                </div>
+                <h3 className="text-2xl md:text-3xl font-bold text-blue-300">
+                  Nuestra Misión
+                </h3>
+              </div>
+              <p className="text-gray-300 text-lg leading-relaxed">
+                Democratizar la tecnología de vanguardia, creando soluciones
+                digitales accesibles e innovadoras que impulsen el crecimiento
+                de nuestros clientes. Nos comprometemos a entregar productos de
+                software excepcionales que transformen ideas en realidades
+                digitales exitosas.
+              </p>
+            </div>
+
+            {/* Vision */}
+            <div className="bg-gradient-to-br from-purple-900/50 to-pink-900/50 backdrop-blur-sm rounded-2xl p-8 border border-purple-400/20 hover:border-purple-400/40 transition-all duration-300 hover:transform hover:scale-105">
+              <div className="flex items-center mb-6">
+                <div className="w-16 h-16 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center mr-4">
+                  <span className="text-2xl">🚀</span>
+                </div>
+                <h3 className="text-2xl md:text-3xl font-bold text-purple-300">
+                  Nuestra Visión
+                </h3>
+              </div>
+              <p className="text-gray-300 text-lg leading-relaxed">
+                Ser la empresa líder en desarrollo de software personalizado en
+                Latinoamérica, reconocida por nuestra excelencia técnica,
+                innovación constante y capacidad de anticipar las necesidades
+                del mercado digital del futuro.
+              </p>
+            </div>
+          </div>
+
+          {/* Goals Timeline */}
+          <div className="bg-gray-800/40 backdrop-blur-sm rounded-2xl p-8 border border-gray-600/30">
+            <h3 className="text-3xl font-bold text-center mb-12 text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-cyan-400">
+              Objetivos Estratégicos
+            </h3>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              {/* Short Term Goals */}
+              <div className="space-y-6">
+                <div className="flex items-center mb-6">
+                  <div className="w-12 h-12 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full flex items-center justify-center mr-4">
+                    <span className="text-xl">📅</span>
+                  </div>
+                  <h4 className="text-xl font-bold text-green-300">
+                    Corto Plazo (2025-2026)
+                  </h4>
+                </div>
+                <ul className="space-y-4">
+                  <li className="flex items-start">
+                    <span className="text-green-400 mr-3 mt-1">▶</span>
+                    <span className="text-gray-300">
+                      Expandir nuestro equipo de desarrollo con 10+
+                      especialistas
+                    </span>
+                  </li>
+                  <li className="flex items-start">
+                    <span className="text-green-400 mr-3 mt-1">▶</span>
+                    <span className="text-gray-300">
+                      Implementar metodologías ágiles avanzadas y DevOps
+                    </span>
+                  </li>
+                  <li className="flex items-start">
+                    <span className="text-green-400 mr-3 mt-1">▶</span>
+                    <span className="text-gray-300">
+                      Lanzar 50+ proyectos de alta calidad
+                    </span>
+                  </li>
+                  <li className="flex items-start">
+                    <span className="text-green-400 mr-3 mt-1">▶</span>
+                    <span className="text-gray-300">
+                      Establecer alianzas estratégicas con partners tecnológicos
+                    </span>
+                  </li>
+                </ul>
+              </div>
+
+              {/* Long Term Goals */}
+              <div className="space-y-6">
+                <div className="flex items-center mb-6">
+                  <div className="w-12 h-12 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full flex items-center justify-center mr-4">
+                    <span className="text-xl">🎯</span>
+                  </div>
+                  <h4 className="text-xl font-bold text-cyan-300">
+                    Largo Plazo (2027-2030)
+                  </h4>
+                </div>
+                <ul className="space-y-4">
+                  <li className="flex items-start">
+                    <span className="text-cyan-400 mr-3 mt-1">▶</span>
+                    <span className="text-gray-300">
+                      Convertirnos en referente de innovación en IA y ML
+                    </span>
+                  </li>
+                  <li className="flex items-start">
+                    <span className="text-cyan-400 mr-3 mt-1">▶</span>
+                    <span className="text-gray-300">
+                      Expandir operaciones a 5+ países de Latinoamérica
+                    </span>
+                  </li>
+                  <li className="flex items-start">
+                    <span className="text-cyan-400 mr-3 mt-1">▶</span>
+                    <span className="text-gray-300">
+                      Desarrollar productos SaaS propios de clase mundial
+                    </span>
+                  </li>
+                  <li className="flex items-start">
+                    <span className="text-cyan-400 mr-3 mt-1">▶</span>
+                    <span className="text-gray-300">
+                      Alcanzar un equipo de 100+ profesionales especializados
+                    </span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          {/* Values Section */}
+          <div className="mt-20">
+            <h3 className="text-3xl font-bold text-center mb-12 text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-red-400">
+              Nuestros Valores
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              <div className="text-center p-6 bg-gray-800/30 rounded-xl border border-gray-600/20 hover:border-orange-400/40 transition-all duration-300">
+                <div className="text-4xl mb-4">💡</div>
+                <h4 className="text-xl font-bold text-orange-300 mb-2">
+                  Innovación
+                </h4>
+                <p className="text-gray-300">
+                  Pioneros en adoptar tecnologías emergentes
+                </p>
+              </div>
+              <div className="text-center p-6 bg-gray-800/30 rounded-xl border border-gray-600/20 hover:border-blue-400/40 transition-all duration-300">
+                <div className="text-4xl mb-4">🤝</div>
+                <h4 className="text-xl font-bold text-blue-300 mb-2">
+                  Colaboración
+                </h4>
+                <p className="text-gray-300">
+                  Trabajamos como socios estratégicos
+                </p>
+              </div>
+              <div className="text-center p-6 bg-gray-800/30 rounded-xl border border-gray-600/20 hover:border-green-400/40 transition-all duration-300">
+                <div className="text-4xl mb-4">🎯</div>
+                <h4 className="text-xl font-bold text-green-300 mb-2">
+                  Excelencia
+                </h4>
+                <p className="text-gray-300">
+                  Calidad superior en cada proyecto
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </section>
