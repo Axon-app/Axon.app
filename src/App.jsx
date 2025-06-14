@@ -1,13 +1,15 @@
-import React, { useState } from 'react';
-import { 
-  AxonLogo, 
-  AnimatedBackground, 
-  ServiceCard, 
-  TestimonialCard, 
-  TechItem, 
-  ContactForm, 
-  ScrollToTopButton 
-} from './components/UIComponents';
+import React, { useState } from "react";
+import {
+  AxonLogo,
+  AnimatedBackground,
+  ServiceCard,
+  TestimonialCard,
+  TechItem,
+  ContactForm,
+  ScrollToTopButton,
+  EnhancedPrivacyModal,
+  EnhancedTermsModal,
+} from "./components/UIComponents";
 
 const App = () => {
   const [showMenu, setShowMenu] = useState(false);
@@ -406,13 +408,15 @@ const App = () => {
         </div>
       </footer>
 
-      {/* Modals de Privacidad y Términos */}
-      {showPrivacyModal && (
-        <PrivacyPolicyModal onClose={() => setShowPrivacyModal(false)} />
-      )}
-      {showTermsModal && (
-        <TermsAndConditionsModal onClose={() => setShowTermsModal(false)} />
-      )}
+      {/* Modals mejorados de Privacidad y Términos */}
+      <EnhancedPrivacyModal 
+        isOpen={showPrivacyModal} 
+        onClose={() => setShowPrivacyModal(false)} 
+      />
+      <EnhancedTermsModal 
+        isOpen={showTermsModal} 
+        onClose={() => setShowTermsModal(false)} 
+      />
     </div>
   );
 };
@@ -431,211 +435,6 @@ const NavLink = ({ href, children, mobile, onClick }) => {
     >
       {children}
     </a>
-  );
-};
-
-// Componente para la Modal de Política de Privacidad
-const PrivacyPolicyModal = ({ onClose }) => {
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-70 backdrop-blur-sm">
-      <div className="relative bg-gray-800 rounded-lg shadow-xl max-w-3xl w-full max-h-[90vh] overflow-y-auto p-8 text-gray-200 border border-gray-700">
-        <button
-          onClick={onClose}
-          className="absolute top-4 right-4 text-gray-400 hover:text-white text-2xl font-bold transition duration-200"
-        >
-          &times;
-        </button>
-        <h2 className="text-3xl md:text-4xl font-bold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-green-400">
-          Política de Privacidad
-        </h2>
-        <div className="prose prose-invert max-w-none text-gray-300">
-          <p>
-            En Axon.App, valoramos su privacidad y nos comprometemos a proteger
-            su información personal. Esta política de privacidad describe cómo
-            recopilamos, usamos y compartimos su información cuando utiliza
-            nuestros servicios.
-          </p>
-          <h3 className="text-xl font-semibold mt-6 mb-3 text-blue-300">
-            1. Información que Recopilamos
-          </h3>
-          <p>
-            Podemos recopilar información personal que usted nos proporciona
-            directamente, como su nombre, dirección de correo electrónico y
-            número de teléfono, cuando se registra en nuestros servicios, se
-            pone en contacto con nosotros o participa en encuestas.
-          </p>
-          <p>
-            También podemos recopilar información automáticamente sobre su uso
-            de nuestros servicios, incluyendo su dirección IP, tipo de
-            dispositivo, navegador, páginas visitadas, tiempo dedicado y otros
-            datos de uso y diagnóstico.
-          </p>
-          <h3 className="text-xl font-semibold mt-6 mb-3 text-blue-300">
-            2. Uso de su Información
-          </h3>
-          <p>Utilizamos la información que recopilamos para:</p>
-          <ul className="list-disc list-inside ml-4">
-            <li>Proveer, operar y mantener nuestros servicios.</li>
-            <li>Mejorar, personalizar y expandir nuestros servicios.</li>
-            <li>Entender y analizar cómo utiliza nuestros servicios.</li>
-            <li>
-              Desarrollar nuevos productos, servicios, características y
-              funcionalidades.
-            </li>
-            <li>
-              Comunicarnos con usted, ya sea directamente o a través de uno de
-              nuestros socios, para fines de servicio al cliente, para
-              proporcionarle actualizaciones y otra información relacionada con
-              el servicio, y con fines de marketing y promoción.
-            </li>
-            <li>Enviarle correos electrónicos.</li>
-            <li>Encontrar y prevenir fraudes.</li>
-          </ul>
-          <h3 className="text-xl font-semibold mt-6 mb-3 text-blue-300">
-            3. Compartir su Información
-          </h3>
-          <p>
-            Podemos compartir su información personal con proveedores de
-            servicios de terceros que realizan servicios en nuestro nombre, como
-            procesamiento de pagos, análisis de datos, servicios de marketing,
-            etc. No vendemos su información personal a terceros.
-          </p>
-          <h3 className="text-xl font-semibold mt-6 mb-3 text-blue-300">
-            4. Seguridad de los Datos
-          </h3>
-          <p>
-            Tomamos medidas razonables para proteger la información que
-            recopilamos de la pérdida, el uso indebido y el acceso no
-            autorizado, la divulgación, la alteración y la destrucción.
-          </p>
-          <h3 className="text-xl font-semibold mt-6 mb-3 text-blue-300">
-            5. Sus Derechos de Privacidad
-          </h3>
-          <p>
-            Usted tiene derecho a acceder, corregir o eliminar su información
-            personal. Para ejercer estos derechos, contáctenos en
-            info@axon.App.com.
-          </p>
-          <h3 className="text-xl font-semibold mt-6 mb-3 text-blue-300">
-            6. Cambios a esta Política de Privacidad
-          </h3>
-          <p>
-            Podemos actualizar nuestra Política de Privacidad de vez en cuando.
-            Le notificaremos cualquier cambio publicando la nueva Política de
-            Privacidad en esta página.
-          </p>
-          <p className="mt-8 text-sm text-gray-400">
-            Última actualización:{" "}
-            {new Date().toLocaleDateString("es-ES", {
-              year: "numeric",
-              month: "long",
-              day: "numeric",
-            })}
-          </p>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-// Componente para la Modal de Términos y Condiciones
-const TermsAndConditionsModal = ({ onClose }) => {
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-70 backdrop-blur-sm">
-      <div className="relative bg-gray-800 rounded-lg shadow-xl max-w-3xl w-full max-h-[90vh] overflow-y-auto p-8 text-gray-200 border border-gray-700">
-        <button
-          onClick={onClose}
-          className="absolute top-4 right-4 text-gray-400 hover:text-white text-2xl font-bold transition duration-200"
-        >
-          &times;
-        </button>
-        <h2 className="text-3xl md:text-4xl font-bold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-green-400">
-          Términos y Condiciones
-        </h2>
-        <div className="prose prose-invert max-w-none text-gray-300">
-          <p>
-            Bienvenido a Axon.App. Al acceder y utilizar nuestros servicios,
-            usted acepta cumplir con estos Términos y Condiciones. Léalos
-            detenidamente antes de utilizar nuestros servicios.
-          </p>
-          <h3 className="text-xl font-semibold mt-6 mb-3 text-blue-300">
-            1. Aceptación de los Términos
-          </h3>
-          <p>
-            Al acceder o utilizar cualquier parte de nuestros servicios, usted
-            acepta estar sujeto a estos Términos y Condiciones. Si no está de
-            acuerdo con todos los términos y condiciones de este acuerdo,
-            entonces no podrá acceder a ningún servicio.
-          </p>
-          <h3 className="text-xl font-semibold mt-6 mb-3 text-blue-300">
-            2. Modificaciones de los Términos
-          </h3>
-          <p>
-            Nos reservamos el derecho, a nuestra entera discreción, de
-            actualizar, cambiar o reemplazar cualquier parte de estos Términos y
-            Condiciones mediante la publicación de actualizaciones y cambios en
-            nuestro sitio web. Es su responsabilidad revisar periódicamente
-            nuestro sitio web para ver los cambios. Su uso continuo o acceso a
-            nuestro sitio web después de la publicación de cualquier cambio
-            constituye la aceptación de dichos cambios.
-          </p>
-          <h3 className="text-xl font-semibold mt-6 mb-3 text-blue-300">
-            3. Uso de los Servicios
-          </h3>
-          <p>
-            Usted acepta utilizar nuestros servicios únicamente con fines
-            lícitos y de manera que no infrinja los derechos de, restrinja o
-            inhiba el uso y disfrute de este sitio por parte de terceros.
-          </p>
-          <h3 className="text-xl font-semibold mt-6 mb-3 text-blue-300">
-            4. Propiedad Intelectual
-          </h3>
-          <p>
-            Todo el contenido incluido en nuestros servicios, como texto,
-            gráficos, logotipos, imágenes, así como la compilación de los
-            mismos, y cualquier software utilizado en el sitio, es propiedad de
-            Axon.App o sus proveedores de contenido y está protegido por las
-            leyes de derechos de autor y otras leyes que protegen la propiedad
-            intelectual y los derechos de propiedad.
-          </p>
-          <h3 className="text-xl font-semibold mt-6 mb-3 text-blue-300">
-            5. Limitación de Responsabilidad
-          </h3>
-          <p>
-            En ningún caso Axon.App, ni sus directores, empleados, socios,
-            agentes, proveedores o afiliados, serán responsables de daños
-            indirectos, incidentales, especiales, consecuenciales o punitivos,
-            incluyendo, sin limitación, pérdida de beneficios, datos, uso, fondo
-            de comercio u otras pérdidas intangibles, resultantes de (i) su
-            acceso o uso o incapacidad de acceder o usar los Servicios; (ii)
-            cualquier conducta o contenido de cualquier tercero en los
-            Servicios; (iii) cualquier contenido obtenido de los Servicios; y
-            (iv) el acceso no autorizado, uso o alteración de sus transmisiones
-            o contenido, ya sea basado en garantía, contrato, agravio (incluida
-            la negligencia) o cualquier otra teoría legal, ya sea que se nos
-            haya informado o no de la posibilidad de dicho daño, e incluso si se
-            encuentra que un remedio establecido en este documento ha fallado en
-            su propósito esencial.
-          </p>
-          <h3 className="text-xl font-semibold mt-6 mb-3 text-blue-300">
-            6. Ley Aplicable
-          </h3>
-          <p>
-            Estos Términos se regirán e interpretarán de acuerdo con las leyes
-            de Colombia, sin tener en cuenta sus disposiciones sobre conflictos
-            de leyes.
-          </p>
-          <p className="mt-8 text-sm text-gray-400">
-            Última actualización:{" "}
-            {new Date().toLocaleDateString("es-ES", {
-              year: "numeric",
-              month: "long",
-              day: "numeric",
-            })}
-          </p>
-        </div>
-      </div>
-    </div>
   );
 };
 

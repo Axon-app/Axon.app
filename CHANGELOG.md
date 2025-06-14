@@ -13,6 +13,7 @@
 ## 🏗️ Arquitectura Técnica
 
 ### Stack Tecnológico
+
 - **Frontend Framework:** React 18+
 - **Build Tool:** Vite 6.3.5
 - **Styling:** Tailwind CSS 3.4+
@@ -22,6 +23,7 @@
 - **Control de Versiones:** Git + GitHub
 
 ### Estructura del Proyecto
+
 ```
 Axon/
 ├── src/
@@ -46,11 +48,13 @@ Axon/
 ### v1.0.0 - Versión Inicial Completa (14 Jun 2025)
 
 #### ✅ **CONFIGURACIÓN INICIAL**
+
 - [x] Proyecto Vite + React creado desde cero
 - [x] Estructura de carpetas organizadas
 - [x] Configuración de dependencias base
 
 #### ✅ **SISTEMA DE ESTILOS**
+
 - [x] Tailwind CSS instalado y configurado
 - [x] PostCSS y Autoprefixer configurados
 - [x] Fuentes personalizadas: Orbitron (títulos) + Rajdhani (texto)
@@ -60,6 +64,7 @@ Axon/
 #### ✅ **COMPONENTES DESARROLLADOS**
 
 **UIComponents.jsx - Componentes Reutilizables:**
+
 1. **AxonLogo** - Logo principal con gradiente
 2. **AnimatedBackground** - Efectos de fondo animados
 3. **ServiceCard** - Tarjetas de servicios (✅ corregida)
@@ -69,6 +74,7 @@ Axon/
 7. **ScrollToTopButton** - Botón de scroll hacia arriba
 
 **App.jsx - Estructura Principal:**
+
 - [x] Navbar responsivo con menú hamburguesa
 - [x] Hero section con CTA
 - [x] Sección de servicios (6 servicios)
@@ -77,16 +83,19 @@ Axon/
 - [x] Modales de Política de Privacidad y Términos
 
 #### ✅ **DATOS Y CONTENIDO**
+
 - [x] Datos centralizados en `content.js`
 - [x] Servicios definidos (Web, Mobile, UI/UX, Cloud, IA, Seguridad)
 - [x] Estructura preparada para testimonios y tecnologías
 
 #### ✅ **DESPLIEGUE Y CI/CD**
+
 - [x] GitHub Pages configurado
 - [x] Workflow de despliegue automático (`deploy.yml` + `static.yml`)
 - [x] Pruebas locales exitosas
 
 #### ✅ **CORRECCIONES Y OPTIMIZACIONES**
+
 - [x] **Error ServiceCard:** Conflicto de declaración duplicada resuelto
 - [x] **Props components:** Adaptados para compatibilidad React
 - [x] **Imports:** Limpieza de imports no utilizados
@@ -97,24 +106,28 @@ Axon/
 ## 🎨 Funcionalidades Implementadas
 
 ### 🖥️ **Interfaz de Usuario**
+
 - **✅ Diseño Responsivo:** Mobile-first, adaptable a todas las pantallas
 - **✅ Tema Oscuro:** Gradientes oscuros con acentos de color
 - **✅ Animaciones Suaves:** Transiciones CSS y efectos hover
 - **✅ Tipografía Moderna:** Orbitron + Rajdhani para jerarquía visual
 
 ### 🧭 **Navegación**
+
 - **✅ Navbar Fijo:** Sticky navigation con transparencia
 - **✅ Menú Móvil:** Hamburger menu para dispositivos pequeños
 - **✅ Scroll Suave:** Navegación entre secciones
 - **✅ Scroll to Top:** Botón para volver arriba
 
 ### 📄 **Secciones de Contenido**
+
 1. **✅ Hero Section:** Presentación principal con CTA
 2. **✅ Servicios:** 6 servicios con iconos y descripciones
 3. **✅ Contacto:** Formulario funcional con validación
 4. **✅ Footer:** Links, información legal y redes sociales
 
 ### 🔧 **Funcionalidades Técnicas**
+
 - **✅ Hot Reload:** Desarrollo en tiempo real con Vite
 - **✅ CSS Processing:** Tailwind + PostCSS optimizado
 - **✅ Component Architecture:** Modular y reutilizable
@@ -125,22 +138,27 @@ Axon/
 ## 🚀 Servicios Ofrecidos (Contenido)
 
 1. **💻 Desarrollo Web**
+
    - Sitios web responsivos y de alto rendimiento
    - Optimizados para UX
 
 2. **📱 Desarrollo de Apps Móviles**
+
    - iOS y Android
    - Interfaces intuitivas
 
 3. **🎨 Diseño UI/UX**
+
    - Interfaces atractivas
    - Experiencias de usuario fluidas
 
 4. **☁️ Soluciones Cloud**
+
    - Infraestructuras escalables
    - Optimización de costos
 
 5. **🧠 Inteligencia Artificial**
+
    - Machine Learning
    - Automatización de procesos
 
@@ -153,6 +171,7 @@ Axon/
 ## 🐛 Errores Resueltos
 
 ### ❌ **Problemas Solucionados:**
+
 1. **ServiceCard Duplicado** - Declaración duplicada eliminada
 2. **Props Mismatch** - Componentes adaptados a props individuales
 3. **JSX Syntax Errors** - Estructura JSX corregida
@@ -164,6 +183,7 @@ Axon/
 ## 📋 Próximas Funcionalidades (Backlog)
 
 ### 🔄 **Pendientes**
+
 - [ ] **Sección Testimonios:** Implementar testimonios reales
 - [ ] **Sección Tecnologías:** Mostrar stack tecnológico
 - [ ] **Blog/Noticias:** Sistema de contenido dinámico
@@ -175,6 +195,7 @@ Axon/
 - [ ] **Performance:** Lazy loading, optimización de imágenes
 
 ### 🎯 **Mejoras Técnicas**
+
 - [ ] **Testing:** Unit tests con Jest/Vitest
 - [ ] **E2E Testing:** Cypress o Playwright
 - [ ] **PWA:** Service workers y offline support
@@ -186,6 +207,7 @@ Axon/
 ## 📝 Notas de Desarrollo
 
 ### 🔧 **Comandos Útiles**
+
 ```bash
 # Desarrollo
 npm run dev
@@ -201,9 +223,11 @@ git push origin main
 ```
 
 ### 🚨 **Problemas Conocidos**
+
 - Ninguno actualmente
 
 ### 💡 **Buenas Prácticas Implementadas**
+
 - Componentes funcionales con hooks
 - Props drilling evitado con estructura plana
 - CSS modular con Tailwind
@@ -221,4 +245,4 @@ git push origin main
 
 ---
 
-*Documento actualizado automáticamente con cada cambio significativo*
+_Documento actualizado automáticamente con cada cambio significativo_

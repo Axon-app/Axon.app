@@ -4,8 +4,8 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        'orbitron': ['Orbitron', 'monospace'],
-        'rajdhani': ['Rajdhani', 'sans-serif'],
+        orbitron: ["Orbitron", "monospace"],
+        rajdhani: ["Rajdhani", "sans-serif"],
       },
       keyframes: {
         blob: {

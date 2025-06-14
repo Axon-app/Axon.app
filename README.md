@@ -28,7 +28,8 @@
 ## 🏃‍♂️ Inicio Rápido
 
 ### Prerrequisitos
-- Node.js 18+ 
+
+- Node.js 18+
 - npm o yarn
 
 ### Instalación
@@ -80,6 +81,7 @@ Axon/
 ## 🎨 Componentes Principales
 
 ### UIComponents.jsx
+
 - `AxonLogo` - Logo principal con gradiente
 - `AnimatedBackground` - Efectos de fondo animados
 - `ServiceCard` - Tarjetas de servicios
@@ -89,6 +91,7 @@ Axon/
 - `ScrollToTopButton` - Botón scroll to top
 
 ### Secciones de la Página
+
 - **Hero** - Presentación principal con CTA
 - **Servicios** - 6 servicios principales
 - **Contacto** - Formulario funcional
@@ -99,11 +102,13 @@ Axon/
 El sitio se despliega automáticamente en GitHub Pages cuando se hace push a la rama `main`.
 
 ### Configuración de GitHub Pages
+
 1. Habilitar GitHub Pages en la configuración del repo
 2. Configurar source como "GitHub Actions"
 3. Los workflows en `.github/workflows/` manejan el despliegue
 
 ### Despliegue Manual
+
 ```bash
 npm run build
 npm run preview  # Para probar localmente
@@ -121,16 +126,19 @@ npm run preview  # Para probar localmente
 ## 🛠️ Desarrollo
 
 ### Agregar Nuevos Componentes
+
 1. Crear componente en `src/components/UIComponents.jsx`
 2. Exportar el componente
 3. Importar en `App.jsx`
 4. Actualizar `CHANGELOG.md`
 
 ### Modificar Contenido
+
 - Editar `src/data/content.js` para servicios, testimonios, etc.
 - Modificar `App.jsx` para contenido estático
 
 ### Personalizar Estilos
+
 - Configurar colores en `tailwind.config.js`
 - Añadir estilos globales en `src/index.css`
 
@@ -144,11 +152,13 @@ npm run preview  # Para probar localmente
 ## 🐛 Solución de Problemas
 
 ### Errores Comunes
+
 - **Port ya en uso:** Cambiar puerto en `vite.config.js`
 - **Dependencias:** Ejecutar `npm install` para reinstalar
 - **Build errors:** Verificar sintaxis JSX y imports
 
 ### Logs y Debugging
+
 ```bash
 npm run dev --debug     # Modo debug
 npm run build --debug   # Build con logs detallados
@@ -177,4 +187,4 @@ Este proyecto está bajo la Licencia MIT - ver archivo [LICENSE](LICENSE) para d
 
 ⭐ **¡Dale una estrella si te gusta el proyecto!**
 
-*Construido con ❤️ usando React + Vite + Tailwind CSS*
+_Construido con ❤️ usando React + Vite + Tailwind CSS_

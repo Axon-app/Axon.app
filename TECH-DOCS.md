@@ -2,13 +2,14 @@
 
 ## 📋 Registro de Cambios Detallado
 
-*Actualizado: 14 de Junio, 2025*
+_Actualizado: 14 de Junio, 2025_
 
 ---
 
 ## 🏗️ CONFIGURACIÓN INICIAL DEL PROYECTO
 
 ### Comandos Ejecutados
+
 ```bash
 npm create vite@latest Axon -- --template react
 cd Axon
@@ -21,59 +22,58 @@ npm install @fontsource/orbitron @fontsource/rajdhani
 ### Archivos de Configuración Creados
 
 #### `tailwind.config.js`
+
 ```javascript
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: [
-    "./index.html",
-    "./src/**/*.{js,ts,jsx,tsx}",
-  ],
+  content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
       fontFamily: {
-        'orbitron': ['Orbitron', 'sans-serif'],
-        'rajdhani': ['Rajdhani', 'sans-serif'],
+        orbitron: ["Orbitron", "sans-serif"],
+        rajdhani: ["Rajdhani", "sans-serif"],
       },
       animation: {
-        'fadeIn': 'fadeIn 1s ease-in-out',
-        'slideUp': 'slideUp 0.8s ease-out',
-        'bounceIn': 'bounceIn 0.6s ease-out',
-        'glow': 'glow 2s ease-in-out infinite alternate',
+        fadeIn: "fadeIn 1s ease-in-out",
+        slideUp: "slideUp 0.8s ease-out",
+        bounceIn: "bounceIn 0.6s ease-out",
+        glow: "glow 2s ease-in-out infinite alternate",
       },
       keyframes: {
         fadeIn: {
-          '0%': { opacity: '0', transform: 'translateY(20px)' },
-          '100%': { opacity: '1', transform: 'translateY(0)' },
+          "0%": { opacity: "0", transform: "translateY(20px)" },
+          "100%": { opacity: "1", transform: "translateY(0)" },
         },
         slideUp: {
-          '0%': { opacity: '0', transform: 'translateY(50px)' },
-          '100%': { opacity: '1', transform: 'translateY(0)' },
+          "0%": { opacity: "0", transform: "translateY(50px)" },
+          "100%": { opacity: "1", transform: "translateY(0)" },
         },
         bounceIn: {
-          '0%': { opacity: '0', transform: 'scale(0.3)' },
-          '50%': { transform: 'scale(1.05)' },
-          '70%': { transform: 'scale(0.9)' },
-          '100%': { opacity: '1', transform: 'scale(1)' },
+          "0%": { opacity: "0", transform: "scale(0.3)" },
+          "50%": { transform: "scale(1.05)" },
+          "70%": { transform: "scale(0.9)" },
+          "100%": { opacity: "1", transform: "scale(1)" },
         },
         glow: {
-          '0%': { textShadow: '0 0 5px #00C9FF, 0 0 10px #00C9FF' },
-          '100%': { textShadow: '0 0 10px #92FE9D, 0 0 20px #92FE9D' },
+          "0%": { textShadow: "0 0 5px #00C9FF, 0 0 10px #00C9FF" },
+          "100%": { textShadow: "0 0 10px #92FE9D, 0 0 20px #92FE9D" },
         },
       },
     },
   },
   plugins: [],
-}
+};
 ```
 
 #### `postcss.config.js`
+
 ```javascript
 export default {
   plugins: {
     tailwindcss: {},
     autoprefixer: {},
   },
-}
+};
 ```
 
 ---
@@ -116,32 +116,39 @@ Axon/
 ### 1. **UIComponents.jsx** (167 líneas)
 
 #### Componentes Exportados:
+
 1. **`AxonLogo`** (líneas 4-15)
+
    - Props: ninguna
    - Función: Logo principal con gradiente
    - Fuentes: Orbitron + Rajdhani
 
 2. **`AnimatedBackground`** (líneas 17-25)
+
    - Props: ninguna
    - Función: Efectos de fondo con blur y animaciones
    - Animaciones: 3 círculos con pulso
 
 3. **`ServiceCard`** (líneas 27-48) ✅ **CORREGIDO**
+
    - Props: `{ icon, title, description, onOpenModal, id }`
    - Función: Tarjetas de servicios con hover effects
    - Features: Gradientes, transformaciones, botón condicional
 
 4. **`TestimonialCard`** (líneas 50-75)
+
    - Props: `{ testimonial }`
    - Función: Tarjetas de testimonios con avatar y rating
    - Features: Sistema de estrellas, layout flexible
 
 5. **`TechItem`** (líneas 77-87)
+
    - Props: `{ tech }`
    - Función: Items de tecnología con icono y nombre
    - Features: Hover effects, scale transforms
 
 6. **`ContactForm`** (líneas 89-135)
+
    - Props: ninguna
    - Función: Formulario de contacto funcional
    - Features: Validación HTML5, submit handler, responsive grid
@@ -154,22 +161,27 @@ Axon/
 ### 2. **App.jsx** (643 líneas)
 
 #### Estructura Principal:
+
 - **Estado:** `showMenu`, `showPrivacyModal`, `showTermsModal`
 - **Imports:** 7 componentes de UIComponents
 - **Secciones:** Navbar, Hero, Servicios, Contacto, Footer, Modales
 
 #### Componentes Internos:
+
 1. **`AxonAppLogoSVG`** (líneas 19-38)
+
    - SVG inline personalizado
    - Gradiente lineal
    - ViewBox optimizado
 
 2. **`NavLink`** (líneas 416-436)
+
    - Props: `{ href, children, mobile, onClick }`
    - Función: Enlaces de navegación responsivos
    - Features: Estilos condicionales mobile/desktop
 
 3. **`PrivacyPolicyModal`** (líneas 440-520)
+
    - Props: `{ onClose }`
    - Función: Modal de política de privacidad
    - Features: Overlay, scroll interno, botón cerrar
@@ -184,6 +196,7 @@ Axon/
 ## 🎨 SISTEMA DE ESTILOS
 
 ### Colores Principales
+
 - **Azul Primario:** `#00C9FF` → `blue-400`, `blue-500`, `blue-600`
 - **Verde Secundario:** `#92FE9D` → `green-400`, `cyan-400`
 - **Púrpura Acento:** `purple-500`, `purple-600`, `purple-900`
@@ -191,18 +204,21 @@ Axon/
 - **Transparencias:** `/20`, `/30`, `/50`, `/60`, `/70`, `/80` (opacidades)
 
 ### Gradientes Utilizados
+
 - **Fondo Principal:** `from-gray-900 via-blue-900 to-purple-900`
 - **Textos:** `from-blue-400 to-green-400`, `from-green-400 to-cyan-400`
 - **Botones:** `from-blue-600 to-cyan-600`
 - **Hover States:** `from-blue-700 to-cyan-700`
 
 ### Animaciones Custom
+
 - **fadeIn:** Aparición suave con translateY
 - **slideUp:** Deslizamiento desde abajo
 - **bounceIn:** Entrada con rebote
 - **glow:** Efecto de brillo en texto
 
 ### Fuentes
+
 - **Orbitron:** Títulos y elementos destacados (font-orbitron)
 - **Rajdhani:** Subtítulos y texto secundario (font-rajdhani)
 - **Inter/Sans-serif:** Texto base y formularios
@@ -214,13 +230,14 @@ Axon/
 ### GitHub Actions Workflows
 
 #### `deploy.yml`
+
 ```yaml
 name: Deploy to GitHub Pages
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
@@ -228,7 +245,7 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
-          node-version: '18'
+          node-version: "18"
       - run: npm ci
       - run: npm run build
       - uses: actions/deploy-pages@v2
@@ -238,6 +255,7 @@ jobs:
 ```
 
 #### `static.yml`
+
 ```yaml
 name: Deploy static content to Pages
 on:
@@ -264,7 +282,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: 'npm'
+          cache: "npm"
       - name: Install dependencies
         run: npm ci
       - name: Build
@@ -274,7 +292,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: './dist'
+          path: "./dist"
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
@@ -285,6 +303,7 @@ jobs:
 ## 🔧 COMANDOS Y SCRIPTS UTILIZADOS
 
 ### Scripts package.json
+
 ```json
 {
   "scripts": {
@@ -297,6 +316,7 @@ jobs:
 ```
 
 ### Comandos de Desarrollo
+
 ```bash
 # Servidor de desarrollo
 npm run dev                          # Puerto 5173
@@ -316,21 +336,25 @@ git push origin main                 # Dispara deploy automático
 ## 🐛 ERRORES RESUELTOS Y SOLUCIONES
 
 ### 1. **ServiceCard Duplicado** ✅
+
 **Error:** `Parsing error: Identifier 'ServiceCard' has already been declared`
 **Causa:** Componente definido en UIComponents.jsx e importado + redefinido en App.jsx
 **Solución:** Eliminada definición duplicada en App.jsx (líneas 439-467)
 
 ### 2. **Props Mismatch** ✅
+
 **Error:** `Cannot read properties of undefined`
 **Causa:** ServiceCard esperaba `service.icon` pero recibía `icon` directo
 **Solución:** Modificado componente para recibir props individuales: `{ icon, title, description, onOpenModal, id }`
 
 ### 3. **Imports No Utilizados** ✅
+
 **Error:** `'useEffect' is defined but never used`
 **Causa:** Imports de desarrollo no limpiados
 **Solución:** Eliminados `useEffect`, `technologies`, `testimonials`, `services` de imports
 
 ### 4. **JSX Syntax Error** ✅
+
 **Error:** `Expected corresponding JSX closing tag`
 **Causa:** Problemas de cache del servidor con hot reload
 **Solución:** Reinicio completo del servidor (`taskkill` + `npm run dev`)
@@ -340,6 +364,7 @@ git push origin main                 # Dispara deploy automático
 ## 📊 MÉTRICAS DE DESARROLLO
 
 ### Líneas de Código
+
 - **App.jsx:** 643 líneas
 - **UIComponents.jsx:** 167 líneas
 - **Total React:** ~810 líneas
@@ -347,11 +372,13 @@ git push origin main                 # Dispara deploy automático
 - **Documentación:** ~400+ líneas
 
 ### Tiempo de Build
+
 - **Desarrollo:** ~200ms (Vite HMR)
 - **Producción:** ~2-3 segundos
 - **Despliegue:** ~30-60 segundos (GitHub Actions)
 
 ### Dependencias
+
 - **Producción:** React, React-DOM
 - **Desarrollo:** Vite, Tailwind, PostCSS, Autoprefixer, ESLint
 - **Fuentes:** @fontsource/orbitron, @fontsource/rajdhani
@@ -361,6 +388,7 @@ git push origin main                 # Dispara deploy automático
 ## 🔄 PRÓXIMOS PASOS TÉCNICOS
 
 ### Optimizaciones Pendientes
+
 - [ ] **Code Splitting:** Lazy loading de componentes
 - [ ] **Image Optimization:** WebP, lazy loading de imágenes
 - [ ] **PWA:** Service workers, manifest.json
@@ -368,6 +396,7 @@ git push origin main                 # Dispara deploy automático
 - [ ] **Performance Monitoring:** Web Vitals
 
 ### Funcionalidades Técnicas
+
 - [ ] **TypeScript Migration:** Tipado estático
 - [ ] **Testing:** Jest/Vitest + React Testing Library
 - [ ] **Storybook:** Documentación de componentes
@@ -376,5 +405,5 @@ git push origin main                 # Dispara deploy automático
 
 ---
 
-*Documento técnico actualizado con cada cambio significativo*
-*Úsalo como referencia para futuros desarrollos y debugging*
+_Documento técnico actualizado con cada cambio significativo_
+_Úsalo como referencia para futuros desarrollos y debugging_
