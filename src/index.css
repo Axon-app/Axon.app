@@ -255,6 +255,11 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Offset para navegación con navbar fijo */
+section[id] {
+  scroll-margin-top: 80px;
+}
+
 /* Reset de estilos base */
 * {
   box-sizing: border-box;
@@ -472,4 +477,83 @@ body {
   animation: rotateHorizontalReverse 15s ease-in-out infinite,
     lightReflection 4s ease-in-out infinite 1.5s;
   transform-style: preserve-3d;
+}
+
+/* Enhanced Navbar Animations */
+@keyframes navSlideIn {
+  0% {
+    opacity: 0;
+    transform: translateY(-100%);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes navGlow {
+  0%,
+  100% {
+    box-shadow: 0 0 20px rgba(59, 130, 246, 0.15);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(59, 130, 246, 0.25);
+  }
+}
+
+@keyframes logoFloat {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-3px);
+  }
+}
+
+@keyframes menuSlide {
+  0% {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Navbar Animation Classes */
+.nav-slide-in {
+  animation: navSlideIn 0.6s ease-out;
+}
+
+.nav-glow {
+  animation: navGlow 3s ease-in-out infinite;
+}
+
+.logo-float {
+  animation: logoFloat 3s ease-in-out infinite;
+}
+
+.menu-slide {
+  animation: menuSlide 0.3s ease-out;
+}
+
+/* Smooth scroll behavior */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Enhanced backdrop blur for navbar */
+.navbar-blur {
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+}
+
+/* Glass effect */
+.glass-effect {
+  background: rgba(17, 24, 39, 0.8);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }

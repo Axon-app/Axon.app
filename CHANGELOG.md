@@ -2,39 +2,131 @@
 
 ## 📊 Estado del Proyecto
 
-**Versión Actual:** 2.3.0  
+**Versión Actual:** 2.4.0  
 **Última Actualización:** 14 de Junio, 2025
-**Estado:** ✅ Funcional - Desplegado en GitHub Pages  
+**Estado:** ✅ Funcional - Navbar Completamente Reparado  
 **URL de Producción:** https://axon-app.github.io/Axon.app/  
-**URL de Desarrollo:** http://localhost:5175/Axon.app/
+**URL de Desarrollo:** http://localhost:5173/
+
+---
+
+## 🆕 Versión 2.4.0 - Reparación Completa del Navbar y Navegación
+
+### 🔧 Correcciones Críticas del Navbar
+
+#### **Problema de Íconos Desaparecidos**
+
+- **Problema**: Ícono de "Inicio" no aparecía en el navbar desktop
+- **Causa**: Error en componente `NavLink` - solo renderizaba efectos visuales, no el contenido
+- **Solución**: Reestructuración completa del componente `NavLink`
+  - Desktop: Renderiza `children` (íconos + texto) + efectos visuales
+  - Mobile: Renderiza solo `children`
+
+#### **Problema de Texto Transparente en Estado Activo**
+
+- **Problema**: Al hacer clic en enlaces del navbar, el texto desaparecía
+- **Causa**: `text-transparent` con gradiente no se aplicaba correctamente
+- **Solución**: Cambio a `text-blue-400 font-semibold` para estado activo
+- **Resultado**: Texto siempre visible en todos los estados
+
+#### **Corrección de Navegación a Testimonios**
+
+- **Problema**: Enlace "Testimonios" no dirigía a la sección correspondiente
+- **Causa**: Sección sin atributo `id="testimonials"`
+- **Solución**: Agregado `id="testimonials"` a la sección
+
+### 🎯 Mejoras en Navegación
+
+#### **Botón de Menú Móvil Mejorado**
+
+- **Antes**: Solo ícono hamburger sin texto
+- **Ahora**: "Menú" cuando cerrado / "Cerrar" cuando abierto
+- **Mejora UX**: Más claro para usuarios móviles
+
+#### **Scroll Suave Optimizado**
+
+- **Agregado**: `scroll-margin-top: 80px` para todas las secciones
+- **Beneficio**: Compensar navbar fijo, secciones no quedan ocultas
+
+### 🖼️ Correcciones de Assets
+
+#### **Reorganización de Logos**
+
+- **Movidos**: Logos de `src/assets/` a `public/` para acceso directo
+- **Rutas corregidas**:
+  - `import logo1 from "/logo1.png"`
+  - `import logo231 from "/logo231.png"`
+- **Resultado**: Logos cargan correctamente sin errores 404
+
+### ✅ Estado Final del Navbar
+
+**Desktop Navigation:**
+
+- ✅ Todos los íconos SVG visibles y funcionales
+- ✅ Texto permanece visible en todos los estados (normal/hover/activo)
+- ✅ Efectos visuales (gradientes, líneas, fondos) funcionando
+- ✅ Detección de sección activa operativa
+- ✅ Smooth scroll con offset correcto
+
+**Mobile Navigation:**
+
+- ✅ Botón de menú con texto claro
+- ✅ Menú desplegable funcional
+- ✅ Todos los enlaces navegan correctamente
+- ✅ Animaciones y transiciones suaves
+
+**Navegación General:**
+
+- ✅ Inicio → `#hero`
+- ✅ Nosotros → `#about`
+- ✅ Servicios → `#services`
+- ✅ Tecnologías → `#technologies`
+- ✅ **Testimonios → `#testimonials`** (REPARADO)
+- ✅ Contacto → `#contact`
+
+### 🎨 Componente NavLink Final
+
+```jsx
+const NavLink = ({ href, children, mobile, onClick, isActive }) => {
+  // Estados de estilo optimizados:
+  // - Normal: text-gray-300
+  // - Hover: text-white
+  // - Activo: text-blue-400 font-semibold
+  // - Efectos visuales preservados para desktop
+};
+```
 
 ---
 
 ## 🆕 Versión 2.3.0 - Logos Animados con Efectos 3D Profesionales
 
 ### ✨ Sistema de Logos Dual Implementado
+
 - **Doble logo en navbar y footer**: Logo1.png + Logo231.png funcionando juntos
 - **Tamaños optimizados**:
-  - Navbar: Logo1 (48×48px) + Logo231 (56px altura)  
+  - Navbar: Logo1 (48×48px) + Logo231 (56px altura)
   - Footer: Logo1 (64×64px) + Logo231 (80px altura)
 - **Centrado perfecto**: Alineación mejorada con texto y contenido
 
 ### 🎭 Animaciones 3D Avanzadas
-- **Rotación horizontal suave**: 
+
+- **Rotación horizontal suave**:
   - Logo1: 12 segundos con ease-in-out
   - Logo231: 15 segundos inverso con ease-in-out
 - **Efectos de luz profesionales**:
-  - Iluminación directa con `filter: brightness()` 
+  - Iluminación directa con `filter: brightness()`
   - Drop-shadow blanco brillante que realza los logos
   - Sincronización independiente (5s y 4s con delay)
 
 ### 🎨 Mejoras Visuales
+
 - **Brillo dinámico**: Hasta 160% brightness en picos de iluminación
 - **Efecto 3D**: `transform-style: preserve-3d` para rotaciones naturales
 - **Visibilidad mejorada**: Logos más claros en navbar oscuro
 - **Movimiento profesional**: Transiciones suaves sin efectos bruscos
 
 ### 🔧 Mejoras Técnicas
+
 - **Nuevo asset**: logo231.png agregado (485.80 kB)
 - **Imports optimizados**: Ambos logos desde assets
 - **Error handling**: Manejo de errores para ambos logos
