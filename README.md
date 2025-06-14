@@ -1,4 +1,25 @@
-# 🚀 Axon.App - Sitio Web Corp### 🎯 **Contenido Empresarial**
+# 🚀 Axon.App - Sitio Web Corporativo v2.2.1
+
+[![Vite](https://img.shields.io/badge/Vite-6.3.5-646CFF?logo=vite&logoColor=white)](https://vitejs.dev/)
+[![React](https://img.shields.io/badge/React-18+-61DAFB?logo=react&logoColor=white)](https://reactjs.org/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind-3.4+-38B2AC?logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
+[![EmailJS](https://img.shields.io/badge/EmailJS-Integrated-FF6B35?logo=gmail&logoColor=white)](https://www.emailjs.com/)
+[![GitHub Pages](https://img.shields.io/badge/Deploy-GitHub%20Pages-222222?logo=github&logoColor=white)](https://pages.github.com/)
+
+> **Sitio web profesional moderno para Axon.App** - Soluciones tecnológicas innovadoras con sistema completo de formularios y captación de leads
+
+🌐 **[VER SITIO EN VIVO](https://axon-app.github.io/Axon.app/)** ← Click aquí para ver el resultado final
+
+## ✨ Características Principales
+
+### 🎨 **Diseño y UX**
+
+- ✅ **Diseño Moderno y Profesional** - Interfaz elegante con gradientes y animaciones
+- ✅ **Totalmente Responsivo** - Optimizado para móviles, tablets y desktop
+- ✅ **Animaciones Suaves** - Transiciones y efectos visuales atractivos
+- ✅ **Logo y Branding Integrado** - Identidad visual consistente
+
+### 🎯 **Contenido Empresarial**
 
 - ✅ **Sección Misión y Visión** - Rediseñada con valores y objetivos
 - ✅ **6 Servicios Principales** - Desarrollo Web, Apps, AI, etc.
@@ -7,7 +28,8 @@
 - ✅ **Sección de Tecnologías** - Stack técnico organizado por categorías
 - ✅ **Contadores Animados** - Estadísticas de proyectos y logros
 - ✅ **Banner de Testimonios** - Carrusel automático con opiniones de clientes
-- ✅ **Información de Contacto** - Visible en múltiples secciones v2.1.1
+- ✅ **Sección de Contacto Profesional** - Formulario avanzado con WhatsApp integrado
+- ✅ **Información de Contacto Completa** - Email, teléfono (+57 323 393 2071) y ubicación
 
 [![Vite](https://img.shields.io/badge/Vite-6.3.5-646CFF?logo=vite&logoColor=white)](https://vitejs.dev/)
 [![React](https://img.shields.io/badge/React-18+-61DAFB?logo=react&logoColor=white)](https://reactjs.org/)
