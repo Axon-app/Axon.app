@@ -1,4 +1,13 @@
-# 🚀 Axon.App - Sitio Web Corporativo v2.0.0
+# 🚀 Axon.App - Sitio Web Corp### 🎯 **Contenido Empresarial**
+
+- ✅ **Sección Misión y Visión** - Rediseñada con valores y objetivos
+- ✅ **6 Servicios Principales** - Desarrollo Web, Apps, AI, etc.
+- ✅ **Modales Detallados** - Información completa de cada servicio
+- ✅ **Base de Datos de Servicios** - Procesos, tecnologías y características
+- ✅ **Sección de Tecnologías** - Stack técnico organizado por categorías
+- ✅ **Contadores Animados** - Estadísticas de proyectos y logros
+- ✅ **Banner de Testimonios** - Carrusel automático con opiniones de clientes
+- ✅ **Información de Contacto** - Visible en múltiples secciones v2.1.1
 
 [![Vite](https://img.shields.io/badge/Vite-6.3.5-646CFF?logo=vite&logoColor=white)](https://vitejs.dev/)
 [![React](https://img.shields.io/badge/React-18+-61DAFB?logo=react&logoColor=white)](https://reactjs.org/)

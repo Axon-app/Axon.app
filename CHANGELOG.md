@@ -2,11 +2,117 @@
 
 ## 📊 Estado del Proyecto
 
-**Versión Actual:** 2.0.0  
+**Versión Actual:** 2.1.1  
 **Última Actualización:** 14 de Junio, 2025
 **Estado:** ✅ Funcional - Desplegado en GitHub Pages  
 **URL de Producción:** https://axon-app.github.io/Axon.app/  
-**URL de Desarrollo:** http://localhost:5177/
+**URL de Desarrollo:** http://localhost:5175/Axon.app/
+
+---
+
+## 🆕 Versión 2.1.1 - Corrección de Errores de Tailwind v4
+
+### 🐛 Correcciones de Errores
+- **Corrección de imports de Tailwind CSS v4**
+  - Reemplazado `@tailwind base` y `@tailwind components` por `@import "tailwindcss"`
+  - Compatibilidad completa con Tailwind CSS v4
+  - Build y preview funcionando sin errores
+
+### ✅ Verificaciones Realizadas
+- Build de producción exitoso
+- Preview local funcionando correctamente
+- Sin errores de compilación en archivos principales
+- Compatibilidad completa con todas las funcionalidades existentes
+
+---
+
+## 🆕 Versión 2.1.0 - Mejoras Principales de UI/UX
+
+### ✨ Nuevas Características Implementadas
+
+#### 🎯 Sección de Tecnologías Rediseñada
+- **Diseño compacto y profesional** organizado por categorías
+- **Frontend & Frameworks:** React, Vue, Angular, Next.js, TypeScript
+- **Backend & APIs:** Node.js, Python, Express, Django, FastAPI, GraphQL
+- **Infrastructure & Data:** AWS, Docker, Kubernetes, PostgreSQL, MongoDB, Redis, TensorFlow
+- **Layout horizontal** con mejor uso del espacio
+- **Efectos hover sofisticados** y badges de expertise level
+- **Responsive design** optimizado para todos los dispositivos
+
+#### 📊 Sección de Contadores Animados
+- **Contadores que inician desde 0** cada vez que entran en vista
+- **150+ Proyectos Completados** con barra de progreso
+- **120+ Clientes Satisfechos** con validación visual
+- **5+ Años de Experiencia** en el mercado
+- **99.9% Uptime** garantizado en servicios
+- **Intersection Observer** para detectar visibilidad
+- **Animaciones suaves** con easing functions
+- **Estadísticas adicionales:** Respuesta < 24h, 100% Seguro, Soporte 24/7
+
+#### 🎭 Banner de Testimonios Auto-Scroll
+- **6 testimonios profesionales** de clientes reales simulados
+- **Scroll automático** de derecha a izquierda (45s ciclo completo)
+- **Avatares con gradientes únicos** para cada cliente
+- **Información completa:** nombre, posición, empresa, proyecto
+- **Sistema de calificaciones** con 5 estrellas
+- **Pausa automática al hover** para mejor UX
+- **Efecto infinito** sin interrupciones
+- **Cards compactas** con toda la información esencial
+
+### 🔧 Mejoras Técnicas
+
+#### ⚙️ Configuración de Desarrollo
+- **Auto-apertura del navegador** configurada en Vite
+- **Puerto automático** si 5173 está ocupado
+- **Hot reload mejorado** para desarrollo más eficiente
+
+#### 🎨 Animaciones y Efectos CSS
+- **Nuevas animaciones personalizadas** para contadores
+- **Scroll infinito** para banner de testimonios
+- **Efectos de hover** mejorados en toda la aplicación
+- **Gradientes dinámicos** según el contexto
+- **Transiciones suaves** en todos los componentes
+
+#### 📱 Responsive Design
+- **Grid adaptativo** para todas las secciones
+- **Mobile-first approach** en nuevos componentes
+- **Optimización para tablets** y dispositivos intermedios
+- **Breakpoints mejorados** para mejor experiencia
+
+### 🏗️ Componentes Nuevos
+
+1. **AnimatedCounter**
+   - Contador animado con intersection observer
+   - Soporte para decimales y sufijos personalizados
+   - Animación con easing function suave
+   - Reset automático al recargar página
+
+2. **TestimonialsBanner**
+   - Banner horizontal con scroll automático
+   - Cards de testimonios compactas
+   - Avatares con gradientes únicos
+   - Sistema de rating integrado
+
+3. **BannerTestimonialCard**
+   - Card individual para el banner
+   - Información completa del cliente
+   - Efectos hover y gradientes dinámicos
+   - Texto truncado para uniformidad
+
+### 📊 Datos Agregados
+
+#### 👥 Testimonios de Clientes
+- **María González** - TechStart Solutions (E-commerce)
+- **Carlos Mendoza** - InnovateLab (Sistema de Gestión)
+- **Ana Rodríguez** - Digital Boost (Marketing Digital)
+- **Roberto Silva** - StartupX (MVP & Escalamiento)
+- **Lucía Fernández** - RetailPro (Cloud & DevOps)
+- **Diego Morales** - FinanceNext (IA & Machine Learning)
+
+### 🎯 Métricas de Credibilidad Agregadas
+- **4.9/5** Calificación Promedio
+- **100%** Proyectos Exitosos
+- **98%** Clientes Recurrentes
 
 ---
 
