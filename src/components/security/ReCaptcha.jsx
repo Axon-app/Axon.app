@@ -9,10 +9,6 @@ export const ReCaptchaComponent = React.memo(
   ({ onVerify, onError, onExpired, className = "" }) => {
     const recaptchaRef = useRef(null);
     const widgetId = useRef(null);    useEffect(() => {
-      // Debug temporal
-      // eslint-disable-next-line no-console
-      console.log('RECAPTCHA COMPONENT DEBUG - SITE_KEY:', RECAPTCHA_CONFIG.SITE_KEY);
-      
       // Verificar configuración - ahora debe tener un fallback
       if (!RECAPTCHA_CONFIG.SITE_KEY || RECAPTCHA_CONFIG.SITE_KEY === 'undefined') {
         onError?.("Error: Configuración de reCAPTCHA no válida");
