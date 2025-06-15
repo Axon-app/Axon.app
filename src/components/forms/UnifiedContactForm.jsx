@@ -195,15 +195,15 @@ export const UnifiedContactForm = React.memo(
       meetingType: "video-call",
     });
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const [errors, setErrors] = useState({});
-    // Hook de reCAPTCHA v2
+    const [errors, setErrors] = useState({});    // Hook de reCAPTCHA v2
     const {
       recaptchaToken,
       isRecaptchaVerified,
       recaptchaError,
       resetRecaptcha,
-      setRecaptchaToken, // <-- Agregado
-      setRecaptchaError  // <-- Agregado
+      handleRecaptchaVerify,
+      handleRecaptchaError,
+      handleRecaptchaExpired
     } = useRecaptcha();
 
     // Definir campos obligatorios por modo
@@ -1068,23 +1068,11 @@ export const UnifiedContactForm = React.memo(
                 </span>
               </div>
             </div>
-            {/* reCAPTCHA */}
-            <div id="recaptcha-container" className="mb-4" aria-live="polite">
+            {/* reCAPTCHA */}            <div id="recaptcha-container" className="mb-4" aria-live="polite">
               <ReCaptchaComponent
-                onVerify={(token) => {
-                  setRecaptchaToken(token);
-                  setRecaptchaError(null);
-                }}
-                onError={(error) => {
-                  setRecaptchaError(error);
-                  setRecaptchaToken(null);
-                }}
-                onExpired={() => {
-                  setRecaptchaToken(null);
-                  setRecaptchaError(
-                    "La verificación ha expirado. Por favor, inténtalo de nuevo."
-                  );
-                }}
+                onVerify={handleRecaptchaVerify}
+                onError={handleRecaptchaError}
+                onExpired={handleRecaptchaExpired}
                 className="flex justify-center"
               />
               {recaptchaError && (
