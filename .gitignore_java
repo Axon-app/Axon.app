@@ -1,0 +1,25 @@
+# Excluir archivos de configuración de Java
+**/.classpath
+**/.project
+**/.settings/
+**/bin/
+**/.factorypath
+**/.apt_generated/
+**/.apt_generated_test/
+
+# Excluir archivos de Maven y Gradle
+**/target/
+**/build/
+**/.gradle/
+**/gradle/
+**/gradlew*
+**/pom.xml
+**/build.gradle*
+**/settings.gradle*
+
+# Archivos de Java
+**/*.class
+**/*.jar
+**/*.war
+**/*.ear
+**/*.java
