@@ -72,10 +72,8 @@ export const QuoteRequestModal = React.memo(({ isOpen, onClose, service }) => {
     }
 
     setIsSubmitting(true);
-
     try {
       // Aquí iría la lógica para enviar la cotización via EmailJS
-      console.log("Enviando cotización:", formData);
 
       // Simular envío
       await new Promise((resolve) => setTimeout(resolve, 2000));
@@ -84,8 +82,7 @@ export const QuoteRequestModal = React.memo(({ isOpen, onClose, service }) => {
       setTimeout(() => {
         onClose();
       }, 2000);
-    } catch (error) {
-      console.error("Error enviando cotización:", error);
+    } catch {
       setSubmitStatus("error");
     } finally {
       setIsSubmitting(false);

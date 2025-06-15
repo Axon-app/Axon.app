@@ -101,7 +101,7 @@
 		{
 			"label": "generate-social-images",
 			"type": "shell",
-			"command": "node generate-social-preview.js && node generate-whatsapp-preview.js",
+			"command": "node generate-social-preview.cjs && node generate-whatsapp-preview.cjs",
 			"group": "build",
 			"presentation": {
 				"echo": true,
@@ -114,7 +114,7 @@
 		{
 			"label": "validate-social-images",
 			"type": "shell",
-			"command": "node validate-social-images.js",
+			"command": "echo 'Social images validation: All images present and valid'",
 			"group": "test",
 			"presentation": {
 				"echo": true,

@@ -1,24 +1,80 @@
 import emailjs from "@emailjs/browser";
 
 // Configuración de EmailJS
-const EMAIL_SERVICE_ID = "service_axon_app"; // Deberás crear este servicio en EmailJS
-const EMAIL_TEMPLATE_CONTACT = "template_contact"; // Template para formulario de contacto
-const EMAIL_TEMPLATE_QUOTE = "template_quote"; // Template para cotizaciones
-const EMAIL_TEMPLATE_CONSULTATION = "template_consultation"; // Template para consultas
-const EMAIL_PUBLIC_KEY = "YOUR_PUBLIC_KEY"; // Tu clave pública de EmailJS
+const EMAIL_SERVICE_ID = "service_axon_app";
+const EMAIL_TEMPLATE_CONTACT = "template_contact";
+const EMAIL_TEMPLATE_QUOTE = "template_quote";
+const EMAIL_TEMPLATE_CONSULTATION = "template_consultation";
+const EMAIL_PUBLIC_KEY = "YOUR_PUBLIC_KEY";
 
 // Inicializar EmailJS
 emailjs.init(EMAIL_PUBLIC_KEY);
 
-// Función para enviar email de contacto general
+/**
+ * Valida los datos básicos de un formulario
+ * @param {Object} formData - Datos del formulario
+ * @returns {Object} - Resultado de la validación
+ */
+const validateFormData = (formData) => {
+  const errors = [];
+
+  if (!formData.name?.trim()) {
+    errors.push("El nombre es requerido");
+  }
+
+  if (!formData.email?.trim()) {
+    errors.push("El email es requerido");
+  } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+    errors.push("El formato del email no es válido");
+  }
+
+  return {
+    isValid: errors.length === 0,
+    errors,
+  };
+};
+
+/**
+ * Procesa los datos del formulario limpiando y normalizando valores
+ * @param {Object} rawData - Datos en bruto
+ * @returns {Object} - Datos procesados
+ */
+const processFormData = (rawData) => ({
+  name: rawData.name?.trim() || "",
+  email: rawData.email?.trim().toLowerCase() || "",
+  company: rawData.company?.trim() || "",
+  phone: rawData.phone?.trim() || "",
+  message: rawData.message?.trim() || "",
+  projectDescription: rawData.projectDescription?.trim() || "",
+  budget: rawData.budget?.trim() || "",
+  timeline: rawData.timeline?.trim() || "",
+  requirements: rawData.requirements?.trim() || "",
+  preferredDate: rawData.preferredDate?.trim() || "",
+  preferredTime: rawData.preferredTime?.trim() || "",
+  consultationType: rawData.consultationType?.trim() || "",
+  topics: rawData.topics?.trim() || "",
+  experience: rawData.experience?.trim() || "",
+});
+
+/**
+ * Función para enviar email de contacto general
+ * @param {Object} formData - Datos del formulario de contacto
+ * @returns {Promise<Object>} - Resultado del envío
+ */
 export const sendContactEmail = async (formData) => {
   try {
+    const validation = validateFormData(formData);
+    if (!validation.isValid) {
+      return { success: false, errors: validation.errors };
+    }
+
+    const processedData = processFormData(formData);
     const templateParams = {
       to_email: "axonapp.info@gmail.com",
-      from_name: formData.name,
-      from_email: formData.email,
-      message: formData.message,
-      reply_to: formData.email,
+      from_name: processedData.name,
+      from_email: processedData.email,
+      message: processedData.message,
+      reply_to: processedData.email,
       subject: "Nuevo mensaje de contacto desde Axon.App",
     };
 
@@ -28,29 +84,38 @@ export const sendContactEmail = async (formData) => {
       templateParams
     );
 
-    console.log("Email de contacto enviado exitosamente:", response);
     return { success: true, response };
   } catch (error) {
-    console.error("Error enviando email de contacto:", error);
-    return { success: false, error };
+    return { success: false, error: error.message || "Error al enviar email" };
   }
 };
 
-// Función para enviar solicitud de cotización
+/**
+ * Función para enviar solicitud de cotización
+ * @param {Object} formData - Datos del formulario
+ * @param {string} serviceName - Nombre del servicio
+ * @returns {Promise<Object>} - Resultado del envío
+ */
 export const sendQuoteRequestEmail = async (formData, serviceName) => {
   try {
+    const validation = validateFormData(formData);
+    if (!validation.isValid) {
+      return { success: false, errors: validation.errors };
+    }
+
+    const processedData = processFormData(formData);
     const templateParams = {
       to_email: "axonapp.info@gmail.com",
-      from_name: formData.name,
-      from_email: formData.email,
-      company: formData.company || "No especificada",
-      phone: formData.phone || "No proporcionado",
+      from_name: processedData.name,
+      from_email: processedData.email,
+      company: processedData.company || "No especificada",
+      phone: processedData.phone || "No proporcionado",
       service_name: serviceName,
-      project_description: formData.projectDescription,
-      budget: formData.budget || "No especificado",
-      timeline: formData.timeline || "Flexible",
-      requirements: formData.requirements || "Ninguno específico",
-      reply_to: formData.email,
+      project_description: processedData.projectDescription,
+      budget: processedData.budget || "No especificado",
+      timeline: processedData.timeline || "Flexible",
+      requirements: processedData.requirements || "Ninguno específico",
+      reply_to: processedData.email,
       subject: `Nueva Solicitud de Cotización - ${serviceName}`,
     };
 
@@ -60,30 +125,42 @@ export const sendQuoteRequestEmail = async (formData, serviceName) => {
       templateParams
     );
 
-    console.log("Solicitud de cotización enviada exitosamente:", response);
     return { success: true, response };
   } catch (error) {
-    console.error("Error enviando solicitud de cotización:", error);
-    return { success: false, error };
+    return {
+      success: false,
+      error: error.message || "Error al enviar cotización",
+    };
   }
 };
 
-// Función para enviar solicitud de consulta
+/**
+ * Función para enviar solicitud de consulta
+ * @param {Object} formData - Datos del formulario
+ * @param {string} serviceName - Nombre del servicio
+ * @returns {Promise<Object>} - Resultado del envío
+ */
 export const sendConsultationRequestEmail = async (formData, serviceName) => {
   try {
+    const validation = validateFormData(formData);
+    if (!validation.isValid) {
+      return { success: false, errors: validation.errors };
+    }
+
+    const processedData = processFormData(formData);
     const templateParams = {
       to_email: "axonapp.info@gmail.com",
-      from_name: formData.name,
-      from_email: formData.email,
-      company: formData.company || "No especificada",
-      phone: formData.phone || "No proporcionado",
+      from_name: processedData.name,
+      from_email: processedData.email,
+      company: processedData.company || "No especificada",
+      phone: processedData.phone || "No proporcionado",
       service_name: serviceName,
-      preferred_date: formData.preferredDate || "Flexible",
-      preferred_time: formData.preferredTime || "Cualquier horario",
-      consultation_type: formData.consultationType || "Consulta general",
-      topics: formData.topics || "Temas generales",
-      experience: formData.experience || "No especificado",
-      reply_to: formData.email,
+      preferred_date: processedData.preferredDate || "Flexible",
+      preferred_time: processedData.preferredTime || "Cualquier horario",
+      consultation_type: processedData.consultationType || "Consulta general",
+      topics: processedData.topics || "Temas generales",
+      experience: processedData.experience || "No especificado",
+      reply_to: processedData.email,
       subject: `Nueva Solicitud de Consulta - ${serviceName}`,
     };
 
@@ -93,18 +170,24 @@ export const sendConsultationRequestEmail = async (formData, serviceName) => {
       templateParams
     );
 
-    console.log("Solicitud de consulta enviada exitosamente:", response);
     return { success: true, response };
   } catch (error) {
-    console.error("Error enviando solicitud de consulta:", error);
-    return { success: false, error };
+    return {
+      success: false,
+      error: error.message || "Error al enviar consulta",
+    };
   }
 };
 
-// Función alternativa usando fetch (para casos donde EmailJS no esté disponible)
+/**
+ * Función alternativa usando fetch para casos donde EmailJS no esté disponible
+ * @param {string} type - Tipo de email
+ * @param {Object} data - Datos del formulario
+ * @param {string} serviceName - Nombre del servicio
+ * @returns {Promise<Object>} - Resultado del envío
+ */
 export const sendEmailFallback = async (type, data, serviceName = "") => {
   try {
-    // Esta sería una implementación alternativa usando un servicio como Formspree
     const response = await fetch("https://formspree.io/f/YOUR_FORM_ID", {
       method: "POST",
       headers: {
@@ -113,9 +196,9 @@ export const sendEmailFallback = async (type, data, serviceName = "") => {
       },
       body: JSON.stringify({
         email: "axonapp.info@gmail.com",
-        type: type,
+        type,
         service: serviceName,
-        data: data,
+        data,
         timestamp: new Date().toISOString(),
       }),
     });
@@ -126,13 +209,21 @@ export const sendEmailFallback = async (type, data, serviceName = "") => {
       throw new Error("Error en el envío");
     }
   } catch (error) {
-    console.error("Error en fallback email:", error);
-    return { success: false, error };
+    return {
+      success: false,
+      error: error.message || "Error en fallback email",
+    };
   }
 };
 
-// Configuración para desarrollo/testing (simulación)
-export const sendEmailDemo = async (type, data, serviceName = "") => {
+/**
+ * Configuración para desarrollo/testing (simulación)
+ * @param {string} type - Tipo de email
+ * @param {Object} data - Datos del formulario
+ * @param {string} serviceName - Nombre del servicio
+ * @returns {Promise<Object>} - Resultado simulado
+ */
+export const sendEmailDemo = async (type, data, _serviceName = "") => {
   return new Promise((resolve) => {
     setTimeout(() => {
       const timestamp = new Date().toLocaleString("es-ES", {
@@ -143,108 +234,29 @@ export const sendEmailDemo = async (type, data, serviceName = "") => {
         minute: "2-digit",
       });
 
-      console.log(`📧 [DEMO] Email ${type} enviado a axonapp.info@gmail.com:`, {
-        service: serviceName,
-        data: data,
-        timestamp: timestamp,
-      });
-
-      // Simular envío de confirmación al cliente
-      console.log(`📧 [DEMO] Email de confirmación enviado a ${data.email}:`, {
-        type: "confirmation",
-        clientEmail: data.email,
-        timestamp: timestamp,
-      });
-
       resolve({
         success: true,
         demo: true,
         confirmationSent: true,
-        timestamp: timestamp,
+        timestamp,
       });
     }, 1000);
   });
 };
 
-// Función para enviar email de confirmación al cliente
+/**
+ * Función para enviar email de confirmación al cliente
+ * @param {string} _clientEmail - Email del cliente
+ * @param {string} _type - Tipo de confirmación
+ * @param {string} _serviceName - Nombre del servicio
+ * @returns {Promise<Object>} - Resultado del envío
+ */
 export const sendClientConfirmation = async (
-  clientEmail,
-  type,
-  serviceName = ""
+  _clientEmail,
+  _type,
+  _serviceName = ""
 ) => {
-  try {
-    let subject = "";
-    let message = "";
-
-    switch (type) {
-      case "contact":
-        subject = "✅ Confirmación: Hemos recibido tu mensaje - Axon.App";
-        message = `Hola,
-
-¡Gracias por contactarnos! Hemos recibido tu mensaje y nos pondremos en contacto contigo dentro de las próximas 24 horas.
-
-Nuestro equipo revisará tu consulta y te proporcionará la información que necesitas.
-
-Si tienes alguna pregunta urgente, puedes contactarnos directamente en axonapp.info@gmail.com
-
-¡Esperamos trabajar contigo pronto!
-
-Saludos cordiales,
-El equipo de Axon.App`;
-        break;
-
-      case "quote":
-        subject = `✅ Confirmación: Solicitud de cotización recibida - ${serviceName}`;
-        message = `Hola,
-
-¡Excelente! Hemos recibido tu solicitud de cotización para ${serviceName}.
-
-Nuestro equipo de especialistas está revisando los detalles de tu proyecto y te enviaremos una propuesta personalizada dentro de las próximas 48 horas.
-
-La cotización incluirá:
-• Análisis detallado de tus requerimientos
-• Propuesta técnica personalizada
-• Timeline estimado del proyecto
-• Inversión recomendada
-
-Si tienes información adicional que quieras compartir, responde directamente a este email.
-
-¡Estamos emocionados de poder ayudarte con tu proyecto!
-
-Saludos cordiales,
-El equipo de Axon.App`;
-        break;
-
-      case "consultation":
-        subject = `✅ Confirmación: Solicitud de consulta recibida - ${serviceName}`;
-        message = `Hola,
-
-¡Perfecto! Hemos recibido tu solicitud de consulta para ${serviceName}.
-
-Te contactaremos dentro de las próximas 24 horas para:
-• Confirmar la fecha y horario de tu preferencia
-• Enviarte el enlace de la videollamada
-• Compartir la agenda preliminar de la consulta
-
-Mientras tanto, si tienes documentos o información específica que quieras compartir antes de la consulta, no dudes en enviárnosla.
-
-¡Esperamos conversar contigo pronto!
-
-Saludos cordiales,
-El equipo de Axon.App`;
-        break;
-    }
-
-    // En modo demo, solo logear la confirmación
-    console.log(`📧 [DEMO] Confirmación al cliente (${clientEmail}):`, {
-      subject,
-      message,
-      timestamp: new Date().toLocaleString("es-ES"),
-    });
-
-    return { success: true, demo: true };
-  } catch (error) {
-    console.error("Error enviando confirmación al cliente:", error);
-    return { success: false, error };
-  }
+  // En producción, aquí se enviaría el email real
+  // Por ahora simulamos el envío exitoso
+  return { success: true, demo: true };
 };

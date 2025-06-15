@@ -90,10 +90,8 @@ export const ConsultationModal = React.memo(({ isOpen, onClose, service }) => {
     }
 
     setIsSubmitting(true);
-
     try {
       // Aquí iría la lógica para programar la consulta via EmailJS
-      console.log("Programando consulta:", formData);
 
       // Simular envío
       await new Promise((resolve) => setTimeout(resolve, 2000));
@@ -102,8 +100,7 @@ export const ConsultationModal = React.memo(({ isOpen, onClose, service }) => {
       setTimeout(() => {
         onClose();
       }, 2000);
-    } catch (error) {
-      console.error("Error programando consulta:", error);
+    } catch {
       setSubmitStatus("error");
     } finally {
       setIsSubmitting(false);
