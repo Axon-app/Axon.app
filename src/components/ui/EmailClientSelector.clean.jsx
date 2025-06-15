@@ -11,6 +11,7 @@ export const EmailClientSelector = React.memo(
       });
       return `https://mail.google.com/mail/?view=cm&fs=1&${params.toString()}`;
     };
+
     const getOutlookUrl = () => {
       const params = new URLSearchParams({
         to: emailData.to,
@@ -49,7 +50,6 @@ export const EmailClientSelector = React.memo(
           className="bg-slate-800 rounded-xl max-w-md w-full shadow-2xl border border-blue-500/30"
           onClick={(e) => e.stopPropagation()}
         >
-          {" "}
           {/* Header */}
           <div className="p-6 border-b border-gray-700">
             <div className="flex items-center gap-3 mb-3">
@@ -69,6 +69,7 @@ export const EmailClientSelector = React.memo(
               Selecciona dónde quieres redactar tu mensaje
             </p>
           </div>
+
           {/* Email preview */}
           <div className="p-4 bg-slate-900/50 border-b border-gray-700">
             <div className="text-xs text-gray-400 space-y-1">
@@ -79,8 +80,9 @@ export const EmailClientSelector = React.memo(
                 <strong>Asunto:</strong> {emailData.subject}
               </p>
             </div>
-          </div>{" "}
-          {/* Client options - Solo Gmail y Outlook */}
+          </div>
+
+          {/* Client options - Solo Gmail, Outlook y Cliente predeterminado */}
           <div className="p-6 space-y-3">
             {/* Gmail */}
             <button
@@ -114,6 +116,7 @@ export const EmailClientSelector = React.memo(
                 </div>
               </div>
             </button>
+
             {/* Outlook */}
             <button
               onClick={() => handleClientSelection(getOutlookUrl(), true)}
@@ -123,7 +126,15 @@ export const EmailClientSelector = React.memo(
                 <svg className="w-5 h-5" viewBox="0 0 24 24">
                   <path
                     fill="#0078D4"
-                    d="M21.5 4.5v15h-7v-7h7zm-8.5 0v15h-11.5v-15h11.5zm-10.5 1v13h9.5v-13h-9.5zm18 1v5h-5v-5h5z"
+                    d="M23.5 12c0-6.35-5.15-11.5-11.5-11.5S.5 5.65.5 12s5.15 11.5 11.5 11.5S23.5 18.35 23.5 12zM12 21c-4.97 0-9-4.03-9-9s4.03-9 9-9 9 4.03 9 9-4.03 9-9 9z"
+                  />
+                  <path
+                    fill="#0078D4"
+                    d="M12 6c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm0 10c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4z"
+                  />
+                  <path
+                    fill="#fff"
+                    d="M12 9c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"
                   />
                 </svg>
               </div>
@@ -135,7 +146,8 @@ export const EmailClientSelector = React.memo(
                   Para @outlook.com, @hotmail.com, @live.com
                 </div>
               </div>
-            </button>{" "}
+            </button>
+
             {/* Cliente predeterminado */}
             <button
               onClick={() => handleClientSelection(getMailtoUrl(), false)}
@@ -152,15 +164,16 @@ export const EmailClientSelector = React.memo(
                 </svg>
               </div>
               <div className="text-left">
-                <div className="font-semibold text-white">
+                <div className="text-white font-semibold">
                   Cliente predeterminado
                 </div>
-                <div className="text-xs text-gray-300">
+                <div className="text-gray-300 text-sm">
                   Aplicación de correo del sistema
                 </div>
               </div>
             </button>
           </div>
+
           {/* Footer */}
           <div className="p-4 border-t border-gray-700 text-center">
             <button

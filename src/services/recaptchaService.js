@@ -30,16 +30,26 @@ export const verifyRecaptchaToken = async (token) => {
 };
 
 /**
- * Configuración de reCAPTCHA
+ * Configuración de reCAPTCHA v3
  */
 export const RECAPTCHA_CONFIG = {
-  // Clave pública de reCAPTCHA (de Google Cloud Console)
+  // Clave pública de reCAPTCHA v3 (de Google Cloud Console)
   SITE_KEY: "6Lf_zGErAAAABEXtzpIGpDrdSsxAOulq2sadHas",
 
-  // Configuración de tema y tamaño
-  THEME: "dark",
-  SIZE: "normal",
+  // Configuración específica para v3
   LANGUAGE: "es",
+
+  // Acciones comunes para diferentes formularios
+  ACTIONS: {
+    QUOTE: "quote_form",
+    CONSULTATION: "consultation_form",
+    CONTACT: "contact_form",
+    SUBMIT: "submit_form",
+  },
+
+  // Umbral mínimo de puntuación (0.0 - 1.0)
+  // Valores más altos = más estricto
+  MIN_SCORE: 0.5,
 };
 
 /**

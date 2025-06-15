@@ -1,6 +1,6 @@
 import React from "react";
 import { useRecaptcha } from "../../hooks/useRecaptcha";
-import { verifyRecaptchaToken } from "../../services/recaptchaService";
+import { sendQuoteRequest } from "../../services/emailService";
 import { ReCaptchaComponent } from "../security/ReCaptcha";
 
 // Funciones de validación y seguridad
@@ -75,12 +75,9 @@ export const QuoteRequestModal = React.memo(({ isOpen, onClose, service }) => {
   const [isSubmitting, setIsSubmitting] = React.useState(false);
   const [submitStatus, setSubmitStatus] = React.useState(null);
   const [validationErrors, setValidationErrors] = React.useState({});
-  const [securityError, setSecurityError] = React.useState("");
-
-  // Estado de reCAPTCHA
-  const { isRecaptchaVerified, resetRecaptcha } = useRecaptcha();
-
-  // Calcular si el formulario está completo
+  const [securityError, setSecurityError] = React.useState(""); // Estado de reCAPTCHA v3
+  const { executeRecaptcha, resetRecaptcha } = useRecaptcha();
+  // Calcular si el formulario está completo (sin reCAPTCHA v3 porque se ejecuta al enviar)
   const isFormComplete = React.useMemo(() => {
     const requiredFields = [
       "name",
@@ -95,8 +92,8 @@ export const QuoteRequestModal = React.memo(({ isOpen, onClose, service }) => {
     );
     const hasNoErrors =
       Object.keys(validationErrors).length === 0 && !securityError;
-    return hasRequiredFields && hasNoErrors && isRecaptchaVerified;
-  }, [formData, validationErrors, securityError, isRecaptchaVerified]);
+    return hasRequiredFields && hasNoErrors;
+  }, [formData, validationErrors, securityError]);
 
   // Función para obtener campos faltantes y errores
   const getMissingFields = React.useMemo(() => {
@@ -113,15 +110,12 @@ export const QuoteRequestModal = React.memo(({ isOpen, onClose, service }) => {
     Object.entries(validationErrors).forEach(([, error]) => {
       if (error) errors.push(error);
     });
-
     return {
       missing,
       errors,
-      needsRecaptcha: !isRecaptchaVerified,
-      hasIssues:
-        missing.length > 0 || errors.length > 0 || !isRecaptchaVerified,
+      hasIssues: missing.length > 0 || errors.length > 0,
     };
-  }, [formData, validationErrors, isRecaptchaVerified]);
+  }, [formData, validationErrors]);
 
   // Manejar escape key
   React.useEffect(() => {
@@ -254,93 +248,58 @@ export const QuoteRequestModal = React.memo(({ isOpen, onClose, service }) => {
       ...prev,
       [name]: sanitizedValue,
     }));
-  };
-
-  // Función para manejar reCAPTCHA
-  const handleRecaptchaVerify = async (token) => {
-    try {
-      // En producción, verificar el token en el backend
-      const isValid = await verifyRecaptchaToken(token);
-      if (!isValid) {
-        setSecurityError("Verificación reCAPTCHA fallida. Intenta nuevamente.");
-      }
-    } catch {
-      setSecurityError("Error en verificación reCAPTCHA. Intenta nuevamente.");
-    }
-  };
-
-  const handleRecaptchaExpire = () => {
-    setSecurityError(
-      "La verificación reCAPTCHA ha expirado. Por favor, verifica nuevamente."
-    );
-  };
-
-  const handleRecaptchaError = () => {
-    setSecurityError(
-      "Error en reCAPTCHA. Por favor, recarga la página e intenta nuevamente."
-    );
-  };
-  // Manejar envío del formulario
+  }; // Manejar envío del formulario
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // 0. Verificar si el formulario está completo antes de continuar
-    if (!isFormComplete) {
-      const missing = getMissingFields;
-      let errorMessage = "⚠️ Por favor completa la información faltante:\n\n";
-
-      if (missing.missing.length > 0) {
-        errorMessage += `📝 Campos requeridos:\n• ${missing.missing.join(
-          "\n• "
-        )}\n\n`;
-      }
-
-      if (missing.errors.length > 0) {
-        errorMessage += `❌ Errores a corregir:\n• ${missing.errors.join(
-          "\n• "
-        )}\n\n`;
-      }
-
-      if (missing.needsRecaptcha) {
-        errorMessage += "🔒 Completa la verificación de seguridad reCAPTCHA";
-      }
-
-      setSecurityError(errorMessage);
-      return;
-    }
-
-    if (!isRecaptchaVerified) {
-      setSecurityError(
-        "Por favor, completa la verificación reCAPTCHA antes de continuar."
-      );
-      return;
-    }
-
-    // Verificar token reCAPTCHA
-    if (!isRecaptchaVerified) {
-      setSecurityError(
-        "La verificación reCAPTCHA falló. Por favor, intenta nuevamente."
-      );
-      return;
-    }
-
-    // Validación adicional de longitud para prevenir ataques
-    if (
-      !SecurityValidators.validateLength(formData.name, 2, 50) ||
-      !SecurityValidators.validateLength(formData.email, 5, 254) ||
-      !SecurityValidators.validateLength(formData.description, 10, 2000)
-    ) {
-      setSecurityError(
-        "Algunos campos tienen una longitud inválida. Por favor, revisa la información."
-      );
-      return;
-    }
 
     setIsSubmitting(true);
     setSecurityError("");
 
     try {
-      // Preparar datos para envío con sanitización final
+      // 1. Ejecutar reCAPTCHA v3 primero
+      const recaptchaToken = await executeRecaptcha("quote_form");
+
+      if (!recaptchaToken) {
+        setSecurityError(
+          "Error en la verificación de seguridad. Por favor, intenta nuevamente."
+        );
+        return;
+      }
+
+      // 2. Validación de campos después de reCAPTCHA
+      const missing = getMissingFields;
+      if (missing.missing.length > 0 || missing.errors.length > 0) {
+        let errorMessage = "⚠️ Por favor completa la información faltante:\n\n";
+
+        if (missing.missing.length > 0) {
+          errorMessage += `📝 Campos requeridos:\n• ${missing.missing.join(
+            "\n• "
+          )}\n\n`;
+        }
+
+        if (missing.errors.length > 0) {
+          errorMessage += `❌ Errores a corregir:\n• ${missing.errors.join(
+            "\n• "
+          )}\n\n`;
+        }
+
+        setSecurityError(errorMessage);
+        return;
+      }
+
+      // 3. Validación adicional de longitud para prevenir ataques
+      if (
+        !SecurityValidators.validateLength(formData.name, 2, 50) ||
+        !SecurityValidators.validateLength(formData.email, 5, 254) ||
+        !SecurityValidators.validateLength(formData.description, 10, 2000)
+      ) {
+        setSecurityError(
+          "Algunos campos tienen una longitud inválida. Por favor, revisa la información."
+        );
+        return;
+      }
+
+      // 4. Preparar datos para envío con sanitización final
       const sanitizedData = {
         name: SecurityValidators.sanitizeInput(formData.name.trim()),
         email: SecurityValidators.sanitizeInput(formData.email.trim()),
@@ -361,9 +320,7 @@ export const QuoteRequestModal = React.memo(({ isOpen, onClose, service }) => {
         ),
         timestamp: new Date().toISOString(),
         formType: "quote-request",
-      };
-
-      // Validación final antes del envío
+      }; // Validación final antes del envío
       for (const [key, value] of Object.entries(sanitizedData)) {
         if (
           typeof value === "string" &&
@@ -371,11 +328,17 @@ export const QuoteRequestModal = React.memo(({ isOpen, onClose, service }) => {
         ) {
           throw new Error(`Entrada inválida detectada en campo ${key}`);
         }
-      } // Aquí iría la integración con EmailJS
-      // Datos preparados para envío: sanitizedData
+      }
 
-      // Simular envío
-      await new Promise((resolve) => setTimeout(resolve, 2000));
+      // 4. Enviar email usando EmailJS
+      const emailResult = await sendQuoteRequest({
+        ...sanitizedData,
+        recaptchaToken,
+      });
+
+      if (!emailResult.success) {
+        throw new Error(emailResult.error || "Error al enviar la cotización");
+      }
 
       setSubmitStatus("success");
       setTimeout(() => {
@@ -862,14 +825,10 @@ export const QuoteRequestModal = React.memo(({ isOpen, onClose, service }) => {
                     </div>
                   </div>
                 </div>
-              )}
-              {/* reCAPTCHA */}
+              )}{" "}
+              {/* reCAPTCHA v3 - Solo información */}
               <div className="border-t border-gray-700 pt-4">
-                <ReCaptchaComponent
-                  onVerify={handleRecaptchaVerify}
-                  onExpire={handleRecaptchaExpire}
-                  onError={handleRecaptchaError}
-                />
+                <ReCaptchaComponent action="quote_form" className="mb-4" />
               </div>
               <div className="bg-blue-500/10 border border-blue-500/30 rounded-lg p-4">
                 <h4 className="text-blue-300 font-semibold mb-2">
