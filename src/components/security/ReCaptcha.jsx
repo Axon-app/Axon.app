@@ -9,23 +9,44 @@ export const ReCaptchaComponent = React.memo(
   ({ onVerify, onError, onExpired, className = "" }) => {
     const recaptchaRef = useRef(null);
     const widgetId = useRef(null);
-    const [isLoaded, setIsLoaded] = React.useState(false);
+    const [loadAttempts, setLoadAttempts] = React.useState(0);
+    const maxAttempts = 3;
+
+    // Verificar la configuración de reCAPTCHA
+    useEffect(() => {
+      if (!RECAPTCHA_CONFIG.SITE_KEY) {
+        onError?.("Error: Falta la clave del sitio de reCAPTCHA (SITE_KEY)");
+        return;
+      }
+    }, [onError]);
 
     // Verificar si grecaptcha está disponible
     const checkRecaptchaLoaded = useCallback(() => {
       return (
+        typeof window !== "undefined" &&
         window.grecaptcha &&
         window.grecaptcha.render &&
         typeof window.grecaptcha.render === "function"
       );
     }, []); // Renderizar el widget de reCAPTCHA v2
     const renderRecaptcha = useCallback(() => {
-      if (!checkRecaptchaLoaded() || !recaptchaRef.current) {
+      if (!RECAPTCHA_CONFIG.SITE_KEY) {
+        onError?.("Error: Falta la clave del sitio de reCAPTCHA (SITE_KEY)");
         return;
       }
 
-      // Verificar que el contenedor esté vacío
-      if (recaptchaRef.current.hasChildNodes()) {
+      if (!checkRecaptchaLoaded()) {
+        if (loadAttempts < maxAttempts) {
+          setTimeout(() => {
+            setLoadAttempts((prev) => prev + 1);
+          }, 1000);
+        } else {
+          onError?.("No se pudo cargar reCAPTCHA después de varios intentos");
+        }
+        return;
+      }
+
+      if (!recaptchaRef.current || recaptchaRef.current.hasChildNodes()) {
         return;
       }
 
@@ -33,123 +54,117 @@ export const ReCaptchaComponent = React.memo(
         widgetId.current = window.grecaptcha.render(recaptchaRef.current, {
           sitekey: RECAPTCHA_CONFIG.SITE_KEY,
           callback: (token) => {
-            onVerify?.(token);
+            if (token) {
+              onVerify?.(token);
+            } else {
+              onError?.("No se recibió un token válido de reCAPTCHA");
+            }
           },
           "expired-callback": () => {
             onExpired?.();
+            if (widgetId.current !== null) {
+              window.grecaptcha.reset(widgetId.current);
+            }
           },
-          "error-callback": () => {
-            onError?.("Error en la verificación de reCAPTCHA");
+          "error-callback": (error) => {
+            onError?.(error || "Error en la verificación de reCAPTCHA");
+            if (widgetId.current !== null) {
+              window.grecaptcha.reset(widgetId.current);
+            }
           },
-          theme: RECAPTCHA_CONFIG.THEME,
-          size: RECAPTCHA_CONFIG.SIZE,
+          theme: RECAPTCHA_CONFIG.THEME || "light",
+          size: RECAPTCHA_CONFIG.SIZE || "normal",
+          badge: "inline",
         });
       } catch (error) {
-        onError?.(`Error al cargar reCAPTCHA: ${error.message}`);
+        onError?.(error.message || "Error al cargar reCAPTCHA");
       }
-    }, [checkRecaptchaLoaded, onVerify, onError, onExpired]);
+    }, [checkRecaptchaLoaded, onVerify, onError, onExpired, loadAttempts]);
 
-    // Resetear el reCAPTCHA
-    const resetRecaptcha = useCallback(() => {
-      if (checkRecaptchaLoaded() && widgetId.current !== null) {
-        try {
-          window.grecaptcha.reset(widgetId.current);
-        } catch {
-          // Error silencioso al resetear
-        }
-      }
-    }, [checkRecaptchaLoaded]);
-
-    // Verificar cuando se carga el script
+    // Limpiar el widget al desmontar
     useEffect(() => {
-      let attempts = 0;
-      const maxAttempts = 50; // 5 segundos máximo
-
-      const checkLoaded = () => {
-        attempts++;
-
-        if (checkRecaptchaLoaded()) {
-          setIsLoaded(true);
-          setTimeout(() => renderRecaptcha(), 100); // Pequeña espera para asegurar el DOM
-        } else if (attempts < maxAttempts) {
-          setTimeout(checkLoaded, 100);
-        } else {
-          // Timeout después de 5 segundos
-          onError?.(
-            "No se pudo cargar reCAPTCHA. Verifica tu conexión a internet."
-          );
-        }
-      };
-
-      // Verificar si ya está cargado
-      if (window.grecaptcha && window.grecaptcha.ready) {
-        window.grecaptcha.ready(() => {
-          checkLoaded();
-        });
-      } else {
-        checkLoaded();
-      }
-
       return () => {
-        // Cleanup al desmontar
-        if (widgetId.current !== null && window.grecaptcha) {
+        if (widgetId.current !== null) {
           try {
-            window.grecaptcha.reset(widgetId.current);
+            window.grecaptcha?.reset(widgetId.current);
           } catch {
-            // Error silencioso
+            // Silently handle cleanup errors
           }
         }
       };
-    }, [checkRecaptchaLoaded, renderRecaptcha, onError]); // Exponer funciones para el componente padre
-    const componentRef = useRef({
-      reset: resetRecaptcha,
-      isLoaded,
-    });
+    }, []);
 
-    // Actualizar la referencia cuando cambien los valores
+    // Cargar el script de reCAPTCHA
     useEffect(() => {
-      componentRef.current = {
-        reset: resetRecaptcha,
-        isLoaded,
+      if (!RECAPTCHA_CONFIG.SITE_KEY) {
+        onError?.("Error: Falta la clave del sitio de reCAPTCHA (SITE_KEY)");
+        return;
+      }
+
+      const existingScript = document.getElementById("recaptcha-script");
+      if (existingScript) {
+        if (checkRecaptchaLoaded()) {
+          renderRecaptcha();
+        }
+        return;
+      }
+
+      const script = document.createElement("script");
+      script.src = `https://www.google.com/recaptcha/api.js?render=explicit&hl=es`;
+      script.async = true;
+      script.defer = true;
+      script.id = "recaptcha-script";
+
+      const timeoutId = setTimeout(() => {
+        if (!checkRecaptchaLoaded()) {
+          onError?.("Error: Tiempo de carga de reCAPTCHA excedido");
+        }
+      }, 10000);
+
+      script.onerror = () => {
+        clearTimeout(timeoutId);
+        onError?.("Error: No se pudo cargar el script de reCAPTCHA");
       };
-    }, [resetRecaptcha, isLoaded]);
 
-    return (
-      <div className={`recaptcha-v2-container ${className}`}>
-        {!isLoaded && (
-          <div className="text-sm text-gray-400 text-center mb-4">
-            Cargando verificación de seguridad...
-          </div>
-        )}
+      script.onload = () => {
+        clearTimeout(timeoutId);
+        setTimeout(() => {
+          if (checkRecaptchaLoaded()) {
+            renderRecaptcha();
+          } else {
+            onError?.("Error: reCAPTCHA no se inicializó correctamente");
+          }
+        }, 1000);
+      };
 
-        {/* Contenedor para el widget de reCAPTCHA v2 */}
-        <div className="flex justify-center mb-4">
-          <div ref={recaptchaRef}></div>
-        </div>
+      document.head.appendChild(script);
 
-        <div className="text-xs text-gray-500 text-center">
-          Este sitio está protegido por reCAPTCHA y se aplican la{" "}
-          <a
-            href="https://policies.google.com/privacy"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-blue-400 hover:underline"
-          >
-            Política de Privacidad
-          </a>{" "}
-          y los{" "}
-          <a
-            href="https://policies.google.com/terms"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-blue-400 hover:underline"
-          >
-            Términos de Servicio
-          </a>{" "}
-          de Google.
-        </div>
-      </div>
-    );
+      return () => {
+        clearTimeout(timeoutId);
+        if (widgetId.current !== null) {
+          try {
+            window.grecaptcha?.reset(widgetId.current);
+          } catch {
+            // Silently handle cleanup errors
+          }
+        }
+        const scriptToRemove = document.getElementById("recaptcha-script");
+        if (scriptToRemove) {
+          document.head.removeChild(scriptToRemove);
+        }
+      };
+    }, [checkRecaptchaLoaded, renderRecaptcha, onError]);
+
+    return RECAPTCHA_CONFIG.SITE_KEY ? (
+      <div
+        ref={recaptchaRef}
+        className={`g-recaptcha ${className}`.trim()}
+        data-sitekey={RECAPTCHA_CONFIG.SITE_KEY}
+        data-theme={RECAPTCHA_CONFIG.THEME || "light"}
+        data-size={RECAPTCHA_CONFIG.SIZE || "normal"}
+        aria-label="reCAPTCHA"
+      />
+    ) : null;
   }
 );
 

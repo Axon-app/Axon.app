@@ -1,52 +1,67 @@
 /**
- * Función para verificar el token de reCAPTCHA en el servidor
- * (Esta función debe implementarse en el backend)
+ * Configuración de Google reCAPTCHA v2
+ */
+export const RECAPTCHA_CONFIG = {
+  SITE_KEY: import.meta.env.VITE_RECAPTCHA_SITE_KEY,
+  SECRET_KEY: import.meta.env.VITE_RECAPTCHA_SECRET_KEY,
+  THEME: "light",
+  SIZE: "normal",
+  MIN_SCORE: 0.5,
+};
+
+/**
+ * Función para verificar el token de reCAPTCHA
+ * @param {string} token - Token de reCAPTCHA a verificar
+ * @returns {Promise<boolean>} - true si la verificación es exitosa
  */
 export const verifyRecaptchaToken = async (token) => {
-  try {
-    // En un entorno de producción, esto debe enviarse a tu backend
-    // const response = await fetch('/api/verify-recaptcha', {
-    //   method: 'POST',
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //   },
-    //   body: JSON.stringify({ token }),
-    // });
-    //
-    // const result = await response.json();
-    // return result.success;
+  if (!token) {
+    throw new Error("Token de reCAPTCHA no proporcionado");
+  }
 
-    // Para desarrollo/demo, simulamos una verificación exitosa
-    if (token && token.length > 0) {
-      return true;
+  try {
+    const response = await fetch(
+      "https://www.google.com/recaptcha/api/siteverify",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: new URLSearchParams({
+          secret: RECAPTCHA_CONFIG.SECRET_KEY,
+          response: token,
+        }),
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Error en la verificación de reCAPTCHA");
     }
-    return false;
+
+    const result = await response.json();
+
+    if (!result.success) {
+      return false;
+    }
+
+    return true;
   } catch {
-    // En producción, aquí podrías registrar el error en un servicio de logging
-    return false;
+    throw new Error("Error al verificar reCAPTCHA");
   }
 };
 
 /**
- * Configuración de reCAPTCHA v2 ÚNICAMENTE
- * Dominio autorizado: https://axon-app.github.io/Axon.app/
+ * Función para resetear el widget de reCAPTCHA
+ * @param {number} widgetId - ID del widget de reCAPTCHA
  */
-export const RECAPTCHA_CONFIG = {
-  // Clave pública de reCAPTCHA v2 (corregida)
-  SITE_KEY: "6Le79WErAAAAALOzPy06SG8O8crutLTb9yW0EEXv",
+export const resetRecaptcha = (widgetId) => {
+  if (typeof window === "undefined" || !window.grecaptcha) {
+    return;
+  }
 
-  // Configuración específica para v2
-  VERSION: "v2",
-  LANGUAGE: "es",
-  THEME: "light", // "light" o "dark"
-  SIZE: "normal", // "normal", "compact" o "invisible"
-
-  // Dominio autorizado
-  DOMAIN: "https://axon-app.github.io/Axon.app/",
+  try {
+    window.grecaptcha.reset(widgetId);
+  } catch {
+    // Silently handle reset errors
+  }
 };
-
-/**
- * Clave secreta para verificación en el servidor
- * (Solo para referencia - NO debe usarse en el frontend)
- * Esta clave corresponde a la nueva clave pública corregida
- */

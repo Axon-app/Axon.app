@@ -47,6 +47,8 @@ const App = () => {
 
   // Efecto para detectar la sección activa al hacer scroll
   React.useEffect(() => {
+    let ticking = false;
+
     const handleScroll = () => {
       const sections = [
         "hero",
@@ -58,22 +60,28 @@ const App = () => {
       ];
       const scrollPosition = window.scrollY + 100;
 
-      for (const section of sections) {
-        const element = document.getElementById(section);
-        if (element) {
-          const { offsetTop, offsetHeight } = element;
-          if (
-            scrollPosition >= offsetTop &&
-            scrollPosition < offsetTop + offsetHeight
-          ) {
-            setActiveSection(section);
-            break;
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          for (const section of sections) {
+            const element = document.getElementById(section);
+            if (element) {
+              const { offsetTop, offsetHeight } = element;
+              if (
+                scrollPosition >= offsetTop &&
+                scrollPosition < offsetTop + offsetHeight
+              ) {
+                setActiveSection(section);
+                break;
+              }
+            }
           }
-        }
+          ticking = false;
+        });
+        ticking = true;
       }
     };
 
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 

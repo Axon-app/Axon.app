@@ -201,10 +201,9 @@ export const UnifiedContactForm = React.memo(
       recaptchaToken,
       isRecaptchaVerified,
       recaptchaError,
-      handleRecaptchaVerify,
-      handleRecaptchaError,
-      handleRecaptchaExpired,
       resetRecaptcha,
+      setRecaptchaToken, // <-- Agregado
+      setRecaptchaError  // <-- Agregado
     } = useRecaptcha();
 
     // Definir campos obligatorios por modo
@@ -453,192 +452,103 @@ export const UnifiedContactForm = React.memo(
         setIsSubmitting(false);
       }
     }; // Renderizar campo con diseño profesional mejorado y validaciones estrictas
-    const renderField = (
-      name,
-      label,
-      type = "text",
-      required = false,
-      options = null,
-      icon = null
-    ) => {
-      // Configurar atributos específicos por campo
-      const getFieldAttributes = () => {
-        const baseAttributes = {
-          id: name,
-          name,
-          value: formData[name],
-          onChange: handleChange,
-          required,
-        };
+    const renderField = useCallback(
+      (
+        name,
+        label,
+        type = "text",
+        required = false,
+        options = [],
+        maxLength
+      ) => {
+        const fieldId = `field-${name}-${type}`;
+        const hasError = errors[name];
+        const getValue = () => formData[name] || "";
 
-        switch (name) {
-          case "name":
-            return {
-              ...baseAttributes,
-              type: "text",
-              placeholder: "Ingresa tu nombre completo (solo letras)",
-              pattern: "[a-zA-ZÀ-ÿ\\u00f1\\u00d1\\s'-]+",
-              maxLength: 50,
-              minLength: 2,
-              title:
-                "Solo se permiten letras, espacios y caracteres especiales del español",
-              autoComplete: "name",
-            };
-          case "email":
-            return {
-              ...baseAttributes,
-              type: "email",
-              placeholder: "ejemplo@dominio.com",
-              maxLength: 254,
-              title: "Ingrese un email válido",
-              autoComplete: "email",
-            };
-          case "phone":
-            return {
-              ...baseAttributes,
-              type: "tel",
-              placeholder: "Ej: +57 300 123 4567 (solo números)",
-              pattern: "[0-9\\s\\-()+ ]+",
-              maxLength: 20,
-              minLength: 10,
-              title:
-                "Solo se permiten números, espacios, guiones, paréntesis y signo +",
-              autoComplete: "tel",
-            };
-          case "company":
-            return {
-              ...baseAttributes,
-              type: "text",
-              placeholder: "Nombre de tu empresa u organización",
-              maxLength: 100,
-              autoComplete: "organization",
-            };
-          default:
-            return {
-              ...baseAttributes,
-              type,
-              placeholder: `Ingresa tu ${label.toLowerCase()}`,
-            };
-        }
-      };
-
-      const fieldAttributes = getFieldAttributes();
-
-      return (
-        <div className="group mb-6">
-          <label
-            htmlFor={name}
-            className="flex items-center text-sm font-semibold text-gray-200 mb-3"
-          >
-            {icon && <span className="mr-2 text-blue-400">{icon}</span>}
-            {label}
-            {required && <span className="text-red-400 ml-1">*</span>}
-          </label>
-
-          <div className="relative">
-            {type === "textarea" ? (
-              <textarea
-                {...fieldAttributes}
-                rows="5"
-                className={`w-full px-4 py-4 bg-gray-800/70 backdrop-blur-sm border-2 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-900 transition-all duration-300 resize-none shadow-lg ${
-                  errors[name]
-                    ? "border-red-500/50 focus:ring-red-500/50 focus:border-red-400 bg-red-900/10"
-                    : "border-gray-600/50 focus:ring-blue-500/50 focus:border-blue-400 hover:border-gray-500/70 group-hover:shadow-blue-500/10"
-                }`}
-                placeholder={`Describe ${label.toLowerCase()} en detalle...`}
-              />
-            ) : type === "select" ? (
-              <select
-                {...fieldAttributes}
-                className={`w-full px-4 py-4 bg-gray-800/70 backdrop-blur-sm border-2 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-900 transition-all duration-300 shadow-lg cursor-pointer ${
-                  errors[name]
-                    ? "border-red-500/50 focus:ring-red-500/50 focus:border-red-400 bg-red-900/10"
-                    : "border-gray-600/50 focus:ring-blue-500/50 focus:border-blue-400 hover:border-gray-500/70 group-hover:shadow-blue-500/10"
-                }`}
-                style={{ appearance: "none" }}
-              >
-                <option value="" className="bg-gray-800 text-gray-400">
-                  Selecciona {label.toLowerCase()}
-                </option>
-                {options?.map((option) => (
-                  <option
-                    key={option}
-                    value={option}
-                    className="bg-gray-800 text-white py-2"
-                  >
-                    {option}
-                  </option>
-                ))}
-              </select>
-            ) : (
-              <input
-                {...fieldAttributes}
-                className={`w-full px-4 py-4 bg-gray-800/70 backdrop-blur-sm border-2 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-900 transition-all duration-300 shadow-lg ${
-                  errors[name]
-                    ? "border-red-500/50 focus:ring-red-500/50 focus:border-red-400 bg-red-900/10"
-                    : "border-gray-600/50 focus:ring-blue-500/50 focus:border-blue-400 hover:border-gray-500/70 group-hover:shadow-blue-500/10"
-                }`}
-              />
-            )}
-
-            {/* Icono de select dropdown */}
-            {type === "select" && (
-              <div className="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none">
-                <svg
-                  className="w-5 h-5 text-gray-400"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M19 9l-7 7-7-7"
-                  ></path>
-                </svg>
-              </div>
-            )}
-
-            {/* Indicador de campo válido */}
-            {formData[name] && !errors[name] && (
-              <div className="absolute inset-y-0 right-0 flex items-center pr-4">
-                <svg
-                  className="w-5 h-5 text-green-400"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M5 13l4 4L19 7"
-                  ></path>
-                </svg>
-              </div>
-            )}
-          </div>
-
-          {errors[name] && (
-            <div className="mt-2 flex items-center text-red-400">
-              <svg
-                className="w-4 h-4 mr-2 flex-shrink-0"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
-                  clipRule="evenodd"
+        return (
+          <div className="mb-4 relative">
+            <label
+              htmlFor={fieldId}
+              className="block text-sm font-medium text-gray-300 mb-1"
+            >
+              {label}
+              {required && (
+                <span className="text-red-500 ml-1" aria-label="required">
+                  *
+                </span>
+              )}
+            </label>
+            <div className="relative">
+              {type === "textarea" ? (
+                <textarea
+                  id={fieldId}
+                  name={name}
+                  value={getValue()}
+                  onChange={handleChange}
+                  className={`w-full px-3 py-2 bg-gray-800 border ${
+                    hasError
+                      ? "border-red-500"
+                      : "border-gray-600 focus:border-blue-500"
+                  } rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-colors`}
+                  rows={4}
+                  maxLength={maxLength || 1000}
+                  aria-invalid={hasError ? "true" : "false"}
+                  aria-describedby={hasError ? `${fieldId}-error` : undefined}
                 />
-              </svg>
-              <p className="text-sm font-medium">{errors[name]}</p>{" "}
+              ) : type === "select" ? (
+                <select
+                  id={fieldId}
+                  name={name}
+                  value={getValue()}
+                  onChange={handleChange}
+                  className={`w-full px-3 py-2 bg-gray-800 border ${
+                    hasError
+                      ? "border-red-500"
+                      : "border-gray-600 focus:border-blue-500"
+                  } rounded-lg text-white appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-colors`}
+                  aria-invalid={hasError ? "true" : "false"}
+                  aria-describedby={hasError ? `${fieldId}-error` : undefined}
+                >
+                  <option value="" disabled>
+                    Selecciona una opción
+                  </option>
+                  {options.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
+              ) : (
+                <input
+                  id={fieldId}
+                  name={name}
+                  type={type}
+                  value={getValue()}
+                  onChange={handleChange}
+                  className={`w-full px-3 py-2 bg-gray-800 border ${
+                    hasError
+                      ? "border-red-500"
+                      : "border-gray-600 focus:border-blue-500"
+                  } rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-colors`}
+                  maxLength={maxLength}
+                  aria-invalid={hasError ? "true" : "false"}
+                  aria-describedby={hasError ? `${fieldId}-error` : undefined}
+                />
+              )}
+              {hasError && (
+                <div
+                  id={`${fieldId}-error`}
+                  className="absolute left-0 -bottom-5 text-xs text-red-500"
+                >
+                  {errors[name]}
+                </div>
+              )}
             </div>
-          )}
-        </div>
-      );
-    };
+          </div>
+        );
+      },
+      [formData, errors, handleChange]
+    );
     const titles = {
       contact: "Formulario de información y contacto",
       quote: "Detalles del Proyecto",
@@ -1109,7 +1019,7 @@ export const UnifiedContactForm = React.memo(
                       strokeLinecap="round"
                       strokeLinejoin="round"
                       strokeWidth="2"
-                      d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                      d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"
                     ></path>
                   </svg>
                 )}
@@ -1278,7 +1188,7 @@ export const UnifiedContactForm = React.memo(
                       strokeLinejoin="round"
                       strokeWidth="2"
                       d="M9 12l2 2 4-4m5.5-2A8.5 8.5 0 1119 12a8.5 8.5 0 01-8.5-8.5z"
-                    ></path>
+                    />
                   </svg>
                 </div>
                 <h3 className="text-lg font-semibold text-white">
@@ -1300,18 +1210,114 @@ export const UnifiedContactForm = React.memo(
                   {isRecaptchaVerified ? "Verificado" : "Pendiente"}
                 </span>
               </div>
-            </div>{" "}
-            <ReCaptchaComponent
-              onVerify={handleRecaptchaVerify}
-              onError={handleRecaptchaError}
-              onExpired={handleRecaptchaExpired}
-              className="mb-4"
-            />
-            {recaptchaError && (
-              <div className="mb-4 p-3 bg-red-500/10 border border-red-500/20 rounded-lg">
-                <div className="flex items-center space-x-2">
+            </div>
+            {/* reCAPTCHA */}
+            <div id="recaptcha-container" className="mb-4" aria-live="polite">
+              <ReCaptchaComponent
+                onVerify={(token) => {
+                  setRecaptchaToken(token);
+                  setRecaptchaError(null);
+                }}
+                onError={(error) => {
+                  setRecaptchaError(error);
+                  setRecaptchaToken(null);
+                }}
+                onExpired={() => {
+                  setRecaptchaToken(null);
+                  setRecaptchaError(
+                    "La verificación ha expirado. Por favor, inténtalo de nuevo."
+                  );
+                }}
+                className="flex justify-center"
+              />
+              {recaptchaError && (
+                <div className="text-red-500 text-sm mt-2" role="alert">
+                  {recaptchaError}
+                </div>
+              )}
+            </div>
+
+            {/* Botón de envío mejorado con estado dinámico */}
+            <div className="bg-gradient-to-br from-gray-800/40 to-gray-900/40 backdrop-blur-sm p-6 rounded-2xl border border-gray-700/30 shadow-xl">
+              {/* Indicador de estado antes del botón */}
+              {!isFormComplete() && (
+                <div className="flex items-center space-x-2 mb-4">
+                  <div className="w-4 h-4 bg-orange-500 rounded-full animate-pulse"></div>
+                  <span className="text-sm text-orange-300">
+                    Completa los campos obligatorios para continuar
+                  </span>
+                </div>
+              )}
+
+              <button
+                type="submit"
+                disabled={isSubmitting || !isFormComplete()}
+                className={`w-full relative overflow-hidden group py-4 px-8 rounded-2xl font-bold text-white transition-all duration-500 transform ${
+                  isSubmitting
+                    ? "bg-gray-600 cursor-not-allowed scale-95"
+                    : !isFormComplete()
+                    ? "bg-gray-700 cursor-not-allowed opacity-50"
+                    : "bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800 hover:from-blue-700 hover:via-purple-700 hover:to-blue-900 hover:scale-105 hover:shadow-2xl hover:shadow-blue-500/25"
+                }`}
+              >
+                {/* Efecto de brillo animado solo cuando está habilitado */}
+                {!isSubmitting && isFormComplete() && (
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
+                )}
+
+                <div className="relative flex items-center justify-center">
+                  {isSubmitting ? (
+                    <>
+                      <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-white mr-3"></div>
+                      <span>Enviando...</span>
+                    </>
+                  ) : !isFormComplete() ? (
+                    <>
+                      <svg
+                        className="w-5 h-5 mr-3 opacity-50"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
+                          d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"
+                        ></path>
+                      </svg>
+                      <span>Completar campos obligatorios</span>
+                    </>
+                  ) : (
+                    <>
+                      <svg
+                        className="w-5 h-5 mr-3 transform group-hover:translate-x-1 transition-transform duration-300"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
+                          d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
+                        ></path>
+                      </svg>
+                      <span>
+                        {mode === "contact" && "Enviar Mensaje"}
+                        {mode === "quote" && "Solicitar Propuesta"}
+                        {mode === "consultation" && "Programar Consulta"}
+                      </span>
+                    </>
+                  )}
+                </div>
+              </button>
+
+              {/* Información adicional */}
+              <div className="mt-4 p-4 bg-gradient-to-r from-blue-500/10 to-purple-500/10 rounded-xl border border-blue-500/20">
+                <div className="flex items-center text-sm text-gray-300">
                   <svg
-                    className="w-4 h-4 text-red-400"
+                    className="w-4 h-4 mr-2 text-green-400 flex-shrink-0"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -1320,125 +1326,27 @@ export const UnifiedContactForm = React.memo(
                       strokeLinecap="round"
                       strokeLinejoin="round"
                       strokeWidth="2"
-                      d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"
+                      d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
                     ></path>
                   </svg>
-                  <span className="text-sm text-red-300">{recaptchaError}</span>
-                </div>
-              </div>
-            )}
-          </div>
-          {/* Botón de envío mejorado con estado dinámico */}
-          <div className="bg-gradient-to-br from-gray-800/40 to-gray-900/40 backdrop-blur-sm p-6 rounded-2xl border border-gray-700/30 shadow-xl">
-            {/* Indicador de estado antes del botón */}
-            {!isFormComplete() && (
-              <div className="mb-4 p-3 bg-orange-500/10 border border-orange-500/20 rounded-lg">
-                <div className="flex items-center space-x-2">
-                  <div className="w-4 h-4 bg-orange-500 rounded-full animate-pulse"></div>
-                  <span className="text-sm text-orange-300">
-                    Completa los campos obligatorios para continuar
+                  <span>
+                    Respuesta garantizada en 24 horas • Consulta inicial
+                    gratuita • Datos 100% seguros
                   </span>
                 </div>
               </div>
-            )}
 
-            <button
-              type="submit"
-              disabled={isSubmitting || !isFormComplete()}
-              className={`w-full relative overflow-hidden group py-4 px-8 rounded-2xl font-bold text-white transition-all duration-500 transform ${
-                isSubmitting
-                  ? "bg-gray-600 cursor-not-allowed scale-95"
-                  : !isFormComplete()
-                  ? "bg-gray-700 cursor-not-allowed opacity-50"
-                  : "bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800 hover:from-blue-700 hover:via-purple-700 hover:to-blue-900 hover:scale-105 hover:shadow-2xl hover:shadow-blue-500/25"
-              }`}
-            >
-              {/* Efecto de brillo animado solo cuando está habilitado */}
-              {!isSubmitting && isFormComplete() && (
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
-              )}
-
-              <div className="relative flex items-center justify-center">
-                {isSubmitting ? (
-                  <>
-                    <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-white mr-3"></div>
-                    <span>Enviando...</span>
-                  </>
-                ) : !isFormComplete() ? (
-                  <>
-                    <svg
-                      className="w-5 h-5 mr-3 opacity-50"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"
-                      ></path>
-                    </svg>
-                    <span>Completar campos obligatorios</span>
-                  </>
-                ) : (
-                  <>
-                    <svg
-                      className="w-5 h-5 mr-3 transform group-hover:translate-x-1 transition-transform duration-300"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
-                      ></path>
-                    </svg>
-                    <span>
-                      {mode === "contact" && "Enviar Mensaje"}
-                      {mode === "quote" && "Solicitar Propuesta"}
-                      {mode === "consultation" && "Programar Consulta"}
-                    </span>
-                  </>
-                )}
-              </div>
-            </button>
-
-            {/* Información adicional */}
-            <div className="mt-4 p-4 bg-gradient-to-r from-blue-500/10 to-purple-500/10 rounded-xl border border-blue-500/20">
-              <div className="flex items-center text-sm text-gray-300">
-                <svg
-                  className="w-4 h-4 mr-2 text-green-400 flex-shrink-0"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
+              {/* Botón de cerrar si es modal */}
+              {onClose && (
+                <button
+                  type="button"
+                  onClick={onClose}
+                  className="w-full mt-4 py-3 px-4 text-gray-400 hover:text-white transition-colors rounded-xl border border-gray-600 hover:border-gray-500 hover:bg-gray-800/50"
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                  ></path>
-                </svg>
-                <span>
-                  Respuesta garantizada en 24 horas • Consulta inicial gratuita
-                  • Datos 100% seguros
-                </span>
-              </div>
+                  Cancelar
+                </button>
+              )}
             </div>
-
-            {/* Botón de cerrar si es modal */}
-            {onClose && (
-              <button
-                type="button"
-                onClick={onClose}
-                className="w-full mt-4 py-3 px-4 text-gray-400 hover:text-white transition-colors rounded-xl border border-gray-600 hover:border-gray-500 hover:bg-gray-800/50"
-              >
-                Cancelar
-              </button>
-            )}
           </div>
         </form>
       </div>
