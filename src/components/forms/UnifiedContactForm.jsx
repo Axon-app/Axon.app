@@ -255,20 +255,48 @@ export const UnifiedContactForm = React.memo(
     // Verificar si el formulario está completo
     const isFormComplete = useCallback(() => {
       return getPendingFields().length === 0;
-    }, [getPendingFields]);
-
-    // Validación básica
+    }, [getPendingFields]); // Validación estricta con reglas específicas
     const validateForm = useCallback(() => {
       const newErrors = {};
 
+      // Validación de nombre - solo letras, espacios, acentos y caracteres especiales del español
       if (!formData.name.trim()) {
         newErrors.name = "El nombre es requerido";
+      } else if (formData.name.trim().length < 2) {
+        newErrors.name = "El nombre debe tener al menos 2 caracteres";
+      } else if (!/^[a-zA-ZÀ-ÿ\u00f1\u00d1\s'-]+$/.test(formData.name.trim())) {
+        newErrors.name =
+          "El nombre solo puede contener letras, espacios y caracteres válidos";
+      } else if (/\d/.test(formData.name.trim())) {
+        newErrors.name = "El nombre no puede contener números";
+      } else if (formData.name.trim().length > 50) {
+        newErrors.name = "El nombre no puede exceder los 50 caracteres";
       }
 
+      // Validación de email - más estricta
       if (!formData.email.trim()) {
         newErrors.email = "El email es requerido";
-      } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-        newErrors.email = "El email no es válido";
+      } else {
+        const emailRegex =
+          /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
+        if (!emailRegex.test(formData.email.trim())) {
+          newErrors.email =
+            "Ingrese un email válido (ejemplo: usuario@dominio.com)";
+        } else if (formData.email.trim().length > 254) {
+          newErrors.email = "El email es demasiado largo";
+        }
+      } // Validación de teléfono - solo números y formatos válidos
+      if (formData.phone && formData.phone.trim()) {
+        const phoneClean = formData.phone.replace(/[\s\-()+ ]/g, "");
+        if (!/^\d+$/.test(phoneClean)) {
+          newErrors.phone = "El teléfono solo puede contener números";
+        } else if (phoneClean.length < 10) {
+          newErrors.phone = "El teléfono debe tener al menos 10 dígitos";
+        } else if (phoneClean.length > 15) {
+          newErrors.phone = "El teléfono no puede tener más de 15 dígitos";
+        } else if (!/^[0-9\s\-()+ ]+$/.test(formData.phone.trim())) {
+          newErrors.phone = "Formato de teléfono inválido";
+        }
       }
 
       if (mode === "contact" && !formData.message.trim()) {
@@ -296,15 +324,49 @@ export const UnifiedContactForm = React.memo(
 
       setErrors(newErrors);
       return Object.keys(newErrors).length === 0;
-    }, [formData, mode]);
-
-    // Manejar cambios en el formulario
+    }, [formData, mode]); // Manejar cambios en el formulario con validación en tiempo real
     const handleChange = useCallback(
       (e) => {
         const { name, value } = e.target;
+        let processedValue = value;
+
+        // Procesamiento específico por campo
+        switch (name) {
+          case "name":
+            // Solo permitir letras, espacios y caracteres especiales del español
+            processedValue = value.replace(/[^a-zA-ZÀ-ÿ\u00f1\u00d1\s'-]/g, "");
+            // Limitar longitud
+            if (processedValue.length > 50) {
+              processedValue = processedValue.substring(0, 50);
+            }
+            break;
+
+          case "phone":
+            // Solo permitir números, espacios, guiones, paréntesis y signo +
+            processedValue = value.replace(/[^0-9\s\-()+ ]/g, "");
+            // Limitar longitud (15 dígitos + formateo)
+            if (processedValue.replace(/[^0-9]/g, "").length > 15) {
+              const digitsOnly = processedValue.replace(/[^0-9]/g, "");
+              processedValue = digitsOnly.substring(0, 15);
+            }
+            break;
+
+          case "email":
+            // Convertir a minúsculas y eliminar espacios
+            processedValue = value.toLowerCase().trim();
+            // Limitar longitud
+            if (processedValue.length > 254) {
+              processedValue = processedValue.substring(0, 254);
+            }
+            break;
+
+          default:
+            processedValue = value;
+        }
+
         setFormData((prev) => ({
           ...prev,
-          [name]: value,
+          [name]: processedValue,
         }));
 
         // Limpiar error del campo cuando el usuario empiece a escribir
@@ -390,8 +452,7 @@ export const UnifiedContactForm = React.memo(
       } finally {
         setIsSubmitting(false);
       }
-    };
-    // Renderizar campo con diseño profesional mejorado
+    }; // Renderizar campo con diseño profesional mejorado y validaciones estrictas
     const renderField = (
       name,
       label,
@@ -399,131 +460,185 @@ export const UnifiedContactForm = React.memo(
       required = false,
       options = null,
       icon = null
-    ) => (
-      <div className="group mb-6">
-        <label
-          htmlFor={name}
-          className="flex items-center text-sm font-semibold text-gray-200 mb-3"
-        >
-          {icon && <span className="mr-2 text-blue-400">{icon}</span>}
-          {label}
-          {required && <span className="text-red-400 ml-1">*</span>}
-        </label>
+    ) => {
+      // Configurar atributos específicos por campo
+      const getFieldAttributes = () => {
+        const baseAttributes = {
+          id: name,
+          name,
+          value: formData[name],
+          onChange: handleChange,
+          required,
+        };
 
-        <div className="relative">
-          {type === "textarea" ? (
-            <textarea
-              id={name}
-              name={name}
-              value={formData[name]}
-              onChange={handleChange}
-              rows="5"
-              className={`w-full px-4 py-4 bg-gray-800/70 backdrop-blur-sm border-2 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-900 transition-all duration-300 resize-none shadow-lg ${
-                errors[name]
-                  ? "border-red-500/50 focus:ring-red-500/50 focus:border-red-400 bg-red-900/10"
-                  : "border-gray-600/50 focus:ring-blue-500/50 focus:border-blue-400 hover:border-gray-500/70 group-hover:shadow-blue-500/10"
-              }`}
-              placeholder={`Describe ${label.toLowerCase()} en detalle...`}
-            />
-          ) : type === "select" ? (
-            <select
-              id={name}
-              name={name}
-              value={formData[name]}
-              onChange={handleChange}
-              className={`w-full px-4 py-4 bg-gray-800/70 backdrop-blur-sm border-2 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-900 transition-all duration-300 shadow-lg cursor-pointer ${
-                errors[name]
-                  ? "border-red-500/50 focus:ring-red-500/50 focus:border-red-400 bg-red-900/10"
-                  : "border-gray-600/50 focus:ring-blue-500/50 focus:border-blue-400 hover:border-gray-500/70 group-hover:shadow-blue-500/10"
-              }`}
-              style={{ appearance: "none" }}
-            >
-              <option value="" className="bg-gray-800 text-gray-400">
-                Selecciona {label.toLowerCase()}
-              </option>
-              {options?.map((option) => (
-                <option
-                  key={option}
-                  value={option}
-                  className="bg-gray-800 text-white py-2"
-                >
-                  {option}
+        switch (name) {
+          case "name":
+            return {
+              ...baseAttributes,
+              type: "text",
+              placeholder: "Ingresa tu nombre completo (solo letras)",
+              pattern: "[a-zA-ZÀ-ÿ\\u00f1\\u00d1\\s'-]+",
+              maxLength: 50,
+              minLength: 2,
+              title:
+                "Solo se permiten letras, espacios y caracteres especiales del español",
+              autoComplete: "name",
+            };
+          case "email":
+            return {
+              ...baseAttributes,
+              type: "email",
+              placeholder: "ejemplo@dominio.com",
+              maxLength: 254,
+              title: "Ingrese un email válido",
+              autoComplete: "email",
+            };
+          case "phone":
+            return {
+              ...baseAttributes,
+              type: "tel",
+              placeholder: "Ej: +57 300 123 4567 (solo números)",
+              pattern: "[0-9\\s\\-()+ ]+",
+              maxLength: 20,
+              minLength: 10,
+              title:
+                "Solo se permiten números, espacios, guiones, paréntesis y signo +",
+              autoComplete: "tel",
+            };
+          case "company":
+            return {
+              ...baseAttributes,
+              type: "text",
+              placeholder: "Nombre de tu empresa u organización",
+              maxLength: 100,
+              autoComplete: "organization",
+            };
+          default:
+            return {
+              ...baseAttributes,
+              type,
+              placeholder: `Ingresa tu ${label.toLowerCase()}`,
+            };
+        }
+      };
+
+      const fieldAttributes = getFieldAttributes();
+
+      return (
+        <div className="group mb-6">
+          <label
+            htmlFor={name}
+            className="flex items-center text-sm font-semibold text-gray-200 mb-3"
+          >
+            {icon && <span className="mr-2 text-blue-400">{icon}</span>}
+            {label}
+            {required && <span className="text-red-400 ml-1">*</span>}
+          </label>
+
+          <div className="relative">
+            {type === "textarea" ? (
+              <textarea
+                {...fieldAttributes}
+                rows="5"
+                className={`w-full px-4 py-4 bg-gray-800/70 backdrop-blur-sm border-2 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-900 transition-all duration-300 resize-none shadow-lg ${
+                  errors[name]
+                    ? "border-red-500/50 focus:ring-red-500/50 focus:border-red-400 bg-red-900/10"
+                    : "border-gray-600/50 focus:ring-blue-500/50 focus:border-blue-400 hover:border-gray-500/70 group-hover:shadow-blue-500/10"
+                }`}
+                placeholder={`Describe ${label.toLowerCase()} en detalle...`}
+              />
+            ) : type === "select" ? (
+              <select
+                {...fieldAttributes}
+                className={`w-full px-4 py-4 bg-gray-800/70 backdrop-blur-sm border-2 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-900 transition-all duration-300 shadow-lg cursor-pointer ${
+                  errors[name]
+                    ? "border-red-500/50 focus:ring-red-500/50 focus:border-red-400 bg-red-900/10"
+                    : "border-gray-600/50 focus:ring-blue-500/50 focus:border-blue-400 hover:border-gray-500/70 group-hover:shadow-blue-500/10"
+                }`}
+                style={{ appearance: "none" }}
+              >
+                <option value="" className="bg-gray-800 text-gray-400">
+                  Selecciona {label.toLowerCase()}
                 </option>
-              ))}
-            </select>
-          ) : (
-            <input
-              type={type}
-              id={name}
-              name={name}
-              value={formData[name]}
-              onChange={handleChange}
-              className={`w-full px-4 py-4 bg-gray-800/70 backdrop-blur-sm border-2 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-900 transition-all duration-300 shadow-lg ${
-                errors[name]
-                  ? "border-red-500/50 focus:ring-red-500/50 focus:border-red-400 bg-red-900/10"
-                  : "border-gray-600/50 focus:ring-blue-500/50 focus:border-blue-400 hover:border-gray-500/70 group-hover:shadow-blue-500/10"
-              }`}
-              placeholder={`Ingresa tu ${label.toLowerCase()}`}
-            />
-          )}
+                {options?.map((option) => (
+                  <option
+                    key={option}
+                    value={option}
+                    className="bg-gray-800 text-white py-2"
+                  >
+                    {option}
+                  </option>
+                ))}
+              </select>
+            ) : (
+              <input
+                {...fieldAttributes}
+                className={`w-full px-4 py-4 bg-gray-800/70 backdrop-blur-sm border-2 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-900 transition-all duration-300 shadow-lg ${
+                  errors[name]
+                    ? "border-red-500/50 focus:ring-red-500/50 focus:border-red-400 bg-red-900/10"
+                    : "border-gray-600/50 focus:ring-blue-500/50 focus:border-blue-400 hover:border-gray-500/70 group-hover:shadow-blue-500/10"
+                }`}
+              />
+            )}
 
-          {/* Icono de select dropdown */}
-          {type === "select" && (
-            <div className="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none">
+            {/* Icono de select dropdown */}
+            {type === "select" && (
+              <div className="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none">
+                <svg
+                  className="w-5 h-5 text-gray-400"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M19 9l-7 7-7-7"
+                  ></path>
+                </svg>
+              </div>
+            )}
+
+            {/* Indicador de campo válido */}
+            {formData[name] && !errors[name] && (
+              <div className="absolute inset-y-0 right-0 flex items-center pr-4">
+                <svg
+                  className="w-5 h-5 text-green-400"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M5 13l4 4L19 7"
+                  ></path>
+                </svg>
+              </div>
+            )}
+          </div>
+
+          {errors[name] && (
+            <div className="mt-2 flex items-center text-red-400">
               <svg
-                className="w-5 h-5 text-gray-400"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
+                className="w-4 h-4 mr-2 flex-shrink-0"
+                fill="currentColor"
+                viewBox="0 0 20 20"
               >
                 <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M19 9l-7 7-7-7"
-                ></path>
+                  fillRule="evenodd"
+                  d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                  clipRule="evenodd"
+                />
               </svg>
-            </div>
-          )}
-
-          {/* Indicador de campo válido */}
-          {formData[name] && !errors[name] && (
-            <div className="absolute inset-y-0 right-0 flex items-center pr-4">
-              <svg
-                className="w-5 h-5 text-green-400"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M5 13l4 4L19 7"
-                ></path>
-              </svg>
+              <p className="text-sm font-medium">{errors[name]}</p>{" "}
             </div>
           )}
         </div>
-
-        {errors[name] && (
-          <div className="mt-2 flex items-center text-red-400">
-            <svg
-              className="w-4 h-4 mr-2 flex-shrink-0"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-            >
-              <path
-                fillRule="evenodd"
-                d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
-                clipRule="evenodd"
-              />
-            </svg>
-            <p className="text-sm font-medium">{errors[name]}</p>
-          </div>
-        )}
-      </div>
-    ); // Títulos según el modo
+      );
+    };
     const titles = {
       contact: "Formulario de información y contacto",
       quote: "Detalles del Proyecto",

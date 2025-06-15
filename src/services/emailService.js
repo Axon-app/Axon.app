@@ -40,7 +40,6 @@ emailjs.init(EMAILJS_CONFIG.PUBLIC_KEY);
 const sendToMultipleServices = async (templateId, templateParams) => {
   try {
     const promises = [];
-    const timeout = 10000; // 10 segundos timeout
 
     // Configurar parámetros para Gmail
     const gmailParams = {
@@ -56,62 +55,52 @@ const sendToMultipleServices = async (templateId, templateParams) => {
       to_email: "axonapp@outlook.es",
       from_service: EMAILJS_CONFIG.SERVICES.OUTLOOK.NAME,
       from_email: EMAILJS_CONFIG.SERVICES.OUTLOOK.EMAIL,
-    };    // Función para crear promesa con timeout mejorado
-    const createEmailPromise = (serviceId, params, serviceName) => {
-      return new Promise((resolve) => {
-        const timer = setTimeout(() => {
-          resolve({
-            service: serviceName,
-            success: false,
-            error: 'Timeout - El servicio tardó demasiado en responder',
-          });
-        }, timeout);
+    };
 
-        emailjs.send(serviceId, templateId, params, EMAILJS_CONFIG.PUBLIC_KEY)
-          .then((result) => {
-            clearTimeout(timer);
-            resolve({
-              service: serviceName,
-              success: true,
-              result,
-            });
-          })
-          .catch((error) => {
-            clearTimeout(timer);
-            resolve({
-              service: serviceName,
-              success: false,
-              error: error.message || 'Error de conexión',
-            });
-          });
-      });
-    };    // Enviar a Gmail con timeout
+    // Enviar a Gmail
     promises.push(
-      createEmailPromise(
-        EMAILJS_CONFIG.SERVICES.GMAIL.SERVICE_ID,
-        gmailParams,
-        "Gmail"
-      )
+      emailjs
+        .send(
+          EMAILJS_CONFIG.SERVICES.GMAIL.SERVICE_ID,
+          templateId,
+          gmailParams,
+          EMAILJS_CONFIG.PUBLIC_KEY
+        )
+        .then((result) => ({
+          service: "Gmail",
+          success: true,
+          result,
+        }))
+        .catch((error) => ({
+          service: "Gmail",
+          success: false,
+          error: error.message,
+        }))
     );
 
-    // Enviar a Outlook con timeout
+    // Enviar a Outlook
     promises.push(
-      createEmailPromise(
-        EMAILJS_CONFIG.SERVICES.OUTLOOK.SERVICE_ID,
-        outlookParams,
-        "Outlook"
-      )
+      emailjs
+        .send(
+          EMAILJS_CONFIG.SERVICES.OUTLOOK.SERVICE_ID,
+          templateId,
+          outlookParams,
+          EMAILJS_CONFIG.PUBLIC_KEY
+        )
+        .then((result) => ({
+          service: "Outlook",
+          success: true,
+          result,
+        }))
+        .catch((error) => ({
+          service: "Outlook",
+          success: false,
+          error: error.message,
+        }))
     );
 
     // Esperar todas las promesas
-    const results = await Promise.allSettled(promises);
-    const allResults = results.map(result => 
-      result.status === 'fulfilled' ? result.value : {
-        success: false,
-        error: result.reason?.message || 'Error desconocido'
-      }
-    );
-    
+    const allResults = await Promise.all(promises);
     const successfulSends = allResults.filter((r) => r.success);
 
     return {
