@@ -89,10 +89,22 @@ export const ConsultationModal = React.memo(({ isOpen, onClose }) => {
   }, [isOpen, onClose]); // Reset form cuando se abre/cierra
   React.useEffect(() => {
     if (isOpen) {
-      setFormData((prev) => ({
-        ...prev,
-        consultationType: "", // Siempre inicia vacío para permitir selección manual
-      }));
+      // Resetear completamente el formulario
+      setFormData({
+        name: "",
+        email: "",
+        phone: "",
+        company: "",
+        clientType: "empresa", // empresa o persona-natural
+        city: "", // Campo obligatorio
+        consultationType: "", // Siempre inicia vacío
+        preferredDate: "",
+        preferredTime: "",
+        timezone: "",
+        topics: "",
+        questions: "",
+        meetingType: "video-call",
+      });
       setSubmitStatus(null);
       setErrors({});
       setGlobalError("");
@@ -101,17 +113,19 @@ export const ConsultationModal = React.memo(({ isOpen, onClose }) => {
   }, [isOpen, resetRecaptcha]);
 
   // Early return si no está abierto
-  if (!isOpen) return null;
-  // Manejar cambios en el formulario con sanitización
+  if (!isOpen) return null; // Manejar cambios en el formulario con sanitización simplificada
   const handleInputChange = (e) => {
     const { name, value } = e.target;
 
-    // Sanitizar entrada
-    const sanitizedValue = sanitizeInput(value);
+    // Validación básica de longitud
+    if (value.length > 1000) {
+      setGlobalError("El texto ingresado es demasiado largo.");
+      return;
+    }
 
     setFormData((prev) => ({
       ...prev,
-      [name]: sanitizedValue,
+      [name]: value,
     }));
 
     // Limpiar errores específicos del campo al modificarlo
@@ -264,18 +278,18 @@ export const ConsultationModal = React.memo(({ isOpen, onClose }) => {
       onClose();
     }
   };
-
   return (
     <div
-      className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+      className="fixed inset-0 bg-black/70 backdrop-blur-sm z-[9999] flex items-center justify-center p-4 modal-backdrop"
       onClick={handleBackdropClick}
       role="dialog"
       aria-modal="true"
       aria-labelledby="consultation-modal-title"
     >
-      <div className="bg-slate-800 rounded-xl max-w-2xl w-full max-h-[80vh] overflow-y-auto shadow-2xl border border-blue-500/30">
+      {" "}
+      <div className="bg-slate-800 rounded-xl max-w-2xl w-full max-h-[80vh] overflow-y-auto shadow-2xl border border-blue-500/30 z-[10000] relative modal-content">
         {/* Header */}
-        <div className="sticky top-0 bg-slate-800 border-b border-gray-700 p-4 sm:p-6 flex items-center justify-between">
+        <div className="sticky top-0 bg-slate-800 border-b border-gray-700 p-4 sm:p-6 flex items-center justify-between z-[10001]">
           <h2
             id="consultation-modal-title"
             className="text-2xl sm:text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400"
@@ -429,12 +443,16 @@ export const ConsultationModal = React.memo(({ isOpen, onClose }) => {
                 <div>
                   <label className="text-blue-300 text-sm font-medium mb-2 block">
                     Tipo de Cliente
-                  </label>
+                  </label>{" "}
                   <select
                     name="clientType"
                     value={formData.clientType}
                     onChange={handleInputChange}
-                    className="w-full p-3 bg-slate-700 border border-gray-600 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 text-white transition-all"
+                    className="w-full p-3 bg-slate-700 border border-gray-600 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 text-white transition-all cursor-pointer"
+                    style={{
+                      zIndex: 1000,
+                      position: "relative",
+                    }}
                   >
                     <option value="empresa">Empresa</option>
                     <option value="persona-natural">Persona Natural</option>
@@ -470,40 +488,83 @@ export const ConsultationModal = React.memo(({ isOpen, onClose }) => {
               <div>
                 <label className="text-blue-300 text-sm font-medium mb-2 block">
                   Tipo de Consulta <span className="text-red-400">*</span>
-                </label>
+                </label>{" "}
                 <select
                   name="consultationType"
                   value={formData.consultationType}
                   onChange={handleInputChange}
                   required
-                  className={`w-full p-3 bg-slate-700 border rounded-lg focus:ring-2 focus:ring-blue-500/20 text-white transition-all ${
+                  className={`w-full p-3 bg-slate-700 border rounded-lg focus:ring-2 focus:ring-blue-500/20 text-white transition-all cursor-pointer ${
                     errors.consultationType
                       ? "border-red-500 focus:border-red-500"
                       : "border-gray-600 focus:border-blue-500"
                   }`}
+                  style={{
+                    zIndex: 1000,
+                    position: "relative",
+                  }}
                 >
-                  <option value="">Selecciona un tipo</option>
-                  <option value="Consulta General">Consulta General</option>
-                  <option value="Revisión de Proyecto">
+                  <option
+                    value=""
+                    disabled
+                    className="bg-slate-800 text-gray-400"
+                  >
+                    Selecciona un tipo de consulta
+                  </option>
+                  <option
+                    value="Consulta General"
+                    className="bg-slate-800 text-white"
+                  >
+                    Consulta General
+                  </option>
+                  <option
+                    value="Revisión de Proyecto"
+                    className="bg-slate-800 text-white"
+                  >
                     Revisión de Proyecto
                   </option>
-                  <option value="Estrategia Tecnológica">
+                  <option
+                    value="Estrategia Tecnológica"
+                    className="bg-slate-800 text-white"
+                  >
                     Estrategia Tecnológica
                   </option>
-                  <option value="Auditoría de Código">
+                  <option
+                    value="Auditoría de Código"
+                    className="bg-slate-800 text-white"
+                  >
                     Auditoría de Código
                   </option>
-                  <option value="Optimización de Performance">
+                  <option
+                    value="Optimización de Performance"
+                    className="bg-slate-800 text-white"
+                  >
                     Optimización de Performance
                   </option>
-                  <option value="Desarrollo Web">Desarrollo Web</option>
-                  <option value="Aplicaciones Móviles">
+                  <option
+                    value="Desarrollo Web"
+                    className="bg-slate-800 text-white"
+                  >
+                    Desarrollo Web
+                  </option>
+                  <option
+                    value="Aplicaciones Móviles"
+                    className="bg-slate-800 text-white"
+                  >
                     Aplicaciones Móviles
                   </option>
-                  <option value="Inteligencia Artificial">
+                  <option
+                    value="Inteligencia Artificial"
+                    className="bg-slate-800 text-white"
+                  >
                     Inteligencia Artificial
                   </option>
-                  <option value="Cloud Computing">Cloud Computing</option>
+                  <option
+                    value="Cloud Computing"
+                    className="bg-slate-800 text-white"
+                  >
+                    Cloud Computing
+                  </option>
                 </select>
                 {errors.consultationType && (
                   <p className="text-red-400 text-xs mt-1">
@@ -596,22 +657,36 @@ export const ConsultationModal = React.memo(({ isOpen, onClose }) => {
                     className="text-blue-300 text-sm font-medium mb-2 block"
                   >
                     Hora Preferida <span className="text-red-400">*</span>
-                  </label>
+                  </label>{" "}
                   <select
                     id="consultation-time"
                     name="preferredTime"
                     value={formData.preferredTime}
                     onChange={handleInputChange}
                     required
-                    className={`w-full p-3 bg-slate-700 border rounded-lg focus:ring-2 focus:ring-blue-500/20 text-white transition-all ${
+                    className={`w-full p-3 bg-slate-700 border rounded-lg focus:ring-2 focus:ring-blue-500/20 text-white transition-all cursor-pointer ${
                       errors.preferredTime
                         ? "border-red-500 focus:border-red-500"
                         : "border-gray-600 focus:border-blue-500"
                     }`}
+                    style={{
+                      zIndex: 1000,
+                      position: "relative",
+                    }}
                   >
-                    <option value="">Selecciona hora</option>
+                    <option
+                      value=""
+                      disabled
+                      className="bg-slate-800 text-gray-400"
+                    >
+                      Selecciona hora preferida
+                    </option>
                     {TIME_OPTIONS.map((time) => (
-                      <option key={time} value={time}>
+                      <option
+                        key={time}
+                        value={time}
+                        className="bg-slate-800 text-white"
+                      >
                         {time}
                       </option>
                     ))}
@@ -625,27 +700,78 @@ export const ConsultationModal = React.memo(({ isOpen, onClose }) => {
                 <div>
                   <label className="text-blue-300 text-sm font-medium mb-2 block">
                     Zona Horaria <span className="text-red-400">*</span>
-                  </label>
+                  </label>{" "}
                   <select
                     name="timezone"
                     value={formData.timezone}
                     onChange={handleInputChange}
                     required
+                    style={{
+                      WebkitAppearance: "menulist",
+                      MozAppearance: "menulist",
+                      appearance: "menulist",
+                    }}
                     className={`w-full p-3 bg-slate-700 border rounded-lg focus:ring-2 focus:ring-blue-500/20 text-white transition-all ${
                       errors.timezone
                         ? "border-red-500 focus:border-red-500"
                         : "border-gray-600 focus:border-blue-500"
                     }`}
                   >
-                    <option value="">Selecciona TZ</option>
-                    <option value="America/New_York">EST (UTC-5)</option>
-                    <option value="America/Chicago">CST (UTC-6)</option>
-                    <option value="America/Denver">MST (UTC-7)</option>
-                    <option value="America/Los_Angeles">PST (UTC-8)</option>
-                    <option value="America/Mexico_City">México (UTC-6)</option>
-                    <option value="America/Bogota">Colombia (UTC-5)</option>
-                    <option value="America/Lima">Perú (UTC-5)</option>
-                    <option value="America/Santiago">Chile (UTC-3)</option>
+                    <option
+                      value=""
+                      disabled
+                      className="bg-slate-800 text-gray-400"
+                    >
+                      Selecciona zona horaria
+                    </option>
+                    <option
+                      value="America/New_York"
+                      className="bg-slate-800 text-white"
+                    >
+                      EST (UTC-5)
+                    </option>
+                    <option
+                      value="America/Chicago"
+                      className="bg-slate-800 text-white"
+                    >
+                      CST (UTC-6)
+                    </option>
+                    <option
+                      value="America/Denver"
+                      className="bg-slate-800 text-white"
+                    >
+                      MST (UTC-7)
+                    </option>
+                    <option
+                      value="America/Los_Angeles"
+                      className="bg-slate-800 text-white"
+                    >
+                      PST (UTC-8)
+                    </option>
+                    <option
+                      value="America/Mexico_City"
+                      className="bg-slate-800 text-white"
+                    >
+                      México (UTC-6)
+                    </option>
+                    <option
+                      value="America/Bogota"
+                      className="bg-slate-800 text-white"
+                    >
+                      Colombia (UTC-5)
+                    </option>
+                    <option
+                      value="America/Lima"
+                      className="bg-slate-800 text-white"
+                    >
+                      Perú (UTC-5)
+                    </option>
+                    <option
+                      value="America/Santiago"
+                      className="bg-slate-800 text-white"
+                    >
+                      Chile (UTC-3)
+                    </option>
                   </select>
                   {errors.timezone && (
                     <p className="text-red-400 text-xs mt-1">

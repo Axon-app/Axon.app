@@ -1,33 +1,49 @@
 import React, { useState } from "react";
+import { UnifiedContactForm } from "./components/forms/UnifiedContactForm";
 import {
   AnimatedCounterWithProgress,
-  ConsultationModal,
   EnhancedCookiesModal,
   EnhancedPrivacyModal,
   EnhancedTermsModal,
-  QuoteRequestModal,
   ServiceCard,
   ServiceDetailModal,
   TestimonialsBanner,
 } from "./components/index";
+import {
+  ConsultationModal,
+  ContactModal,
+  QuoteModal,
+} from "./components/modals/UnifiedModals";
 import { EmailLink } from "./components/ui/EmailLink";
 import { technologies, testimonials } from "./data/content";
 import { servicesData } from "./data/servicesData";
+import { useModals } from "./hooks/useModals";
 import logo1 from "/logo1.png";
 import logo231 from "/logo231.png";
 
 const App = () => {
   const [showMenu, setShowMenu] = useState(false);
-  const [showPrivacyModal, setShowPrivacyModal] = useState(false); // Estado para la modal de Privacidad
-  const [showTermsModal, setShowTermsModal] = useState(false); // Estado para la modal de Términos
-  const [showCookiesModal, setShowCookiesModal] = useState(false); // Estado para la modal de Cookies
-  const [showCookieBanner, setShowCookieBanner] = useState(false); // Estado para el banner de cookies
+  const [showPrivacyModal, setShowPrivacyModal] = useState(false);
+  const [showTermsModal, setShowTermsModal] = useState(false);
+  const [showCookiesModal, setShowCookiesModal] = useState(false);
+  const [showCookieBanner, setShowCookieBanner] = useState(false);
   const [logoError, setLogoError] = useState(false);
   const [selectedService, setSelectedService] = useState(null);
   const [showServiceModal, setShowServiceModal] = useState(false);
-  const [showQuoteModal, setShowQuoteModal] = useState(false);
-  const [showConsultationModal, setShowConsultationModal] = useState(false);
-  const [activeSection, setActiveSection] = useState("hero"); // Nuevo estado para la sección activa
+  const [activeSection, setActiveSection] = useState("hero");
+
+  // Hook para manejar los modales unificados
+  const {
+    contactModalOpen,
+    quoteModalOpen,
+    consultationModalOpen,
+    openContactModal,
+    openQuoteModal,
+    openConsultationModal,
+    closeContactModal,
+    closeQuoteModal,
+    closeConsultationModal,
+  } = useModals();
 
   // Efecto para detectar la sección activa al hacer scroll
   React.useEffect(() => {
@@ -86,21 +102,12 @@ const App = () => {
     setShowServiceModal(false);
     setSelectedService(null);
   };
-
   const handleOpenQuoteModal = () => {
-    setShowQuoteModal(true);
-  };
-
-  const handleCloseQuoteModal = () => {
-    setShowQuoteModal(false);
+    openQuoteModal();
   };
 
   const handleOpenConsultationModal = () => {
-    setShowConsultationModal(true);
-  };
-
-  const handleCloseConsultationModal = () => {
-    setShowConsultationModal(false);
+    openConsultationModal();
   };
 
   // Función para navegación suave a las secciones
@@ -294,7 +301,7 @@ const App = () => {
                       d="M12 6v6m0 0v6m0-6h6m-6 0H6"
                     />
                   </svg>
-                  <span>Cotizar Proyecto</span>
+                  <span>Propuesta Personalizada</span>
                 </span>
               </button>
 
@@ -490,14 +497,13 @@ const App = () => {
                       d="M12 6v6m0 0v6m0-6h6m-6 0H6"
                     />
                   </svg>
-                  <span>Cotizar Proyecto</span>
+                  <span>Propuesta Personalizada</span>
                 </button>
               </div>
             </div>
           </div>
         </div>
       </nav>
-
       {/* Hero Section */}
       <section
         id="hero"
@@ -538,7 +544,6 @@ const App = () => {
           </a>
         </div>
       </section>
-
       {/* About Us Section - Mission & Vision */}
       <section
         id="about"
@@ -724,7 +729,6 @@ const App = () => {
           </div>
         </div>
       </section>
-
       {/* Services Section - Professional Design */}
       <section
         id="services"
@@ -906,7 +910,6 @@ const App = () => {
           </div>
         </div>
       </section>
-
       {/* Tech Stack Section - Diseño Elegante y Compacto */}
       <section
         id="technologies"
@@ -1089,14 +1092,15 @@ const App = () => {
 
               {/* CTA compacto */}
               <div className="flex space-x-3">
+                {" "}
                 <button
-                  onClick={() => setShowQuoteModal(true)}
+                  onClick={() => openQuoteModal()}
                   className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-medium py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 text-sm"
                 >
-                  Cotización
+                  Propuesta
                 </button>
                 <button
-                  onClick={() => setShowConsultationModal(true)}
+                  onClick={() => openConsultationModal()}
                   className="bg-transparent border border-gray-600 hover:border-gray-500 text-gray-300 hover:text-white font-medium py-3 px-6 rounded-lg transition-all duration-300 text-sm"
                 >
                   Consulta
@@ -1106,7 +1110,6 @@ const App = () => {
           </div>
         </div>
       </section>
-
       {/* Stats Counter Section - Logros y Proyectos */}
       <section className="py-16 md:py-20 bg-gradient-to-br from-gray-800 to-slate-800 relative overflow-hidden">
         {/* Efectos de fondo */}
@@ -1269,7 +1272,6 @@ const App = () => {
           </div>
         </div>
       </section>
-
       {/* Testimonials Section */}
       <section
         id="testimonials"
@@ -1353,13 +1355,13 @@ const App = () => {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <button
-                onClick={() => setShowQuoteModal(true)}
+                onClick={() => openQuoteModal()}
                 className="bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-white font-bold py-4 px-8 rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg shadow-yellow-500/25"
               >
                 Iniciar Mi Proyecto
               </button>
               <button
-                onClick={() => setShowConsultationModal(true)}
+                onClick={() => openConsultationModal()}
                 className="bg-transparent border-2 border-gray-500 text-gray-300 hover:border-gray-400 hover:text-white font-bold py-4 px-8 rounded-full transition-all duration-300"
               >
                 Ver Más Casos
@@ -1368,7 +1370,6 @@ const App = () => {
           </div>
         </div>
       </section>
-
       {/* Contact Section */}
       <section id="contact" className="py-20 md:py-32 relative overflow-hidden">
         {/* Background con gradiente y efectos */}
@@ -1555,187 +1556,30 @@ const App = () => {
                   </a>
                 </div>
               </div>
-            </div>
-
-            {/* Formulario mejorado */}
+            </div>{" "}
+            {/* Formulario unificado */}
             <div className="bg-gradient-to-br from-gray-800/90 to-gray-900/90 backdrop-blur-md p-8 rounded-2xl border border-gray-700/50 shadow-2xl h-full flex flex-col">
-              <div className="mb-6">
-                <h3 className="text-2xl font-bold text-white mb-2">
-                  Envíanos un mensaje
-                </h3>
-                <p className="text-gray-400">
-                  Cuéntanos sobre tu proyecto y te contactaremos pronto
-                </p>
-              </div>
-
-              <form className="space-y-6 flex-grow flex flex-col">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                    <label
-                      htmlFor="name"
-                      className="block text-gray-300 text-sm font-semibold mb-2"
-                    >
-                      Nombre Completo *
-                    </label>
-                    <input
-                      type="text"
-                      id="name"
-                      name="name"
-                      required
-                      autoComplete="name"
-                      className="w-full h-12 py-3 px-4 bg-gray-700/50 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-300"
-                      placeholder="Tu nombre completo"
-                    />
-                  </div>
-                  <div>
-                    <label
-                      htmlFor="phone"
-                      className="block text-gray-300 text-sm font-semibold mb-2"
-                    >
-                      Teléfono
-                    </label>
-                    <input
-                      type="tel"
-                      id="phone"
-                      name="phone"
-                      autoComplete="tel"
-                      className="w-full h-12 py-3 px-4 bg-gray-700/50 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-300"
-                      placeholder="+57 123 456 7890"
-                    />
-                  </div>
-                </div>
-
+              <div className="flex justify-between items-center mb-4">
                 <div>
-                  <label
-                    htmlFor="email"
-                    className="block text-gray-300 text-sm font-semibold mb-2"
-                  >
-                    Email Corporativo *
-                  </label>
-                  <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    required
-                    autoComplete="email"
-                    className="w-full h-12 py-3 px-4 bg-gray-700/50 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-300"
-                    placeholder="tu@empresa.com"
-                  />
+                  <h3 className="text-2xl font-bold text-white mb-2">
+                    Envíanos un mensaje
+                  </h3>
+                  <p className="text-gray-400">
+                    Cuéntanos sobre tu proyecto y te contactaremos pronto
+                  </p>
                 </div>
-
-                <div>
-                  <label
-                    htmlFor="company"
-                    className="block text-gray-300 text-sm font-semibold mb-2"
-                  >
-                    Empresa / Organización
-                  </label>
-                  <input
-                    type="text"
-                    id="company"
-                    name="company"
-                    autoComplete="organization"
-                    className="w-full h-12 py-3 px-4 bg-gray-700/50 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-300"
-                    placeholder="Nombre de tu empresa"
-                  />
-                </div>
-
-                <div>
-                  <label
-                    htmlFor="service"
-                    className="block text-gray-300 text-sm font-semibold mb-2"
-                  >
-                    Servicio de Interés
-                  </label>
-                  <select
-                    id="service"
-                    name="service"
-                    className="w-full h-12 py-3 px-4 bg-gray-700/50 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-300 appearance-none cursor-pointer"
-                  >
-                    <option value="">Selecciona un servicio</option>
-                    <option value="desarrollo-web">Desarrollo Web</option>
-                    <option value="aplicaciones-moviles">
-                      Aplicaciones Móviles
-                    </option>
-                    <option value="inteligencia-artificial">
-                      Inteligencia Artificial
-                    </option>
-                    <option value="automatizacion">
-                      Automatización de Procesos
-                    </option>
-                    <option value="consultoria">Consultoría Tecnológica</option>
-                    <option value="mantenimiento">
-                      Mantenimiento y Soporte
-                    </option>
-                    <option value="otro">Otro</option>
-                  </select>
-                </div>
-
-                <div className="flex-grow">
-                  <label
-                    htmlFor="message"
-                    className="block text-gray-300 text-sm font-semibold mb-2"
-                  >
-                    Mensaje / Descripción del Proyecto *
-                  </label>
-                  <textarea
-                    id="message"
-                    name="message"
-                    required
-                    className="w-full h-32 py-3 px-4 bg-gray-700/50 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-300 resize-none"
-                    placeholder="Describe tu proyecto, objetivos, plazos y cualquier detalle relevante..."
-                  ></textarea>
-                </div>
-
-                <div className="flex items-start">
-                  <input
-                    type="checkbox"
-                    id="privacy"
-                    name="privacy"
-                    required
-                    className="mt-1 mr-3 w-4 h-4 text-blue-600 bg-gray-700 border-gray-600 rounded focus:ring-blue-500"
-                  />
-                  <label htmlFor="privacy" className="text-gray-400 text-sm">
-                    Acepto el tratamiento de mis datos personales según la
-                    política de privacidad y autorizo el contacto comercial *
-                  </label>
-                </div>
-
                 <button
-                  type="submit"
-                  className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-bold py-4 px-6 rounded-lg shadow-lg transition duration-300 ease-in-out transform hover:scale-[1.02] hover:shadow-xl"
+                  onClick={openContactModal}
+                  className="text-blue-400 hover:text-blue-300 text-sm font-medium transition-colors"
                 >
-                  <span className="flex items-center justify-center">
-                    <svg
-                      className="w-5 h-5 mr-2"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
-                      ></path>
-                    </svg>
-                    Enviar Mensaje
-                  </span>
+                  Abrir en modal
                 </button>
-              </form>
-
-              <div className="mt-6 pt-6 border-t border-gray-700">
-                <p className="text-gray-400 text-xs text-center">
-                  Al enviar este formulario, recibirás una respuesta en un
-                  máximo de 24 horas laborales. Para consultas urgentes,
-                  contáctanos directamente por WhatsApp.
-                </p>
               </div>
+              <UnifiedContactForm mode="contact" className="flex-grow" />
             </div>
           </div>
         </div>
       </section>
-
       {/* Footer Profesional */}
       <footer className="bg-gradient-to-br from-gray-950 via-gray-900 to-black relative overflow-hidden">
         {/* Background Pattern */}
@@ -2238,7 +2082,6 @@ const App = () => {
           </a>
         </div>
       </footer>
-
       {/* Cookie Banner */}
       {showCookieBanner && (
         <div className="fixed bottom-0 left-0 right-0 bg-slate-900 border-t border-gray-700 shadow-2xl z-40 p-4">
@@ -2314,7 +2157,6 @@ const App = () => {
           </div>
         </div>
       )}
-
       {/* Modals mejorados de Privacidad y Términos */}
       <EnhancedPrivacyModal
         isOpen={showPrivacyModal}
@@ -2337,20 +2179,13 @@ const App = () => {
           onOpenQuote={handleOpenQuoteModal}
           onOpenConsultation={handleOpenConsultationModal}
         />
-      )}
-
-      {/* Quote Request Modal */}
-      <QuoteRequestModal
-        isOpen={showQuoteModal}
-        onClose={handleCloseQuoteModal}
-        serviceName={selectedService?.title || "Servicio"}
-      />
-
-      {/* Consultation Modal */}
+      )}{" "}
+      {/* Modales Unificados */}
+      <ContactModal isOpen={contactModalOpen} onClose={closeContactModal} />
+      <QuoteModal isOpen={quoteModalOpen} onClose={closeQuoteModal} />
       <ConsultationModal
-        isOpen={showConsultationModal}
-        onClose={handleCloseConsultationModal}
-        serviceName={selectedService?.title || "Servicio"}
+        isOpen={consultationModalOpen}
+        onClose={closeConsultationModal}
       />
     </div>
   );

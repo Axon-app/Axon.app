@@ -588,3 +588,107 @@ html {
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
+
+/* Estilos específicos para mejorar interacción con formularios */
+.modal-content {
+  pointer-events: auto !important;
+  z-index: 10000 !important;
+}
+
+.modal-content input,
+.modal-content select,
+.modal-content textarea {
+  pointer-events: auto !important;
+  user-select: auto !important;
+  -webkit-user-select: auto !important;
+  -moz-user-select: auto !important;
+  -ms-user-select: auto !important;
+  touch-action: manipulation !important;
+}
+
+.modal-content select {
+  cursor: pointer !important;
+  -webkit-appearance: menulist !important;
+  -moz-appearance: menulist !important;
+  appearance: menulist !important;
+}
+
+.modal-content select option {
+  background-color: rgb(30 41 59) !important; /* slate-800 */
+  color: white !important;
+  padding: 8px !important;
+}
+
+/* Asegurar que los campos de formulario sean accesibles */
+input:focus,
+select:focus,
+textarea:focus {
+  outline: 2px solid rgb(59 130 246) !important; /* blue-500 */
+  outline-offset: 2px !important;
+}
+
+/* Evitar que los elementos backdrop interfieran */
+.modal-backdrop {
+  pointer-events: auto;
+}
+
+.modal-backdrop > * {
+  pointer-events: none;
+}
+
+.modal-backdrop .modal-content {
+  pointer-events: auto;
+}
+
+/* Mejorar visibilidad de opciones de select en modo oscuro */
+select option {
+  background-color: rgb(30 41 59) !important; /* slate-800 */
+  color: white !important;
+}
+
+select option:checked {
+  background-color: rgb(59 130 246) !important; /* blue-500 */
+}
+
+/* Asegurar que los inputs no estén siendo bloqueados */
+.form-input,
+.form-select,
+.form-textarea {
+  pointer-events: auto !important;
+  position: relative !important;
+  z-index: 1000 !important;
+}
+
+/* Específicamente para elementos de formulario en modales */
+.modal-content form {
+  pointer-events: auto !important;
+  z-index: 10001 !important;
+}
+
+.modal-content form * {
+  pointer-events: auto !important;
+}
+
+/* Asegurar que no hay overlay bloqueando */
+.modal-content::before,
+.modal-content::after {
+  display: none !important;
+}
+
+/* Mejorar interacción con elementos de formulario */
+.modal-content button {
+  pointer-events: auto !important;
+  z-index: 1001 !important;
+}
+
+.modal-content input:focus,
+.modal-content select:focus,
+.modal-content textarea:focus {
+  z-index: 1002 !important;
+  position: relative !important;
+}
+
+/* Corregir problema con backdrop */
+.modal-backdrop > *:not(.modal-content) {
+  pointer-events: none;
+}

@@ -1,94 +1,133 @@
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback, useEffect, useRef } from "react";
 import { RECAPTCHA_CONFIG } from "../../services/recaptchaService";
 
 /**
- * Componente para Google reCAPTCHA v3
- * Funciona de forma invisible en segundo plano
+ * Componente para Google reCAPTCHA v2
+ * Renderiza el widget visible de verificación
  */
 export const ReCaptchaComponent = React.memo(
-  ({ onVerify, onError, action = "submit_form", className = "" }) => {
+  ({ onVerify, onError, onExpired, className = "" }) => {
+    const recaptchaRef = useRef(null);
+    const widgetId = useRef(null);
     const [isLoaded, setIsLoaded] = React.useState(false);
-    const [isExecuting, setIsExecuting] = React.useState(false);
 
     // Verificar si grecaptcha está disponible
     const checkRecaptchaLoaded = useCallback(() => {
-      return window.grecaptcha && window.grecaptcha.ready;
-    }, []);
-
-    // Ejecutar reCAPTCHA v3
-    const executeRecaptcha = useCallback(async () => {
-      if (!checkRecaptchaLoaded()) {
-        onError?.("reCAPTCHA no está cargado");
-        return null;
+      return (
+        window.grecaptcha &&
+        window.grecaptcha.render &&
+        typeof window.grecaptcha.render === "function"
+      );
+    }, []); // Renderizar el widget de reCAPTCHA v2
+    const renderRecaptcha = useCallback(() => {
+      if (!checkRecaptchaLoaded() || !recaptchaRef.current) {
+        return;
       }
 
-      if (isExecuting) {
-        return null;
+      // Verificar que el contenedor esté vacío
+      if (recaptchaRef.current.hasChildNodes()) {
+        return;
       }
-
-      setIsExecuting(true);
 
       try {
-        const token = await new Promise((resolve, reject) => {
-          window.grecaptcha.ready(() => {
-            window.grecaptcha
-              .execute(RECAPTCHA_CONFIG.SITE_KEY, { action })
-              .then(resolve)
-              .catch(reject);
-          });
+        widgetId.current = window.grecaptcha.render(recaptchaRef.current, {
+          sitekey: RECAPTCHA_CONFIG.SITE_KEY,
+          callback: (token) => {
+            onVerify?.(token);
+          },
+          "expired-callback": () => {
+            onExpired?.();
+          },
+          "error-callback": () => {
+            onError?.("Error en la verificación de reCAPTCHA");
+          },
+          theme: RECAPTCHA_CONFIG.THEME,
+          size: RECAPTCHA_CONFIG.SIZE,
         });
-
-        onVerify?.(token);
-        return token;
-      } catch {
-        // En producción, usar un servicio de logging apropiado
-        onError?.("Error al verificar reCAPTCHA");
-        return null;
-      } finally {
-        setIsExecuting(false);
+      } catch (error) {
+        onError?.(`Error al cargar reCAPTCHA: ${error.message}`);
       }
-    }, [checkRecaptchaLoaded, onError, onVerify, action, isExecuting]);
+    }, [checkRecaptchaLoaded, onVerify, onError, onExpired]);
+
+    // Resetear el reCAPTCHA
+    const resetRecaptcha = useCallback(() => {
+      if (checkRecaptchaLoaded() && widgetId.current !== null) {
+        try {
+          window.grecaptcha.reset(widgetId.current);
+        } catch {
+          // Error silencioso al resetear
+        }
+      }
+    }, [checkRecaptchaLoaded]);
 
     // Verificar cuando se carga el script
     useEffect(() => {
+      let attempts = 0;
+      const maxAttempts = 50; // 5 segundos máximo
+
       const checkLoaded = () => {
+        attempts++;
+
         if (checkRecaptchaLoaded()) {
           setIsLoaded(true);
-        } else {
+          setTimeout(() => renderRecaptcha(), 100); // Pequeña espera para asegurar el DOM
+        } else if (attempts < maxAttempts) {
           setTimeout(checkLoaded, 100);
+        } else {
+          // Timeout después de 5 segundos
+          onError?.(
+            "No se pudo cargar reCAPTCHA. Verifica tu conexión a internet."
+          );
         }
       };
 
-      checkLoaded();
-    }, [checkRecaptchaLoaded]); // Para que el componente padre pueda acceder a executeRecaptcha
-    const componentRef = React.useRef({
-      execute: executeRecaptcha,
+      // Verificar si ya está cargado
+      if (window.grecaptcha && window.grecaptcha.ready) {
+        window.grecaptcha.ready(() => {
+          checkLoaded();
+        });
+      } else {
+        checkLoaded();
+      }
+
+      return () => {
+        // Cleanup al desmontar
+        if (widgetId.current !== null && window.grecaptcha) {
+          try {
+            window.grecaptcha.reset(widgetId.current);
+          } catch {
+            // Error silencioso
+          }
+        }
+      };
+    }, [checkRecaptchaLoaded, renderRecaptcha, onError]); // Exponer funciones para el componente padre
+    const componentRef = useRef({
+      reset: resetRecaptcha,
       isLoaded,
-      isExecuting,
     });
 
     // Actualizar la referencia cuando cambien los valores
-    React.useEffect(() => {
+    useEffect(() => {
       componentRef.current = {
-        execute: executeRecaptcha,
+        reset: resetRecaptcha,
         isLoaded,
-        isExecuting,
       };
-    }, [executeRecaptcha, isLoaded, isExecuting]);
+    }, [resetRecaptcha, isLoaded]);
 
     return (
-      <div className={`recaptcha-v3-container ${className}`}>
+      <div className={`recaptcha-v2-container ${className}`}>
         {!isLoaded && (
-          <div className="text-sm text-gray-400 text-center">
+          <div className="text-sm text-gray-400 text-center mb-4">
             Cargando verificación de seguridad...
           </div>
         )}
-        {isExecuting && (
-          <div className="text-sm text-blue-400 text-center">
-            Verificando seguridad...
-          </div>
-        )}
-        <div className="text-xs text-gray-500 text-center mt-2">
+
+        {/* Contenedor para el widget de reCAPTCHA v2 */}
+        <div className="flex justify-center mb-4">
+          <div ref={recaptchaRef}></div>
+        </div>
+
+        <div className="text-xs text-gray-500 text-center">
           Este sitio está protegido por reCAPTCHA y se aplican la{" "}
           <a
             href="https://policies.google.com/privacy"

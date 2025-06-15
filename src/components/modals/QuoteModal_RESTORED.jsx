@@ -370,7 +370,7 @@ export const QuoteRequestModal = React.memo(({ isOpen, onClose, service }) => {
       }
 
       // Aquí iría la integración con EmailJS
-      // console.log("Datos de cotización:", sanitizedData);
+      // console.log("Datos de propuesta:", sanitizedData);
 
       // Simular envío
       await new Promise((resolve) => setTimeout(resolve, 2000));
@@ -394,9 +394,9 @@ export const QuoteRequestModal = React.memo(({ isOpen, onClose, service }) => {
         resetRecaptcha();
       }, 2000);
     } catch {
-      // Error al enviar cotización
+      // Error al enviar propuesta
       setSecurityError(
-        "Error al enviar la cotización. Por favor, intenta nuevamente o contáctanos directamente."
+        "Error al enviar la propuesta. Por favor, intenta nuevamente o contáctanos directamente."
       );
       setSubmitStatus("error");
     } finally {
@@ -426,12 +426,12 @@ export const QuoteRequestModal = React.memo(({ isOpen, onClose, service }) => {
             id="quote-modal-title"
             className="text-2xl sm:text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400"
           >
-            Solicitar Cotización
+            Solicitar Propuesta
           </h2>
           <button
             onClick={onClose}
             className="text-gray-400 hover:text-white transition-colors p-2 hover:bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            aria-label="Cerrar solicitud de cotización"
+            aria-label="Cerrar solicitud de propuesta"
             type="button"
           >
             <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
@@ -484,7 +484,7 @@ export const QuoteRequestModal = React.memo(({ isOpen, onClose, service }) => {
                 </svg>
               </div>
               <h3 className="text-xl font-semibold text-green-400 mb-2">
-                ¡Cotización Enviada!
+                ¡Propuesta Enviada!
               </h3>
               <p className="text-gray-300">
                 Te contactaremos dentro de 24 horas con una propuesta detallada.
@@ -767,10 +767,10 @@ export const QuoteRequestModal = React.memo(({ isOpen, onClose, service }) => {
                   💡 Información sobre Cotizaciones
                 </h4>
                 <ul className="text-sm text-gray-300 space-y-1">
-                  <li>• Cotización gratuita y sin compromiso</li>
+                  <li>• Propuesta gratuita y sin compromiso</li>
                   <li>• Respuesta dentro de 24 horas hábiles</li>
                   <li>• Propuesta detallada con cronograma</li>
-                  <li>• Consulta inicial incluida en la cotización</li>
+                  <li>• Consulta inicial incluida en la propuesta</li>
                 </ul>
               </div>
 
@@ -916,7 +916,7 @@ export const QuoteRequestModal = React.memo(({ isOpen, onClose, service }) => {
                       Enviando...
                     </span>
                   ) : (
-                    "Solicitar Cotización"
+                    "Solicitar Propuesta"
                   )}
                 </button>
               </div>

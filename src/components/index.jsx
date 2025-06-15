@@ -18,9 +18,6 @@ export {
   TestimonialsBanner,
 } from "./ui/Interactive";
 
-// Formularios (carga inmediata)
-export { ContactForm } from "./forms/ContactForm";
-
 // Modales (lazy loading para mejor rendimiento)
 export const EnhancedPrivacyModal = React.lazy(() =>
   import("./modals/PrivacyModal").then((module) => ({

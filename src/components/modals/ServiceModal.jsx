@@ -208,8 +208,8 @@ export const ServiceDetailModal = React.memo(
               </p>
               <ul className="text-xs text-gray-400 space-y-1">
                 <li>
-                  • <strong>Cotización:</strong> Recibe una propuesta detallada
-                  y personalizada
+                  • <strong>Propuesta:</strong> Recibe una propuesta detallada y
+                  personalizada
                 </li>
                 <li>
                   • <strong>Consulta:</strong> Conversa con nuestro equipo sobre
@@ -223,10 +223,10 @@ export const ServiceDetailModal = React.memo(
               <button
                 onClick={() => {
                   onClose(); // Cerrar el modal actual
-                  if (onOpenQuote) onOpenQuote(); // Abrir modal de cotización
+                  if (onOpenQuote) onOpenQuote(); // Abrir modal de propuesta
                 }}
                 className="flex-1 px-6 py-3 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white rounded-lg transition-all duration-300 transform hover:scale-105 font-semibold shadow-lg flex items-center justify-center"
-                aria-label={`Solicitar cotización para ${service.title}`}
+                aria-label={`Solicitar propuesta para ${service.title}`}
               >
                 <svg
                   className="w-5 h-5 mr-2"
@@ -241,7 +241,7 @@ export const ServiceDetailModal = React.memo(
                     d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
                   />
                 </svg>
-                Solicitar Cotización
+                Solicitar Propuesta
               </button>{" "}
               <button
                 onClick={() => {

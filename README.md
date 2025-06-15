@@ -34,7 +34,7 @@
 ## 📧 **Sistema de Formularios Avanzado**
 
 - ✅ **Formulario de Contacto** - Contacto directo desde el sitio
-- ✅ **Solicitud de Cotización** - Formulario detallado para presupuestos
+- ✅ **Solicitud de Propuesta** - Formulario detallado para presupuestos
 - ✅ **Agendar Consulta** - Sistema de agendamiento de citas
 - ✅ **Integración EmailJS** - Conectado a `axonapp.info@gmail.com`
 - ✅ **Validación Completa** - Validación HTML5 y feedback visual
@@ -173,7 +173,7 @@ Axon/
 - `PrivacyModal` - Política de privacidad
 - `TermsModal` - Términos y condiciones
 - `ServiceModal` - Información detallada de servicios
-- `QuoteModal` - Solicitud de cotización
+- `QuoteModal` - Solicitud de propuesta
 - `ConsultationModal` - Agendamiento de consultas
 
 ### Secciones de la Página

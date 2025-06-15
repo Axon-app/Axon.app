@@ -5,25 +5,26 @@ const EMAILJS_CONFIG = {
   // Clave pública de EmailJS
   PUBLIC_KEY: "LzQtejP5Ii_qUvS7j",
 
-  // Servicios configurados
+  // Servicios configurados (basados en las imágenes proporcionadas)
   SERVICES: {
     GMAIL: {
-      SERVICE_ID: "service_0v5oqvm", // Gmail service
+      SERVICE_ID: "service_0v5oqvm", // Gmail service conectado a axonapp.info@gmail.com
       NAME: "Gmail",
       EMAIL: "axonapp.info@gmail.com",
     },
     OUTLOOK: {
-      SERVICE_ID: "service_ec5ggdj", // Outlook service
+      SERVICE_ID: "service_ec5ggdj", // Outlook service conectado a axonapp@outlook.es
       NAME: "Axon.app",
       EMAIL: "axonapp@outlook.es",
     },
   },
 
-  // Templates configurados
+  // Templates configurados (solo los 2 que tienes)
   TEMPLATES: {
-    CONTACT: "template_contact",
-    QUOTE: "template_quote",
     CONSULTATION: "template_consultation",
+    QUOTE: "template_quote",
+    // Usar template_consultation para contacto general también
+    CONTACT: "template_consultation",
   },
 };
 
@@ -31,73 +32,89 @@ const EMAILJS_CONFIG = {
 emailjs.init(EMAILJS_CONFIG.PUBLIC_KEY);
 
 /**
- * Detecta el tipo de email y selecciona el servicio apropiado
- * @param {string} email - Email del destinatario
- * @returns {Object} - Configuración del servicio
- */
-const selectEmailService = (email) => {
-  if (!email) {
-    // Por defecto usar Gmail
-    return EMAILJS_CONFIG.SERVICES.GMAIL;
-  }
-
-  const domain = email.toLowerCase().split("@")[1];
-
-  // Detectar dominio y seleccionar servicio
-  const outlookDomains = [
-    "outlook.com",
-    "outlook.es",
-    "hotmail.com",
-    "hotmail.es",
-    "live.com",
-  ];
-  const gmailDomains = ["gmail.com", "googlemail.com"];
-
-  if (outlookDomains.includes(domain)) {
-    return EMAILJS_CONFIG.SERVICES.OUTLOOK;
-  } else if (gmailDomains.includes(domain)) {
-    return EMAILJS_CONFIG.SERVICES.GMAIL;
-  } else {
-    // Por defecto usar Gmail para otros dominios
-    return EMAILJS_CONFIG.SERVICES.GMAIL;
-  }
-};
-
-/**
- * Envía un email usando el servicio apropiado
+ * Envía email a múltiples destinatarios (Gmail y Outlook)
  * @param {string} templateId - ID del template
  * @param {Object} templateParams - Parámetros del template
- * @param {string} recipientEmail - Email del destinatario
  * @returns {Promise<Object>} - Resultado del envío
  */
-const sendEmailWithService = async (
-  templateId,
-  templateParams,
-  recipientEmail
-) => {
+const sendToMultipleServices = async (templateId, templateParams) => {
   try {
-    const service = selectEmailService(recipientEmail);
+    const promises = [];
 
-    const result = await emailjs.send(
-      service.SERVICE_ID,
-      templateId,
-      {
-        ...templateParams,
-        from_service: service.NAME,
-        from_email: service.EMAIL,
-      },
-      EMAILJS_CONFIG.PUBLIC_KEY
+    // Configurar parámetros para Gmail
+    const gmailParams = {
+      ...templateParams,
+      to_email: "axonapp.info@gmail.com",
+      from_service: EMAILJS_CONFIG.SERVICES.GMAIL.NAME,
+      from_email: EMAILJS_CONFIG.SERVICES.GMAIL.EMAIL,
+    };
+
+    // Configurar parámetros para Outlook
+    const outlookParams = {
+      ...templateParams,
+      to_email: "axonapp@outlook.es",
+      from_service: EMAILJS_CONFIG.SERVICES.OUTLOOK.NAME,
+      from_email: EMAILJS_CONFIG.SERVICES.OUTLOOK.EMAIL,
+    };
+
+    // Enviar a Gmail
+    promises.push(
+      emailjs
+        .send(
+          EMAILJS_CONFIG.SERVICES.GMAIL.SERVICE_ID,
+          templateId,
+          gmailParams,
+          EMAILJS_CONFIG.PUBLIC_KEY
+        )
+        .then((result) => ({
+          service: "Gmail",
+          success: true,
+          result,
+        }))
+        .catch((error) => ({
+          service: "Gmail",
+          success: false,
+          error: error.message,
+        }))
     );
 
+    // Enviar a Outlook
+    promises.push(
+      emailjs
+        .send(
+          EMAILJS_CONFIG.SERVICES.OUTLOOK.SERVICE_ID,
+          templateId,
+          outlookParams,
+          EMAILJS_CONFIG.PUBLIC_KEY
+        )
+        .then((result) => ({
+          service: "Outlook",
+          success: true,
+          result,
+        }))
+        .catch((error) => ({
+          service: "Outlook",
+          success: false,
+          error: error.message,
+        }))
+    );
+
+    // Esperar todas las promesas
+    const allResults = await Promise.all(promises);
+    const successfulSends = allResults.filter((r) => r.success);
+
     return {
-      success: true,
-      result,
-      service: service.NAME,
+      success: successfulSends.length > 0,
+      results: allResults,
+      successCount: successfulSends.length,
+      totalAttempts: allResults.length,
+      primarySuccess: successfulSends.length >= 1,
     };
   } catch (error) {
     return {
       success: false,
-      error: error.message || "Error al enviar email",
+      error: error.message || "Error al enviar a múltiples servicios",
+      results: [],
     };
   }
 };
@@ -127,26 +144,104 @@ const validateFormData = (formData) => {
 };
 
 /**
- * Procesa los datos del formulario limpiando y normalizando valores
- * @param {Object} rawData - Datos en bruto
- * @returns {Object} - Datos procesados
+ * Función UNIFICADA para enviar cualquier tipo de email
+ * @param {string} type - Tipo: 'contact', 'quote', 'consultation'
+ * @param {Object} formData - Datos del formulario
+ * @returns {Promise<Object>} - Resultado del envío
  */
-const processFormData = (rawData) => ({
-  name: rawData.name?.trim() || "",
-  email: rawData.email?.trim().toLowerCase() || "",
-  company: rawData.company?.trim() || "",
-  phone: rawData.phone?.trim() || "",
-  message: rawData.message?.trim() || "",
-  projectDescription: rawData.projectDescription?.trim() || "",
-  budget: rawData.budget?.trim() || "",
-  timeline: rawData.timeline?.trim() || "",
-  requirements: rawData.requirements?.trim() || "",
-  preferredDate: rawData.preferredDate?.trim() || "",
-  preferredTime: rawData.preferredTime?.trim() || "",
-  consultationType: rawData.consultationType?.trim() || "",
-  topics: rawData.topics?.trim() || "",
-  experience: rawData.experience?.trim() || "",
-});
+export const sendUnifiedEmail = async (type, formData) => {
+  try {
+    // Validar datos básicos
+    const validation = validateFormData(formData);
+    if (!validation.isValid) {
+      return { success: false, errors: validation.errors };
+    }
+
+    // Seleccionar template según el tipo
+    let templateId;
+    let templateParams;
+
+    switch (type) {
+      case "quote":
+        templateId = EMAILJS_CONFIG.TEMPLATES.QUOTE;
+        templateParams = {
+          from_name: formData.name,
+          from_email: formData.email,
+          phone: formData.phone || "No proporcionado",
+          company: formData.company || "No especificada",
+          city: formData.city || "No especificada",
+          client_type: formData.clientType || "No especificado",
+          project_type: formData.projectType || "Propuesta General",
+          project_description:
+            formData.description ||
+            formData.projectDescription ||
+            formData.message ||
+            "Sin descripción",
+          requirements:
+            formData.additionalRequirements ||
+            formData.requirements ||
+            "Ninguno específico",
+          reply_to: formData.email,
+          timestamp: new Date().toLocaleString("es-ES"),
+        };
+        break;
+
+      case "consultation":
+        templateId = EMAILJS_CONFIG.TEMPLATES.CONSULTATION;
+        templateParams = {
+          from_name: formData.name,
+          from_email: formData.email,
+          phone: formData.phone || "No proporcionado",
+          company: formData.company || "No especificada",
+          city: formData.city || "No especificada",
+          client_type: formData.clientType || "No especificado",
+          consultation_type: formData.consultationType || "Consulta General",
+          preferred_date: formData.preferredDate || "Flexible",
+          preferred_time: formData.preferredTime || "Cualquier horario",
+          timezone: formData.timezone || "No especificado",
+          topics: formData.topics || formData.message || "Temas generales",
+          questions: formData.questions || "Ninguna pregunta específica",
+          meeting_type: formData.meetingType || "video-call",
+          reply_to: formData.email,
+          timestamp: new Date().toLocaleString("es-ES"),
+        };
+        break;
+
+      case "contact":
+      default:
+        // Para contacto general, usar template de consultation
+        templateId = EMAILJS_CONFIG.TEMPLATES.CONSULTATION;
+        templateParams = {
+          from_name: formData.name,
+          from_email: formData.email,
+          phone: formData.phone || "No proporcionado",
+          company: formData.company || "No especificada",
+          city: "No especificada",
+          client_type: "Contacto General",
+          consultation_type: "Consulta General - Contacto",
+          preferred_date: "Flexible",
+          preferred_time: "Cualquier horario",
+          timezone: "No especificado",
+          topics: formData.message || "Mensaje de contacto general",
+          questions: formData.message || "Sin preguntas específicas",
+          meeting_type: "A definir",
+          reply_to: formData.email,
+          timestamp: new Date().toLocaleString("es-ES"),
+        };
+        break;
+    }
+
+    // Enviar a múltiples servicios
+    const result = await sendToMultipleServices(templateId, templateParams);
+
+    return result;
+  } catch (error) {
+    return {
+      success: false,
+      error: error.message || "Error al enviar email",
+    };
+  }
+};
 
 /**
  * Función para enviar email de contacto general
@@ -154,120 +249,25 @@ const processFormData = (rawData) => ({
  * @returns {Promise<Object>} - Resultado del envío
  */
 export const sendContactEmail = async (formData) => {
-  try {
-    const validation = validateFormData(formData);
-    if (!validation.isValid) {
-      return { success: false, errors: validation.errors };
-    }
-    const processedData = processFormData(formData);
-    const templateParams = {
-      to_email: "axonapp.info@gmail.com",
-      from_name: processedData.name,
-      from_email: processedData.email,
-      message: processedData.message,
-      reply_to: processedData.email,
-      subject: "Nuevo mensaje de contacto desde Axon.App",
-    };
-
-    const result = await sendEmailWithService(
-      EMAILJS_CONFIG.TEMPLATES.CONTACT,
-      templateParams,
-      processedData.email
-    );
-
-    return result;
-  } catch (error) {
-    return { success: false, error: error.message || "Error al enviar email" };
-  }
+  return await sendUnifiedEmail("contact", formData);
 };
 
 /**
- * Función para enviar solicitud de cotización
- * @param {Object} formData - Datos del formulario
- * @param {string} serviceName - Nombre del servicio
+ * Función para enviar solicitud de propuesta
+ * @param {Object} formData - Datos del formulario de propuesta
  * @returns {Promise<Object>} - Resultado del envío
  */
-export const sendQuoteRequestEmail = async (formData, serviceName) => {
-  try {
-    const validation = validateFormData(formData);
-    if (!validation.isValid) {
-      return { success: false, errors: validation.errors };
-    }
-
-    const processedData = processFormData(formData);
-    const templateParams = {
-      to_email: "axonapp.info@gmail.com",
-      from_name: processedData.name,
-      from_email: processedData.email,
-      company: processedData.company || "No especificada",
-      phone: processedData.phone || "No proporcionado",
-      service_name: serviceName,
-      project_description: processedData.projectDescription,
-      budget: processedData.budget || "No especificado",
-      timeline: processedData.timeline || "Flexible",
-      requirements: processedData.requirements || "Ninguno específico",
-      reply_to: processedData.email,
-      subject: `Nueva Solicitud de Cotización - ${serviceName}`,
-    };
-
-    const result = await sendEmailWithService(
-      EMAILJS_CONFIG.TEMPLATES.QUOTE,
-      templateParams,
-      processedData.email
-    );
-
-    return result;
-  } catch (error) {
-    return {
-      success: false,
-      error: error.message || "Error al enviar cotización",
-    };
-  }
+export const sendQuoteRequest = async (formData) => {
+  return await sendUnifiedEmail("quote", formData);
 };
 
 /**
  * Función para enviar solicitud de consulta
- * @param {Object} formData - Datos del formulario
- * @param {string} serviceName - Nombre del servicio
+ * @param {Object} formData - Datos del formulario de consulta
  * @returns {Promise<Object>} - Resultado del envío
  */
-export const sendConsultationRequestEmail = async (formData, serviceName) => {
-  try {
-    const validation = validateFormData(formData);
-    if (!validation.isValid) {
-      return { success: false, errors: validation.errors };
-    }
-
-    const processedData = processFormData(formData);
-    const templateParams = {
-      to_email: "axonapp.info@gmail.com",
-      from_name: processedData.name,
-      from_email: processedData.email,
-      company: processedData.company || "No especificada",
-      phone: processedData.phone || "No proporcionado",
-      service_name: serviceName,
-      preferred_date: processedData.preferredDate || "Flexible",
-      preferred_time: processedData.preferredTime || "Cualquier horario",
-      consultation_type: processedData.consultationType || "Consulta general",
-      topics: processedData.topics || "Temas generales",
-      experience: processedData.experience || "No especificado",
-      reply_to: processedData.email,
-      subject: `Nueva Solicitud de Consulta - ${serviceName}`,
-    };
-
-    const result = await sendEmailWithService(
-      EMAILJS_CONFIG.TEMPLATES.CONSULTATION,
-      templateParams,
-      processedData.email
-    );
-
-    return result;
-  } catch (error) {
-    return {
-      success: false,
-      error: error.message || "Error al enviar consulta",
-    };
-  }
+export const sendConsultationRequest = async (formData) => {
+  return await sendUnifiedEmail("consultation", formData);
 };
 
 /**
@@ -349,108 +349,4 @@ export const sendClientConfirmation = async (
   // En producción, aquí se enviaría el email real
   // Por ahora simulamos el envío exitoso
   return { success: true, demo: true };
-};
-
-/**
- * Envía una solicitud de cotización por email
- * @param {Object} quoteData - Datos de la cotización
- * @returns {Promise<Object>} - Resultado del envío
- */
-export const sendQuoteRequest = async (quoteData) => {
-  try {
-    // Validar datos básicos
-    const validation = validateFormData(quoteData);
-    if (!validation.isValid) {
-      return {
-        success: false,
-        error: validation.errors.join(", "),
-      };
-    } // Procesar datos
-    const processedData = processFormData(quoteData);
-
-    // Seleccionar servicio basado en el email de destino (Axon.App)
-    const service = selectEmailService("axonapp.info@gmail.com");
-
-    // Enviar email real con EmailJS
-    const result = await emailjs.send(
-      service.SERVICE_ID,
-      EMAILJS_CONFIG.TEMPLATES.QUOTE,
-      {
-        ...processedData,
-        to_email: service.EMAIL,
-        from_name: processedData.name,
-        from_email: processedData.email,
-        reply_to: processedData.email,
-        service_name: service.NAME,
-      },
-      EMAILJS_CONFIG.PUBLIC_KEY
-    );
-
-    if (result.status === 200) {
-      return {
-        success: true,
-        data: processedData,
-        service: service.NAME,
-      };
-    } else {
-      throw new Error("Error en el envío");
-    }
-  } catch {
-    return {
-      success: false,
-      error: "Error al enviar la cotización. Por favor, intenta nuevamente.",
-    };
-  }
-};
-
-/**
- * Envía una solicitud de consulta por email
- * @param {Object} consultationData - Datos de la consulta
- * @returns {Promise<Object>} - Resultado del envío
- */
-export const sendConsultationRequest = async (consultationData) => {
-  try {
-    // Validar datos básicos
-    const validation = validateFormData(consultationData);
-    if (!validation.isValid) {
-      return {
-        success: false,
-        error: validation.errors.join(", "),
-      };
-    } // Procesar datos
-    const processedData = processFormData(consultationData);
-
-    // Seleccionar servicio basado en el email de destino (Axon.App)
-    const service = selectEmailService("axonapp.info@gmail.com");
-
-    // Enviar email real con EmailJS
-    const result = await emailjs.send(
-      service.SERVICE_ID,
-      EMAILJS_CONFIG.TEMPLATES.CONSULTATION,
-      {
-        ...processedData,
-        to_email: service.EMAIL,
-        from_name: processedData.name,
-        from_email: processedData.email,
-        reply_to: processedData.email,
-        service_name: service.NAME,
-      },
-      EMAILJS_CONFIG.PUBLIC_KEY
-    );
-
-    if (result.status === 200) {
-      return {
-        success: true,
-        data: processedData,
-        service: service.NAME,
-      };
-    } else {
-      throw new Error("Error en el envío");
-    }
-  } catch {
-    return {
-      success: false,
-      error: "Error al programar la consulta. Por favor, intenta nuevamente.",
-    };
-  }
 };
