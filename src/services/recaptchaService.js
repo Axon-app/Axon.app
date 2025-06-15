@@ -7,13 +7,25 @@
 const getSiteKey = () => {
   const envKey = import.meta.env.VITE_RECAPTCHA_SITE_KEY;
   
+  // Debug temporal
+  // eslint-disable-next-line no-console
+  console.log('RECAPTCHA DEBUG - envKey:', envKey);
+  // eslint-disable-next-line no-console
+  console.log('RECAPTCHA DEBUG - envKey type:', typeof envKey);
+  // eslint-disable-next-line no-console
+  console.log('RECAPTCHA DEBUG - envKey length:', envKey ? envKey.length : 'null');
+  
   // Si tenemos una clave de entorno válida, usarla
   if (envKey && envKey !== 'undefined' && envKey.length > 10) {
+    // eslint-disable-next-line no-console
+    console.log('RECAPTCHA DEBUG - Using environment key');
     return envKey;
   }
   
   // Fallback a claves de prueba de Google reCAPTCHA
   // Estas claves están diseñadas para testing y siempre pasan la validación
+  // eslint-disable-next-line no-console
+  console.log('RECAPTCHA DEBUG - Using fallback test key');
   return "6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI";
 };
 
