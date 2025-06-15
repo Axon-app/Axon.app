@@ -146,24 +146,24 @@ const getErrorModalContent = (error) => `
 
 // Tipos de proyecto para propuestas comerciales
 const PROJECT_TYPES = [
-  "Desarrollo Web",
-  "Aplicación Móvil",
-  "E-commerce",
-  "Sistema de Gestión",
-  "Consultoría Técnica",
-  "Mantenimiento Web",
-  "Otro",
+  { value: "Desarrollo Web", label: "Desarrollo Web" },
+  { value: "Aplicación Móvil", label: "Aplicación Móvil" },
+  { value: "E-commerce", label: "E-commerce" },
+  { value: "Sistema de Gestión", label: "Sistema de Gestión" },
+  { value: "Consultoría Técnica", label: "Consultoría Técnica" },
+  { value: "Mantenimiento Web", label: "Mantenimiento Web" },
+  { value: "Otro", label: "Otro" },
 ];
 
 // Tipos de cliente
 const CLIENT_TYPES = [
-  "Empresa",
-  "Emprendedor",
-  "Freelancer",
-  "Organización sin fines de lucro",
-  "Gobierno",
-  "Estudiante",
-  "Otro",
+  { value: "Empresa", label: "Empresa" },
+  { value: "Emprendedor", label: "Emprendedor" },
+  { value: "Freelancer", label: "Freelancer" },
+  { value: "Organización sin fines de lucro", label: "Organización sin fines de lucro" },
+  { value: "Gobierno", label: "Gobierno" },
+  { value: "Estudiante", label: "Estudiante" },
+  { value: "Otro", label: "Otro" },
 ];
 
 export const UnifiedContactForm = React.memo(
@@ -783,91 +783,39 @@ export const UnifiedContactForm = React.memo(
                 ></path>
               </svg>
               Información Personal
-            </h3>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            </h3>            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {renderField(
                 "name",
                 "Nombre completo",
                 "text",
                 true,
-                null,
-                <svg
-                  className="w-4 h-4"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-                  ></path>
-                </svg>
+                [],
+                50
               )}
               {renderField(
                 "email",
                 "Email",
                 "email",
                 true,
-                null,
-                <svg
-                  className="w-4 h-4"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
-                  ></path>
-                </svg>
+                [],
+                254
               )}
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            </div>            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {renderField(
                 "phone",
                 "Teléfono",
                 "tel",
                 false,
-                null,
-                <svg
-                  className="w-4 h-4"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
-                  ></path>
-                </svg>
+                [],
+                20
               )}
               {renderField(
                 "company",
                 "Empresa/Organización",
                 "text",
                 false,
-                null,
-                <svg
-                  className="w-4 h-4"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
-                  ></path>
-                </svg>
+                [],
+                100
               )}
             </div>
           </div>
@@ -889,26 +837,13 @@ export const UnifiedContactForm = React.memo(
                   ></path>
                 </svg>
                 Tu Mensaje
-              </h3>
-              {renderField(
+              </h3>              {renderField(
                 "message",
                 "Mensaje",
                 "textarea",
                 true,
-                null,
-                <svg
-                  className="w-4 h-4"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"
-                  ></path>
-                </svg>
+                [],
+                1000
               )}
             </div>
           )}
@@ -931,76 +866,28 @@ export const UnifiedContactForm = React.memo(
                     ></path>
                   </svg>
                   Detalles del Proyecto
-                </h3>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                </h3>                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {renderField(
                     "city",
                     "Ciudad",
                     "text",
                     false,
-                    null,
-                    <svg
-                      className="w-4 h-4"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
-                      ></path>
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
-                      ></path>
-                    </svg>
+                    [],
+                    50
                   )}
                   {renderField(
                     "clientType",
                     "Tipo de cliente",
                     "select",
                     false,
-                    CLIENT_TYPES,
-                    <svg
-                      className="w-4 h-4"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
-                      ></path>
-                    </svg>
+                    CLIENT_TYPES
                   )}
-                </div>
-
-                {renderField(
+                </div>                {renderField(
                   "projectType",
                   "Tipo de proyecto",
                   "select",
                   true,
-                  PROJECT_TYPES,
-                  <svg
-                    className="w-4 h-4"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"
-                    ></path>
-                  </svg>
+                  PROJECT_TYPES
                 )}
 
                 {renderField(
@@ -1008,20 +895,8 @@ export const UnifiedContactForm = React.memo(
                   "Descripción del proyecto",
                   "textarea",
                   true,
-                  null,
-                  <svg
-                    className="w-4 h-4"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"
-                    ></path>
-                  </svg>
+                  [],
+                  1000
                 )}
 
                 {renderField(
@@ -1029,20 +904,8 @@ export const UnifiedContactForm = React.memo(
                   "Requisitos adicionales",
                   "textarea",
                   false,
-                  null,
-                  <svg
-                    className="w-4 h-4"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4"
-                    ></path>
-                  </svg>
+                  [],
+                  1000
                 )}
               </div>
             </div>
@@ -1066,10 +929,8 @@ export const UnifiedContactForm = React.memo(
                     ></path>
                   </svg>
                   Detalles de la Consulta
-                </h3>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {renderField("city", "Ciudad", "text", false, null)}
+                </h3>                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {renderField("city", "Ciudad", "text", false, [], 50)}
                   {renderField(
                     "clientType",
                     "Tipo de cliente",
@@ -1077,28 +938,24 @@ export const UnifiedContactForm = React.memo(
                     false,
                     CLIENT_TYPES
                   )}
-                </div>
-
-                {renderField(
+                </div>{renderField(
                   "consultationType",
                   "Tipo de consulta",
                   "select",
                   true,
                   [
-                    "Consulta General",
-                    "Consulta Técnica",
-                    "Estrategia Digital",
-                    "Revisión de Proyecto",
-                    "Asesoría de Desarrollo",
-                    "Otro",
+                    { value: "Consulta General", label: "Consulta General" },
+                    { value: "Consulta Técnica", label: "Consulta Técnica" },
+                    { value: "Estrategia Digital", label: "Estrategia Digital" },
+                    { value: "Revisión de Proyecto", label: "Revisión de Proyecto" },
+                    { value: "Asesoría de Desarrollo", label: "Asesoría de Desarrollo" },
+                    { value: "Otro", label: "Otro" },
                   ]
-                )}
-
-                {renderField("topics", "Temas a tratar", "textarea", true)}
+                )}                {renderField("topics", "Temas a tratar", "textarea", true, [], 1000)}
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {renderField("preferredDate", "Fecha preferida", "date")}
-                  {renderField("preferredTime", "Hora preferida", "time")}
+                  {renderField("preferredDate", "Fecha preferida", "date", false, [])}
+                  {renderField("preferredTime", "Hora preferida", "time", false, [])}
                 </div>
 
                 {/* Tipo de reunión con diseño mejorado */}

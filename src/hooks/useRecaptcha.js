@@ -32,11 +32,12 @@ export const useRecaptcha = () => {
     setIsRecaptchaVerified(false);
     setRecaptchaError(null);
   };
-
   return {
     recaptchaToken,
     recaptchaError,
     isRecaptchaVerified,
+    setRecaptchaToken,
+    setRecaptchaError,
     handleRecaptchaVerify,
     handleRecaptchaError,
     handleRecaptchaExpired,
