@@ -58,23 +58,22 @@ export const ReCaptchaComponent = React.memo(
           // Error silencioso al resetear
         }
       }
-    }, [checkRecaptchaLoaded]);
-
-    // Verificar cuando se carga el script
+    }, [checkRecaptchaLoaded]);    // Verificar cuando se carga el script
     useEffect(() => {
       let attempts = 0;
-      const maxAttempts = 50; // 5 segundos máximo
+      const maxAttempts = 30; // 3 segundos máximo para ser más rápido
+      let timeoutId;
 
       const checkLoaded = () => {
         attempts++;
 
         if (checkRecaptchaLoaded()) {
           setIsLoaded(true);
-          setTimeout(() => renderRecaptcha(), 100); // Pequeña espera para asegurar el DOM
+          // Pequeña espera para asegurar el DOM está listo
+          timeoutId = setTimeout(() => renderRecaptcha(), 100);
         } else if (attempts < maxAttempts) {
-          setTimeout(checkLoaded, 100);
-        } else {
-          // Timeout después de 5 segundos
+          timeoutId = setTimeout(checkLoaded, 100);        } else {
+          // Timeout después de 3 segundos
           onError?.(
             "No se pudo cargar reCAPTCHA. Verifica tu conexión a internet."
           );
@@ -91,6 +90,11 @@ export const ReCaptchaComponent = React.memo(
       }
 
       return () => {
+        // Limpiar timeouts
+        if (timeoutId) {
+          clearTimeout(timeoutId);
+        }
+        
         // Cleanup al desmontar
         if (widgetId.current !== null && window.grecaptcha) {
           try {
@@ -100,7 +104,7 @@ export const ReCaptchaComponent = React.memo(
           }
         }
       };
-    }, [checkRecaptchaLoaded, renderRecaptcha, onError]); // Exponer funciones para el componente padre
+    }, [checkRecaptchaLoaded, renderRecaptcha, onError]);// Exponer funciones para el componente padre
     const componentRef = useRef({
       reset: resetRecaptcha,
       isLoaded,

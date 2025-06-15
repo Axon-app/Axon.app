@@ -56,29 +56,36 @@ const sendToMultipleServices = async (templateId, templateParams) => {
       to_email: "axonapp@outlook.es",
       from_service: EMAILJS_CONFIG.SERVICES.OUTLOOK.NAME,
       from_email: EMAILJS_CONFIG.SERVICES.OUTLOOK.EMAIL,
-    };
-
-    // Función para crear promesa con timeout
+    };    // Función para crear promesa con timeout mejorado
     const createEmailPromise = (serviceId, params, serviceName) => {
-      return Promise.race([
-        emailjs.send(serviceId, templateId, params, EMAILJS_CONFIG.PUBLIC_KEY),
-        new Promise((_, reject) =>
-          setTimeout(() => reject(new Error('Timeout')), timeout)
-        )
-      ])
-      .then((result) => ({
-        service: serviceName,
-        success: true,
-        result,
-      }))
-      .catch((error) => ({
-        service: serviceName,
-        success: false,
-        error: error.message || 'Error de conexión',
-      }));
-    };
+      return new Promise((resolve) => {
+        const timer = setTimeout(() => {
+          resolve({
+            service: serviceName,
+            success: false,
+            error: 'Timeout - El servicio tardó demasiado en responder',
+          });
+        }, timeout);
 
-    // Enviar a Gmail con timeout
+        emailjs.send(serviceId, templateId, params, EMAILJS_CONFIG.PUBLIC_KEY)
+          .then((result) => {
+            clearTimeout(timer);
+            resolve({
+              service: serviceName,
+              success: true,
+              result,
+            });
+          })
+          .catch((error) => {
+            clearTimeout(timer);
+            resolve({
+              service: serviceName,
+              success: false,
+              error: error.message || 'Error de conexión',
+            });
+          });
+      });
+    };    // Enviar a Gmail con timeout
     promises.push(
       createEmailPromise(
         EMAILJS_CONFIG.SERVICES.GMAIL.SERVICE_ID,
@@ -94,7 +101,9 @@ const sendToMultipleServices = async (templateId, templateParams) => {
         outlookParams,
         "Outlook"
       )
-    );    // Esperar todas las promesas
+    );
+
+    // Esperar todas las promesas
     const results = await Promise.allSettled(promises);
     const allResults = results.map(result => 
       result.status === 'fulfilled' ? result.value : {
