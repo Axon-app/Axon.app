@@ -15,7 +15,8 @@
     "@fontsource/rajdhani": "^5.2.6",
     "canvas": "^3.1.0",
     "react": "^19.1.0",
-    "react-dom": "^19.1.0"
+    "react-dom": "^19.1.0",
+    "react-google-recaptcha": "^3.1.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.25.0",

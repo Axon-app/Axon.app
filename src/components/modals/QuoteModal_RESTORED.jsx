@@ -67,7 +67,7 @@ export const QuoteRequestModal = React.memo(({ isOpen, onClose, service }) => {
     clientType: "",
     company: "",
     city: "",
-    projectType: "", // Siempre inicia vacío
+    projectType: service?.title || "",
     description: "",
     additionalRequirements: "",
   });
@@ -109,8 +109,10 @@ export const QuoteRequestModal = React.memo(({ isOpen, onClose, service }) => {
     if (!formData.clientType.trim()) missing.push("Tipo de Cliente");
     if (!formData.city.trim()) missing.push("Ciudad");
     if (!formData.projectType.trim()) missing.push("Tipo de Proyecto");
-    if (!formData.description.trim()) missing.push("Descripción del Proyecto"); // Verificar errores de validación
-    Object.entries(validationErrors).forEach(([, error]) => {
+    if (!formData.description.trim()) missing.push("Descripción del Proyecto");
+
+    // Verificar errores de validación
+    Object.entries(validationErrors).forEach(([_field, error]) => {
       if (error) errors.push(error);
     });
 
@@ -141,19 +143,20 @@ export const QuoteRequestModal = React.memo(({ isOpen, onClose, service }) => {
       document.body.style.overflow = "unset";
     };
   }, [isOpen, onClose]);
+
   // Reset form cuando se abre/cierra
   React.useEffect(() => {
     if (isOpen) {
       setFormData((prev) => ({
         ...prev,
-        projectType: "", // Siempre inicia vacío para permitir selección manual
+        projectType: service?.title || "",
       }));
       setSubmitStatus(null);
       setValidationErrors({});
       setSecurityError("");
       resetRecaptcha(); // Reset reCAPTCHA al abrir el modal
     }
-  }, [isOpen, resetRecaptcha]);
+  }, [isOpen, service, resetRecaptcha]);
 
   // Early return si no está abierto
   if (!isOpen) return null;
@@ -225,14 +228,6 @@ export const QuoteRequestModal = React.memo(({ isOpen, onClose, service }) => {
         }
         break;
 
-      case "projectType":
-        if (!sanitizedValue) {
-          errors.projectType = "Debe seleccionar un tipo de proyecto";
-        } else {
-          delete errors.projectType;
-        }
-        break;
-
       case "description":
       case "additionalRequirements":
         if (
@@ -280,6 +275,7 @@ export const QuoteRequestModal = React.memo(({ isOpen, onClose, service }) => {
       "Error en reCAPTCHA. Por favor, recarga la página e intenta nuevamente."
     );
   };
+
   // Manejar envío del formulario
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -371,8 +367,10 @@ export const QuoteRequestModal = React.memo(({ isOpen, onClose, service }) => {
         ) {
           throw new Error(`Entrada inválida detectada en campo ${key}`);
         }
-      } // Aquí iría la integración con EmailJS
-      // Datos preparados para envío: sanitizedData
+      }
+
+      // Aquí iría la integración con EmailJS
+      // console.log("Datos de cotización:", sanitizedData);
 
       // Simular envío
       await new Promise((resolve) => setTimeout(resolve, 2000));
@@ -415,7 +413,7 @@ export const QuoteRequestModal = React.memo(({ isOpen, onClose, service }) => {
 
   return (
     <div
-      className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+      className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto"
       onClick={handleBackdropClick}
       role="dialog"
       aria-modal="true"
@@ -429,7 +427,7 @@ export const QuoteRequestModal = React.memo(({ isOpen, onClose, service }) => {
             className="text-2xl sm:text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400"
           >
             Solicitar Cotización
-          </h2>{" "}
+          </h2>
           <button
             onClick={onClose}
             className="text-gray-400 hover:text-white transition-colors p-2 hover:bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -443,7 +441,7 @@ export const QuoteRequestModal = React.memo(({ isOpen, onClose, service }) => {
                 clipRule="evenodd"
               />
             </svg>
-          </button>{" "}
+          </button>
         </div>
 
         {/* Mensajes de Error de Seguridad */}
@@ -486,24 +484,17 @@ export const QuoteRequestModal = React.memo(({ isOpen, onClose, service }) => {
                 </svg>
               </div>
               <h3 className="text-xl font-semibold text-green-400 mb-2">
-                ¡Cotización Enviada con Éxito!
+                ¡Cotización Enviada!
               </h3>
-              <p className="text-gray-300 mb-3">
-                Hemos recibido tu solicitud de cotización. Nuestro equipo la
-                revisará y te contactará dentro de{" "}
-                <strong>24 horas hábiles</strong> con una propuesta detallada.
-              </p>
-              <p className="text-sm text-gray-400">
-                Revisa tu email (incluyendo spam) para la confirmación.
+              <p className="text-gray-300">
+                Te contactaremos dentro de 24 horas con una propuesta detallada.
               </p>
             </div>
           ) : (
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={handleSubmit} className="space-y-6">
               {/* Información personal */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {" "}
                 <div>
-                  {" "}
                   <label
                     htmlFor="quote-name"
                     className="text-blue-300 text-sm font-medium mb-2 block"
@@ -532,7 +523,6 @@ export const QuoteRequestModal = React.memo(({ isOpen, onClose, service }) => {
                   )}
                 </div>
                 <div>
-                  {" "}
                   <label
                     htmlFor="quote-email"
                     className="text-blue-300 text-sm font-medium mb-2 block"
@@ -560,7 +550,8 @@ export const QuoteRequestModal = React.memo(({ isOpen, onClose, service }) => {
                     </p>
                   )}
                 </div>
-              </div>{" "}
+              </div>
+
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label
@@ -619,6 +610,7 @@ export const QuoteRequestModal = React.memo(({ isOpen, onClose, service }) => {
                   )}
                 </div>
               </div>
+
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label
@@ -672,21 +664,18 @@ export const QuoteRequestModal = React.memo(({ isOpen, onClose, service }) => {
                   )}
                 </div>
               </div>
+
               {/* Detalles del proyecto */}
               <div>
                 <label className="text-blue-300 text-sm font-medium mb-2 block">
                   Tipo de Proyecto <span className="text-red-500">*</span>
-                </label>{" "}
+                </label>
                 <select
                   name="projectType"
                   value={formData.projectType}
                   onChange={handleInputChange}
                   required
-                  className={`w-full p-3 bg-slate-700 border rounded-lg focus:ring-2 focus:ring-blue-500/20 text-white transition-all ${
-                    validationErrors.projectType
-                      ? "border-red-500 focus:border-red-500"
-                      : "border-gray-600 focus:border-blue-500"
-                  }`}
+                  className="w-full p-3 bg-slate-700 border border-gray-600 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 text-white transition-all"
                 >
                   <option value="">Selecciona un servicio</option>
                   <option value="Desarrollo Web Full-Stack">
@@ -704,21 +693,17 @@ export const QuoteRequestModal = React.memo(({ isOpen, onClose, service }) => {
                   </option>
                   <option value="Consultoría Técnica">
                     Consultoría Técnica
-                  </option>{" "}
+                  </option>
                   <option value="Migración de Sistemas">
                     Migración de Sistemas
                   </option>
                   <option value="Integración de Sistemas">
                     Integración de Sistemas
-                  </option>{" "}
+                  </option>
                   <option value="Otro">Otro</option>
                 </select>
-                {validationErrors.projectType && (
-                  <p className="text-red-400 text-xs mt-1">
-                    {validationErrors.projectType}
-                  </p>
-                )}
               </div>
+
               <div>
                 <label className="text-blue-300 text-sm font-medium mb-2 block">
                   Descripción del Proyecto{" "}
@@ -743,6 +728,7 @@ export const QuoteRequestModal = React.memo(({ isOpen, onClose, service }) => {
                   </p>
                 )}
               </div>
+
               <div>
                 <label className="text-blue-300 text-sm font-medium mb-2 block">
                   Requerimientos Adicionales
@@ -764,7 +750,8 @@ export const QuoteRequestModal = React.memo(({ isOpen, onClose, service }) => {
                     {validationErrors.additionalRequirements}
                   </p>
                 )}
-              </div>{" "}
+              </div>
+
               {submitStatus === "error" && (
                 <div className="p-4 bg-red-500/20 border border-red-500/50 rounded-lg">
                   <p className="text-red-400 text-sm">
@@ -774,6 +761,19 @@ export const QuoteRequestModal = React.memo(({ isOpen, onClose, service }) => {
                   </p>
                 </div>
               )}
+
+              <div className="bg-blue-500/10 border border-blue-500/30 rounded-lg p-4">
+                <h4 className="text-blue-300 font-semibold mb-2">
+                  💡 Información sobre Cotizaciones
+                </h4>
+                <ul className="text-sm text-gray-300 space-y-1">
+                  <li>• Cotización gratuita y sin compromiso</li>
+                  <li>• Respuesta dentro de 24 horas hábiles</li>
+                  <li>• Propuesta detallada con cronograma</li>
+                  <li>• Consulta inicial incluida en la cotización</li>
+                </ul>
+              </div>
+
               {/* Estado del formulario con validación paso a paso */}
               {isFormComplete ? (
                 <div className="p-4 bg-green-500/10 border border-green-500/30 rounded-lg">
@@ -863,6 +863,7 @@ export const QuoteRequestModal = React.memo(({ isOpen, onClose, service }) => {
                   </div>
                 </div>
               )}
+
               {/* reCAPTCHA */}
               <div className="border-t border-gray-700 pt-4">
                 <ReCaptchaComponent
@@ -871,25 +872,16 @@ export const QuoteRequestModal = React.memo(({ isOpen, onClose, service }) => {
                   onError={handleRecaptchaError}
                 />
               </div>
-              <div className="bg-blue-500/10 border border-blue-500/30 rounded-lg p-4">
-                <h4 className="text-blue-300 font-semibold mb-2">
-                  💡 Información sobre Cotizaciones
-                </h4>
-                <ul className="text-sm text-gray-300 space-y-1">
-                  <li>• Cotización gratuita y sin compromiso</li>
-                  <li>• Respuesta dentro de 24 horas hábiles</li>
-                  <li>• Propuesta detallada con cronograma</li>
-                  <li>• Consulta inicial incluida en la cotización</li>
-                </ul>
-              </div>
-              <div className="flex flex-col sm:flex-row gap-3 pt-4">
+
+              {/* Botón de envío */}
+              <div className="flex gap-4 pt-4">
                 <button
                   type="button"
                   onClick={onClose}
-                  className="px-6 py-3 bg-slate-700 hover:bg-slate-600 text-white rounded-lg transition-all duration-300 font-semibold border border-gray-600"
+                  className="flex-1 px-6 py-3 bg-gray-600 hover:bg-gray-500 text-white rounded-lg font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-gray-500"
                 >
                   Cancelar
-                </button>{" "}
+                </button>
                 <button
                   type="submit"
                   disabled={isSubmitting || !isFormComplete}
