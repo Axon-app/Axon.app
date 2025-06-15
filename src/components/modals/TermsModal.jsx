@@ -1,4 +1,5 @@
 import React from "react";
+import { EmailLink } from "../ui/EmailLink";
 
 export const EnhancedTermsModal = React.memo(({ isOpen, onClose }) => {
   // Manejar escape key
@@ -278,16 +279,16 @@ export const EnhancedTermsModal = React.memo(({ isOpen, onClose }) => {
             <section>
               <h3 className="text-xl font-semibold text-blue-300 mb-3">
                 11. Contacto
-              </h3>
+              </h3>{" "}
               <p className="leading-relaxed">
                 Para preguntas sobre estos términos y condiciones, contáctenos
                 en:{" "}
-                <a
-                  href="mailto:legal@axon.app"
+                <EmailLink
+                  mailtoUrl="mailto:axonapp.info@gmail.com?subject=Consulta%20Legal%20-%20Términos%20y%20Condiciones%20Axon.App&body=Estimado%20equipo%20legal%20de%20Axon.App,%0A%0AMe%20dirijo%20a%20ustedes%20para%20realizar%20una%20consulta%20sobre%20los%20Términos%20y%20Condiciones%20de%20servicio:%0A%0ATipo%20de%20consulta%20(marque%20con%20X):%0A[%20]%20Dudas%20sobre%20derechos%20de%20propiedad%20intelectual%0A[%20]%20Consulta%20sobre%20limitaciones%20de%20responsabilidad%0A[%20]%20Preguntas%20sobre%20el%20uso%20de%20servicios%0A[%20]%20Resolución%20de%20disputas%0A[%20]%20Otro:%20__________________%0A%0ADetalles%20de%20mi%20consulta:%0A%0A%0A%0ANombre%20completo:%20%0AEmpresa/Organización:%20%0AEmail:%20%0ATeléfono:%20%0A%0AGracias%20por%20su%20tiempo%20y%20atención.%0A%0ASaludos%20cordiales,"
                   className="text-cyan-400 hover:text-cyan-300 transition-colors underline"
                 >
-                  legal@axon.app
-                </a>
+                  axonapp.info@gmail.com
+                </EmailLink>
               </p>
               <p className="leading-relaxed mt-3 text-sm text-gray-400">
                 <strong>Tiempo de respuesta:</strong> Responderemos a consultas

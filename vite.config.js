@@ -1,10 +1,10 @@
-import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
+import { defineConfig } from "vite";
 
 // https://vite.dev/config/
-export default defineConfig({
+export default defineConfig(({ mode }) => ({
   plugins: [react()],
-  base: "/Axon.app/",
+  base: mode === "production" ? "/Axon.app/" : "/",
   server: {
     open: true,
     port: 5173,
@@ -12,4 +12,4 @@ export default defineConfig({
   build: {
     outDir: "dist",
   },
-});
+}));

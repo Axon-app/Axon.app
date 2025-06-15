@@ -1,80 +1,89 @@
+#!/usr/bin/env node
+
 const { exec } = require("child_process");
-const path = require("path");
+const util = require("util");
 
-console.log("🚀 Abriendo herramientas de validación para redes sociales...\n");
+const execAsync = util.promisify(exec);
 
-const validationUrls = [
-  {
-    name: "Facebook Debugger",
-    url: "https://developers.facebook.com/tools/debug/",
-    description: "Para probar cómo se ve en Facebook, WhatsApp, Messenger",
-  },
-  {
-    name: "Twitter Card Validator",
-    url: "https://cards-dev.twitter.com/validator",
-    description: "Para probar cómo se ve en Twitter/X",
-  },
-  {
-    name: "LinkedIn Post Inspector",
-    url: "https://www.linkedin.com/post-inspector/",
-    description: "Para probar cómo se ve en LinkedIn",
-  },
-  {
-    name: "Google Rich Results Test",
-    url: "https://search.google.com/test/rich-results",
-    description: "Para probar el markup estructurado",
-  },
-];
+async function openSocialValidators() {
+  console.log("🌐 Opening social media validation tools...");
 
-console.log("📝 Instrucciones rápidas:");
-console.log("1. Se abrirán las herramientas de validación en tu navegador");
-console.log(
-  "2. En cada una, pega tu URL: https://axon-app.github.io/Axon.app/"
-);
-console.log('3. Haz clic en "Debug", "Preview" o "Test"');
-console.log("4. Verifica que aparezca tu logo y descripción\n");
+  const validators = [
+    {
+      name: "Facebook Sharing Debugger",
+      url: "https://developers.facebook.com/tools/debug/",
+      platform: "Facebook/Meta",
+    },
+    {
+      name: "Twitter Card Validator",
+      url: "https://cards-dev.twitter.com/validator",
+      platform: "Twitter/X",
+    },
+    {
+      name: "LinkedIn Post Inspector",
+      url: "https://www.linkedin.com/post-inspector/",
+      platform: "LinkedIn",
+    },
+    {
+      name: "Open Graph Check",
+      url: "https://opengraphcheck.com/",
+      platform: "General OG",
+    },
+  ];
 
-// Función para abrir URLs
-function openUrl(url) {
-  const command =
-    process.platform === "win32"
-      ? "start"
-      : process.platform === "darwin"
-      ? "open"
-      : "xdg-open";
-
-  exec(`${command} "${url}"`, (error) => {
-    if (error) {
-      console.log(`❌ Error abriendo ${url}: ${error.message}`);
-    }
+  console.log("\n📋 Available Social Media Validators:");
+  validators.forEach((validator, index) => {
+    console.log(`${index + 1}. ${validator.name} (${validator.platform})`);
+    console.log(`   URL: ${validator.url}`);
   });
+
+  try {
+    console.log("\n🚀 Opening validators in your default browser...");
+
+    // Open each validator in the default browser
+    for (const validator of validators) {
+      console.log(`Opening ${validator.name}...`);
+
+      // Cross-platform browser opening
+      let command;
+      switch (process.platform) {
+        case "darwin": // macOS
+          command = `open "${validator.url}"`;
+          break;
+        case "win32": // Windows
+          command = `start "" "${validator.url}"`;
+          break;
+        default: // Linux and others
+          command = `xdg-open "${validator.url}"`;
+          break;
+      }
+
+      try {
+        await execAsync(command);
+        console.log(`✅ ${validator.name} opened`);
+      } catch (error) {
+        console.log(`⚠️ Could not auto-open ${validator.name}`);
+        console.log(`   Please open manually: ${validator.url}`);
+      }
+
+      // Small delay between opening tabs
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+    }
+
+    console.log("\n🎉 All validators opened!");
+    console.log("\n📝 How to use:");
+    console.log("1. Enter your website URL in each validator");
+    console.log("2. Check that images display correctly");
+    console.log("3. Verify title and description text");
+    console.log("4. Test different page URLs if needed");
+    console.log('5. Use "Scrape Again" if you make changes');
+  } catch (error) {
+    console.error("❌ Error opening validators:", error.message);
+    console.log("\n📋 Manual URLs to copy and paste:");
+    validators.forEach((validator) => {
+      console.log(`${validator.name}: ${validator.url}`);
+    });
+  }
 }
 
-// Abrir herramientas con retraso para no saturar
-validationUrls.forEach((tool, index) => {
-  setTimeout(() => {
-    console.log(`🔗 Abriendo: ${tool.name}`);
-    console.log(`   ${tool.description}`);
-    console.log(`   URL: ${tool.url}\n`);
-    openUrl(tool.url);
-  }, index * 2000); // 2 segundos entre cada una
-});
-
-console.log("⏳ Esperando 2 segundos entre cada herramienta...");
-
-// Mensaje final después de abrir todas
-setTimeout(() => {
-  console.log("\n✅ Todas las herramientas de validación abiertas!");
-  console.log("\n📱 Para probar en aplicaciones móviles:");
-  console.log("• WhatsApp: Envía el enlace en cualquier chat");
-  console.log("• Telegram: Envía el enlace en cualquier chat");
-  console.log("• Instagram: Usa el sticker de enlace en Stories");
-  console.log("• Facebook: Crea un post con el enlace");
-  console.log("• Twitter: Escribe un tweet con el enlace");
-  console.log("• LinkedIn: Crea un post con el enlace");
-
-  console.log("\n🎯 URL a probar: https://axon-app.github.io/Axon.app/");
-  console.log(
-    "\n🏆 Tu sitio está listo para compartir en todas las redes sociales!"
-  );
-}, validationUrls.length * 2000 + 1000);
+openSocialValidators();

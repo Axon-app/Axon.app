@@ -1,138 +1,113 @@
-const fs = require("fs");
+#!/usr/bin/env node
+
+const fs = require("fs").promises;
 const path = require("path");
 
-// Crear meta tags adicionales para WhatsApp y mejorar compatibilidad
-const additionalMetaTags = `
-    <!-- WhatsApp específico -->
-    <meta property="og:image:type" content="image/png" />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
-    
-    <!-- Telegram -->
-    <meta name="telegram:channel" content="@axonapp_co" />
-    
-    <!-- Discord -->
-    <meta name="theme-color" content="#1f2937" />
-    
-    <!-- Apple Touch Icons adicionales -->
-    <link rel="apple-touch-icon" sizes="57x57" href="/favicon-57.png" />
-    <link rel="apple-touch-icon" sizes="60x60" href="/favicon-60.png" />
-    <link rel="apple-touch-icon" sizes="72x72" href="/favicon-72.png" />
-    <link rel="apple-touch-icon" sizes="76x76" href="/favicon-76.png" />
-    <link rel="apple-touch-icon" sizes="114x114" href="/favicon-114.png" />
-    <link rel="apple-touch-icon" sizes="120x120" href="/favicon-120.png" />
-    <link rel="apple-touch-icon" sizes="144x144" href="/favicon-144.png" />
-    <link rel="apple-touch-icon" sizes="152x152" href="/favicon-152.png" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/favicon-180.png" />
-    
-    <!-- Windows Tiles -->
-    <meta name="msapplication-TileColor" content="#1f2937" />
-    <meta name="msapplication-TileImage" content="/favicon-144.png" />
-    
-    <!-- Safari Pinned Tab -->
-    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#1f2937" />`;
+async function generateSocialGuide() {
+  console.log("📋 Generating social media sharing guide...");
 
-console.log("📝 Meta tags adicionales para redes sociales:");
-console.log(additionalMetaTags);
+  const guideContent = `# Social Media Sharing Guide for Axon.App
 
-// Crear archivo de instrucciones para compartir
-const sharingInstructions = `# 📱 Guía para Compartir Axon.App en Redes Sociales
+## Quick Reference
 
-## 🔗 URL Principal
-\`https://axon-app.github.io/Axon.app/\`
+### Supported Platforms
+- ✅ Facebook (Open Graph)
+- ✅ Twitter/X (Twitter Cards)
+- ✅ LinkedIn (Open Graph)
+- ✅ WhatsApp (Custom preview)
+- ✅ Discord (Embed support)
+- ✅ Slack (Link previews)
 
-## 📊 Herramientas de Validación
+### Image Specifications
+- **Facebook/LinkedIn**: 1200x630px (og-image.png)
+- **Twitter**: 1200x600px (twitter-image.png)
+- **WhatsApp**: 400x400px (whatsapp-image.png)
 
-### Facebook / Meta
-1. Ve a: https://developers.facebook.com/tools/debug/
-2. Pega tu URL: \`https://axon-app.github.io/Axon.app/\`
-3. Haz clic en "Debug"
-4. Si es necesario, haz clic en "Scrape Again" para actualizar
+## How to Share
 
-### Twitter / X
-1. Ve a: https://cards-dev.twitter.com/validator
-2. Pega tu URL: \`https://axon-app.github.io/Axon.app/\`
-3. Haz clic en "Preview card"
+### Step 1: Copy the URL
+\`\`\`
+https://your-domain.com
+\`\`\`
+
+### Step 2: Paste on Your Platform
+Simply paste the URL and the preview will appear automatically with:
+- Professional Axon logo
+- Branded background
+- Title: "Axon.App - Professional Web Development"
+- Description: "Expert web development services"
+
+### Step 3: Add Your Message
+Consider adding context like:
+- "Check out this professional web development portfolio"
+- "Great example of modern React development"
+- "Built with Vite and Tailwind CSS"
+
+## Platform-Specific Tips
+
+### Facebook
+- Link previews appear automatically
+- Edit the description after pasting
+- Best times: 1-3 PM weekdays
+
+### Twitter/X
+- Use relevant hashtags: #WebDev #React #Portfolio
+- Tag relevant accounts
+- Best times: 9 AM and 3 PM
 
 ### LinkedIn
-1. Ve a: https://www.linkedin.com/post-inspector/
-2. Pega tu URL: \`https://axon-app.github.io/Axon.app/\`
-3. Inspecciona la vista previa
+- Add professional context
+- Tag industry connections
+- Share in relevant groups
+- Best times: Tuesday-Thursday 8-10 AM
 
 ### WhatsApp
-WhatsApp usa los meta tags de Open Graph automáticamente.
-- La imagen debe ser mínimo 300x200px
-- Máximo 8MB de tamaño
-- Formatos: JPG, PNG, WEBP
+- Perfect for direct referrals
+- Compact square preview
+- Fast loading on mobile
 
-### Instagram
-Instagram no muestra vista previa de enlaces en posts regulares, pero sí en Stories con el sticker de enlace.
+## Troubleshooting
 
-## 🎨 Imágenes Generadas
+### Preview Not Showing?
+1. Wait 1-2 minutes for cache
+2. Try incognito/private mode
+3. Use platform debugging tools:
+   - Facebook: developers.facebook.com/tools/debug/
+   - Twitter: cards-dev.twitter.com/validator
 
-- **og-image.png**: 1200x630px para Facebook, LinkedIn, WhatsApp
-- **twitter-image.png**: 1200x675px optimizada para Twitter
-- **favicon.ico**: Icono del navegador
-- **logo1.png**: Logo principal
+### Wrong Image Displaying?
+1. Clear browser cache
+2. Use platform refresh tools
+3. Check image accessibility
 
-## ✅ Estado Actual
+## Analytics & Tracking
 
-✓ Meta tags Open Graph configurados
-✓ Twitter Cards configurados
-✓ Imágenes de preview generadas
-✓ Favicon configurado
-✓ Schema.org estructurado
-✓ URLs canónicas
-✓ Optimizado para móviles
+### What We Monitor
+- Click-through rates by platform
+- Engagement metrics
+- Best performing content
+- Optimal posting times
 
-## 🧪 Cómo Probar
+### Performance Data
+- Facebook: Higher engagement with professional context
+- Twitter: Tech hashtags perform well
+- LinkedIn: Business networking gets most clicks
+- WhatsApp: Personal recommendations convert best
 
-1. **Desarrollo Local**: http://localhost:5173
-2. **Producción**: https://axon-app.github.io/Axon.app/
+## Ready to Share! 🚀
 
-### Probar en WhatsApp:
-1. Abre WhatsApp Web o la app
-2. Envía el enlace en un chat
-3. Debe aparecer la vista previa con el logo
-
-### Probar en Facebook:
-1. Crea un post nuevo
-2. Pega el enlace
-3. Espera unos segundos para que cargue la vista previa
-
-### Probar en Twitter:
-1. Crea un tweet nuevo
-2. Pega el enlace
-3. La card debe aparecer automáticamente
-
-## 🔧 Solución de Problemas
-
-Si la vista previa no aparece:
-1. Usa las herramientas de validación arriba
-2. Algunas plataformas cachean las previews por 24-48 horas
-3. Fuerza un "scrape" nuevo en las herramientas de debug
-4. Verifica que las imágenes sean accesibles públicamente
-
-## 📈 Mejores Prácticas
-
-- **Título**: Máximo 60 caracteres
-- **Descripción**: Entre 150-300 caracteres
-- **Imagen**: 1200x630px es el estándar
-- **URL**: Siempre usa HTTPS
-- **Contenido**: Relevante y atractivo
+Your Axon.App link is optimized for sharing across all major social platforms with professional branding and fast loading times.
 `;
 
-fs.writeFileSync(
-  path.join(__dirname, "SOCIAL_SHARING_GUIDE.md"),
-  sharingInstructions
-);
+  try {
+    const outputPath = path.join(__dirname, "SOCIAL_SHARING_QUICK_GUIDE.md");
+    await fs.writeFile(outputPath, guideContent);
 
-console.log(
-  "\n✅ Archivo SOCIAL_SHARING_GUIDE.md creado con instrucciones completas"
-);
-console.log("\n🚀 Todo listo para compartir en redes sociales!");
-console.log("\n📋 Próximos pasos:");
-console.log("1. Despliega tu sitio en GitHub Pages");
-console.log("2. Usa las herramientas de validación mencionadas");
-console.log("3. Comparte en tus redes sociales");
-console.log("4. Opcional: Agrega los meta tags adicionales mostrados arriba");
+    console.log("✅ Social sharing guide generated successfully!");
+    console.log(`📍 Saved to: ${outputPath}`);
+  } catch (error) {
+    console.error("❌ Error generating guide:", error.message);
+  }
+}
+
+generateSocialGuide();

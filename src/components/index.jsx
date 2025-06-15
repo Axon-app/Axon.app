@@ -51,3 +51,9 @@ export const ConsultationModal = React.lazy(() =>
     default: module.ConsultationModal,
   }))
 );
+
+export const EnhancedCookiesModal = React.lazy(() =>
+  import("./modals/CookiesModal").then((module) => ({
+    default: module.EnhancedCookiesModal,
+  }))
+);

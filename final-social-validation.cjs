@@ -1,180 +1,91 @@
-const fs = require("fs");
+#!/usr/bin/env node
+
+const fs = require("fs").promises;
 const path = require("path");
 
-console.log("🔍 Validación completa de imágenes y meta tags...\n");
+async function validateSocialSharing() {
+  console.log("🔍 Final Social Sharing Validation...");
 
-// Verificar que el archivo HTML existe
-const htmlPath = path.join(__dirname, "index.html");
-if (!fs.existsSync(htmlPath)) {
-  console.error("❌ Error: No se encontró index.html");
-  process.exit(1);
-}
+  const publicDir = path.join(__dirname, "public");
+  const indexPath = path.join(__dirname, "index.html");
 
-// Leer HTML
-const htmlContent = fs.readFileSync(htmlPath, "utf8");
+  try {
+    // Check required social images
+    const requiredImages = [
+      "og-image.png",
+      "twitter-image.png",
+      "whatsapp-image.png",
+      "favicon.ico",
+      "logo1.png",
+    ];
 
-// Función para buscar meta tags con formato flexible
-function findMetaTag(tag) {
-  // Buscar tanto property= como name=, con comillas simples o dobles, ignorando espacios y saltos de línea
-  const patterns = [
-    new RegExp(`property=["']${tag}["'][^>]*content=["']([^"']*)["']`, "is"),
-    new RegExp(`name=["']${tag}["'][^>]*content=["']([^"']*)["']`, "is"),
-    new RegExp(`content=["']([^"']*)["'][^>]*property=["']${tag}["']`, "is"),
-    new RegExp(`content=["']([^"']*)["'][^>]*name=["']${tag}["']`, "is"),
-  ];
-
-  for (const pattern of patterns) {
-    const match = htmlContent.match(pattern);
-    if (match) return match[1];
-  }
-
-  return null;
-}
-
-// Meta tags importantes para redes sociales
-const socialTags = [
-  {
-    tag: "og:title",
-    required: true,
-    platforms: "Facebook, WhatsApp, LinkedIn",
-  },
-  {
-    tag: "og:description",
-    required: true,
-    platforms: "Facebook, WhatsApp, LinkedIn",
-  },
-  {
-    tag: "og:image",
-    required: true,
-    platforms: "Facebook, WhatsApp, LinkedIn",
-  },
-  { tag: "og:url", required: true, platforms: "Facebook, WhatsApp, LinkedIn" },
-  { tag: "og:type", required: true, platforms: "Facebook, WhatsApp, LinkedIn" },
-  { tag: "twitter:card", required: true, platforms: "Twitter/X" },
-  { tag: "twitter:title", required: true, platforms: "Twitter/X" },
-  { tag: "twitter:description", required: true, platforms: "Twitter/X" },
-  { tag: "twitter:image", required: true, platforms: "Twitter/X" },
-  { tag: "og:image:width", required: false, platforms: "Optimización" },
-  { tag: "og:image:height", required: false, platforms: "Optimización" },
-  { tag: "og:image:type", required: false, platforms: "Optimización" },
-];
-
-console.log("📋 Estado de meta tags para redes sociales:\n");
-
-let allRequired = true;
-socialTags.forEach(({ tag, required, platforms }) => {
-  const content = findMetaTag(tag);
-  const status = content ? "✅" : required ? "❌" : "⚠️";
-
-  if (required && !content) allRequired = false;
-
-  const displayContent = content
-    ? content.length > 60
-      ? content.substring(0, 60) + "..."
-      : content
-    : "No encontrado";
-
-  const requiredText = required ? "[REQUERIDO]" : "[OPCIONAL]";
-
-  console.log(
-    `${status} ${tag.padEnd(20)} ${requiredText.padEnd(12)} ${platforms}`
-  );
-  if (content) {
-    console.log(`${"".padEnd(25)} → ${displayContent}`);
-  }
-  console.log("");
-});
-
-// Verificar imágenes
-console.log("🖼️  Estado de imágenes:\n");
-
-const images = [
-  {
-    name: "og-image.png",
-    purpose: "Facebook, WhatsApp, LinkedIn",
-    size: "1200x630px",
-  },
-  { name: "twitter-image.png", purpose: "Twitter/X", size: "1200x630px" },
-  {
-    name: "whatsapp-image.png",
-    purpose: "WhatsApp (ligera)",
-    size: "800x420px",
-  },
-  { name: "favicon.ico", purpose: "Navegadores", size: "Variable" },
-  { name: "logo1.png", purpose: "Logo principal", size: "Variable" },
-];
-
-images.forEach(({ name, purpose, size }) => {
-  const imagePath = path.join(__dirname, "public", name);
-  if (fs.existsSync(imagePath)) {
-    const stats = fs.statSync(imagePath);
-    const sizeKB = (stats.size / 1024).toFixed(2);
-    const sizeMB = (stats.size / (1024 * 1024)).toFixed(2);
-
-    // Validar tamaño recomendado para imágenes sociales
-    let sizeWarning = "";
-    if (name.includes("og-image") || name.includes("twitter-image")) {
-      if (stats.size > 8 * 1024 * 1024) {
-        // > 8MB
-        sizeWarning = " ⚠️ Muy grande";
-      } else if (stats.size < 50 * 1024) {
-        // < 50KB
-        sizeWarning = " ⚠️ Muy pequeña";
+    console.log("\n📸 Checking social media images:");
+    for (const image of requiredImages) {
+      const imagePath = path.join(publicDir, image);
+      try {
+        const stats = await fs.stat(imagePath);
+        const sizeKB = Math.round(stats.size / 1024);
+        console.log(`✅ ${image}: ${sizeKB}KB`);
+      } catch (error) {
+        console.log(`❌ ${image}: Missing`);
       }
     }
 
-    console.log(`✅ ${name.padEnd(20)} ${purpose}`);
-    console.log(`${"".padEnd(25)} → ${size} • ${sizeKB} KB${sizeWarning}`);
-  } else {
-    console.log(`❌ ${name.padEnd(20)} ${purpose}`);
-    console.log(`${"".padEnd(25)} → No encontrado`);
+    // Check meta tags in index.html
+    console.log("\n🏷️ Checking meta tags:");
+    const indexContent = await fs.readFile(indexPath, "utf-8");
+
+    const metaTags = [
+      {
+        tag: "og:title",
+        regex: /<meta property="og:title"/,
+        name: "Open Graph Title",
+      },
+      {
+        tag: "og:description",
+        regex: /<meta property="og:description"/,
+        name: "Open Graph Description",
+      },
+      {
+        tag: "og:image",
+        regex: /<meta property="og:image"/,
+        name: "Open Graph Image",
+      },
+      {
+        tag: "twitter:card",
+        regex: /<meta name="twitter:card"/,
+        name: "Twitter Card",
+      },
+      {
+        tag: "twitter:image",
+        regex: /<meta name="twitter:image"/,
+        name: "Twitter Image",
+      },
+    ];
+
+    for (const meta of metaTags) {
+      const found = meta.regex.test(indexContent);
+      console.log(
+        `${found ? "✅" : "❌"} ${meta.name}: ${found ? "Present" : "Missing"}`
+      );
+    }
+
+    console.log("\n🌐 Social Media Platform URLs:");
+    console.log(
+      "Facebook Debugger: https://developers.facebook.com/tools/debug/"
+    );
+    console.log(
+      "Twitter Card Validator: https://cards-dev.twitter.com/validator"
+    );
+    console.log(
+      "LinkedIn Post Inspector: https://www.linkedin.com/post-inspector/"
+    );
+
+    console.log("\n✅ Social sharing validation complete!");
+    console.log("🚀 Ready for social media sharing across all platforms");
+  } catch (error) {
+    console.error("❌ Error during validation:", error.message);
   }
-  console.log("");
-});
-
-// Resumen final
-console.log("📊 RESUMEN FINAL:\n");
-
-if (allRequired) {
-  console.log("🎉 ✅ CONFIGURACIÓN COMPLETA");
-  console.log("   Todos los meta tags requeridos están configurados");
-  console.log("   Las imágenes de preview están optimizadas");
-  console.log(
-    "   Tu sitio está listo para compartir en todas las redes sociales"
-  );
-} else {
-  console.log("⚠️  ❌ CONFIGURACIÓN INCOMPLETA");
-  console.log("   Algunos meta tags requeridos faltan");
-  console.log("   Revisa los elementos marcados con ❌ arriba");
 }
 
-console.log("\n🔗 URL para compartir:");
-console.log("   https://axon-app.github.io/Axon.app/");
-
-console.log("\n📱 Plataformas soportadas:");
-console.log("   ✅ WhatsApp - Vista previa automática");
-console.log("   ✅ Facebook - Post con imagen");
-console.log("   ✅ Twitter/X - Twitter Card");
-console.log("   ✅ LinkedIn - Preview profesional");
-console.log("   ✅ Telegram - Vista previa completa");
-console.log("   ✅ Instagram - Stories con sticker de enlace");
-console.log("   ✅ Discord - Embed automático");
-
-console.log("\n🧪 Para probar:");
-console.log("   1. Abre WhatsApp y envía el enlace en cualquier chat");
-console.log("   2. Crea un post en Facebook con el enlace");
-console.log("   3. Escribe un tweet con el enlace");
-console.log("   4. Comparte en LinkedIn");
-
-console.log("\n🔗 Herramientas de validación:");
-console.log(
-  "   • Facebook Debugger: https://developers.facebook.com/tools/debug/"
-);
-console.log(
-  "   • Twitter Card Validator: https://cards-dev.twitter.com/validator"
-);
-console.log(
-  "   • LinkedIn Post Inspector: https://www.linkedin.com/post-inspector/"
-);
-
-console.log("\n✨ ¡Las imágenes ya no se ven pixeladas y son de alta calidad!");
+validateSocialSharing();

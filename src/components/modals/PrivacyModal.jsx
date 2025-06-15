@@ -1,4 +1,5 @@
 import React from "react";
+import { EmailLink } from "../ui/EmailLink";
 
 export const EnhancedPrivacyModal = React.memo(({ isOpen, onClose }) => {
   // Manejar escape key
@@ -191,16 +192,17 @@ export const EnhancedPrivacyModal = React.memo(({ isOpen, onClose }) => {
             <section>
               <h3 className="text-xl font-semibold text-blue-300 mb-3">
                 7. Contacto
-              </h3>
+              </h3>{" "}
               <p className="leading-relaxed">
+                {" "}
                 Para preguntas sobre esta política de privacidad o para ejercer
                 sus derechos, contáctenos en:{" "}
-                <a
-                  href="mailto:privacy@axon.app"
+                <EmailLink
+                  mailtoUrl="mailto:axonapp.info@gmail.com?subject=Consulta%20sobre%20Política%20de%20Privacidad%20-%20Axon.App&body=Estimado%20equipo%20de%20Axon.App,%0A%0AMe%20dirijo%20a%20ustedes%20para%20realizar%20una%20consulta%20sobre%20su%20Política%20de%20Privacidad:%0A%0ATipo%20de%20consulta%20(marque%20con%20X):%0A[%20]%20Solicitud%20de%20acceso%20a%20mis%20datos%20personales%0A[%20]%20Solicitud%20de%20rectificación%20de%20datos%0A[%20]%20Solicitud%20de%20eliminación%20de%20datos%0A[%20]%20Consulta%20general%20sobre%20privacidad%0A[%20]%20Otro:%20__________________%0A%0ADetalles%20de%20mi%20consulta:%0A%0A%0A%0AMis%20datos%20de%20contacto:%0ANombre%20completo:%20%0AEmail:%20%0ATeléfono:%20%0A%0AGracias%20por%20su%20atención.%0A%0ASaludos%20cordiales,"
                   className="text-cyan-400 hover:text-cyan-300 transition-colors underline"
                 >
-                  privacy@axon.app
-                </a>
+                  axonapp.info@gmail.com
+                </EmailLink>
               </p>
               <p className="leading-relaxed mt-3 text-sm text-gray-400">
                 <strong>Tiempo de respuesta:</strong> Responderemos a su

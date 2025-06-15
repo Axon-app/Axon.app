@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import {
   AnimatedCounterWithProgress,
   ConsultationModal,
+  EnhancedCookiesModal,
   EnhancedPrivacyModal,
   EnhancedTermsModal,
   QuoteRequestModal,
@@ -9,6 +10,7 @@ import {
   ServiceDetailModal,
   TestimonialsBanner,
 } from "./components/index";
+import { EmailLink } from "./components/ui/EmailLink";
 import { technologies, testimonials } from "./data/content";
 import { servicesData } from "./data/servicesData";
 import logo1 from "/logo1.png";
@@ -18,6 +20,8 @@ const App = () => {
   const [showMenu, setShowMenu] = useState(false);
   const [showPrivacyModal, setShowPrivacyModal] = useState(false); // Estado para la modal de Privacidad
   const [showTermsModal, setShowTermsModal] = useState(false); // Estado para la modal de Términos
+  const [showCookiesModal, setShowCookiesModal] = useState(false); // Estado para la modal de Cookies
+  const [showCookieBanner, setShowCookieBanner] = useState(false); // Estado para el banner de cookies
   const [logoError, setLogoError] = useState(false);
   const [selectedService, setSelectedService] = useState(null);
   const [showServiceModal, setShowServiceModal] = useState(false);
@@ -57,6 +61,18 @@ const App = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // Efecto para mostrar el banner de cookies
+  React.useEffect(() => {
+    const cookiesAccepted = localStorage.getItem("axon-cookies-accepted");
+    if (!cookiesAccepted) {
+      // Mostrar el banner después de 2 segundos para no ser intrusivo
+      const timer = setTimeout(() => {
+        setShowCookieBanner(true);
+      }, 2000);
+      return () => clearTimeout(timer);
+    }
+  }, []);
+
   const handleLogoError = () => {
     setLogoError(true);
   };
@@ -87,6 +103,21 @@ const App = () => {
     setShowConsultationModal(false);
   };
 
+  // Función para navegación suave a las secciones
+  const scrollToSection = (sectionId) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      const offset = 80; // Offset para el navbar fijo
+      const elementPosition = element.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.pageYOffset - offset;
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: "smooth",
+      });
+    }
+  };
+
   // Logo SVG como fallback
   const LogoSVG = ({ className }) => (
     <div
@@ -103,9 +134,9 @@ const App = () => {
         <div className="container mx-auto px-4 lg:px-8">
           <div className="flex justify-between items-center py-4">
             {/* Logo Section */}
-            <a
-              href="#hero"
-              className="flex items-center group transition-transform duration-300 hover:scale-105"
+            <button
+              onClick={() => scrollToSection("hero")}
+              className="flex items-center group transition-transform duration-300 hover:scale-105 cursor-pointer"
             >
               <div className="flex items-center space-x-4">
                 <img
@@ -125,10 +156,14 @@ const App = () => {
                   }}
                 />
               </div>
-            </a>{" "}
+            </button>{" "}
             {/* Desktop Navigation */}
             <div className="hidden lg:flex items-center space-x-8">
-              <NavLink href="#hero" isActive={activeSection === "hero"}>
+              <NavLink
+                href="#hero"
+                isActive={activeSection === "hero"}
+                scrollToSection={scrollToSection}
+              >
                 <span className="flex items-center space-x-2">
                   <svg
                     className="w-4 h-4 flex-shrink-0"
@@ -140,7 +175,11 @@ const App = () => {
                   <span>Inicio</span>
                 </span>
               </NavLink>
-              <NavLink href="#about" isActive={activeSection === "about"}>
+              <NavLink
+                href="#about"
+                isActive={activeSection === "about"}
+                scrollToSection={scrollToSection}
+              >
                 <span className="flex items-center space-x-2">
                   <svg
                     className="w-4 h-4 flex-shrink-0"
@@ -156,7 +195,11 @@ const App = () => {
                   <span>Nosotros</span>
                 </span>
               </NavLink>
-              <NavLink href="#services" isActive={activeSection === "services"}>
+              <NavLink
+                href="#services"
+                isActive={activeSection === "services"}
+                scrollToSection={scrollToSection}
+              >
                 <span className="flex items-center space-x-2">
                   <svg
                     className="w-4 h-4 flex-shrink-0"
@@ -175,6 +218,7 @@ const App = () => {
               <NavLink
                 href="#technologies"
                 isActive={activeSection === "technologies"}
+                scrollToSection={scrollToSection}
               >
                 <span className="flex items-center space-x-2">
                   <svg
@@ -194,6 +238,7 @@ const App = () => {
               <NavLink
                 href="#testimonials"
                 isActive={activeSection === "testimonials"}
+                scrollToSection={scrollToSection}
               >
                 <span className="flex items-center space-x-2">
                   <svg
@@ -210,7 +255,11 @@ const App = () => {
                   <span>Testimonios</span>
                 </span>
               </NavLink>
-              <NavLink href="#contact" isActive={activeSection === "contact"}>
+              <NavLink
+                href="#contact"
+                isActive={activeSection === "contact"}
+                scrollToSection={scrollToSection}
+              >
                 <span className="flex items-center space-x-2">
                   <svg
                     className="w-4 h-4 flex-shrink-0"
@@ -298,6 +347,7 @@ const App = () => {
                 mobile
                 onClick={() => setShowMenu(false)}
                 isActive={activeSection === "hero"}
+                scrollToSection={scrollToSection}
               >
                 <span className="flex items-center space-x-3">
                   <svg
@@ -315,6 +365,7 @@ const App = () => {
                 mobile
                 onClick={() => setShowMenu(false)}
                 isActive={activeSection === "about"}
+                scrollToSection={scrollToSection}
               >
                 <span className="flex items-center space-x-3">
                   <svg
@@ -336,6 +387,7 @@ const App = () => {
                 mobile
                 onClick={() => setShowMenu(false)}
                 isActive={activeSection === "services"}
+                scrollToSection={scrollToSection}
               >
                 <span className="flex items-center space-x-3">
                   <svg
@@ -357,6 +409,7 @@ const App = () => {
                 mobile
                 onClick={() => setShowMenu(false)}
                 isActive={activeSection === "technologies"}
+                scrollToSection={scrollToSection}
               >
                 <span className="flex items-center space-x-3">
                   <svg
@@ -378,6 +431,7 @@ const App = () => {
                 mobile
                 onClick={() => setShowMenu(false)}
                 isActive={activeSection === "testimonials"}
+                scrollToSection={scrollToSection}
               >
                 <span className="flex items-center space-x-3">
                   <svg
@@ -399,6 +453,7 @@ const App = () => {
                 mobile
                 onClick={() => setShowMenu(false)}
                 isActive={activeSection === "contact"}
+                scrollToSection={scrollToSection}
               >
                 <span className="flex items-center space-x-3">
                   <svg
@@ -1376,12 +1431,12 @@ const App = () => {
                       <h4 className="text-white font-semibold">
                         Email Corporativo
                       </h4>
-                      <a
-                        href="mailto:axonapp.info@gmail.com"
+                      <EmailLink
+                        mailtoUrl="mailto:axonapp.info@gmail.com?subject=Consulta%20sobre%20servicios%20de%20Axon.App&body=Hola%20equipo%20de%20Axon.App,%0A%0AEstoy%20interesado%20en%20conocer%20más%20sobre%20sus%20servicios.%20Me%20gustaría%20que%20me%20contacten%20para:%0A%0A-%20%0A-%20%0A-%20%0A%0AGracias,%0A[Tu%20nombre]"
                         className="text-blue-400 hover:text-blue-300 transition duration-200"
                       >
                         axonapp.info@gmail.com
-                      </a>
+                      </EmailLink>
                       <p className="text-gray-400 text-sm mt-1">
                         Consultas generales y soporte técnico
                       </p>
@@ -1745,58 +1800,58 @@ const App = () => {
               </h4>
               <ul className="space-y-3 text-sm">
                 <li>
-                  <a
-                    href="#servicios"
-                    className="text-gray-300 hover:text-green-400 transition-colors duration-200 flex items-center space-x-2"
+                  <button
+                    onClick={() => scrollToSection("services")}
+                    className="text-gray-300 hover:text-green-400 transition-colors duration-200 flex items-center space-x-2 cursor-pointer"
                   >
                     <span className="text-green-400">▶</span>
                     <span>Desarrollo Web</span>
-                  </a>
+                  </button>
                 </li>
                 <li>
-                  <a
-                    href="#servicios"
-                    className="text-gray-300 hover:text-green-400 transition-colors duration-200 flex items-center space-x-2"
+                  <button
+                    onClick={() => scrollToSection("services")}
+                    className="text-gray-300 hover:text-green-400 transition-colors duration-200 flex items-center space-x-2 cursor-pointer"
                   >
                     <span className="text-green-400">▶</span>
                     <span>Aplicaciones Móviles</span>
-                  </a>
+                  </button>
                 </li>
                 <li>
-                  <a
-                    href="#servicios"
-                    className="text-gray-300 hover:text-green-400 transition-colors duration-200 flex items-center space-x-2"
+                  <button
+                    onClick={() => scrollToSection("services")}
+                    className="text-gray-300 hover:text-green-400 transition-colors duration-200 flex items-center space-x-2 cursor-pointer"
                   >
                     <span className="text-green-400">▶</span>
                     <span>Inteligencia Artificial</span>
-                  </a>
+                  </button>
                 </li>
                 <li>
-                  <a
-                    href="#servicios"
-                    className="text-gray-300 hover:text-green-400 transition-colors duration-200 flex items-center space-x-2"
+                  <button
+                    onClick={() => scrollToSection("services")}
+                    className="text-gray-300 hover:text-green-400 transition-colors duration-200 flex items-center space-x-2 cursor-pointer"
                   >
                     <span className="text-green-400">▶</span>
                     <span>Consultoría TI</span>
-                  </a>
+                  </button>
                 </li>
                 <li>
-                  <a
-                    href="#servicios"
-                    className="text-gray-300 hover:text-green-400 transition-colors duration-200 flex items-center space-x-2"
+                  <button
+                    onClick={() => scrollToSection("services")}
+                    className="text-gray-300 hover:text-green-400 transition-colors duration-200 flex items-center space-x-2 cursor-pointer"
                   >
                     <span className="text-green-400">▶</span>
                     <span>E-commerce</span>
-                  </a>
+                  </button>
                 </li>
                 <li>
-                  <a
-                    href="#servicios"
-                    className="text-gray-300 hover:text-green-400 transition-colors duration-200 flex items-center space-x-2"
+                  <button
+                    onClick={() => scrollToSection("services")}
+                    className="text-gray-300 hover:text-green-400 transition-colors duration-200 flex items-center space-x-2 cursor-pointer"
                   >
                     <span className="text-green-400">▶</span>
                     <span>Soporte Técnico</span>
-                  </a>
+                  </button>
                 </li>
               </ul>
             </div>
@@ -1820,12 +1875,12 @@ const App = () => {
                   </div>
                   <div>
                     <p className="text-gray-400">Email</p>
-                    <a
-                      href="mailto:axonapp.info@gmail.com"
+                    <EmailLink
+                      mailtoUrl="mailto:axonapp.info@gmail.com?subject=Contacto%20desde%20sitio%20web%20-%20Axon.App&body=Hola%20equipo%20de%20Axon.App,%0A%0AMe%20pongo%20en%20contacto%20con%20ustedes%20desde%20su%20sitio%20web%20para:%0A%0A-%20%0A-%20%0A-%20%0A%0AMis%20datos%20de%20contacto:%0ANombre:%20%0ATeléfono:%20%0AEmpresa:%20%0A%0AGracias%20por%20su%20tiempo.%0A%0ASaludos,"
                       className="text-purple-400 hover:text-purple-300 transition-colors"
                     >
                       axonapp.info@gmail.com
-                    </a>
+                    </EmailLink>
                   </div>
                 </div>
 
@@ -1880,58 +1935,58 @@ const App = () => {
               </h4>
               <ul className="space-y-3 text-sm">
                 <li>
-                  <a
-                    href="#inicio"
-                    className="text-gray-300 hover:text-green-400 transition-colors duration-200 flex items-center space-x-2"
+                  <button
+                    onClick={() => scrollToSection("hero")}
+                    className="text-gray-300 hover:text-green-400 transition-colors duration-200 flex items-center space-x-2 cursor-pointer"
                   >
                     <span className="text-green-400">▶</span>
                     <span>Inicio</span>
-                  </a>
+                  </button>
                 </li>
                 <li>
-                  <a
-                    href="#nosotros"
-                    className="text-gray-300 hover:text-green-400 transition-colors duration-200 flex items-center space-x-2"
+                  <button
+                    onClick={() => scrollToSection("about")}
+                    className="text-gray-300 hover:text-green-400 transition-colors duration-200 flex items-center space-x-2 cursor-pointer"
                   >
                     <span className="text-green-400">▶</span>
                     <span>Nosotros</span>
-                  </a>
+                  </button>
                 </li>
                 <li>
-                  <a
-                    href="#servicios"
-                    className="text-gray-300 hover:text-green-400 transition-colors duration-200 flex items-center space-x-2"
+                  <button
+                    onClick={() => scrollToSection("services")}
+                    className="text-gray-300 hover:text-green-400 transition-colors duration-200 flex items-center space-x-2 cursor-pointer"
                   >
                     <span className="text-green-400">▶</span>
                     <span>Servicios</span>
-                  </a>
+                  </button>
                 </li>
                 <li>
-                  <a
-                    href="#tecnologias"
-                    className="text-gray-300 hover:text-green-400 transition-colors duration-200 flex items-center space-x-2"
+                  <button
+                    onClick={() => scrollToSection("technologies")}
+                    className="text-gray-300 hover:text-green-400 transition-colors duration-200 flex items-center space-x-2 cursor-pointer"
                   >
                     <span className="text-green-400">▶</span>
                     <span>Tecnologías</span>
-                  </a>
+                  </button>
                 </li>
                 <li>
-                  <a
-                    href="#testimonios"
-                    className="text-gray-300 hover:text-green-400 transition-colors duration-200 flex items-center space-x-2"
+                  <button
+                    onClick={() => scrollToSection("testimonials")}
+                    className="text-gray-300 hover:text-green-400 transition-colors duration-200 flex items-center space-x-2 cursor-pointer"
                   >
                     <span className="text-green-400">▶</span>
                     <span>Testimonios</span>
-                  </a>
+                  </button>
                 </li>
                 <li>
-                  <a
-                    href="#contacto"
-                    className="text-gray-300 hover:text-green-400 transition-colors duration-200 flex items-center space-x-2"
+                  <button
+                    onClick={() => scrollToSection("contact")}
+                    className="text-gray-300 hover:text-green-400 transition-colors duration-200 flex items-center space-x-2 cursor-pointer"
                   >
                     <span className="text-green-400">▶</span>
                     <span>Contacto</span>
-                  </a>
+                  </button>
                 </li>
               </ul>
 
@@ -2149,12 +2204,12 @@ const App = () => {
                 >
                   Mapa del sitio
                 </a>
-                <a
-                  href="#"
+                <button
+                  onClick={() => setShowCookiesModal(true)}
                   className="text-gray-400 hover:text-green-400 transition-colors duration-200"
                 >
                   Cookies
-                </a>
+                </button>
               </div>
             </div>
           </div>
@@ -2184,6 +2239,82 @@ const App = () => {
         </div>
       </footer>
 
+      {/* Cookie Banner */}
+      {showCookieBanner && (
+        <div className="fixed bottom-0 left-0 right-0 bg-slate-900 border-t border-gray-700 shadow-2xl z-40 p-4">
+          <div className="container mx-auto max-w-6xl">
+            <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
+              <div className="flex items-start gap-3 flex-1">
+                <div className="text-2xl">🍪</div>
+                <div className="text-sm text-gray-300">
+                  <p className="font-semibold text-white mb-1">
+                    Utilizamos cookies para mejorar tu experiencia
+                  </p>
+                  <p>
+                    Usamos cookies esenciales y opcionales para personalizar
+                    contenido, analizar el tráfico y mejorar nuestros servicios.{" "}
+                    <button
+                      onClick={() => setShowCookiesModal(true)}
+                      className="text-blue-400 hover:text-blue-300 underline"
+                    >
+                      Ver configuración detallada
+                    </button>
+                  </p>
+                </div>
+              </div>
+              <div className="flex flex-col sm:flex-row gap-2 lg:gap-3 w-full lg:w-auto">
+                <button
+                  onClick={() => {
+                    // Solo cookies necesarias
+                    const onlyNecessary = {
+                      necessary: true,
+                      analytics: false,
+                      marketing: false,
+                      preferences: false,
+                    };
+                    localStorage.setItem(
+                      "axon-cookie-preferences",
+                      JSON.stringify(onlyNecessary)
+                    );
+                    localStorage.setItem("axon-cookies-accepted", "true");
+                    setShowCookieBanner(false);
+                  }}
+                  className="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition-colors text-sm"
+                >
+                  Solo Necesarias
+                </button>
+                <button
+                  onClick={() => {
+                    // Aceptar todas
+                    const allAccepted = {
+                      necessary: true,
+                      analytics: true,
+                      marketing: true,
+                      preferences: true,
+                    };
+                    localStorage.setItem(
+                      "axon-cookie-preferences",
+                      JSON.stringify(allAccepted)
+                    );
+                    localStorage.setItem("axon-cookies-accepted", "true");
+                    setShowCookieBanner(false);
+                  }}
+                  className="px-4 py-2 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white rounded-lg transition-colors text-sm font-semibold"
+                >
+                  Aceptar Todas
+                </button>
+                <button
+                  onClick={() => setShowCookiesModal(true)}
+                  className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors text-sm"
+                >
+                  Configurar
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Modals mejorados de Privacidad y Términos */}
       <EnhancedPrivacyModal
         isOpen={showPrivacyModal}
@@ -2192,6 +2323,10 @@ const App = () => {
       <EnhancedTermsModal
         isOpen={showTermsModal}
         onClose={() => setShowTermsModal(false)}
+      />
+      <EnhancedCookiesModal
+        isOpen={showCookiesModal}
+        onClose={() => setShowCookiesModal(false)}
       />
       {/* ServiceDetailModal temporalmente comentado para debug */}
       {selectedService && showServiceModal && (
@@ -2222,14 +2357,21 @@ const App = () => {
 };
 
 // Componente para enlaces de navegación
-const NavLink = ({ href, children, mobile, onClick, isActive }) => {
+const NavLink = ({
+  href,
+  children,
+  mobile,
+  onClick,
+  isActive,
+  scrollToSection,
+}) => {
   const baseClasses = mobile
-    ? `block px-4 py-3 rounded-lg text-base font-medium transition-all duration-300 transform hover:translate-x-2 border-l-2 ${
+    ? `block px-4 py-3 rounded-lg text-base font-medium transition-all duration-300 transform hover:translate-x-2 border-l-2 cursor-pointer ${
         isActive
           ? "text-blue-400 bg-gradient-to-r from-blue-600/20 to-cyan-600/20 border-blue-400"
           : "text-gray-300 hover:text-white hover:bg-gradient-to-r hover:from-blue-600/20 hover:to-cyan-600/20 border-transparent hover:border-blue-400"
       }`
-    : `relative text-sm font-semibold transition-all duration-300 group px-3 py-2 rounded-lg ${
+    : `relative text-sm font-semibold transition-all duration-300 group px-3 py-2 rounded-lg cursor-pointer ${
         isActive
           ? "text-blue-400 bg-white/10"
           : "text-gray-300 hover:text-white hover:bg-white/5"
@@ -2252,8 +2394,19 @@ const NavLink = ({ href, children, mobile, onClick, isActive }) => {
     </>
   ) : null;
 
+  const handleClick = (e) => {
+    e.preventDefault();
+    const sectionId = href.replace("#", "");
+    if (scrollToSection) {
+      scrollToSection(sectionId);
+    }
+    if (onClick) {
+      onClick();
+    }
+  };
+
   return (
-    <a href={href} onClick={onClick} className={baseClasses}>
+    <div onClick={handleClick} className={baseClasses}>
       {mobile ? (
         children
       ) : (
@@ -2270,7 +2423,7 @@ const NavLink = ({ href, children, mobile, onClick, isActive }) => {
           {desktopEffect}
         </div>
       )}
-    </a>
+    </div>
   );
 };
 
