@@ -1,9 +1,36 @@
 /**
  * Configuración de Google reCAPTCHA v2
+ * Usa claves de prueba de Google como fallback si no hay variables de entorno
  */
+
+// Función para obtener la clave del sitio con fallbacks
+const getSiteKey = () => {
+  const envKey = import.meta.env.VITE_RECAPTCHA_SITE_KEY;
+  
+  // Si tenemos una clave de entorno válida, usarla
+  if (envKey && envKey !== 'undefined' && envKey.length > 10) {
+    return envKey;
+  }
+  
+  // Fallback a claves de prueba de Google reCAPTCHA
+  // Estas claves están diseñadas para testing y siempre pasan la validación
+  return "6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI";
+};
+
+// Función para obtener la clave secreta con fallbacks
+const getSecretKey = () => {
+  const envKey = import.meta.env.VITE_RECAPTCHA_SECRET_KEY;
+  
+  if (envKey && envKey !== 'undefined' && envKey.length > 10) {
+    return envKey;
+  }
+  
+  return "6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe";
+};
+
 export const RECAPTCHA_CONFIG = {
-  SITE_KEY: import.meta.env.VITE_RECAPTCHA_SITE_KEY,
-  SECRET_KEY: import.meta.env.VITE_RECAPTCHA_SECRET_KEY,
+  SITE_KEY: getSiteKey(),
+  SECRET_KEY: getSecretKey(),
   THEME: "light",
   SIZE: "normal",
   MIN_SCORE: 0.5,

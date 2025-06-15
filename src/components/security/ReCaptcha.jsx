@@ -8,12 +8,10 @@ import { RECAPTCHA_CONFIG } from "../../services/recaptchaService";
 export const ReCaptchaComponent = React.memo(
   ({ onVerify, onError, onExpired, className = "" }) => {
     const recaptchaRef = useRef(null);
-    const widgetId = useRef(null);
-
-    useEffect(() => {
-      // Verificar configuración
-      if (!RECAPTCHA_CONFIG.SITE_KEY) {
-        onError?.("Error: Falta la clave del sitio de reCAPTCHA");
+    const widgetId = useRef(null);    useEffect(() => {
+      // Verificar configuración - ahora debe tener un fallback
+      if (!RECAPTCHA_CONFIG.SITE_KEY || RECAPTCHA_CONFIG.SITE_KEY === 'undefined') {
+        onError?.("Error: Configuración de reCAPTCHA no válida");
         return;
       }
 
