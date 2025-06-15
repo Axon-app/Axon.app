@@ -1,7 +1,22 @@
 import React from "react";
 import { useRecaptcha } from "../../hooks/useRecaptcha";
 import { sendConsultationRequest } from "../../services/emailService";
-import { ReCaptchaComponent } from "../security/ReCaptcha";
+// import { ReCaptchaComponent } from "../security/ReCaptcha"; // TEMPORALMENTE COMENTADO
+
+// Componente reCAPTCHA temporalmente suspendido inline
+const ReCaptchaComponent = ({ onVerify, className = "" }) => {
+  React.useEffect(() => {
+    setTimeout(() => {
+      onVerify?.(`suspended-${Date.now()}`);
+    }, 100);
+  }, [onVerify]);
+  
+  return (
+    <div className={`p-4 border-2 border-dashed border-gray-300 rounded-lg text-center text-gray-500 text-sm ${className}`}>
+      🔒 Verificación de seguridad (suspendida temporalmente)
+    </div>
+  );
+};
 
 // Generar opciones de horario una sola vez (9 AM - 5 PM, intervalos de 30 min)
 const generateTimeOptions = () => {
