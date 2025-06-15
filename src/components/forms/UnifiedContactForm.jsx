@@ -10,9 +10,11 @@ const ReCaptchaComponent = ({ onVerify, className = "" }) => {
       onVerify?.(`suspended-${Date.now()}`);
     }, 100);
   }, [onVerify]);
-  
+
   return (
-    <div className={`p-4 border-2 border-dashed border-gray-300 rounded-lg text-center text-gray-500 text-sm ${className}`}>
+    <div
+      className={`p-4 border-2 border-dashed border-gray-300 rounded-lg text-center text-gray-500 text-sm ${className}`}
+    >
       🔒 Verificación de seguridad (suspendida temporalmente)
     </div>
   );
@@ -175,7 +177,10 @@ const CLIENT_TYPES = [
   { value: "Empresa", label: "Empresa" },
   { value: "Emprendedor", label: "Emprendedor" },
   { value: "Freelancer", label: "Freelancer" },
-  { value: "Organización sin fines de lucro", label: "Organización sin fines de lucro" },
+  {
+    value: "Organización sin fines de lucro",
+    label: "Organización sin fines de lucro",
+  },
   { value: "Gobierno", label: "Gobierno" },
   { value: "Estudiante", label: "Estudiante" },
   { value: "Otro", label: "Otro" },
@@ -210,7 +215,7 @@ export const UnifiedContactForm = React.memo(
       meetingType: "video-call",
     });
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const [errors, setErrors] = useState({});    // Hook de reCAPTCHA v2
+    const [errors, setErrors] = useState({}); // Hook de reCAPTCHA v2
     const {
       recaptchaToken,
       isRecaptchaVerified,
@@ -218,7 +223,7 @@ export const UnifiedContactForm = React.memo(
       resetRecaptcha,
       handleRecaptchaVerify,
       handleRecaptchaError,
-      handleRecaptchaExpired
+      handleRecaptchaExpired,
     } = useRecaptcha();
 
     // Definir campos obligatorios por modo
@@ -798,32 +803,13 @@ export const UnifiedContactForm = React.memo(
                 ></path>
               </svg>
               Información Personal
-            </h3>            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {renderField(
-                "name",
-                "Nombre completo",
-                "text",
-                true,
-                [],
-                50
-              )}
-              {renderField(
-                "email",
-                "Email",
-                "email",
-                true,
-                [],
-                254
-              )}
-            </div>            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {renderField(
-                "phone",
-                "Teléfono",
-                "tel",
-                false,
-                [],
-                20
-              )}
+            </h3>{" "}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {renderField("name", "Nombre completo", "text", true, [], 50)}
+              {renderField("email", "Email", "email", true, [], 254)}
+            </div>{" "}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {renderField("phone", "Teléfono", "tel", false, [], 20)}
               {renderField(
                 "company",
                 "Empresa/Organización",
@@ -852,14 +838,8 @@ export const UnifiedContactForm = React.memo(
                   ></path>
                 </svg>
                 Tu Mensaje
-              </h3>              {renderField(
-                "message",
-                "Mensaje",
-                "textarea",
-                true,
-                [],
-                1000
-              )}
+              </h3>{" "}
+              {renderField("message", "Mensaje", "textarea", true, [], 1000)}
             </div>
           )}
           {mode === "quote" && (
@@ -881,15 +861,9 @@ export const UnifiedContactForm = React.memo(
                     ></path>
                   </svg>
                   Detalles del Proyecto
-                </h3>                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {renderField(
-                    "city",
-                    "Ciudad",
-                    "text",
-                    false,
-                    [],
-                    50
-                  )}
+                </h3>{" "}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {renderField("city", "Ciudad", "text", false, [], 50)}
                   {renderField(
                     "clientType",
                     "Tipo de cliente",
@@ -897,14 +871,14 @@ export const UnifiedContactForm = React.memo(
                     false,
                     CLIENT_TYPES
                   )}
-                </div>                {renderField(
+                </div>{" "}
+                {renderField(
                   "projectType",
                   "Tipo de proyecto",
                   "select",
                   true,
                   PROJECT_TYPES
                 )}
-
                 {renderField(
                   "projectDescription",
                   "Descripción del proyecto",
@@ -913,7 +887,6 @@ export const UnifiedContactForm = React.memo(
                   [],
                   1000
                 )}
-
                 {renderField(
                   "additionalRequirements",
                   "Requisitos adicionales",
@@ -944,7 +917,8 @@ export const UnifiedContactForm = React.memo(
                     ></path>
                   </svg>
                   Detalles de la Consulta
-                </h3>                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                </h3>{" "}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {renderField("city", "Ciudad", "text", false, [], 50)}
                   {renderField(
                     "clientType",
@@ -953,7 +927,8 @@ export const UnifiedContactForm = React.memo(
                     false,
                     CLIENT_TYPES
                   )}
-                </div>{renderField(
+                </div>
+                {renderField(
                   "consultationType",
                   "Tipo de consulta",
                   "select",
@@ -961,18 +936,45 @@ export const UnifiedContactForm = React.memo(
                   [
                     { value: "Consulta General", label: "Consulta General" },
                     { value: "Consulta Técnica", label: "Consulta Técnica" },
-                    { value: "Estrategia Digital", label: "Estrategia Digital" },
-                    { value: "Revisión de Proyecto", label: "Revisión de Proyecto" },
-                    { value: "Asesoría de Desarrollo", label: "Asesoría de Desarrollo" },
+                    {
+                      value: "Estrategia Digital",
+                      label: "Estrategia Digital",
+                    },
+                    {
+                      value: "Revisión de Proyecto",
+                      label: "Revisión de Proyecto",
+                    },
+                    {
+                      value: "Asesoría de Desarrollo",
+                      label: "Asesoría de Desarrollo",
+                    },
                     { value: "Otro", label: "Otro" },
                   ]
-                )}                {renderField("topics", "Temas a tratar", "textarea", true, [], 1000)}
-
+                )}{" "}
+                {renderField(
+                  "topics",
+                  "Temas a tratar",
+                  "textarea",
+                  true,
+                  [],
+                  1000
+                )}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {renderField("preferredDate", "Fecha preferida", "date", false, [])}
-                  {renderField("preferredTime", "Hora preferida", "time", false, [])}
+                  {renderField(
+                    "preferredDate",
+                    "Fecha preferida",
+                    "date",
+                    false,
+                    []
+                  )}
+                  {renderField(
+                    "preferredTime",
+                    "Hora preferida",
+                    "time",
+                    false,
+                    []
+                  )}
                 </div>
-
                 {/* Tipo de reunión con diseño mejorado */}
                 <div className="group mb-6">
                   <label className="flex items-center text-sm font-semibold text-gray-200 mb-3">
@@ -1083,7 +1085,8 @@ export const UnifiedContactForm = React.memo(
                 </span>
               </div>
             </div>
-            {/* reCAPTCHA */}            <div id="recaptcha-container" className="mb-4" aria-live="polite">
+            {/* reCAPTCHA */}{" "}
+            <div id="recaptcha-container" className="mb-4" aria-live="polite">
               <ReCaptchaComponent
                 onVerify={handleRecaptchaVerify}
                 onError={handleRecaptchaError}
@@ -1096,7 +1099,6 @@ export const UnifiedContactForm = React.memo(
                 </div>
               )}
             </div>
-
             {/* Botón de envío mejorado con estado dinámico */}
             <div className="bg-gradient-to-br from-gray-800/40 to-gray-900/40 backdrop-blur-sm p-6 rounded-2xl border border-gray-700/30 shadow-xl">
               {/* Indicador de estado antes del botón */}

@@ -3,10 +3,10 @@ import React from "react";
 /**
  * Hook personalizado para manejar reCAPTCHA v2
  * ⚠️ TEMPORALMENTE SUSPENDIDO ⚠️
- * 
+ *
  * Este hook simula el comportamiento de reCAPTCHA sin realizar verificaciones reales.
  * Los formularios funcionarán normalmente sin bloqueos.
- * 
+ *
  * TODO: Reactivar cuando se solucionen los problemas de integración
  */
 export const useRecaptcha = () => {
@@ -18,7 +18,8 @@ export const useRecaptcha = () => {
     setRecaptchaToken(token || "suspended-token");
     setIsRecaptchaVerified(true); // Siempre verificado cuando está suspendido
     setRecaptchaError(null);
-  };  const handleRecaptchaError = (_error) => {
+  };
+  const handleRecaptchaError = (_error) => {
     // No hacer nada en modo suspendido - mantener verificado
     // Ignorar error silenciosamente
   };

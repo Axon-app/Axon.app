@@ -10,9 +10,11 @@ const ReCaptchaComponent = ({ onVerify, className = "" }) => {
       onVerify?.(`suspended-${Date.now()}`);
     }, 100);
   }, [onVerify]);
-  
+
   return (
-    <div className={`p-4 border-2 border-dashed border-gray-300 rounded-lg text-center text-gray-500 text-sm ${className}`}>
+    <div
+      className={`p-4 border-2 border-dashed border-gray-300 rounded-lg text-center text-gray-500 text-sm ${className}`}
+    >
       🔒 Verificación de seguridad (suspendida temporalmente)
     </div>
   );

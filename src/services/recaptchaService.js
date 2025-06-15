@@ -1,10 +1,10 @@
 /**
  * Configuración de Google reCAPTCHA v2
  * ⚠️ TEMPORALMENTE SUSPENDIDO ⚠️
- * 
+ *
  * El servicio de reCAPTCHA ha sido suspendido para evitar conflictos.
  * Las funciones devuelven valores simulados para mantener la funcionalidad.
- * 
+ *
  * TODO: Reactivar cuando se solucionen los problemas de integración
  */
 
