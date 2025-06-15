@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useMemo } from "react";
 import { RECAPTCHA_CONFIG } from "../../services/recaptchaService";
 
 /**
@@ -8,12 +8,32 @@ import { RECAPTCHA_CONFIG } from "../../services/recaptchaService";
 export const ReCaptchaComponent = React.memo(
   ({ onVerify, onError, onExpired, className = "" }) => {
     const recaptchaRef = useRef(null);
-    const widgetId = useRef(null);    useEffect(() => {
+    const widgetId = useRef(null);
+    const isRendered = useRef(false);
+    const componentId = useMemo(() => `recaptcha-${Date.now()}-${Math.random()}`, []);
+
+    useEffect(() => {
       // Verificar configuración - ahora debe tener un fallback
       if (!RECAPTCHA_CONFIG.SITE_KEY || RECAPTCHA_CONFIG.SITE_KEY === 'undefined') {
         onError?.("Error: Configuración de reCAPTCHA no válida");
         return;
       }
+
+      // Función para limpiar el widget existente
+      const cleanupWidget = () => {
+        if (widgetId.current !== null && window.grecaptcha) {
+          try {
+            window.grecaptcha.reset(widgetId.current);
+          } catch {
+            // Ignorar errores de reset
+          }
+        }
+        if (recaptchaRef.current) {
+          recaptchaRef.current.innerHTML = '';
+        }
+        widgetId.current = null;
+        isRendered.current = false;
+      };
 
       // Función para cargar e inicializar reCAPTCHA
       const loadRecaptcha = () => {
@@ -43,11 +63,15 @@ export const ReCaptchaComponent = React.memo(
         };
 
         document.head.appendChild(script);
-      };
-
-      // Función para renderizar el widget
+      };      // Función para renderizar el widget
       const renderRecaptcha = () => {
-        if (!recaptchaRef.current || !window.grecaptcha) return;
+        if (!recaptchaRef.current || !window.grecaptcha || isRendered.current) return;
+
+        // Verificar si el elemento ya tiene un widget
+        if (recaptchaRef.current.children.length > 0) {
+          // Ya hay contenido, limpiar primero
+          cleanupWidget();
+        }
 
         try {
           widgetId.current = window.grecaptcha.render(recaptchaRef.current, {
@@ -64,7 +88,38 @@ export const ReCaptchaComponent = React.memo(
             theme: "light",
             size: "normal",
           });
-        } catch (error) {          onError?.(`Error al inicializar reCAPTCHA: ${error.message}`);
+          isRendered.current = true;
+        } catch (error) {
+          // Si el error es sobre elemento ya renderizado, intentar limpiar y renderizar de nuevo
+          if (error.message.includes('already been rendered')) {
+            cleanupWidget();
+            // Intentar renderizar de nuevo después de limpiar
+            setTimeout(() => {
+              if (recaptchaRef.current && !isRendered.current) {
+                try {
+                  widgetId.current = window.grecaptcha.render(recaptchaRef.current, {
+                    sitekey: RECAPTCHA_CONFIG.SITE_KEY,
+                    callback: (token) => {
+                      onVerify?.(token);
+                    },
+                    "expired-callback": () => {
+                      onExpired?.();
+                    },
+                    "error-callback": () => {
+                      onError?.("Error en la verificación de reCAPTCHA");
+                    },
+                    theme: "light",
+                    size: "normal",
+                  });
+                  isRendered.current = true;
+                } catch (retryError) {
+                  onError?.(`Error al inicializar reCAPTCHA: ${retryError.message}`);
+                }
+              }
+            }, 100);
+          } else {
+            onError?.(`Error al inicializar reCAPTCHA: ${error.message}`);
+          }
         }
       };
 
@@ -72,19 +127,12 @@ export const ReCaptchaComponent = React.memo(
 
       // Cleanup
       return () => {
-        if (widgetId.current !== null && window.grecaptcha) {
-          try {
-            window.grecaptcha.reset(widgetId.current);
-          } catch {
-            // Ignorar errores de cleanup
-          }
-        }
+        cleanupWidget();
       };
-    }, [onVerify, onError, onExpired]);
-
-    return (
+    }, [onVerify, onError, onExpired]);    return (
       <div
         ref={recaptchaRef}
+        id={componentId}
         className={`recaptcha-container ${className}`.trim()}
         aria-label="reCAPTCHA"
       />
