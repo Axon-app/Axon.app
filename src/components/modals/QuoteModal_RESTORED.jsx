@@ -280,17 +280,17 @@ export const QuoteRequestModal = React.memo(({ isOpen, onClose, service }) => {
       setSecurityError("Error en verificación reCAPTCHA. Intenta nuevamente.");
     }
   };
-
   const handleRecaptchaExpire = () => {
-    setSecurityError(
-      "La verificación reCAPTCHA ha expirado. Por favor, verifica nuevamente."
-    );
+    // Disabled - reCAPTCHA is suspended
+    // setSecurityError(
+    //   "La verificación reCAPTCHA ha expirado. Por favor, verifica nuevamente."
+    // );
   };
-
   const handleRecaptchaError = () => {
-    setSecurityError(
-      "Error en reCAPTCHA. Por favor, recarga la página e intenta nuevamente."
-    );
+    // Disabled - reCAPTCHA is suspended
+    // setSecurityError(
+    //   "Error en reCAPTCHA. Por favor, recarga la página e intenta nuevamente."
+    // );
   };
 
   // Manejar envío del formulario

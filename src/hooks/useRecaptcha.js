@@ -28,11 +28,15 @@ export const useRecaptcha = () => {
     // No hacer nada en modo suspendido - mantener verificado
     // reCAPTCHA expirado pero mantenemos verificado
   };
-
   const resetRecaptcha = () => {
     setRecaptchaToken("suspended-token");
     setIsRecaptchaVerified(true); // Mantener siempre verificado
     setRecaptchaError(null);
+  };
+  // Función para compatibilidad con reCAPTCHA v3 (también suspendida)
+  const executeRecaptcha = async (_action) => {
+    // Simular ejecución de reCAPTCHA v3
+    return "suspended-v3-token";
   };
 
   return {
@@ -45,5 +49,6 @@ export const useRecaptcha = () => {
     handleRecaptchaError,
     handleRecaptchaExpired,
     resetRecaptcha,
+    executeRecaptcha, // Agregar función faltante
   };
 };
