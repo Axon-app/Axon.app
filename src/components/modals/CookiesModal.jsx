@@ -144,12 +144,16 @@ export const EnhancedCookiesModal = React.memo(({ isOpen, onClose }) => {
     >
       <div className="bg-slate-800 rounded-xl max-w-4xl w-full max-h-[85vh] overflow-y-auto shadow-2xl border border-blue-500/30">
         {/* Header */}
-        <div className="sticky top-0 bg-slate-800 border-b border-gray-700 p-4 sm:p-6 flex items-center justify-between">
-          <h2
+        <div className="sticky top-0 bg-slate-800 border-b border-gray-700 p-4 sm:p-6 flex items-center justify-between">          <h2
             id="cookies-modal-title"
-            className="text-2xl sm:text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400"
+            className="text-2xl sm:text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400 flex items-center gap-3"
           >
-            🍪 Configuración de Cookies
+            <img 
+              src="logo1.png" 
+              alt="Axon Logo" 
+              className="w-8 h-8 rounded-lg"
+            />
+            Configuración de Cookies
           </h2>
           <button
             onClick={onClose}
