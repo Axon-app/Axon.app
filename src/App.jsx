@@ -2094,11 +2094,13 @@ const App = () => {
       {showCookieBanner && (
         <div className="fixed bottom-0 left-0 right-0 bg-slate-900 border-t border-gray-700 shadow-2xl z-40 p-4">
           <div className="container mx-auto max-w-6xl">
-            <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">            <div className="flex items-start gap-3 flex-1">
+            <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
+              {" "}
+              <div className="flex items-start gap-3 flex-1">
                 <div className="flex-shrink-0">
-                  <img 
-                    src="logo1.png" 
-                    alt="Axon Logo" 
+                  <img
+                    src="logo1.png"
+                    alt="Axon Logo"
                     className="w-8 h-8 rounded-lg"
                   />
                 </div>
