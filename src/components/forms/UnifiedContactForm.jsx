@@ -216,7 +216,8 @@ export const UnifiedContactForm = React.memo(
     });
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [errors, setErrors] = useState({}); // Hook de reCAPTCHA v2
-    const {      recaptchaToken,
+    const {
+      recaptchaToken,
       isRecaptchaVerified,
       // recaptchaError, // Disabled - component suspended
       resetRecaptcha,
@@ -1091,7 +1092,8 @@ export const UnifiedContactForm = React.memo(
                 onError={handleRecaptchaError}
                 onExpired={handleRecaptchaExpired}
                 className="flex justify-center"
-              />              {/* recaptchaError display disabled - component is suspended */}
+              />{" "}
+              {/* recaptchaError display disabled - component is suspended */}
             </div>
             {/* Botón de envío mejorado con estado dinámico */}
             <div className="bg-gradient-to-br from-gray-800/40 to-gray-900/40 backdrop-blur-sm p-6 rounded-2xl border border-gray-700/30 shadow-xl">
