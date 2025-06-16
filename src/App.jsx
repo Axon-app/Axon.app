@@ -784,13 +784,13 @@ const App = () => {
                 description="Desarrollo nativo para iOS y Android, React Native y Flutter. Experiencias móviles que conquistan usuarios."
                 onOpenModal={handleOpenServiceModal}
                 id="apps-moviles"
-              />
+              />{" "}
               <ServiceCard
-                icon="☁️"
-                title="Arquitectura Cloud"
-                description="Infraestructura escalable en AWS, Azure y GCP. Microservicios, contenedores y despliegues automáticos."
+                icon="📢"
+                title="Marketing Digital"
+                description="Estrategias digitales integrales, campañas publicitarias, SEO y gestión de redes sociales."
                 onOpenModal={handleOpenServiceModal}
-                id="arquitectura-cloud"
+                id="marketing-digital"
               />
               <ServiceCard
                 icon="🔗"
@@ -805,13 +805,13 @@ const App = () => {
                 description="Machine Learning, NLP, Computer Vision. Automatización inteligente para tu negocio."
                 onOpenModal={handleOpenServiceModal}
                 id="inteligencia-artificial"
-              />
+              />{" "}
               <ServiceCard
-                icon="🔒"
-                title="Ciberseguridad"
-                description="Auditorías, pentesting, implementación de protocolos de seguridad y compliance."
+                icon="�"
+                title="Soporte Hardware y Software"
+                description="Soporte técnico integral, mantenimiento de equipos y asistencia en software empresarial."
                 onOpenModal={handleOpenServiceModal}
-                id="ciberseguridad"
+                id="soporte-hardware-software"
               />
             </div>
           </div>
@@ -1668,14 +1668,14 @@ const App = () => {
                     <span className="text-green-400">▶</span>
                     <span>Aplicaciones Móviles</span>
                   </button>
-                </li>
+                </li>{" "}
                 <li>
                   <button
                     onClick={() => scrollToSection("services")}
                     className="text-gray-300 hover:text-green-400 transition-colors duration-200 flex items-center space-x-2 cursor-pointer"
                   >
                     <span className="text-green-400">▶</span>
-                    <span>Inteligencia Artificial</span>
+                    <span>Marketing Digital</span>
                   </button>
                 </li>
                 <li>
@@ -1695,14 +1695,14 @@ const App = () => {
                     <span className="text-green-400">▶</span>
                     <span>E-commerce</span>
                   </button>
-                </li>
+                </li>{" "}
                 <li>
                   <button
                     onClick={() => scrollToSection("services")}
                     className="text-gray-300 hover:text-green-400 transition-colors duration-200 flex items-center space-x-2 cursor-pointer"
                   >
                     <span className="text-green-400">▶</span>
-                    <span>Soporte Técnico</span>
+                    <span>Soporte Hardware y Software</span>
                   </button>
                 </li>
               </ul>

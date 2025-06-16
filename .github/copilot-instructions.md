@@ -107,3 +107,6 @@ public/               # Static assets served directly
 - **Email**: EmailJS for contact functionality
 - **Deployment**: GitHub Pages with GitHub Actions
 - **Image Processing**: Canvas API for dynamic generation
+
+- NO generar documentos de resumen automáticamente a menos que se solicite específicamente
+- Enfocar solo en los cambios de código solicitados

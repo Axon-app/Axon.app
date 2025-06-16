@@ -640,12 +640,18 @@ export const QuoteRequestModal = React.memo(({ isOpen, onClose, _service }) => {
                     className="bg-slate-800 text-white"
                   >
                     APIs y Microservicios
-                  </option>
+                  </option>{" "}
                   <option
-                    value="Consultoría Técnica"
+                    value="Marketing Digital"
                     className="bg-slate-800 text-white"
                   >
-                    Consultoría Técnica
+                    Marketing Digital
+                  </option>
+                  <option
+                    value="Soporte Hardware y Software"
+                    className="bg-slate-800 text-white"
+                  >
+                    Soporte Hardware y Software
                   </option>
                   <option
                     value="Migración de Sistemas"
