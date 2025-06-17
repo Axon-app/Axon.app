@@ -1,7 +1,7 @@
-// Exportaciones optimizadas con lazy loading para componentes pesados
+// Exportaciones directas sin lazy loading
 import React from "react";
 
-// Componentes básicos (carga inmediata)
+// Componentes básicos
 export {
   AnimatedBackground,
   AxonLogo,
@@ -18,39 +18,17 @@ export {
   TestimonialsBanner,
 } from "./ui/Interactive";
 
-// Modales (lazy loading para mejor rendimiento)
-export const EnhancedPrivacyModal = React.lazy(() =>
-  import("./modals/PrivacyModal").then((module) => ({
-    default: module.EnhancedPrivacyModal,
-  }))
-);
+// Componentes UI adicionales
+export { FloatingBlogButton } from "./ui/FloatingBlogButton";
 
-export const EnhancedTermsModal = React.lazy(() =>
-  import("./modals/TermsModal").then((module) => ({
-    default: module.EnhancedTermsModal,
-  }))
-);
+// Secciones
+export { BlogSection } from "./sections/BlogSection";
 
-export const ServiceDetailModal = React.lazy(() =>
-  import("./modals/ServiceModal").then((module) => ({
-    default: module.ServiceDetailModal,
-  }))
-);
-
-export const QuoteRequestModal = React.lazy(() =>
-  import("./modals/QuoteModal").then((module) => ({
-    default: module.QuoteRequestModal,
-  }))
-);
-
-export const ConsultationModal = React.lazy(() =>
-  import("./modals/ConsultationModal").then((module) => ({
-    default: module.ConsultationModal,
-  }))
-);
-
-export const EnhancedCookiesModal = React.lazy(() =>
-  import("./modals/CookiesModal").then((module) => ({
-    default: module.EnhancedCookiesModal,
-  }))
-);
+// Modales - importación directa
+export { EnhancedPrivacyModal } from "./modals/PrivacyModal";
+export { EnhancedTermsModal } from "./modals/TermsModal";
+export { ServiceDetailModal } from "./modals/ServiceModal";
+export { QuoteRequestModal } from "./modals/QuoteModal";
+export { ConsultationModal } from "./modals/ConsultationModal";
+export { EnhancedCookiesModal } from "./modals/CookiesModal";
+export { BlogModal } from "./modals/BlogModal";

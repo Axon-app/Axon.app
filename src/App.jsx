@@ -2,13 +2,16 @@ import React, { useState } from "react";
 import { UnifiedContactForm } from "./components/forms/UnifiedContactForm";
 import {
   AnimatedCounterWithProgress,
+  BlogModal,
+  BlogSection,
   EnhancedCookiesModal,
   EnhancedPrivacyModal,
   EnhancedTermsModal,
+  FloatingBlogButton,
   ServiceCard,
+  ServiceDetailModal,
   TestimonialsBanner,
 } from "./components/index";
-import { ServiceDetailModal } from "./components/modals/ServiceModal";
 import {
   ConsultationModal,
   ContactModal,
@@ -32,6 +35,10 @@ const App = () => {
   const [selectedService, setSelectedService] = useState(null);
   const [showServiceModal, setShowServiceModal] = useState(false);
   const [activeSection, setActiveSection] = useState("hero");
+  
+  // Estados para el blog
+  const [showBlogModal, setShowBlogModal] = useState(false);
+  const [selectedBlogPost, setSelectedBlogPost] = useState(null);
 
   // Hook para manejar los modales unificados
   const {
@@ -48,15 +55,14 @@ const App = () => {
 
   // Efecto para detectar la sección activa al hacer scroll
   React.useEffect(() => {
-    let ticking = false;
-
-    const handleScroll = () => {
+    let ticking = false;    const handleScroll = () => {
       const sections = [
         "hero",
         "about",
         "services",
         "technologies",
         "testimonials",
+        "blog",
         "contact",
       ];
       const scrollPosition = window.scrollY + 100;
@@ -116,9 +122,23 @@ const App = () => {
   const handleOpenQuoteModal = () => {
     openQuoteModal();
   };
-
   const handleOpenConsultationModal = () => {
     openConsultationModal();
+  };
+
+  // Funciones para el blog
+  const handleOpenBlogModal = (post) => {
+    setSelectedBlogPost(post);
+    setShowBlogModal(true);
+  };
+
+  const handleCloseBlogModal = () => {
+    setShowBlogModal(false);
+    setSelectedBlogPost(null);
+  };
+
+  const scrollToBlog = () => {
+    scrollToSection('blog');
   };
 
   // Función para navegación suave a las secciones
@@ -268,9 +288,28 @@ const App = () => {
                       fillRule="evenodd"
                       d="M18 13V5a2 2 0 00-2-2H4a2 2 0 00-2 2v8a2 2 0 002 2h3l3 3 3-3h3a2 2 0 002-2zM5 7a1 1 0 011-1h8a1 1 0 110 2H6a1 1 0 01-1-1zm1 3a1 1 0 100 2h3a1 1 0 100-2H6z"
                       clipRule="evenodd"
+                    />                  </svg>
+                  <span>Testimonios</span>
+                </span>
+              </NavLink>
+              <NavLink
+                href="#blog"
+                isActive={activeSection === "blog"}
+                scrollToSection={scrollToSection}
+              >
+                <span className="flex items-center space-x-2">
+                  <svg
+                    className="w-4 h-4 flex-shrink-0"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z"
+                      clipRule="evenodd"
                     />
                   </svg>
-                  <span>Testimonios</span>
+                  <span>Blog</span>
                 </span>
               </NavLink>
               <NavLink
@@ -462,8 +501,29 @@ const App = () => {
                       d="M18 13V5a2 2 0 00-2-2H4a2 2 0 00-2 2v8a2 2 0 002 2h3l3 3 3-3h3a2 2 0 002-2zM5 7a1 1 0 011-1h8a1 1 0 110 2H6a1 1 0 01-1-1zm1 3a1 1 0 100 2h3a1 1 0 100-2H6z"
                       clipRule="evenodd"
                     />
+                  </svg>                  <span>Testimonios</span>
+                </span>
+              </NavLink>
+              <NavLink
+                href="#blog"
+                mobile
+                onClick={() => setShowMenu(false)}
+                isActive={activeSection === "blog"}
+                scrollToSection={scrollToSection}
+              >
+                <span className="flex items-center space-x-3">
+                  <svg
+                    className="w-5 h-5 text-blue-400"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z"
+                      clipRule="evenodd"
+                    />
                   </svg>
-                  <span>Testimonios</span>
+                  <span>Blog</span>
                 </span>
               </NavLink>
               <NavLink
@@ -1315,11 +1375,14 @@ const App = () => {
               soluciones tecnológicas innovadoras.
             </p>
           </div>          {/* Testimonials Banner */}
-          <TestimonialsBanner testimonials={testimonials} />
-
-          {/* Clients Section */}
+          <TestimonialsBanner testimonials={testimonials} />          {/* Clients Section */}
           <div className="mt-20">
             <ClientsSection />
+          </div>
+
+          {/* Blog Section */}
+          <div className="mt-20">
+            <BlogSection onOpenBlogModal={handleOpenBlogModal} />
           </div>
 
           {/* Stats Row */}
@@ -2179,14 +2242,26 @@ const App = () => {
           onClose={handleCloseServiceModal}
           onOpenQuote={handleOpenQuoteModal}
           onOpenConsultation={handleOpenConsultationModal}
-        />
-      )}{" "}
+        />      )}{" "}
       {/* Modales Unificados */}
       <ContactModal isOpen={contactModalOpen} onClose={closeContactModal} />
       <QuoteModal isOpen={quoteModalOpen} onClose={closeQuoteModal} />
       <ConsultationModal
         isOpen={consultationModalOpen}
         onClose={closeConsultationModal}
+      />
+      
+      {/* Modal del Blog */}
+      <BlogModal 
+        isOpen={showBlogModal} 
+        onClose={handleCloseBlogModal} 
+        post={selectedBlogPost} 
+      />
+      
+      {/* Botón flotante del blog */}
+      <FloatingBlogButton 
+        onClick={scrollToBlog}
+        isVisible={true}
       />
     </div>
   );
