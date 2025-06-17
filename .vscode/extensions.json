@@ -1,20 +1,32 @@
 {
     "recommendations": [
+        // === EXTENSIONES ESENCIALES PARA COPILOT ===
+        "github.copilot",
+        "github.copilot-chat",
+        // === EXTENSIONES DE DESARROLLO ===
         "ms-vscode.vscode-eslint",
         "esbenp.prettier-vscode",
         "bradlc.vscode-tailwindcss",
-        "ms-vscode.vscode-typescript-next",
+        // === EXTENSIONES DE PRODUCTIVIDAD ===
         "formulahendry.auto-rename-tag",
         "christian-kohler.path-intellisense",
         "ms-vscode.vscode-json"
     ],
     "unwantedRecommendations": [
+        // === EXTENSIONES DE JAVA (DESACTIVADAS) ===
         "vscjava.vscode-java-pack",
         "vscjava.vscode-java-dependency",
         "vscjava.vscode-java-test",
         "vscjava.vscode-maven",
         "vscjava.vscode-java-debug",
         "redhat.java",
-        "vscjava.vscode-gradle"
+        "vscjava.vscode-gradle",
+        // === EXTENSIONES QUE PUEDEN INTERFERIR CON COPILOT ===
+        "ms-vscode.github-authentication",
+        "github.vscode-pull-request-github",
+        "eamodio.gitlens",
+        "tabnine.tabnine-vscode",
+        "visualstudioexptteam.intellicode-api-usage-examples",
+        "ms-vscode.vscode-typescript-next"
     ]
 }

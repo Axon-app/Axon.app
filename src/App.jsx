@@ -15,6 +15,7 @@ import {
   QuoteModal,
 } from "./components/modals/UnifiedModals";
 import { EmailLink } from "./components/ui/EmailLink";
+import { ClientsSection } from "./components/sections/ClientsSection";
 import { technologies, testimonials } from "./data/content";
 import { servicesData } from "./data/servicesData";
 import { useModals } from "./hooks/useModals";
@@ -1313,10 +1314,13 @@ const App = () => {
               presentación. Descubre cómo hemos transformado sus negocios con
               soluciones tecnológicas innovadoras.
             </p>
-          </div>
-
-          {/* Testimonials Banner */}
+          </div>          {/* Testimonials Banner */}
           <TestimonialsBanner testimonials={testimonials} />
+
+          {/* Clients Section */}
+          <div className="mt-20">
+            <ClientsSection />
+          </div>
 
           {/* Stats Row */}
           <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">

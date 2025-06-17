@@ -48,14 +48,75 @@
     "editor.codeActionsOnSave": {
         "source.fixAll.eslint": "explicit",
         "source.organizeImports": "explicit"
-    },
-    // Rendimiento y productividad
+    }, // Rendimiento y productividad ULTRA OPTIMIZADO
     "editor.quickSuggestions": {
-        "strings": true
+        "strings": true,
+        "comments": true,
+        "other": true
     },
+    "editor.quickSuggestionsDelay": 10,
     "editor.suggest.insertMode": "replace",
+    "editor.suggest.preview": true,
+    "editor.suggest.shareSuggestSelections": false,
     "editor.acceptSuggestionOnCommitCharacter": false,
+    "editor.acceptSuggestionOnEnter": "smart",
     "editor.tabCompletion": "on",
+    "editor.wordBasedSuggestions": "off",
+    "editor.suggest.showKeywords": false,
+    "editor.suggest.showSnippets": false,
+    "editor.suggest.showWords": false,
+    "editor.suggest.localityBonus": true,
+    "editor.suggest.filterGraceful": true,
+    // Configuraciones para mejor rendimiento con Copilot
+    "editor.parameterHints.enabled": true,
+    "editor.hover.delay": 300,
+    "editor.hover.sticky": true,
+    // GitHub Copilot - Configuración ULTRA OPTIMIZADA
+    "github.copilot.enable": {
+        "*": true,
+        "yaml": true,
+        "plaintext": false,
+        "markdown": true,
+        "javascript": true,
+        "javascriptreact": true,
+        "typescript": true,
+        "typescriptreact": true,
+        "html": true,
+        "css": true,
+        "json": true,
+        "jsonc": true,
+        "java": false
+    },
+    // Configuración avanzada para máxima precisión
+    "github.copilot.advanced": {
+        "secret_key": "github-copilot",
+        "length": 800,
+        "temperature": 0.05,
+        "top_p": 0.95,
+        "stop": [
+            "\n\n",
+            "\n//",
+            "\n/*"
+        ],
+        "indentationMode": {
+            "javascript": "space",
+            "javascriptreact": "space",
+            "typescript": "space",
+            "css": "space",
+            "html": "space",
+            "json": "space"
+        }
+    },
+    // Configuraciones de inline suggestions optimizadas
+    "editor.inlineSuggest.enabled": true,
+    "editor.inlineSuggest.showToolbar": "always",
+    "editor.inlineSuggest.suppressSuggestions": false,
+    // Configuraciones específicas de Copilot Chat
+    "github.copilot.chat.enabled": true,
+    "github.copilot.chat.welcomeMessage": "never",
+    // Configuraciones adicionales para velocidad
+    "github.copilot.autocomplete.enable": true,
+    "github.copilot.conversation.enable": true,
     // Archivos y exclusiones
     "files.exclude": {
         "**/node_modules": true,
@@ -122,5 +183,53 @@
         "**/target/**": true,
         "**/.gradle/**": true,
         "**/build/**": true
-    }
+    },
+    // === CONFIGURACIONES ADICIONALES PARA COPILOT ULTRA OPTIMIZADO ===
+    // Configuraciones de lenguaje específicas para mejor contexto
+    "[javascript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.suggest.insertMode": "replace",
+        "editor.inlineSuggest.enabled": true
+    },
+    "[javascriptreact]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.suggest.insertMode": "replace",
+        "editor.inlineSuggest.enabled": true
+    },
+    "[typescript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.suggest.insertMode": "replace",
+        "editor.inlineSuggest.enabled": true
+    },
+    "[typescriptreact]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.suggest.insertMode": "replace",
+        "editor.inlineSuggest.enabled": true
+    },
+    "[json]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.inlineSuggest.enabled": true
+    },
+    "[css]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.inlineSuggest.enabled": true
+    },
+    // Configuraciones de rendimiento específicas
+    "editor.semanticHighlighting.enabled": true,
+    "editor.bracketPairColorization.enabled": true,
+    "editor.guides.bracketPairs": "active",
+    "editor.lightbulb.enabled": "onCode",
+    // Optimizaciones de memoria para proyectos grandes
+    "typescript.disableAutomaticTypeAcquisition": true,
+    "typescript.preferences.useAliasesForRenames": false,
+    "typescript.suggest.autoImports": false,
+    "javascript.suggest.autoImports": false,
+    // Configuraciones para evitar conflictos con Copilot
+    "editor.suggest.snippetsPreventQuickSuggestions": false,
+    "editor.suggestOnTriggerCharacters": true,
+    "editor.wordBasedSuggestionsMode": "off",
+    // Configuraciones de workspace para mejor contexto
+    "search.smartCase": true,
+    "search.useGlobalIgnoreFiles": true,
+    "search.useParentIgnoreFiles": true
 }
