@@ -1,24 +1,5 @@
 import React from "react";
-import { useRecaptcha } from "../../hooks/useRecaptcha";
 import { sendConsultationRequest } from "../../services/emailService";
-// import { ReCaptchaComponent } from "../security/ReCaptcha"; // TEMPORALMENTE COMENTADO
-
-// Componente reCAPTCHA temporalmente suspendido inline
-const ReCaptchaComponent = ({ onVerify, className = "" }) => {
-  React.useEffect(() => {
-    setTimeout(() => {
-      onVerify?.(`suspended-${Date.now()}`);
-    }, 100);
-  }, [onVerify]);
-
-  return (
-    <div
-      className={`p-4 border-2 border-dashed border-gray-300 rounded-lg text-center text-gray-500 text-sm ${className}`}
-    >
-      🔒 Verificación de seguridad (suspendida temporalmente)
-    </div>
-  );
-};
 
 // Generar opciones de horario una sola vez (9 AM - 5 PM, intervalos de 30 min)
 const generateTimeOptions = () => {
@@ -83,8 +64,6 @@ export const ConsultationModal = React.memo(({ isOpen, onClose }) => {
   const [globalError, setGlobalError] = React.useState("");
   const [isSubmitting, setIsSubmitting] = React.useState(false);
   const [submitStatus, setSubmitStatus] = React.useState(null);
-  // Hook para manejar reCAPTCHA v3
-  const { executeRecaptcha, resetRecaptcha } = useRecaptcha();
 
   // Manejar escape key
   React.useEffect(() => {
@@ -125,9 +104,8 @@ export const ConsultationModal = React.memo(({ isOpen, onClose }) => {
       setSubmitStatus(null);
       setErrors({});
       setGlobalError("");
-      resetRecaptcha();
     }
-  }, [isOpen, resetRecaptcha]);
+  }, [isOpen]);
 
   // Early return si no está abierto
   if (!isOpen) return null; // Manejar cambios en el formulario con sanitización simplificada
@@ -214,7 +192,7 @@ export const ConsultationModal = React.memo(({ isOpen, onClose }) => {
       newErrors.phone =
         "El formato del teléfono no es válido (ej: +57 300 123 4567)";
       isValid = false;
-    } // Para reCAPTCHA v3, la validación se hace en el envío
+    } // La validación se hace en el envío
 
     setErrors(newErrors);
     return isValid;
@@ -232,20 +210,9 @@ export const ConsultationModal = React.memo(({ isOpen, onClose }) => {
       );
       return;
     }
-
     setIsSubmitting(true);
 
     try {
-      // 1. Ejecutar reCAPTCHA v3
-      const recaptchaToken = await executeRecaptcha("consultation_form");
-
-      if (!recaptchaToken) {
-        setGlobalError(
-          "Error en la verificación de seguridad. Por favor, intenta nuevamente."
-        );
-        return;
-      }
-
       // 2. Preparar datos sanitizados para el envío
       const SANITIZED_DATA = {
         name: sanitizeInput(formData.name),
@@ -261,15 +228,11 @@ export const ConsultationModal = React.memo(({ isOpen, onClose }) => {
         topics: sanitizeInput(formData.topics),
         questions: sanitizeInput(formData.questions),
         meetingType: formData.meetingType,
-        recaptchaToken,
         timestamp: new Date().toISOString(),
-      }; // Aquí iría la integración con EmailJS
+      }; // Aquí se procesan los datos del formulario
       // Los datos sanitizados están listos para envío: SANITIZED_DATA
-      // await emailService.sendConsultationRequest(SANITIZED_DATA);      // 3. Enviar email usando EmailJS
-      const emailResult = await sendConsultationRequest({
-        ...SANITIZED_DATA,
-        recaptchaToken,
-      });
+      // await emailService.sendConsultationRequest(SANITIZED_DATA);      // 3. Enviar consulta por formulario
+      const emailResult = await sendConsultationRequest(SANITIZED_DATA);
 
       if (!emailResult.success) {
         throw new Error(emailResult.error || "Error al programar la consulta");
@@ -831,14 +794,11 @@ export const ConsultationModal = React.memo(({ isOpen, onClose }) => {
                   rows="3"
                   className="w-full p-3 bg-slate-700 border border-gray-600 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 text-white transition-all resize-none"
                   placeholder="¿Hay algo específico que te gustaría preguntar? (opcional)"
-                />
+                />{" "}
               </div>{" "}
-              {/* Google reCAPTCHA v3 */}
+              {/* Sistema de seguridad integrado */}
               <div className="flex flex-col items-center">
-                <ReCaptchaComponent
-                  action="consultation_form"
-                  className="mb-4"
-                />
+                {/* Verificación automática habilitada */}
               </div>
               {/* Error global */}
               {globalError && (

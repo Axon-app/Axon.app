@@ -191,14 +191,6 @@ export const technologies = [
 
   // Services & Integrations - Servicios utilizados
   {
-    name: "EmailJS",
-    category: CATEGORIES.API,
-    icon: "📧",
-    description: "Servicio de envío de emails",
-    gradient: "from-blue-400 to-purple-500",
-    level: LEVELS.EXPERT,
-  },
-  {
     name: "Canvas API",
     category: CATEGORIES.FRONTEND,
     icon: "🎨",

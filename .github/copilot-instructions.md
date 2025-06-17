@@ -9,7 +9,7 @@
 - **Vite** 6.x as the build tool (optimized for speed)
 - **React** 19.x with modern hooks and patterns
 - **Tailwind CSS** 4.x for utility-first styling
-- **EmailJS** for contact form functionality
+- **Contact Forms** for user interaction
 - **Canvas API** for dynamic social media images
 - **GitHub Pages** for deployment
 - **Modern ES6+ JavaScript** with ES modules
@@ -81,9 +81,9 @@ public/               # Static assets served directly
 
 ### Contact Forms
 
-- Use EmailJS for form submissions
 - Implement proper validation and error handling
 - Provide clear user feedback for form states
+- Use demo mode for form processing
 
 ### Brand Consistency
 
@@ -104,7 +104,7 @@ public/               # Static assets served directly
 - **Styling**: Tailwind CSS 4.x with PostCSS
 - **Fonts**: Google Fonts (Orbitron, Rajdhani)
 - **Icons**: Custom brand icons and logos
-- **Email**: EmailJS for contact functionality
+- **Email**: Contact forms with demo processing
 - **Deployment**: GitHub Pages with GitHub Actions
 - **Image Processing**: Canvas API for dynamic generation
 

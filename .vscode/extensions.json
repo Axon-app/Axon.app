@@ -1,0 +1,20 @@
+{
+    "recommendations": [
+        "ms-vscode.vscode-eslint",
+        "esbenp.prettier-vscode",
+        "bradlc.vscode-tailwindcss",
+        "ms-vscode.vscode-typescript-next",
+        "formulahendry.auto-rename-tag",
+        "christian-kohler.path-intellisense",
+        "ms-vscode.vscode-json"
+    ],
+    "unwantedRecommendations": [
+        "vscjava.vscode-java-pack",
+        "vscjava.vscode-java-dependency",
+        "vscjava.vscode-java-test",
+        "vscjava.vscode-maven",
+        "vscjava.vscode-java-debug",
+        "redhat.java",
+        "vscjava.vscode-gradle"
+    ]
+}

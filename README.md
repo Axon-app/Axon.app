@@ -3,7 +3,6 @@
 [![Vite](https://img.shields.io/badge/Vite-6.3.5-646CFF?logo=vite&logoColor=white)](https://vitejs.dev/)
 [![React](https://img.shields.io/badge/React-19+-61DAFB?logo=react&logoColor=white)](https://reactjs.org/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind-4.1+-38B2AC?logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
-[![EmailJS](https://img.shields.io/badge/EmailJS-Integrated-FF6B35?logo=gmail&logoColor=white)](https://www.emailjs.com/)
 [![GitHub Pages](https://img.shields.io/badge/Deploy-GitHub%20Pages-222222?logo=github&logoColor=white)](https://pages.github.com/)
 
 > **Sitio web profesional moderno para Axon.App** - Soluciones tecnológicas innovadoras con sistema completo de formularios y captación de leads
@@ -36,7 +35,7 @@
 - ✅ **Formulario de Contacto** - Contacto directo desde el sitio
 - ✅ **Solicitud de Propuesta** - Formulario detallado para presupuestos
 - ✅ **Agendar Consulta** - Sistema de agendamiento de citas
-- ✅ **Integración EmailJS** - Conectado a `axonapp.info@gmail.com`
+- ✅ **Sistema de Formularios** - Conectado a `axonapp.info@gmail.com`
 - ✅ **Validación Completa** - Validación HTML5 y feedback visual
 - ✅ **Modales Profesionales** - Sistema avanzado de modales especializados
 
@@ -58,7 +57,7 @@
 - **Frontend:** React 19+ con Hooks modernos y Concurrent Features
 - **Build Tool:** Vite 6.3.5 (ultra-rápido)
 - **Styling:** Tailwind CSS 4.1+ (utility-first)
-- **Email Service:** EmailJS (modo demo funcional)
+- **Contact System:** Sistema de formularios (modo demo funcional)
 - **Fuentes:** Orbitron + Rajdhani (Google Fonts)
 - **Canvas:** Canvas API para generación de imágenes sociales
 - **Despliegue:** GitHub Pages con dominio personalizado
@@ -123,7 +122,7 @@ Axon/
 │   │   ├── 📄 content.js           # Datos de contenido
 │   │   └── 📄 servicesData.js      # Datos de servicios
 │   ├── 📁 services/
-│   │   └── 📄 emailService.js      # EmailJS integration
+│   │   └── 📄 emailService.js      # Sistema de formularios
 │   ├── 📁 assets/                  # Recursos estáticos
 │   ├── 📄 App.jsx                  # Componente principal
 │   ├── 📄 index.css                # Estilos globales
@@ -207,7 +206,8 @@ npm run preview  # Para probar localmente
 - 🎨 **Diseño UI/UX** - Interfaces modernas
 - ☁️ **Soluciones Cloud** - Infraestructura escalable
 - 🧠 **Inteligencia Artificial** - ML y automatización
-- 🔒 **Ciberseguridad** - Protección digital
+- � **Marketing Digital** - Estrategias online
+- 🔧 **Soporte Técnico** - Hardware y Software
 
 ## 🛠️ Desarrollo
 
@@ -275,4 +275,5 @@ Este proyecto está bajo la Licencia MIT - ver archivo [LICENSE](LICENSE) para d
 ⭐ **¡Dale una estrella si te gusta el proyecto!**
 
 _Construido con ❤️ usando React + Vite + Tailwind CSS_
+
 # Deploy - 2025-06-15 19:53:30

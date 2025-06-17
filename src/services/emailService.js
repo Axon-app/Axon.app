@@ -1,122 +1,16 @@
-import emailjs from "@emailjs/browser";
-
-// Configuración de EmailJS - Servicios reales configurados
-const EMAILJS_CONFIG = {
-  // Clave pública de EmailJS
-  PUBLIC_KEY: "LzQtejP5Ii_qUvS7j",
-
-  // Servicios configurados (basados en las imágenes proporcionadas)
-  SERVICES: {
-    GMAIL: {
-      SERVICE_ID: "service_0v5oqvm", // Gmail service conectado a axonapp.info@gmail.com
-      NAME: "Gmail",
-      EMAIL: "axonapp.info@gmail.com",
-    },
-    OUTLOOK: {
-      SERVICE_ID: "service_ec5ggdj", // Outlook service conectado a axonapp@outlook.es
-      NAME: "Axon.app",
-      EMAIL: "axonapp@outlook.es",
-    },
-  },
-
-  // Templates configurados (solo los 2 que tienes)
-  TEMPLATES: {
-    CONSULTATION: "template_consultation",
-    QUOTE: "template_quote",
-    // Usar template_consultation para contacto general también
-    CONTACT: "template_consultation",
-  },
-};
-
-// Inicializar EmailJS con la clave pública real
-emailjs.init(EMAILJS_CONFIG.PUBLIC_KEY);
-
 /**
- * Envía email a múltiples destinatarios (Gmail y Outlook)
- * @param {string} templateId - ID del template
- * @param {Object} templateParams - Parámetros del template
- * @returns {Promise<Object>} - Resultado del envío
+ * Servicio de contacto simplificado sin dependencias externas
+ * Maneja formularios de contacto, cotizaciones y consultas
  */
-const sendToMultipleServices = async (templateId, templateParams) => {
-  try {
-    const promises = [];
 
-    // Configurar parámetros para Gmail
-    const gmailParams = {
-      ...templateParams,
-      to_email: "axonapp.info@gmail.com",
-      from_service: EMAILJS_CONFIG.SERVICES.GMAIL.NAME,
-      from_email: EMAILJS_CONFIG.SERVICES.GMAIL.EMAIL,
-    };
-
-    // Configurar parámetros para Outlook
-    const outlookParams = {
-      ...templateParams,
-      to_email: "axonapp@outlook.es",
-      from_service: EMAILJS_CONFIG.SERVICES.OUTLOOK.NAME,
-      from_email: EMAILJS_CONFIG.SERVICES.OUTLOOK.EMAIL,
-    };
-
-    // Enviar a Gmail
-    promises.push(
-      emailjs
-        .send(
-          EMAILJS_CONFIG.SERVICES.GMAIL.SERVICE_ID,
-          templateId,
-          gmailParams,
-          EMAILJS_CONFIG.PUBLIC_KEY
-        )
-        .then((result) => ({
-          service: "Gmail",
-          success: true,
-          result,
-        }))
-        .catch((error) => ({
-          service: "Gmail",
-          success: false,
-          error: error.message,
-        }))
-    );
-
-    // Enviar a Outlook
-    promises.push(
-      emailjs
-        .send(
-          EMAILJS_CONFIG.SERVICES.OUTLOOK.SERVICE_ID,
-          templateId,
-          outlookParams,
-          EMAILJS_CONFIG.PUBLIC_KEY
-        )
-        .then((result) => ({
-          service: "Outlook",
-          success: true,
-          result,
-        }))
-        .catch((error) => ({
-          service: "Outlook",
-          success: false,
-          error: error.message,
-        }))
-    );
-
-    // Esperar todas las promesas
-    const allResults = await Promise.all(promises);
-    const successfulSends = allResults.filter((r) => r.success);
-
-    return {
-      success: successfulSends.length > 0,
-      results: allResults,
-      successCount: successfulSends.length,
-      totalAttempts: allResults.length,
-      primarySuccess: successfulSends.length >= 1,
-    };
-  } catch (error) {
-    return {
-      success: false,
-      error: error.message || "Error al enviar a múltiples servicios",
-      results: [],
-    };
-  }
+// Configuración de contacto de la empresa
+const CONTACT_CONFIG = {
+  EMAILS: {
+    PRIMARY: "axonapp.info@gmail.com",
+    SECONDARY: "axonapp@outlook.es",
+  },
+  COMPANY_NAME: "Axon.app",
+  RESPONSE_TIME: "24 horas",
 };
 
 /**
@@ -144,103 +38,44 @@ const validateFormData = (formData) => {
 };
 
 /**
- * Función UNIFICADA para enviar cualquier tipo de email
+ * Simula el procesamiento de formularios para demo
  * @param {string} type - Tipo: 'contact', 'quote', 'consultation'
  * @param {Object} formData - Datos del formulario
- * @returns {Promise<Object>} - Resultado del envío
+ * @returns {Promise<Object>} - Resultado simulado del envío
  */
 export const sendUnifiedEmail = async (type, formData) => {
-  try {
-    // Validar datos básicos
-    const validation = validateFormData(formData);
-    if (!validation.isValid) {
-      return { success: false, errors: validation.errors };
-    }
-
-    // Seleccionar template según el tipo
-    let templateId;
-    let templateParams;
-
-    switch (type) {
-      case "quote":
-        templateId = EMAILJS_CONFIG.TEMPLATES.QUOTE;
-        templateParams = {
-          from_name: formData.name,
-          from_email: formData.email,
-          phone: formData.phone || "No proporcionado",
-          company: formData.company || "No especificada",
-          city: formData.city || "No especificada",
-          client_type: formData.clientType || "No especificado",
-          project_type: formData.projectType || "Propuesta General",
-          project_description:
-            formData.description ||
-            formData.projectDescription ||
-            formData.message ||
-            "Sin descripción",
-          requirements:
-            formData.additionalRequirements ||
-            formData.requirements ||
-            "Ninguno específico",
-          reply_to: formData.email,
-          timestamp: new Date().toLocaleString("es-ES"),
-        };
-        break;
-
-      case "consultation":
-        templateId = EMAILJS_CONFIG.TEMPLATES.CONSULTATION;
-        templateParams = {
-          from_name: formData.name,
-          from_email: formData.email,
-          phone: formData.phone || "No proporcionado",
-          company: formData.company || "No especificada",
-          city: formData.city || "No especificada",
-          client_type: formData.clientType || "No especificado",
-          consultation_type: formData.consultationType || "Consulta General",
-          preferred_date: formData.preferredDate || "Flexible",
-          preferred_time: formData.preferredTime || "Cualquier horario",
-          timezone: formData.timezone || "No especificado",
-          topics: formData.topics || formData.message || "Temas generales",
-          questions: formData.questions || "Ninguna pregunta específica",
-          meeting_type: formData.meetingType || "video-call",
-          reply_to: formData.email,
-          timestamp: new Date().toLocaleString("es-ES"),
-        };
-        break;
-
-      case "contact":
-      default:
-        // Para contacto general, usar template de consultation
-        templateId = EMAILJS_CONFIG.TEMPLATES.CONSULTATION;
-        templateParams = {
-          from_name: formData.name,
-          from_email: formData.email,
-          phone: formData.phone || "No proporcionado",
-          company: formData.company || "No especificada",
-          city: "No especificada",
-          client_type: "Contacto General",
-          consultation_type: "Consulta General - Contacto",
-          preferred_date: "Flexible",
-          preferred_time: "Cualquier horario",
-          timezone: "No especificado",
-          topics: formData.message || "Mensaje de contacto general",
-          questions: formData.message || "Sin preguntas específicas",
-          meeting_type: "A definir",
-          reply_to: formData.email,
-          timestamp: new Date().toLocaleString("es-ES"),
-        };
-        break;
-    }
-
-    // Enviar a múltiples servicios
-    const result = await sendToMultipleServices(templateId, templateParams);
-
-    return result;
-  } catch (error) {
-    return {
-      success: false,
-      error: error.message || "Error al enviar email",
-    };
+  // Validar datos básicos
+  const validation = validateFormData(formData);
+  if (!validation.isValid) {
+    return { success: false, errors: validation.errors };
   }
+
+  // Simular procesamiento
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      const timestamp = new Date().toLocaleString("es-ES", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+      });
+
+      resolve({
+        success: true,
+        demo: true,
+        type,
+        data: {
+          name: formData.name,
+          email: formData.email,
+          contactEmail: CONTACT_CONFIG.EMAILS.PRIMARY,
+        },
+        timestamp,
+        message:
+          "Formulario procesado correctamente. En producción se enviaría por email.",
+      });
+    }, 1200);
+  });
 };
 
 /**
@@ -271,73 +106,9 @@ export const sendConsultationRequest = async (formData) => {
 };
 
 /**
- * Función alternativa usando fetch para casos donde EmailJS no esté disponible
- * @param {string} type - Tipo de email
- * @param {Object} data - Datos del formulario
- * @param {string} serviceName - Nombre del servicio
- * @returns {Promise<Object>} - Resultado del envío
- */
-export const sendEmailFallback = async (type, data, serviceName = "") => {
-  try {
-    const response = await fetch("https://formspree.io/f/YOUR_FORM_ID", {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        email: "axonapp.info@gmail.com",
-        type,
-        service: serviceName,
-        data,
-        timestamp: new Date().toISOString(),
-      }),
-    });
-
-    if (response.ok) {
-      return { success: true };
-    } else {
-      throw new Error("Error en el envío");
-    }
-  } catch (error) {
-    return {
-      success: false,
-      error: error.message || "Error en fallback email",
-    };
-  }
-};
-
-/**
- * Configuración para desarrollo/testing (simulación)
- * @param {string} type - Tipo de email
- * @param {Object} data - Datos del formulario
- * @param {string} serviceName - Nombre del servicio
- * @returns {Promise<Object>} - Resultado simulado
- */
-export const sendEmailDemo = async (type, data, _serviceName = "") => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      const timestamp = new Date().toLocaleString("es-ES", {
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-        hour: "2-digit",
-        minute: "2-digit",
-      });
-
-      resolve({
-        success: true,
-        demo: true,
-        confirmationSent: true,
-        timestamp,
-      });
-    }, 1000);
-  });
-};
-
-/**
  * Función para enviar email de confirmación al cliente
- * @param {string} _clientEmail - Email del cliente * @param {string} _type - Tipo de confirmación
+ * @param {string} _clientEmail - Email del cliente
+ * @param {string} _type - Tipo de confirmación
  * @param {string} _serviceName - Nombre del servicio
  * @returns {Promise<Object>} - Resultado del envío
  */
@@ -346,7 +117,10 @@ export const sendClientConfirmation = async (
   _type,
   _serviceName = ""
 ) => {
-  // En producción, aquí se enviaría el email real
-  // Por ahora simulamos el envío exitoso
-  return { success: true, demo: true };
+  // Simulación de confirmación
+  return {
+    success: true,
+    demo: true,
+    message: "Confirmación enviada (modo demo)",
+  };
 };

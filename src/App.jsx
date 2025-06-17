@@ -6,9 +6,9 @@ import {
   EnhancedPrivacyModal,
   EnhancedTermsModal,
   ServiceCard,
-  ServiceDetailModal,
   TestimonialsBanner,
 } from "./components/index";
+import { ServiceDetailModal } from "./components/modals/ServiceModal";
 import {
   ConsultationModal,
   ContactModal,
@@ -100,10 +100,12 @@ const App = () => {
   const handleLogoError = () => {
     setLogoError(true);
   };
-
   const handleOpenServiceModal = (serviceId) => {
-    setSelectedService(servicesData[serviceId]);
-    setShowServiceModal(true);
+    const serviceData = servicesData[serviceId];
+    if (serviceData) {
+      setSelectedService(serviceData);
+      setShowServiceModal(true);
+    }
   };
 
   const handleCloseServiceModal = () => {
@@ -1841,26 +1843,6 @@ const App = () => {
                   </button>
                 </li>
               </ul>
-
-              {/* Newsletter */}
-              <div className="bg-gradient-to-r from-gray-800 to-gray-700 p-4 rounded-lg border border-gray-600">
-                <h5 className="text-sm font-semibold text-white mb-2">
-                  📧 Newsletter
-                </h5>
-                <p className="text-xs text-gray-400 mb-3">
-                  Recibe nuestras últimas noticias y ofertas
-                </p>
-                <div className="flex">
-                  <input
-                    type="email"
-                    placeholder="tu@email.com"
-                    className="flex-1 px-3 py-2 bg-gray-700 border border-gray-600 rounded-l-lg text-white text-xs focus:outline-none focus:border-green-500"
-                  />
-                  <button className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-r-lg transition-colors text-xs">
-                    →
-                  </button>
-                </div>
-              </div>
             </div>
           </div>
 

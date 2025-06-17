@@ -1,24 +1,5 @@
 import React, { useCallback, useState } from "react";
-import { useRecaptcha } from "../../hooks/useRecaptcha";
 import { sendUnifiedEmail } from "../../services/emailService";
-// import { ReCaptchaComponent } from "../security/ReCaptcha"; // TEMPORALMENTE COMENTADO
-
-// Componente reCAPTCHA temporalmente suspendido inline
-const ReCaptchaComponent = ({ onVerify, className = "" }) => {
-  React.useEffect(() => {
-    setTimeout(() => {
-      onVerify?.(`suspended-${Date.now()}`);
-    }, 100);
-  }, [onVerify]);
-
-  return (
-    <div
-      className={`p-4 border-2 border-dashed border-gray-300 rounded-lg text-center text-gray-500 text-sm ${className}`}
-    >
-      🔒 Verificación de seguridad (suspendida temporalmente)
-    </div>
-  );
-};
 
 // Utilidad para crear modales
 const createModal = (content, className = "") => {
@@ -215,17 +196,7 @@ export const UnifiedContactForm = React.memo(
       meetingType: "video-call",
     });
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const [errors, setErrors] = useState({}); // Hook de reCAPTCHA v2
-    const {
-      recaptchaToken,
-      isRecaptchaVerified,
-      // recaptchaError, // Disabled - component suspended
-      resetRecaptcha,
-      handleRecaptchaVerify,
-      handleRecaptchaError,
-      handleRecaptchaExpired,
-    } = useRecaptcha();
-
+    const [errors, setErrors] = useState({});
     // Definir campos obligatorios por modo
     const getRequiredFields = useCallback(() => {
       const baseFields = [
@@ -407,31 +378,13 @@ export const UnifiedContactForm = React.memo(
         return;
       }
       setIsSubmitting(true);
-
       try {
-        // Verificar que reCAPTCHA esté completado (v2)
-        if (!isRecaptchaVerified || !recaptchaToken) {
-          createModal(
-            getErrorModalContent(
-              "Por favor, completa la verificación de reCAPTCHA antes de enviar."
-            )
-          );
-          setIsSubmitting(false);
-          return;
-        }
-
-        // Agregar token de reCAPTCHA a los datos del formulario
-        const formDataWithRecaptcha = {
-          ...formData,
-          recaptchaToken,
-        };
-
-        const result = await sendUnifiedEmail(mode, formDataWithRecaptcha);
+        const result = await sendUnifiedEmail(mode, formData);
 
         if (result.success) {
           createModal(getSuccessModalContent(mode));
 
-          // Resetear formulario y reCAPTCHA
+          // Resetear formulario
           setFormData({
             name: "",
             email: "",
@@ -450,8 +403,6 @@ export const UnifiedContactForm = React.memo(
             meetingType: "video-call",
           });
 
-          resetRecaptcha();
-
           // Cerrar modal si existe
           if (onClose) {
             setTimeout(() => onClose(), 1500);
@@ -459,7 +410,6 @@ export const UnifiedContactForm = React.memo(
         } else {
           const errorMessage = result.error || "Ocurrió un error inesperado";
           createModal(getErrorModalContent(errorMessage));
-          resetRecaptcha();
         }
       } catch {
         createModal(
@@ -467,7 +417,6 @@ export const UnifiedContactForm = React.memo(
             "Error de conexión. Por favor, intenta nuevamente."
           )
         );
-        resetRecaptcha();
       } finally {
         setIsSubmitting(false);
       }
@@ -1042,11 +991,11 @@ export const UnifiedContactForm = React.memo(
                       </label>
                     ))}
                   </div>
-                </div>
+                </div>{" "}
               </div>
             </div>
           )}{" "}
-          {/* Componente reCAPTCHA v3 */}
+          {/* Sistema de seguridad */}
           <div className="bg-gradient-to-br from-gray-800/40 to-gray-900/40 backdrop-blur-sm p-6 rounded-2xl border border-gray-700/30 shadow-xl">
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center space-x-3">
@@ -1067,34 +1016,10 @@ export const UnifiedContactForm = React.memo(
                 </div>
                 <h3 className="text-lg font-semibold text-white">
                   Verificación de Seguridad
-                </h3>
+                </h3>{" "}
               </div>
+            </div>
 
-              <div className="flex items-center space-x-2">
-                <div
-                  className={`w-3 h-3 rounded-full ${
-                    isRecaptchaVerified ? "bg-green-500" : "bg-gray-500"
-                  }`}
-                ></div>
-                <span
-                  className={`text-sm font-medium ${
-                    isRecaptchaVerified ? "text-green-400" : "text-gray-400"
-                  }`}
-                >
-                  {isRecaptchaVerified ? "Verificado" : "Pendiente"}
-                </span>
-              </div>
-            </div>
-            {/* reCAPTCHA */}{" "}
-            <div id="recaptcha-container" className="mb-4" aria-live="polite">
-              <ReCaptchaComponent
-                onVerify={handleRecaptchaVerify}
-                onError={handleRecaptchaError}
-                onExpired={handleRecaptchaExpired}
-                className="flex justify-center"
-              />{" "}
-              {/* recaptchaError display disabled - component is suspended */}
-            </div>
             {/* Botón de envío mejorado con estado dinámico */}
             <div className="bg-gradient-to-br from-gray-800/40 to-gray-900/40 backdrop-blur-sm p-6 rounded-2xl border border-gray-700/30 shadow-xl">
               {/* Indicador de estado antes del botón */}

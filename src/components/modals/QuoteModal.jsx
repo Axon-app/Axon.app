@@ -1,24 +1,5 @@
 import React from "react";
-import { useRecaptcha } from "../../hooks/useRecaptcha";
 import { sendQuoteRequest } from "../../services/emailService";
-// import { ReCaptchaComponent } from "../security/ReCaptcha"; // TEMPORALMENTE COMENTADO
-
-// Componente reCAPTCHA temporalmente suspendido inline
-const ReCaptchaComponent = ({ onVerify, className = "" }) => {
-  React.useEffect(() => {
-    setTimeout(() => {
-      onVerify?.(`suspended-${Date.now()}`);
-    }, 100);
-  }, [onVerify]);
-
-  return (
-    <div
-      className={`p-4 border-2 border-dashed border-gray-300 rounded-lg text-center text-gray-500 text-sm ${className}`}
-    >
-      🔒 Verificación de seguridad (suspendida temporalmente)
-    </div>
-  );
-};
 
 // Funciones de validación y seguridad
 const SecurityValidators = {
@@ -88,13 +69,12 @@ export const QuoteRequestModal = React.memo(({ isOpen, onClose, _service }) => {
     description: "",
     additionalRequirements: "",
   });
-
   const [isSubmitting, setIsSubmitting] = React.useState(false);
   const [submitStatus, setSubmitStatus] = React.useState(null);
   const [validationErrors, setValidationErrors] = React.useState({});
-  const [securityError, setSecurityError] = React.useState(""); // Estado de reCAPTCHA v3
-  const { executeRecaptcha, resetRecaptcha } = useRecaptcha();
-  // Calcular si el formulario está completo (sin reCAPTCHA v3 porque se ejecuta al enviar)
+  const [securityError, setSecurityError] = React.useState("");
+
+  // Calcular si el formulario está completo
   const isFormComplete = React.useMemo(() => {
     const requiredFields = [
       "name",
@@ -169,9 +149,8 @@ export const QuoteRequestModal = React.memo(({ isOpen, onClose, _service }) => {
       setSubmitStatus(null);
       setValidationErrors({});
       setSecurityError("");
-      resetRecaptcha(); // Reset reCAPTCHA al abrir el modal
     }
-  }, [isOpen, resetRecaptcha]);
+  }, [isOpen]);
 
   // Early return si no está abierto
   if (!isOpen) return null; // Manejar cambios en el formulario - VERSION DEBUG
@@ -198,19 +177,8 @@ export const QuoteRequestModal = React.memo(({ isOpen, onClose, _service }) => {
 
     setIsSubmitting(true);
     setSecurityError("");
-
     try {
-      // 1. Ejecutar reCAPTCHA v3 primero
-      const recaptchaToken = await executeRecaptcha("quote_form");
-
-      if (!recaptchaToken) {
-        setSecurityError(
-          "Error en la verificación de seguridad. Por favor, intenta nuevamente."
-        );
-        return;
-      }
-
-      // 2. Validación de campos después de reCAPTCHA
+      // Validación de campos
       const missing = getMissingFields;
       if (missing.missing.length > 0 || missing.errors.length > 0) {
         let errorMessage = "⚠️ Por favor completa la información faltante:\n\n";
@@ -272,13 +240,8 @@ export const QuoteRequestModal = React.memo(({ isOpen, onClose, _service }) => {
         ) {
           throw new Error(`Entrada inválida detectada en campo ${key}`);
         }
-      }
-
-      // 4. Enviar email usando EmailJS
-      const emailResult = await sendQuoteRequest({
-        ...sanitizedData,
-        recaptchaToken,
-      });
+      } // 4. Enviar formulario de cotización
+      const emailResult = await sendQuoteRequest(sanitizedData);
 
       if (!emailResult.success) {
         throw new Error(emailResult.error || "Error al enviar la propuesta");
@@ -299,7 +262,6 @@ export const QuoteRequestModal = React.memo(({ isOpen, onClose, _service }) => {
           additionalRequirements: "",
         });
         setValidationErrors({});
-        resetRecaptcha();
       }, 2000);
     } catch {
       // Error al enviar propuesta
@@ -814,26 +776,12 @@ export const QuoteRequestModal = React.memo(({ isOpen, onClose, _service }) => {
                           </ul>
                         </div>
                       )}
-
-                      {/* reCAPTCHA */}
-                      {getMissingFields.needsRecaptcha && (
-                        <div className="mb-2">
-                          <p className="text-blue-200 text-xs font-medium mb-1">
-                            Verificación de seguridad:
-                          </p>
-                          <p className="text-blue-100 text-xs flex items-center">
-                            <span className="w-1 h-1 bg-blue-400 rounded-full mr-2"></span>
-                            Completar verificación reCAPTCHA
-                          </p>
-                        </div>
-                      )}
                     </div>
                   </div>
                 </div>
               )}{" "}
-              {/* reCAPTCHA v3 - Solo información */}
               <div className="border-t border-gray-700 pt-4">
-                <ReCaptchaComponent action="quote_form" className="mb-4" />
+                {/* Sistema de seguridad integrado */}
               </div>
               <div className="bg-blue-500/10 border border-blue-500/30 rounded-lg p-4">
                 <h4 className="text-blue-300 font-semibold mb-2">
