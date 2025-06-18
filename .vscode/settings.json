@@ -42,40 +42,63 @@
             "className\\s*:\\s*['\"`]([^'\"`]*)['\"`]"
         ]
     ],
-    // Formateo automático optimizado
+    // Formateo y autoguardado optimizado
     "editor.formatOnSave": true,
     "editor.formatOnPaste": true,
     "editor.codeActionsOnSave": {
         "source.fixAll.eslint": "explicit",
         "source.organizeImports": "explicit"
-    }, // Rendimiento y productividad ULTRA OPTIMIZADO
+    }, // Configuración de sugerencias y autocompletado OPTIMIZADA PARA COPILOT
     "editor.quickSuggestions": {
-        "strings": true,
-        "comments": true,
+        "strings": true, // Sugerencias en strings para mejor contexto
+        "comments": true, // Sugerencias en comentarios para documentación inteligente
         "other": true
     },
-    "editor.quickSuggestionsDelay": 10,
+    "editor.quickSuggestionsDelay": 0, // Sin delay para máxima rapidez
     "editor.suggest.insertMode": "replace",
     "editor.suggest.preview": true,
-    "editor.suggest.shareSuggestSelections": false,
-    "editor.acceptSuggestionOnCommitCharacter": false,
-    "editor.acceptSuggestionOnEnter": "smart",
-    "editor.tabCompletion": "on",
-    "editor.wordBasedSuggestions": "off",
-    "editor.suggest.showKeywords": false,
-    "editor.suggest.showSnippets": false,
-    "editor.suggest.showWords": false,
+    "editor.suggest.shareSuggestSelections": true,
+    "editor.acceptSuggestionOnCommitCharacter": true,
+    "editor.acceptSuggestionOnEnter": "on", // Aceptar siempre con Enter
+    "editor.tabCompletion": "onlySnippets", // Optimizado para snippets complejos
+    "editor.wordBasedSuggestions": "allDocuments", // Usar todo el contexto del workspace
+    "editor.suggest.showKeywords": true,
+    "editor.suggest.showSnippets": true,
+    "editor.suggest.showWords": true,
     "editor.suggest.localityBonus": true,
     "editor.suggest.filterGraceful": true,
-    // Configuraciones para mejor rendimiento con Copilot
+    "editor.suggest.snippetsPreventQuickSuggestions": false, // Permitir combinación    // Configuración de ayudas visuales MEJORADA PARA COMPLEJIDAD
     "editor.parameterHints.enabled": true,
-    "editor.hover.delay": 300,
+    "editor.parameterHints.cycle": true, // Navegar entre parámetros
+    "editor.hover.delay": 100, // Respuesta más rápida
     "editor.hover.sticky": true,
-    // GitHub Copilot - Configuración ULTRA OPTIMIZADA
+    "editor.suggest.showMethods": true, // Mostrar métodos disponibles
+    "editor.suggest.showFunctions": true, // Mostrar funciones
+    "editor.suggest.showConstructors": true, // Mostrar constructores
+    "editor.suggest.showClasses": true, // Mostrar clases
+    "editor.suggest.showStructs": true, // Mostrar estructuras
+    "editor.suggest.showInterfaces": true, // Mostrar interfaces
+    "editor.suggest.showModules": true, // Mostrar módulos
+    "editor.suggest.showProperties": true, // Mostrar propiedades
+    "editor.suggest.showEvents": true, // Mostrar eventos
+    "editor.suggest.showOperators": true, // Mostrar operadores
+    "editor.suggest.showUnits": true, // Mostrar unidades
+    "editor.suggest.showValues": true, // Mostrar valores
+    "editor.suggest.showConstants": true, // Mostrar constantes
+    "editor.suggest.showEnums": true, // Mostrar enums
+    "editor.suggest.showEnumMembers": true, // Mostrar miembros de enum
+    "editor.suggest.showColors": true, // Mostrar colores
+    "editor.suggest.showFiles": true, // Mostrar archivos
+    "editor.suggest.showReferences": true, // Mostrar referencias
+    "editor.suggest.showCustomcolors": true, // Mostrar colores personalizados
+    "editor.suggest.showTypeParameters": true, // Mostrar parámetros de tipo
+    "editor.suggest.showUsers": true, // Mostrar usuarios
+    "editor.suggest.showIssues": true, // Mostrar issues// ========== GITHUB COPILOT OPTIMIZADO PARA RAPIDEZ, CREATIVIDAD Y PRECISIÓN ==========
+    // RAPIDEZ: Configuración para respuestas más rápidas
     "github.copilot.enable": {
         "*": true,
         "yaml": true,
-        "plaintext": false,
+        "plaintext": true,
         "markdown": true,
         "javascript": true,
         "javascriptreact": true,
@@ -85,151 +108,42 @@
         "css": true,
         "json": true,
         "jsonc": true,
-        "java": false
+        "scss": true,
+        "sass": true
     },
-    // Configuración avanzada para máxima precisión
-    "github.copilot.advanced": {
-        "secret_key": "github-copilot",
-        "length": 800,
-        "temperature": 0.05,
-        "top_p": 0.95,
-        "stop": [
-            "\n\n",
-            "\n//",
-            "\n/*"
-        ],
-        "indentationMode": {
-            "javascript": "space",
-            "javascriptreact": "space",
-            "typescript": "space",
-            "css": "space",
-            "html": "space",
-            "json": "space"
-        }
-    },
-    // Configuraciones de inline suggestions optimizadas
-    "editor.inlineSuggest.enabled": true,
-    "editor.inlineSuggest.showToolbar": "always",
-    "editor.inlineSuggest.suppressSuggestions": false,
-    // Configuraciones específicas de Copilot Chat
-    "github.copilot.chat.enabled": true,
+    "github.copilot.chat.localeOverride": "es",
     "github.copilot.chat.welcomeMessage": "never",
-    // Configuraciones adicionales para velocidad
-    "github.copilot.autocomplete.enable": true,
-    "github.copilot.conversation.enable": true,
-    // Archivos y exclusiones
-    "files.exclude": {
-        "**/node_modules": true,
-        "**/dist": true,
-        "**/.git": true,
-        "**/.DS_Store": true,
-        "**/Thumbs.db": true
+    // CREATIVIDAD Y CAPACIDADES COMPLEJAS: Configuración avanzada para sugerencias más creativas
+    "github.copilot.advanced": {
+        "length": 3000, // Más contexto para sugerencias complejas
+        "temperature": 0.7, // Mayor creatividad (0.0-1.0, donde 1.0 es más creativo)
+        "top_p": 0.9, // Mayor diversidad en sugerencias
+        "frequency_penalty": 0.1, // Menor repetición (más variado)
+        "presence_penalty": 0.1, // Mayor variedad en temas
+        "indentationMode": true, // Mejor manejo de indentación
+        "listCount": 10, // Más opciones de sugerencias
+        "debug": false,
+        "inlineSuggestCount": 5 // Múltiples sugerencias inline
     },
-    "search.exclude": {
-        "**/node_modules": true,
-        "**/dist": true
-    },
-    // CSS y estilos
-    "css.validate": false,
-    "scss.validate": false,
-    "less.validate": false,
-    // Terminal optimizado
-    "terminal.integrated.defaultProfile.windows": "PowerShell",
-    "terminal.integrated.fontSize": 14, // Vite y desarrollo
-    "vite.devCommand": "npm run dev",
-    "vite.buildCommand": "npm run build", // Deshabilitar extensiones de Java para proyecto React - DEFINITIVO
-    "java.enabled": false,
-    "java.compile.nullAnalysis.mode": "disabled",
-    "java.import.gradle.enabled": false,
-    "java.import.maven.enabled": false,
-    "java.server.launchMode": "LightWeight",
-    "java.sharedIndexes.enabled": "off",
-    "java.autobuild.enabled": false,
-    "java.import.generatesMetadataFilesAtProjectRoot": false,
-    "java.jdt.ls.java.home": null,
-    "java.configuration.runtimes": [],
-    "java.eclipse.downloadSources": false,
-    "java.maven.downloadSources": false,
-    "java.debug.settings.enableRunDebugCodeLens": false,
-    "java.test.enabled": false,
-    "java.dependency.enabled": false,
-    "java.references.includeDecompiledSources": false,
-    "java.saveActions.organizeImports": false,
-    "java.signatureHelp.enabled": false,
-    "java.contentProvider.preferred": "",
-    "java.import.exclusions": [
-        "**"
-    ],
-    "redhat.telemetry.enabled": false, // Desactivar completamente el soporte de Java Language Server
-    "java.jdt.ls.enabled": false,
-    "java.ls.lombokSupport.enabled": false,
-    "java.cleanup.actions": [],
-    "java.completion.enabled": false,
-    "java.hover.enabled": false,
-    "java.format.enabled": false,
-    "java.codeGeneration.hashCodeEquals.useJava7Objects": false,
-    // Configuraciones adicionales para evitar Java completamente
-    "workbench.editorAssociations": {
-        "*.java": "default"
-    },
-    // Exclusiones específicas para Java
+    // CAUTELA Y PRECISIÓN: Configuraciones para mayor precisión    "github.copilot.editor.iterativeCodeActions": true,
+    "github.copilot.editor.enableCodeActions": true,
+    "github.copilot.conversationHistory": true,
+    "github.copilot.referencesInChat": true,
+    // CONFIGURACIONES AVANZADAS PARA ENTENDIMIENTO COMPLEJO
+    "editor.inlineSuggest.enabled": true,
+    "editor.inlineSuggest.suppressSuggestions": false,
+    "editor.inlineSuggest.showToolbar": "always",
+    "editor.inlineSuggest.fontSize": 14,
+    // Rendimiento general
+    "files.autoSave": "afterDelay",
+    "files.autoSaveDelay": 1000,
+    "workbench.editor.enablePreview": true,
+    "workbench.editor.enablePreviewFromQuickOpen": true,
+    "search.followSymlinks": false,
     "files.watcherExclude": {
         "**/.git/objects/**": true,
         "**/.git/subtree-cache/**": true,
         "**/node_modules/**": true,
-        "**/tmp/**": true,
-        "**/*.jar": true,
-        "**/*.class": true,
-        "**/target/**": true,
-        "**/.gradle/**": true,
-        "**/build/**": true
-    },
-    // === CONFIGURACIONES ADICIONALES PARA COPILOT ULTRA OPTIMIZADO ===
-    // Configuraciones de lenguaje específicas para mejor contexto
-    "[javascript]": {
-        "editor.defaultFormatter": "esbenp.prettier-vscode",
-        "editor.suggest.insertMode": "replace",
-        "editor.inlineSuggest.enabled": true
-    },
-    "[javascriptreact]": {
-        "editor.defaultFormatter": "esbenp.prettier-vscode",
-        "editor.suggest.insertMode": "replace",
-        "editor.inlineSuggest.enabled": true
-    },
-    "[typescript]": {
-        "editor.defaultFormatter": "esbenp.prettier-vscode",
-        "editor.suggest.insertMode": "replace",
-        "editor.inlineSuggest.enabled": true
-    },
-    "[typescriptreact]": {
-        "editor.defaultFormatter": "esbenp.prettier-vscode",
-        "editor.suggest.insertMode": "replace",
-        "editor.inlineSuggest.enabled": true
-    },
-    "[json]": {
-        "editor.defaultFormatter": "esbenp.prettier-vscode",
-        "editor.inlineSuggest.enabled": true
-    },
-    "[css]": {
-        "editor.defaultFormatter": "esbenp.prettier-vscode",
-        "editor.inlineSuggest.enabled": true
-    },
-    // Configuraciones de rendimiento específicas
-    "editor.semanticHighlighting.enabled": true,
-    "editor.bracketPairColorization.enabled": true,
-    "editor.guides.bracketPairs": "active",
-    "editor.lightbulb.enabled": "onCode",
-    // Optimizaciones de memoria para proyectos grandes
-    "typescript.disableAutomaticTypeAcquisition": true,
-    "typescript.preferences.useAliasesForRenames": false,
-    "typescript.suggest.autoImports": false,
-    "javascript.suggest.autoImports": false,
-    // Configuraciones para evitar conflictos con Copilot
-    "editor.suggest.snippetsPreventQuickSuggestions": false,
-    "editor.suggestOnTriggerCharacters": true,
-    "editor.wordBasedSuggestionsMode": "off",
-    // Configuraciones de workspace para mejor contexto
-    "search.smartCase": true,
-    "search.useGlobalIgnoreFiles": true,
-    "search.useParentIgnoreFiles": true
+        "**/dist/**": true
+    }
 }
