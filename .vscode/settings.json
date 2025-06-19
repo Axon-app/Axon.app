@@ -48,52 +48,52 @@
     "editor.codeActionsOnSave": {
         "source.fixAll.eslint": "explicit",
         "source.organizeImports": "explicit"
-    }, // Configuración de sugerencias y autocompletado OPTIMIZADA PARA COPILOT
+    },    // Configuración de sugerencias y autocompletado OPTIMIZADA PARA COPILOT
     "editor.quickSuggestions": {
-        "strings": true, // Sugerencias en strings para mejor contexto
-        "comments": true, // Sugerencias en comentarios para documentación inteligente
+        "strings": true,            // Sugerencias en strings para mejor contexto
+        "comments": true,           // Sugerencias en comentarios para documentación inteligente
         "other": true
     },
-    "editor.quickSuggestionsDelay": 0, // Sin delay para máxima rapidez
+    "editor.quickSuggestionsDelay": 0,        // Sin delay para máxima rapidez
     "editor.suggest.insertMode": "replace",
     "editor.suggest.preview": true,
     "editor.suggest.shareSuggestSelections": true,
     "editor.acceptSuggestionOnCommitCharacter": true,
-    "editor.acceptSuggestionOnEnter": "on", // Aceptar siempre con Enter
-    "editor.tabCompletion": "onlySnippets", // Optimizado para snippets complejos
+    "editor.acceptSuggestionOnEnter": "on",   // Aceptar siempre con Enter
+    "editor.tabCompletion": "onlySnippets",   // Optimizado para snippets complejos
     "editor.wordBasedSuggestions": "allDocuments", // Usar todo el contexto del workspace
     "editor.suggest.showKeywords": true,
     "editor.suggest.showSnippets": true,
     "editor.suggest.showWords": true,
-    "editor.suggest.localityBonus": true,
-    "editor.suggest.filterGraceful": true,
+    "editor.suggest.localityBonus": true,    "editor.suggest.filterGraceful": true,
     "editor.suggest.snippetsPreventQuickSuggestions": false, // Permitir combinación    // Configuración de ayudas visuales MEJORADA PARA COMPLEJIDAD
     "editor.parameterHints.enabled": true,
-    "editor.parameterHints.cycle": true, // Navegar entre parámetros
-    "editor.hover.delay": 100, // Respuesta más rápida
+    "editor.parameterHints.cycle": true,        // Navegar entre parámetros
+    "editor.hover.delay": 100,                  // Respuesta más rápida
     "editor.hover.sticky": true,
-    "editor.suggest.showMethods": true, // Mostrar métodos disponibles
-    "editor.suggest.showFunctions": true, // Mostrar funciones
-    "editor.suggest.showConstructors": true, // Mostrar constructores
-    "editor.suggest.showClasses": true, // Mostrar clases
-    "editor.suggest.showStructs": true, // Mostrar estructuras
-    "editor.suggest.showInterfaces": true, // Mostrar interfaces
-    "editor.suggest.showModules": true, // Mostrar módulos
-    "editor.suggest.showProperties": true, // Mostrar propiedades
-    "editor.suggest.showEvents": true, // Mostrar eventos
-    "editor.suggest.showOperators": true, // Mostrar operadores
-    "editor.suggest.showUnits": true, // Mostrar unidades
-    "editor.suggest.showValues": true, // Mostrar valores
-    "editor.suggest.showConstants": true, // Mostrar constantes
-    "editor.suggest.showEnums": true, // Mostrar enums
-    "editor.suggest.showEnumMembers": true, // Mostrar miembros de enum
-    "editor.suggest.showColors": true, // Mostrar colores
-    "editor.suggest.showFiles": true, // Mostrar archivos
-    "editor.suggest.showReferences": true, // Mostrar referencias
-    "editor.suggest.showCustomcolors": true, // Mostrar colores personalizados
-    "editor.suggest.showTypeParameters": true, // Mostrar parámetros de tipo
-    "editor.suggest.showUsers": true, // Mostrar usuarios
-    "editor.suggest.showIssues": true, // Mostrar issues// ========== GITHUB COPILOT OPTIMIZADO PARA RAPIDEZ, CREATIVIDAD Y PRECISIÓN ==========
+    "editor.suggest.showMethods": true,         // Mostrar métodos disponibles
+    "editor.suggest.showFunctions": true,       // Mostrar funciones
+    "editor.suggest.showConstructors": true,    // Mostrar constructores
+    "editor.suggest.showClasses": true,         // Mostrar clases
+    "editor.suggest.showStructs": true,         // Mostrar estructuras
+    "editor.suggest.showInterfaces": true,      // Mostrar interfaces
+    "editor.suggest.showModules": true,         // Mostrar módulos
+    "editor.suggest.showProperties": true,      // Mostrar propiedades
+    "editor.suggest.showEvents": true,          // Mostrar eventos
+    "editor.suggest.showOperators": true,       // Mostrar operadores
+    "editor.suggest.showUnits": true,           // Mostrar unidades
+    "editor.suggest.showValues": true,          // Mostrar valores
+    "editor.suggest.showConstants": true,       // Mostrar constantes
+    "editor.suggest.showEnums": true,           // Mostrar enums
+    "editor.suggest.showEnumMembers": true,     // Mostrar miembros de enum
+    "editor.suggest.showColors": true,          // Mostrar colores
+    "editor.suggest.showFiles": true,           // Mostrar archivos
+    "editor.suggest.showReferences": true,      // Mostrar referencias
+    "editor.suggest.showCustomcolors": true,    // Mostrar colores personalizados
+    "editor.suggest.showTypeParameters": true,  // Mostrar parámetros de tipo
+    "editor.suggest.showUsers": true,           // Mostrar usuarios
+    "editor.suggest.showIssues": true,          // Mostrar issues// ========== GITHUB COPILOT OPTIMIZADO PARA RAPIDEZ, CREATIVIDAD Y PRECISIÓN ==========
+    
     // RAPIDEZ: Configuración para respuestas más rápidas
     "github.copilot.enable": {
         "*": true,
@@ -111,24 +111,31 @@
         "scss": true,
         "sass": true
     },
+      // Spell Checker - DESACTIVADO    "cSpell.enabled": false,
+    "cSpell.showStatus": false,
+    "cSpell.showSuggestions": false,
+    
     "github.copilot.chat.localeOverride": "es",
     "github.copilot.chat.welcomeMessage": "never",
+    
     // CREATIVIDAD Y CAPACIDADES COMPLEJAS: Configuración avanzada para sugerencias más creativas
     "github.copilot.advanced": {
-        "length": 3000, // Más contexto para sugerencias complejas
-        "temperature": 0.7, // Mayor creatividad (0.0-1.0, donde 1.0 es más creativo)
-        "top_p": 0.9, // Mayor diversidad en sugerencias
-        "frequency_penalty": 0.1, // Menor repetición (más variado)
-        "presence_penalty": 0.1, // Mayor variedad en temas
-        "indentationMode": true, // Mejor manejo de indentación
-        "listCount": 10, // Más opciones de sugerencias
+        "length": 3000,              // Más contexto para sugerencias complejas
+        "temperature": 0.7,          // Mayor creatividad (0.0-1.0, donde 1.0 es más creativo)
+        "top_p": 0.9,               // Mayor diversidad en sugerencias
+        "frequency_penalty": 0.1,    // Menor repetición (más variado)
+        "presence_penalty": 0.1,     // Mayor variedad en temas
+        "indentationMode": true,     // Mejor manejo de indentación
+        "listCount": 10,            // Más opciones de sugerencias
         "debug": false,
-        "inlineSuggestCount": 5 // Múltiples sugerencias inline
+        "inlineSuggestCount": 5     // Múltiples sugerencias inline
     },
+    
     // CAUTELA Y PRECISIÓN: Configuraciones para mayor precisión    "github.copilot.editor.iterativeCodeActions": true,
     "github.copilot.editor.enableCodeActions": true,
     "github.copilot.conversationHistory": true,
     "github.copilot.referencesInChat": true,
+    
     // CONFIGURACIONES AVANZADAS PARA ENTENDIMIENTO COMPLEJO
     "editor.inlineSuggest.enabled": true,
     "editor.inlineSuggest.suppressSuggestions": false,

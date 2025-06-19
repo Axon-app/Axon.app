@@ -1,7 +1,6 @@
 import React from "react";
 
 export const BlogModal = ({ isOpen, onClose, post }) => {
-  // Manejar escape key
   React.useEffect(() => {
     const handleEscape = (event) => {
       if (event.key === "Escape") {
@@ -19,13 +18,16 @@ export const BlogModal = ({ isOpen, onClose, post }) => {
       document.body.style.overflow = "unset";
     };
   }, [isOpen, onClose]);
-
-  if (!isOpen || !post) return null;
-
-  // Función para renderizar el contenido markdown como HTML
   const renderContent = (content) => {
-    // Simple parser para markdown básico
-    return content
+    if (!content) return '';
+    
+    const sanitizedContent = content
+      .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
+      .replace(/<iframe\b[^<]*(?:(?!<\/iframe>)<[^<]*)*<\/iframe>/gi, '')
+      .replace(/javascript:/gi, '')
+      .replace(/on\w+\s*=/gi, '');
+
+    return sanitizedContent
       .replace(/# (.*)/g, '<h1 class="text-3xl font-bold mb-6 text-blue-300">$1</h1>')
       .replace(/## (.*)/g, '<h2 class="text-2xl font-semibold mb-4 text-blue-400 mt-8">$2</h2>')
       .replace(/### (.*)/g, '<h3 class="text-xl font-semibold mb-3 text-blue-500 mt-6">$3</h3>')
@@ -39,16 +41,15 @@ export const BlogModal = ({ isOpen, onClose, post }) => {
       .replace(/\n$/, '</p>');
   };
 
+  if (!isOpen || !post) return null;
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
-      <div className="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 rounded-3xl max-w-4xl w-full max-h-[95vh] overflow-y-auto border border-gray-700/50 shadow-2xl">
-        {/* Header del modal */}
-        <div className="sticky top-0 z-10 bg-gradient-to-r from-gray-900/95 to-gray-800/95 backdrop-blur-md p-6 border-b border-gray-700/50 rounded-t-3xl">
+      <div className="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 rounded-3xl max-w-4xl w-full max-h-[95vh] overflow-y-auto border border-gray-700/50 shadow-2xl">        <div className="sticky top-0 z-10 bg-gradient-to-r from-gray-900/95 to-gray-800/95 backdrop-blur-md p-6 border-b border-gray-700/50 rounded-t-3xl">
           <div className="flex justify-between items-start">
             <div className="flex-1 pr-4">
-              {/* Tags */}
               <div className="flex flex-wrap gap-2 mb-3">
-                {post.tags.map((tag, index) => (
+                {post.tags && post.tags.length > 0 && post.tags.map((tag, index) => (
                   <span 
                     key={index}
                     className="bg-blue-600/20 text-blue-300 px-3 py-1 rounded-full text-sm"
@@ -58,29 +59,33 @@ export const BlogModal = ({ isOpen, onClose, post }) => {
                 ))}
               </div>
               
-              {/* Título */}
               <h1 className="text-2xl md:text-3xl font-bold text-white mb-3">
-                {post.title}
+                {post.title || 'Sin título'}
               </h1>
               
-              {/* Metadatos */}
               <div className="flex flex-wrap gap-4 text-sm text-gray-400">
-                <span className="flex items-center">
-                  <span className="mr-1">✍️</span>
-                  {post.author}
-                </span>
-                <span className="flex items-center">
-                  <span className="mr-1">📅</span>
-                  {new Date(post.date).toLocaleDateString('es-ES', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric'
-                  })}
-                </span>
-                <span className="flex items-center">
-                  <span className="mr-1">⏱️</span>
-                  {post.readTime}
-                </span>
+                {post.author && (
+                  <span className="flex items-center">
+                    <span className="mr-1">✍️</span>
+                    {post.author}
+                  </span>
+                )}
+                {post.date && (
+                  <span className="flex items-center">
+                    <span className="mr-1">📅</span>
+                    {new Date(post.date).toLocaleDateString('es-ES', {
+                      year: 'numeric',
+                      month: 'long',
+                      day: 'numeric'
+                    })}
+                  </span>
+                )}
+                {post.readTime && (
+                  <span className="flex items-center">
+                    <span className="mr-1">⏱️</span>
+                    {post.readTime}
+                  </span>
+                )}
               </div>
             </div>
             
@@ -104,11 +109,7 @@ export const BlogModal = ({ isOpen, onClose, post }) => {
               </svg>
             </button>
           </div>
-        </div>
-
-        {/* Contenido del post */}
-        <div className="p-6 md:p-8">
-          {/* Imagen del post (si existe) */}
+        </div>        <div className="p-6 md:p-8">
           {post.image && (
             <div className="mb-8 rounded-xl overflow-hidden">
               <div className="h-64 bg-gradient-to-br from-blue-600/50 to-purple-600/50 rounded-xl flex items-center justify-center">
@@ -117,22 +118,23 @@ export const BlogModal = ({ isOpen, onClose, post }) => {
             </div>
           )}
 
-          {/* Excerpt destacado */}
-          <div className="bg-blue-600/10 border-l-4 border-blue-500 p-4 mb-8 rounded-r-lg">
-            <p className="text-lg text-blue-200 italic">
-              {post.excerpt}
-            </p>
-          </div>
+          {post.excerpt && (
+            <div className="bg-blue-600/10 border-l-4 border-blue-500 p-4 mb-8 rounded-r-lg">
+              <p className="text-lg text-blue-200 italic">
+                {post.excerpt}
+              </p>
+            </div>
+          )}
 
-          {/* Contenido principal */}
-          <div 
-            className="prose prose-invert prose-blue max-w-none"
-            dangerouslySetInnerHTML={{ 
-              __html: renderContent(post.content) 
-            }}
-          />
+          {post.content && (
+            <div 
+              className="prose prose-invert prose-blue max-w-none"
+              dangerouslySetInnerHTML={{ 
+                __html: renderContent(post.content) 
+              }}
+            />
+          )}
 
-          {/* Call to action al final */}
           <div className="mt-12 p-6 bg-gradient-to-r from-blue-600/20 to-purple-600/20 rounded-xl border border-blue-500/30">
             <h3 className="text-xl font-bold mb-3 text-white">
               ¿Te gustó este artículo?

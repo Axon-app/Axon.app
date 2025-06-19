@@ -8,13 +8,12 @@ export default defineConfig(({ mode }) => ({
   server: {
     open: true,
     port: 5173,
-  },
-  build: {
+  },  build: {
     outDir: "dist",
     minify: "terser",
     terserOptions: {
       compress: {
-        drop_console: false, // Mantener console.log para debugging en producción temporalmente
+        drop_console: mode === "production", // Remover console.log solo en producción
       },
     },
     rollupOptions: {
@@ -23,9 +22,15 @@ export default defineConfig(({ mode }) => ({
           if (id.includes("node_modules")) {
             return "vendor";
           }
+          // Separar fuentes en su propio chunk
+          if (id.includes("@fontsource")) {
+            return "fonts";
+          }
         },
       },
     },
+    // Optimizar assets
+    assetsInlineLimit: 4096, // Inline assets smaller than 4kb
   },
   optimizeDeps: {
     include: ["react", "react-dom"],

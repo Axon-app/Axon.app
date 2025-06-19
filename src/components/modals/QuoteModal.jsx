@@ -153,11 +153,16 @@ export const QuoteRequestModal = React.memo(({ isOpen, onClose, _service }) => {
   }, [isOpen]);
 
   // Early return si no está abierto
-  if (!isOpen) return null; // Manejar cambios en el formulario
+  if (!isOpen) return null; // Manejar cambios en el formulario - VERSION DEBUG
   const handleInputChange = (e) => {
     const { name, value } = e.target;
 
-    // Actualizar directamente
+    // Debug: verificar si el evento llega
+    if (typeof window !== "undefined" && window.console) {
+      window.console.log("Input change:", name, value);
+    }
+
+    // Actualizar directamente sin validación para debug
     setFormData((prev) => {
       const newData = { ...prev, [name]: value };
       return newData;

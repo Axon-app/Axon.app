@@ -1,148 +1,7 @@
 import React, { useCallback, useState } from "react";
 import { sendUnifiedEmail } from "../../services/emailService";
 
-// Utilidad para crear modales
-const createModal = (content, className = "") => {
-  const modal = document.createElement("div");
-  modal.className = `fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm ${className}`;
-  modal.innerHTML = content;
-  document.body.appendChild(modal);
-
-  modal.setAttribute("role", "dialog");
-  modal.setAttribute("aria-modal", "true");
-
-  const focusableElements = modal.querySelectorAll(
-    'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-  );
-  if (focusableElements.length > 0) {
-    focusableElements[0].focus();
-  }
-
-  setTimeout(() => {
-    if (document.body.contains(modal)) {
-      modal.remove();
-    }
-  }, 10000);
-
-  return modal;
-};
-
-// Modal de éxito mejorado
-const getSuccessModalContent = (type) => {
-  const titles = {
-    contact: "¡Mensaje Enviado Exitosamente!",
-    quote: "¡Solicitud de Propuesta Recibida!",
-    consultation: "¡Consulta Programada Correctamente!",
-  };
-
-  const messages = {
-    contact:
-      "Hemos recibido tu mensaje exitosamente. Nuestro equipo lo revisará y te contactaremos dentro de las próximas 24 horas.",
-    quote:
-      "Hemos recibido tu solicitud de propuesta. Nuestro equipo analizará los detalles de tu proyecto y te enviaremos una estimación detallada dentro de las próximas 24 horas.",
-    consultation:
-      "Hemos recibido tu solicitud de consulta. Te contactaremos para confirmar la fecha, hora y modalidad de la reunión dentro de las próximas 24 horas.",
-  };
-
-  const nextSteps = {
-    contact: [
-      "📧 Recibirás una confirmación por email",
-      "👥 Un especialista revisará tu consulta",
-      "📞 Te contactaremos en máximo 24 horas",
-      "💬 Responderemos todas tus preguntas",
-    ],
-    quote: [
-      "📧 Recibirás una confirmación por email",
-      "📊 Analizaremos los requerimientos de tu proyecto",
-      "💰 Prepararemos una propuesta detallada",
-      "📋 Te enviaremos la propuesta en 24-48 horas",
-    ],
-    consultation: [
-      "📧 Recibirás una confirmación por email",
-      "📅 Coordinaremos fecha y hora contigo",
-      "🎯 Prepararemos la agenda de la consulta",
-      "💼 Te enviaremos el enlace de la reunión",
-    ],
-  };
-
-  return `
-    <div class="bg-gradient-to-br from-green-900 to-emerald-900 rounded-2xl p-6 sm:p-8 max-w-lg w-full border border-green-500/30 shadow-2xl animate-fade-in">
-      <div class="text-center mb-6">
-        <div class="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4 animate-bounce">
-          <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path>
-          </svg>
-        </div>
-        <h3 class="text-2xl font-bold text-white mb-3">${titles[type]}</h3>
-        <p class="text-green-100 leading-relaxed">${messages[type]}</p>
-      </div>
-
-      <div class="bg-green-800/30 rounded-xl p-4 mb-6 border border-green-500/20">
-        <h4 class="text-green-300 font-semibold mb-3 flex items-center">
-          <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-          </svg>
-          Próximos pasos:
-        </h4>
-        <ul class="space-y-2">
-          ${nextSteps[type]
-            .map(
-              (step) => `
-            <li class="flex items-start space-x-2 text-green-100 text-sm">
-              <span class="block w-1.5 h-1.5 bg-green-400 rounded-full mt-2 flex-shrink-0"></span>
-              <span>${step}</span>
-            </li>
-          `
-            )
-            .join("")}
-        </ul>
-      </div>
-
-      <div class="bg-green-500/10 rounded-lg p-3 mb-6 border border-green-500/20">
-        <div class="flex items-center text-sm text-green-200">
-          <svg class="w-4 h-4 mr-2 text-green-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-          </svg>
-          <span>Revisa tu bandeja de entrada (incluyendo spam) para la confirmación</span>
-        </div>
-      </div>
-
-      <button 
-        onclick="this.closest('[role=dialog]').remove()" 
-        class="w-full py-3 px-6 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-xl transition-all duration-300 transform hover:scale-105 hover:shadow-lg"
-      >
-        Entendido
-      </button>
-    </div>
-  `;
-};
-
-// Modal de error
-const getErrorModalContent = (error) => `
-  <div class="bg-gradient-to-br from-red-900 to-red-800 rounded-2xl p-6 sm:p-8 max-w-md w-full border border-red-500/30 shadow-2xl">
-    <div class="text-center">
-      <div class="w-12 h-12 sm:w-16 sm:h-16 bg-red-500 rounded-full flex items-center justify-center mx-auto mb-4">
-        <svg class="w-6 h-6 sm:w-8 sm:h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-        </svg>
-      </div>
-      <h3 class="text-xl sm:text-2xl font-bold text-white mb-3">Error en el Envío</h3>
-      <p class="text-red-200 mb-4 text-sm sm:text-base">
-        ${error}
-      </p>
-      <p class="text-red-300 text-xs sm:text-sm mb-6">
-        Por favor, verifica los datos e intenta nuevamente.
-      </p>
-      <button onclick="this.parentElement.parentElement.parentElement.remove()" 
-              class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 sm:py-3 px-6 sm:px-8 rounded-full transition-all duration-300 transform hover:scale-105 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-red-400"
-              aria-label="Cerrar modal de error">
-        Entendido
-      </button>
-    </div>
-  </div>
-`;
-
-// Tipos de proyecto para propuestas comerciales
+// === CONSTANTES EXTRAÍDAS ===
 const PROJECT_TYPES = [
   { value: "Desarrollo Web", label: "Desarrollo Web" },
   { value: "Aplicación Móvil", label: "Aplicación Móvil" },
@@ -153,7 +12,6 @@ const PROJECT_TYPES = [
   { value: "Otro", label: "Otro" },
 ];
 
-// Tipos de cliente
 const CLIENT_TYPES = [
   { value: "Empresa", label: "Empresa" },
   { value: "Emprendedor", label: "Emprendedor" },
@@ -166,6 +24,113 @@ const CLIENT_TYPES = [
   { value: "Estudiante", label: "Estudiante" },
   { value: "Otro", label: "Otro" },
 ];
+
+const CONSULTATION_TYPES = [
+  { value: "Consulta General", label: "Consulta General" },
+  { value: "Consulta Técnica", label: "Consulta Técnica" },
+  { value: "Estrategia Digital", label: "Estrategia Digital" },
+  { value: "Revisión de Proyecto", label: "Revisión de Proyecto" },
+  { value: "Asesoría de Desarrollo", label: "Asesoría de Desarrollo" },
+  { value: "Otro", label: "Otro" },
+];
+
+const MEETING_TYPES = [
+  { value: "video-call", label: "Videollamada", icon: "🎥" },
+  { value: "phone-call", label: "Llamada telefónica", icon: "📞" },
+  { value: "in-person", label: "Presencial", icon: "🤝" },
+];
+
+const FORM_TITLES = {
+  contact: "Formulario de información y contacto",
+  quote: "Detalles del Proyecto",
+  consultation: "Agenda tu Consulta",
+};
+
+const MODAL_TITLES = {
+  contact: "¡Mensaje Enviado Exitosamente!",
+  quote: "¡Solicitud de Propuesta Recibida!",
+  consultation: "¡Consulta Programada Correctamente!",
+};
+
+const MODAL_MESSAGES = {
+  contact:
+    "Hemos recibido tu mensaje exitosamente. Nuestro equipo lo revisará y te contactaremos dentro de las próximas 24 horas.",
+  quote:
+    "Hemos recibido tu solicitud de propuesta. Nuestro equipo analizará los detalles de tu proyecto y te enviaremos una estimación detallada dentro de las próximas 24 horas.",
+  consultation:
+    "Hemos recibido tu solicitud de consulta. Te contactaremos para confirmar la fecha, hora y modalidad de la reunión dentro de las próximas 24 horas.",
+};
+
+// === COMPONENTES DE MODAL MEJORADOS ===
+const SuccessModal = ({ type, onClose }) => (
+  <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+    <div className="bg-gradient-to-br from-green-900 to-emerald-900 rounded-2xl p-6 sm:p-8 max-w-lg w-full border border-green-500/30 shadow-2xl animate-fade-in">
+      <div className="text-center mb-6">
+        <div className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4 animate-bounce">
+          <svg
+            className="w-8 h-8 text-white"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="3"
+              d="M5 13l4 4L19 7"
+            />
+          </svg>
+        </div>
+        <h3 className="text-2xl font-bold text-white mb-3">
+          {MODAL_TITLES[type]}
+        </h3>
+        <p className="text-green-100 leading-relaxed">{MODAL_MESSAGES[type]}</p>
+      </div>
+      <button
+        onClick={onClose}
+        className="w-full py-3 px-6 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-xl transition-all duration-300"
+      >
+        Entendido
+      </button>
+    </div>
+  </div>
+);
+
+const ErrorModal = ({ error, onClose }) => (
+  <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+    <div className="bg-gradient-to-br from-red-900 to-red-800 rounded-2xl p-6 sm:p-8 max-w-md w-full border border-red-500/30 shadow-2xl">
+      <div className="text-center">
+        <div className="w-16 h-16 bg-red-500 rounded-full flex items-center justify-center mx-auto mb-4">
+          <svg
+            className="w-8 h-8 text-white"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M6 18L18 6M6 6l12 12"
+            />
+          </svg>
+        </div>
+        <h3 className="text-2xl font-bold text-white mb-3">
+          Error en el Envío
+        </h3>
+        <p className="text-red-200 mb-4">{error}</p>
+        <button
+          onClick={onClose}
+          className="bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-8 rounded-full transition-all duration-300"
+        >
+          Entendido
+        </button>
+      </div>
+    </div>
+  </div>
+);
+
+// === UTILIDADES EXTRAÍDAS ===
 
 export const UnifiedContactForm = React.memo(
   ({
@@ -197,6 +162,9 @@ export const UnifiedContactForm = React.memo(
     });
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [errors, setErrors] = useState({});
+    const [showSuccessModal, setShowSuccessModal] = useState(false);
+    const [showErrorModal, setShowErrorModal] = useState(false);
+    const [errorMessage, setErrorMessage] = useState("");
     // Definir campos obligatorios por modo
     const getRequiredFields = useCallback(() => {
       const baseFields = [
@@ -373,7 +341,6 @@ export const UnifiedContactForm = React.memo(
     // Enviar formulario
     const handleSubmit = async (e) => {
       e.preventDefault();
-
       if (!validateForm()) {
         return;
       }
@@ -382,7 +349,7 @@ export const UnifiedContactForm = React.memo(
         const result = await sendUnifiedEmail(mode, formData);
 
         if (result.success) {
-          createModal(getSuccessModalContent(mode));
+          setShowSuccessModal(true);
 
           // Resetear formulario
           setFormData({
@@ -408,15 +375,13 @@ export const UnifiedContactForm = React.memo(
             setTimeout(() => onClose(), 1500);
           }
         } else {
-          const errorMessage = result.error || "Ocurrió un error inesperado";
-          createModal(getErrorModalContent(errorMessage));
+          const errorMsg = result.error || "Ocurrió un error inesperado";
+          setErrorMessage(errorMsg);
+          setShowErrorModal(true);
         }
       } catch {
-        createModal(
-          getErrorModalContent(
-            "Error de conexión. Por favor, intenta nuevamente."
-          )
-        );
+        setErrorMessage("Error de conexión. Por favor, intenta nuevamente.");
+        setShowErrorModal(true);
       } finally {
         setIsSubmitting(false);
       }
@@ -525,7 +490,21 @@ export const UnifiedContactForm = React.memo(
     };
     return (
       <div className={`relative ${className}`}>
-        {/* Header del formulario con gradiente profesional */}
+        {/* Modales */}
+        {showSuccessModal && (
+          <SuccessModal
+            type={mode}
+            onClose={() => setShowSuccessModal(false)}
+          />
+        )}
+        {showErrorModal && (
+          <ErrorModal
+            error={errorMessage}
+            onClose={() => setShowErrorModal(false)}
+          />
+        )}
+
+        {/* ...existing code... */}
         <div className="mb-8">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center space-x-3">
@@ -882,23 +861,7 @@ export const UnifiedContactForm = React.memo(
                   "Tipo de consulta",
                   "select",
                   true,
-                  [
-                    { value: "Consulta General", label: "Consulta General" },
-                    { value: "Consulta Técnica", label: "Consulta Técnica" },
-                    {
-                      value: "Estrategia Digital",
-                      label: "Estrategia Digital",
-                    },
-                    {
-                      value: "Revisión de Proyecto",
-                      label: "Revisión de Proyecto",
-                    },
-                    {
-                      value: "Asesoría de Desarrollo",
-                      label: "Asesoría de Desarrollo",
-                    },
-                    { value: "Otro", label: "Otro" },
-                  ]
+                  CONSULTATION_TYPES
                 )}{" "}
                 {renderField(
                   "topics",
@@ -943,19 +906,7 @@ export const UnifiedContactForm = React.memo(
                     Tipo de reunión
                   </label>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    {[
-                      {
-                        value: "video-call",
-                        label: "Videollamada",
-                        icon: "🎥",
-                      },
-                      {
-                        value: "phone-call",
-                        label: "Llamada telefónica",
-                        icon: "📞",
-                      },
-                      { value: "in-person", label: "Presencial", icon: "🤝" },
-                    ].map((option) => (
+                    {MEETING_TYPES.map((option) => (
                       <label
                         key={option.value}
                         className="relative flex items-center cursor-pointer"

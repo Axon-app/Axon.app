@@ -1,38 +1,40 @@
-{
-    "recommendations": [
+{    "recommendations": [
         // === EXTENSIONES ESENCIALES PARA COPILOT OPTIMIZADO ===
         "github.copilot",
         "github.copilot-chat",
+        
         // === EXTENSIONES DE DESARROLLO PARA MAYOR RAPIDEZ ===
         "dbaeumer.vscode-eslint",
         "esbenp.prettier-vscode",
         "bradlc.vscode-tailwindcss",
         "ms-vscode.vscode-typescript-next",
+        
         // === EXTENSIONES PARA CREATIVIDAD Y COMPLEJIDAD ===
         "visualstudioexptteam.vscodeintellicode",
         "ms-vscode.vscode-ai-toolkit",
         "formulahendry.auto-rename-tag",
         "christian-kohler.path-intellisense",
         "ms-vscode.vscode-json",
-        // === EXTENSIONES PARA CAUTELA Y PRECISIÓN ===
-        "streetsidesoftware.code-spell-checker",
+          // === EXTENSIONES PARA CAUTELA Y PRECISIÓN ===
         "usernamehw.errorlens",
         "ms-vscode.vscode-error-lens",
         "alefragnani.bookmarks",
+        
         // === EXTENSIONES PARA DEBUGGING COMPLEJO ===
         "ms-vscode.vscode-js-debug",
         "ms-vscode.hexeditor",
         "hbenl.vscode-test-explorer",
+        
         // === EXTENSIONES PARA PRODUCTIVIDAD ===
         "eamodio.gitlens",
         "mhutchie.git-graph",
         "ms-vscode.vscode-thunder-client",
         "redhat.vscode-yaml",
+        
         // === EXTENSIONES PARA INTERFAZ OPTIMIZADA ===
         "pkief.material-icon-theme",
         "ms-vscode.vscode-perf"
-    ],
-    "unwantedRecommendations": [
+    ],    "unwantedRecommendations": [
         // === EXTENSIONES DE JAVA (DESACTIVADAS PARA MEJOR RENDIMIENTO) ===
         "vscjava.vscode-java-pack",
         "vscjava.vscode-java-dependency",
@@ -40,17 +42,21 @@
         "vscjava.vscode-maven",
         "vscjava.vscode-java-debug",
         "redhat.java",
-        "vscjava.vscode-gradle",
-        // === EXTENSIONES QUE PUEDEN INTERFERIR CON COPILOT OPTIMIZADO ===
-        "tabnine.tabnine-vscode", // Evitar conflictos con otros AI
-        "ms-python.python", // No necesario para React
-        "ms-dotnettools.csharp", // No necesario para React
-        "ms-vscode.cpptools", // No necesario para React
-        "golang.go", // No necesario para React
-        "rust-lang.rust", // No necesario para React
+        "vscjava.vscode-gradle",        // === EXTENSIONES QUE PUEDEN INTERFERIR CON COPILOT OPTIMIZADO ===
+        "streetsidesoftware.code-spell-checker", // Causa problemas con texto en español
+        "streetsidesoftware.code-spell-checker-spanish", // Spell checker español
+        "ban.spellright", // Otro spell checker problemático
+        "ms-vscode.wordcount", // Contador de palabras innecesario
+        "tabnine.tabnine-vscode",         // Evitar conflictos con otros AI
+        "ms-python.python",              // No necesario para React
+        "ms-dotnettools.csharp",         // No necesario para React
+        "ms-vscode.cpptools",            // No necesario para React
+        "golang.go",                     // No necesario para React
+        "rust-lang.rust",                // No necesario para React
+        
         // === EXTENSIONES REDUNDANTES O QUE RALENTIZAN ===
         "ms-vscode.vscode-github-authentication", // Redundante
-        "ms-vscode.remote-repositories", // Puede ralentizar
-        "github.codespaces" // No necesario localmente
+        "ms-vscode.remote-repositories",  // Puede ralentizar
+        "github.codespaces"               // No necesario localmente
     ]
 }
