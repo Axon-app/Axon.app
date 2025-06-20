@@ -1,6 +1,10 @@
 # 🚀 Axon.App - Sitio Web Corporativo v2.5.0
 
-[![Vite](https://img.shields.io/badge/Vite-6.3.5-646CFF?logo=vite&logoColor=white)](https://vitejs.dev/)
+[![Vite](https://img.shields.io/badge/Vite-6.3.5-646CFF?logo=vite&logoColor=white)]├── 📁 public/                      # Archivos públicos
+│   ├── 📄 logo1.png               # Logo principal
+│   ├── 📄 favicon.png             # Favicon
+│   ├── 📄 logo231.png             # Logo secundario
+│   └── 📄 redes.png               # Imagen de redes socialess://vitejs.dev/)
 [![React](https://img.shields.io/badge/React-19+-61DAFB?logo=react&logoColor=white)](https://reactjs.org/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind-4.1+-38B2AC?logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
 [![GitHub Pages](https://img.shields.io/badge/Deploy-GitHub%20Pages-222222?logo=github&logoColor=white)](https://pages.github.com/)
