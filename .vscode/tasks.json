@@ -1,0 +1,104 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "dev",
+            "type": "shell",
+            "command": "npm run dev",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "isBackground": true,
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "clear": false
+            },
+            "problemMatcher": {
+                "owner": "typescript",
+                "pattern": "$tsc",
+                "background": {
+                    "activeOnStart": true,
+                    "beginsPattern": ".",
+                    "endsPattern": "ready in"
+                }
+            }
+        },
+
+        {
+            "label": "build",
+            "type": "shell",
+            "command": "npm run build",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "clear": true
+            },
+            "problemMatcher": ["$tsc"]
+        },
+        {
+            "label": "preview",
+            "type": "shell",
+            "command": "npm run preview",
+            "group": "test",
+            "dependsOn": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "lint",
+            "type": "shell",
+            "command": "npm run lint",
+            "group": "test",
+            "problemMatcher": ["$eslint-stylish"]
+        },
+        {
+            "label": "lint:fix",
+            "type": "shell",
+            "command": "npm run lint -- --fix",
+            "group": "test",
+            "problemMatcher": ["$eslint-stylish"]
+        },
+        {
+            "label": "clean",
+            "type": "shell",
+            "command": "Remove-Item -Path dist -Recurse -Force -ErrorAction SilentlyContinue",
+            "group": "build",
+            "problemMatcher": []
+        },
+        {
+            "label": "clean:build",
+            "type": "shell",
+            "command": "Remove-Item -Path dist -Recurse -Force -ErrorAction SilentlyContinue && npm run build",
+            "group": "build",
+            "problemMatcher": ["$tsc"]
+        },
+        {
+            "label": "install",
+            "type": "shell",
+            "command": "npm install",
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
+            "problemMatcher": []
+        }
+    ]
+}

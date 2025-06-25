@@ -1,0 +1,95 @@
+{
+    // ===== Configuración del Editor y Workspace =====
+    "files.associations": {
+        "*.jsx": "javascriptreact",
+        "*.js": "javascript",
+        "*.ts": "typescript",
+        "*.tsx": "typescriptreact"
+    },
+
+    // Editor Principal
+    "editor.formatOnSave": true,
+    "editor.formatOnPaste": true,
+    "editor.formatOnType": true,
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint",
+    "editor.tabSize": 2,
+    "editor.insertSpaces": true,
+    "editor.detectIndentation": true,
+
+    // Autoguardado y Limpieza
+    "files.autoSave": "onFocusChange",
+    "files.trimTrailingWhitespace": true,
+    "files.insertFinalNewline": true,
+    "files.trimFinalNewlines": true,
+
+    // ===== React y JavaScript =====
+    "emmet.includeLanguages": {
+        "javascriptreact": "html",
+        "typescript": "html",
+        "typescriptreact": "html"
+    },
+    "emmet.triggerExpansionOnTab": true,
+
+    // ESLint
+    "eslint.validate": ["javascript", "javascriptreact", "typescript", "typescriptreact"],
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": "explicit",
+        "source.organizeImports": "explicit"
+    },
+
+    // TypeScript/JavaScript
+    "javascript.preferences.quoteStyle": "double",
+    "typescript.preferences.quoteStyle": "double",
+    "javascript.updateImportsOnFileMove.enabled": "always",
+    "typescript.updateImportsOnFileMove.enabled": "always",
+
+    // ===== GitHub Copilot =====
+    "github.copilot.enable": {
+        "*": true,
+        "plaintext": false,
+        "markdown": true
+    },
+    "github.copilot.advanced": {
+        "length": 500,
+        "temperature": 0.5,
+        "indentationMode": "automatic"
+    },
+    "github.copilot.chat": {
+        "localeOverride": "es"
+    },
+
+    // ===== Tailwind CSS =====
+    "tailwindCSS.includeLanguages": {
+        "html": "html",
+        "javascript": "javascript",
+        "javascriptreact": "javascriptreact",
+        "typescript": "typescript",
+        "typescriptreact": "typescriptreact"
+    },
+    "tailwindCSS.experimental.classRegex": [
+        ["clsx\\(([^)]*)\\)", "(?:'|\"|`)([^']*)(?:'|\"|`)"],
+        ["className\\s*:\\s*['\"`]([^'\"`]*)['\"`]"]
+    ],
+
+    // ===== Rendimiento =====
+    "files.watcherExclude": {
+        "**/.git/objects/**": true,
+        "**/node_modules/**": true,
+        "**/dist/**": true,
+        "**/build/**": true
+    },
+
+    // ===== UI y UX =====
+    "editor.minimap.enabled": true,
+    "editor.smoothScrolling": true,
+    "editor.cursorSmoothCaretAnimation": "on",
+    "workbench.list.smoothScrolling": true,
+    "terminal.integrated.smoothScrolling": true,
+
+    // ===== Sugerencias y Autocompletado =====
+    "editor.suggestSelection": "first",
+    "editor.suggest.preview": true,
+    "editor.suggest.showStatusBar": true,
+    "editor.acceptSuggestionOnEnter": "smart",
+    "editor.inlineSuggest.enabled": true
+}
