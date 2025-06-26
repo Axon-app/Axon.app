@@ -20,7 +20,7 @@ export const BlogModal = ({ isOpen, onClose, post }) => {
   }, [isOpen, onClose]);
   const renderContent = (content) => {
     if (!content) return '';
-    
+
     const sanitizedContent = content
       .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
       .replace(/<iframe\b[^<]*(?:(?!<\/iframe>)<[^<]*)*<\/iframe>/gi, '')
@@ -45,12 +45,12 @@ export const BlogModal = ({ isOpen, onClose, post }) => {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
-      <div className="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 rounded-3xl max-w-4xl w-full max-h-[95vh] overflow-y-auto border border-gray-700/50 shadow-2xl">        <div className="sticky top-0 z-10 bg-gradient-to-r from-gray-900/95 to-gray-800/95 backdrop-blur-md p-6 border-b border-gray-700/50 rounded-t-3xl">
+      <div className="bg-gradient-to-br from-gray-900 via-black to-gray-900 rounded-3xl max-w-4xl w-full max-h-[95vh] overflow-y-auto border border-gray-700/50 shadow-2xl">        <div className="sticky top-0 z-10 bg-gradient-to-r from-gray-900/95 to-gray-800/95 backdrop-blur-md p-6 border-b border-gray-700/50 rounded-t-3xl">
           <div className="flex justify-between items-start">
             <div className="flex-1 pr-4">
               <div className="flex flex-wrap gap-2 mb-3">
                 {post.tags && post.tags.length > 0 && post.tags.map((tag, index) => (
-                  <span 
+                  <span
                     key={index}
                     className="bg-blue-600/20 text-blue-300 px-3 py-1 rounded-full text-sm"
                   >
@@ -58,11 +58,11 @@ export const BlogModal = ({ isOpen, onClose, post }) => {
                   </span>
                 ))}
               </div>
-              
+
               <h1 className="text-2xl md:text-3xl font-bold text-white mb-3">
                 {post.title || 'Sin título'}
               </h1>
-              
+
               <div className="flex flex-wrap gap-4 text-sm text-gray-400">
                 {post.author && (
                   <span className="flex items-center">
@@ -88,7 +88,7 @@ export const BlogModal = ({ isOpen, onClose, post }) => {
                 )}
               </div>
             </div>
-            
+
             <button
               onClick={onClose}
               className="p-2 text-gray-400 hover:text-white hover:bg-gray-700/50 rounded-xl transition-all duration-300 group flex-shrink-0"
@@ -127,10 +127,10 @@ export const BlogModal = ({ isOpen, onClose, post }) => {
           )}
 
           {post.content && (
-            <div 
+            <div
               className="prose prose-invert prose-blue max-w-none"
-              dangerouslySetInnerHTML={{ 
-                __html: renderContent(post.content) 
+              dangerouslySetInnerHTML={{
+                __html: renderContent(post.content)
               }}
             />
           )}
@@ -140,17 +140,17 @@ export const BlogModal = ({ isOpen, onClose, post }) => {
               ¿Te gustó este artículo?
             </h3>
             <p className="text-gray-300 mb-4">
-              En Axon.App estamos siempre explorando las últimas tecnologías. 
+              En Axon.App estamos siempre explorando las últimas tecnologías.
               ¿Quieres implementar estas soluciones en tu proyecto?
             </p>
             <div className="flex flex-wrap gap-3">
-              <button 
+              <button
                 onClick={onClose}
                 className="px-6 py-3 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white rounded-lg transition-all duration-300 transform hover:scale-105 font-semibold"
               >
                 💬 Hablemos de tu proyecto
               </button>
-              <button 
+              <button
                 onClick={onClose}
                 className="px-6 py-3 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition-all duration-300 font-semibold"
               >

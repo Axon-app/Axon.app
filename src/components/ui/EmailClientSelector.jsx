@@ -46,7 +46,7 @@ export const EmailClientSelector = React.memo(
         aria-labelledby="email-selector-title"
       >
         <div
-          className="bg-slate-800 rounded-xl max-w-md w-full shadow-2xl border border-blue-500/30"
+          className="bg-gradient-to-br from-gray-900 via-black to-gray-900 rounded-xl max-w-md w-full shadow-2xl border border-gray-700/50"
           onClick={(e) => e.stopPropagation()}
         >
           {" "}

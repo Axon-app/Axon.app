@@ -39,9 +39,9 @@ export const EnhancedTermsModal = React.memo(({ isOpen, onClose }) => {
       aria-modal="true"
       aria-labelledby="terms-modal-title"
     >
-      <div className="bg-slate-800 rounded-xl max-w-4xl w-full max-h-[80vh] overflow-y-auto shadow-2xl border border-blue-500/30">
+      <div className="bg-gradient-to-br from-gray-900 via-black to-gray-900 rounded-xl max-w-4xl w-full max-h-[80vh] overflow-y-auto shadow-2xl border border-gray-700/50">
         {/* Header */}
-        <div className="sticky top-0 bg-slate-800 border-b border-gray-700 p-4 sm:p-6 flex items-center justify-between">
+        <div className="sticky top-0 bg-gray-900/95 backdrop-blur-md border-b border-gray-700 p-4 sm:p-6 flex items-center justify-between">
           <h2
             id="terms-modal-title"
             className="text-2xl sm:text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400"

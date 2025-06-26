@@ -637,46 +637,112 @@ const App = () => {
       {/* Hero Section */}
       <section
         id="hero"
-        className="relative flex items-center justify-center min-h-screen text-center p-8 overflow-hidden pt-20 md:pt-0"
+        className="relative flex items-center justify-center min-h-screen text-center p-8 overflow-hidden pt-20 md:pt-0 bg-gradient-to-br from-gray-900 via-black to-gray-900"
       >
-        <div className="absolute inset-0 z-0 opacity-10">
-          {/* Fondo de partículas o formas futuristas con movimiento dinámico */}
-          <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-blue-500 rounded-full mix-blend-screen animate-blob animation-delay-2000"></div>
-          <div className="absolute top-1/2 right-1/4 w-80 h-80 bg-purple-500 rounded-full mix-blend-screen animate-blob animation-delay-4000"></div>
-          <div className="absolute bottom-1/4 left-1/3 w-72 h-72 bg-green-500 rounded-full mix-blend-screen animate-blob"></div>
+        {/* Geometric Background Elements */}
+        <div className="absolute inset-0 z-0">
+          {/* Animated Rotating Squares */}
+          <div className="absolute top-1/4 left-1/6 w-20 h-20 bg-gradient-to-br from-blue-500/20 to-cyan-500/20 backdrop-blur-sm border border-blue-400/30 animate-rotateSquare"></div>
+          <div className="absolute top-1/3 right-1/5 w-16 h-16 bg-gradient-to-br from-purple-500/20 to-pink-500/20 backdrop-blur-sm border border-purple-400/30 animate-rotateSquareReverse" style={{ animationDelay: '1s' }}></div>
+          <div className="absolute bottom-1/4 left-1/3 w-24 h-24 bg-gradient-to-br from-cyan-500/20 to-teal-500/20 backdrop-blur-sm border border-cyan-400/30 animate-rotateSquare" style={{ animationDelay: '2s' }}></div>
+          <div className="absolute top-1/2 right-1/3 w-18 h-18 bg-gradient-to-br from-indigo-500/20 to-blue-500/20 backdrop-blur-sm border border-indigo-400/30 animate-rotateSquareReverse" style={{ animationDelay: '3s' }}></div>
+          <div className="absolute bottom-1/3 right-1/6 w-14 h-14 bg-gradient-to-br from-emerald-500/20 to-green-500/20 backdrop-blur-sm border border-emerald-400/30 animate-rotateSquare" style={{ animationDelay: '4s' }}></div>
+
+          {/* Floating Grid Pattern */}
+          <div className="absolute inset-0 opacity-10">
+            <svg className="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
+              <defs>
+                <pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse">
+                  <path d="M 10 0 L 0 0 0 10" fill="none" stroke="currentColor" strokeWidth="0.5" opacity="0.3"/>
+                </pattern>
+              </defs>
+              <rect width="100%" height="100%" fill="url(#grid)" className="text-blue-400/20"/>
+            </svg>
+          </div>
+
+          {/* Ambient Glow Effects */}
+          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl animate-pulse"></div>
+          <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-purple-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }}></div>
         </div>
-        <div className="relative z-10 flex flex-col items-center max-w-4xl mx-auto">
+
+        <div className="relative z-10 flex flex-col items-center max-w-5xl mx-auto">
           {/* Logo de Axon.App en la sección Hero */}
-          <div className="mb-8 animate-fadeInScale">
+          <div className="mb-12 animate-fadeInScale group">
             {!logoError ? (
               <img
                 src={logo1}
                 alt="Axon.App Logo"
-                className="h-20 md:h-28 w-auto mx-auto"
+                className="h-24 md:h-32 w-auto mx-auto transition-transform duration-500 group-hover:scale-110 drop-shadow-2xl"
                 onError={handleLogoError}
               />
             ) : (
-              <LogoSVG className="h-20 md:h-28 w-20 md:w-28 mx-auto" />
+              <LogoSVG className="h-24 md:h-32 w-24 md:w-32 mx-auto transition-transform duration-500 group-hover:scale-110 drop-shadow-2xl" />
             )}
-          </div>          <h1 className="text-4xl md:text-6xl font-extrabold mb-6 leading-tight animate-fadeInUp text-transparent bg-clip-text bg-gradient-to-r from-teal-400 to-blue-500">
-            � Desarrollamos el Futuro Digital
+          </div>
+
+          {/* 3D Professional Title */}
+          <h1 className="professional-3d-title text-5xl md:text-7xl lg:text-8xl font-black mb-8 leading-tight animate-fadeInUp">
+            <span className="block mb-2 text-white">Desarrollamos el</span>
+            <span className="block text-white">
+              Futuro Digital
+            </span>
           </h1>
-          <p className="text-lg md:text-xl text-gray-300 mb-10 animate-fadeInUp delay-200">
-            Soluciones de software y aplicaciones que transforman ideas en
-            realidad.
+
+          {/* Elegant Subtitle */}
+          <p className="text-xl md:text-2xl text-gray-300 mb-12 animate-fadeInUp max-w-4xl leading-relaxed font-light" style={{ animationDelay: '0.3s' }}>
+            <span className="block mb-2">Soluciones de software innovadoras y aplicaciones de vanguardia</span>
+            <span className="text-gray-400">que transforman ideas ambiciosas en realidades digitales exitosas.</span>
           </p>
-          <a
-            href="#services"
-            className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transition duration-300 ease-in-out transform hover:scale-105 animate-bounceIn delay-400"
-          >
-            Explorar Servicios
-          </a>
+
+          {/* Professional CTA Section */}
+          <div className="flex flex-col sm:flex-row gap-6 animate-fadeInUp" style={{ animationDelay: '0.6s' }}>
+            <a
+              href="#services"
+              className="group relative bg-gradient-to-r from-blue-600 via-blue-700 to-cyan-600 hover:from-blue-700 hover:via-blue-800 hover:to-cyan-700 text-white font-semibold py-4 px-10 rounded-2xl shadow-2xl transition-all duration-500 transform hover:scale-105 hover:shadow-blue-500/25 overflow-hidden"
+            >
+              <span className="relative z-10 flex items-center justify-center space-x-3">
+                <span>Explorar Servicios</span>
+                <svg className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                </svg>
+              </span>
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000"></div>
+            </a>
+
+            <button
+              onClick={openContactModal}
+              className="group bg-transparent border-2 border-gray-600 hover:border-blue-400 text-gray-300 hover:text-white font-semibold py-4 px-10 rounded-2xl transition-all duration-500 transform hover:scale-105 backdrop-blur-sm hover:bg-blue-500/10"
+            >
+              <span className="flex items-center justify-center space-x-3">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+                </svg>
+                <span>Consulta Gratuita</span>
+              </span>
+            </button>
+          </div>
+
+          {/* Professional Stats or Features */}
+          <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8 animate-fadeInUp" style={{ animationDelay: '0.9s' }}>
+            <div className="text-center group">
+              <div className="text-3xl md:text-4xl font-bold text-blue-400 mb-2 group-hover:scale-110 transition-transform duration-300">100+</div>
+              <div className="text-gray-400 text-sm uppercase tracking-wider">Proyectos Completados</div>
+            </div>
+            <div className="text-center group">
+              <div className="text-3xl md:text-4xl font-bold text-cyan-400 mb-2 group-hover:scale-110 transition-transform duration-300">50+</div>
+              <div className="text-gray-400 text-sm uppercase tracking-wider">Clientes Satisfechos</div>
+            </div>
+            <div className="text-center group">
+              <div className="text-3xl md:text-4xl font-bold text-purple-400 mb-2 group-hover:scale-110 transition-transform duration-300">24/7</div>
+              <div className="text-gray-400 text-sm uppercase tracking-wider">Soporte Técnico</div>
+            </div>
+          </div>
         </div>
       </section>
       {/* About Us Section - Mission & Vision */}
       <section
         id="about"
-        className="py-20 md:py-32 bg-gray-900 bg-opacity-70 backdrop-blur-md relative overflow-hidden"
+        className="py-20 md:py-32 bg-gradient-to-br from-gray-900 via-black to-gray-900 relative overflow-hidden"
       >
         {/* Efectos de fondo animados */}
         <div className="absolute inset-0">
@@ -883,7 +949,7 @@ const App = () => {
       {/* Services Section - Professional Design */}
       <section
         id="services"
-        className="py-20 md:py-32 bg-gradient-to-br from-gray-800 via-gray-900 to-slate-900 relative overflow-hidden"
+        className="py-20 md:py-32 bg-gradient-to-br from-gray-900 via-black to-gray-900 relative overflow-hidden"
       >
         {/* Efectos de fondo animados */}
         <div className="absolute inset-0">
@@ -1263,7 +1329,7 @@ const App = () => {
         </div>
       </section>
       {/* Stats Counter Section - Logros y Proyectos */}
-      <section className="py-16 md:py-20 bg-gradient-to-br from-gray-800 to-slate-800 relative overflow-hidden">
+      <section className="py-16 md:py-20 bg-gradient-to-br from-gray-900 via-black to-gray-900 relative overflow-hidden">
         {/* Efectos de fondo */}
         <div className="absolute inset-0">
           <div className="absolute top-1/4 left-1/4 w-72 h-72 bg-blue-500/10 rounded-full blur-3xl animate-blob"></div>
@@ -1426,7 +1492,7 @@ const App = () => {
         </div>
       </section>      {/* Testimonials Section */}      <section
         id="testimonials"
-        className="py-16 md:py-24 bg-gradient-to-br from-slate-900 via-gray-900 to-black relative overflow-hidden"
+        className="py-16 md:py-24 bg-gradient-to-br from-gray-900 via-black to-gray-900 relative overflow-hidden"
       >
         {/* Efectos de fondo animados */}
         <div className="absolute inset-0">

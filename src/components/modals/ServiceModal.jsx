@@ -39,9 +39,9 @@ export const ServiceDetailModal = React.memo(
         aria-modal="true"
         aria-labelledby="service-modal-title"
       >
-        <div className="bg-slate-800 rounded-xl max-w-4xl w-full max-h-[80vh] overflow-y-auto shadow-2xl border border-blue-500/30">
+        <div className="bg-gradient-to-br from-gray-900 via-black to-gray-900 rounded-xl max-w-4xl w-full max-h-[80vh] overflow-y-auto shadow-2xl border border-gray-700/50">
           {/* Header */}
-          <div className="sticky top-0 bg-slate-800 border-b border-gray-700 p-4 sm:p-6 flex items-center justify-between">
+          <div className="sticky top-0 bg-gray-900/95 backdrop-blur-md border-b border-gray-700 p-4 sm:p-6 flex items-center justify-between">
             <div className="flex items-center">
               <div className="text-3xl sm:text-4xl mr-4 text-blue-400">
                 {service.icon}
