@@ -666,22 +666,22 @@ const App = () => {
         </div>
 
         <div className="relative z-10 flex flex-col items-center max-w-5xl mx-auto">
-          {/* Logo de Axon.App en la sección Hero */}
-          <div className="mb-12 animate-fadeInScale group">
+          {/* Logo de fondo - detrás del texto */}
+          <div className="absolute inset-0 flex items-center justify-center z-0 opacity-20">
             {!logoError ? (
               <img
                 src={logo1}
-                alt="Axon.App Logo"
-                className="h-24 md:h-32 w-auto mx-auto transition-transform duration-500 group-hover:scale-110 drop-shadow-2xl"
+                alt="Axon.App Logo Background"
+                className="h-96 md:h-[500px] lg:h-[600px] w-auto animate-horizontal-rotate drop-shadow-2xl"
                 onError={handleLogoError}
               />
             ) : (
-              <LogoSVG className="h-24 md:h-32 w-24 md:w-32 mx-auto transition-transform duration-500 group-hover:scale-110 drop-shadow-2xl" />
+              <LogoSVG className="h-96 md:h-[500px] lg:h-[600px] w-96 md:w-[500px] lg:w-[600px] animate-horizontal-rotate drop-shadow-2xl opacity-30" />
             )}
           </div>
 
           {/* 3D Professional Title */}
-          <h1 className="professional-3d-title text-5xl md:text-7xl lg:text-8xl font-black mb-8 leading-tight animate-fadeInUp">
+          <h1 className="professional-3d-title text-5xl md:text-7xl lg:text-8xl font-black mb-8 leading-tight animate-fadeInUp relative z-20">
             <span className="block mb-2 text-white">Desarrollamos el</span>
             <span className="block text-white">
               Futuro Digital
@@ -720,22 +720,6 @@ const App = () => {
                 <span>Consulta Gratuita</span>
               </span>
             </button>
-          </div>
-
-          {/* Professional Stats or Features */}
-          <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8 animate-fadeInUp" style={{ animationDelay: '0.9s' }}>
-            <div className="text-center group">
-              <div className="text-3xl md:text-4xl font-bold text-blue-400 mb-2 group-hover:scale-110 transition-transform duration-300">100+</div>
-              <div className="text-gray-400 text-sm uppercase tracking-wider">Proyectos Completados</div>
-            </div>
-            <div className="text-center group">
-              <div className="text-3xl md:text-4xl font-bold text-cyan-400 mb-2 group-hover:scale-110 transition-transform duration-300">50+</div>
-              <div className="text-gray-400 text-sm uppercase tracking-wider">Clientes Satisfechos</div>
-            </div>
-            <div className="text-center group">
-              <div className="text-3xl md:text-4xl font-bold text-purple-400 mb-2 group-hover:scale-110 transition-transform duration-300">24/7</div>
-              <div className="text-gray-400 text-sm uppercase tracking-wider">Soporte Técnico</div>
-            </div>
           </div>
         </div>
       </section>

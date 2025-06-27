@@ -61,20 +61,7 @@ export const BlogSection = ({ onOpenBlogModal }) => {
           </div>
         </div>
 
-        {/* Call to action */}
-        <div className="text-center mt-16">
-          <div className="bg-gradient-to-r from-blue-600/20 to-purple-600/20 rounded-2xl p-8 border border-blue-500/30">
-            <h3 className="text-2xl font-bold mb-4 text-white">
-              ¿Quieres estar al día?
-            </h3>
-            <p className="text-gray-300 mb-6">
-              Suscríbete a nuestro newsletter y recibe las últimas novedades directamente en tu correo
-            </p>
-            <button className="px-8 py-3 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-lg transition-all duration-300 transform hover:scale-105 font-semibold">
-              📧 Suscribirse al Newsletter
-            </button>
-          </div>
-        </div>
+
       </div>
     </section>
   );
