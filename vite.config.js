@@ -38,7 +38,7 @@ export default defineConfig(({ mode }) => ({
   plugins: [react()], // Plugin oficial de React para Vite
 
   // === CONFIGURACIÓN BASE ===
-  // Ruta base para el deploy (se ajusta según el entorno)
+  // Ruta base para el deploy en GitHub Pages
   base: mode === "production" ? "/Axon.app/" : "/",
 
   // === CONFIGURACIÓN DEL SERVIDOR DE DESARROLLO ===
@@ -110,7 +110,7 @@ export default defineConfig(({ mode }) => ({
   // Optimizaciones generales
   optimizeDeps: {
     include: ["react", "react-dom"],
-    exclude: ["@fontsource/orbitron", "@fontsource/rajdhani"]
+    exclude: []
   },
 
   // Alias para importaciones
