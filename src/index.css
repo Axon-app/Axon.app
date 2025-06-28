@@ -1,11 +1,16 @@
-@import "@fontsource/orbitron/400.css";
-@import "@fontsource/orbitron/700.css";
-@import "@fontsource/orbitron/900.css";
-@import "@fontsource/rajdhani/400.css";
-@import "@fontsource/rajdhani/600.css";
-@import "@fontsource/rajdhani/700.css";
-
+/* CSS optimizado - Axon.App v2025062701 */
 @import "tailwindcss";
+
+/* Configuración de fuentes base */
+:root {
+  font-family: 'Rajdhani', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
 
 /* Animaciones personalizadas */
 @keyframes blob {

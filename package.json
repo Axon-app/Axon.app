@@ -20,8 +20,6 @@
     "deploy:clean": "npm run clean:build && gh-pages -d dist"
   },
   "dependencies": {
-    "@fontsource/orbitron": "^5.2.6",
-    "@fontsource/rajdhani": "^5.2.6",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
