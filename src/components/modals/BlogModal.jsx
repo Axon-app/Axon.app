@@ -80,12 +80,6 @@ export const BlogModal = ({ isOpen, onClose, post }) => {
                     })}
                   </span>
                 )}
-                {post.readTime && (
-                  <span className="flex items-center">
-                    <span className="mr-1">⏱️</span>
-                    {post.readTime}
-                  </span>
-                )}
               </div>
             </div>
 

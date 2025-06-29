@@ -3,6 +3,10 @@
   "private": true,
   "version": "2.4.0",
   "homepage": "https://axon-app.github.io/Axon.app/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Axon-app/Axon.app.git"
+  },
   "type": "module",
   "scripts": {
     "dev": "vite",

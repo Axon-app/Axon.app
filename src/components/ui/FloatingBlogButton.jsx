@@ -1,4 +1,3 @@
-import React from "react";
 
 export const FloatingBlogButton = ({ onClick, isVisible = true }) => {
   if (!isVisible) return null;
@@ -6,7 +5,8 @@ export const FloatingBlogButton = ({ onClick, isVisible = true }) => {
   return (
     <button
       onClick={onClick}
-      className="fixed bottom-20 right-4 sm:bottom-24 sm:right-8 p-4 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white rounded-full transition-all duration-300 transform hover:scale-110 shadow-lg z-40 group"
+      className="fixed right-4 sm:right-8 p-4 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white rounded-full transition-all duration-300 transform hover:scale-110 shadow-lg z-40 group"
+      style={{ top: 'calc(50% + 2.5rem)' }}
       aria-label="Ver blog"
       title="Explorar nuestro blog"
     >
@@ -25,7 +25,7 @@ export const FloatingBlogButton = ({ onClick, isVisible = true }) => {
           />
         </svg>
       </div>
-      
+
       {/* Tooltip */}
       <div className="absolute right-full mr-3 top-1/2 transform -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
         <div className="bg-gray-900 text-white px-3 py-2 rounded-lg text-sm whitespace-nowrap shadow-lg border border-gray-700">

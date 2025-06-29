@@ -135,6 +135,7 @@ const ErrorModal = ({ error, onClose }) => (
 export const UnifiedContactForm = React.memo(
   ({
     mode = "contact", // 'contact', 'quote', 'consultation'
+    section = null, // 'basic', 'details' (para contact mode únicamente)
     onClose = null,
     className = "",
   }) => {
@@ -714,66 +715,119 @@ export const UnifiedContactForm = React.memo(
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Sección de información personal */}
-          <div className="bg-gradient-to-br from-gray-800/40 to-gray-900/40 backdrop-blur-sm p-6 rounded-2xl border border-gray-700/30 shadow-xl">
-            <h3 className="text-lg font-semibold text-white mb-4 flex items-center">
-              <svg
-                className="w-5 h-5 mr-2 text-blue-400"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-                ></path>
-              </svg>
-              Información Personal
-            </h3>{" "}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {renderField("name", "Nombre completo", "text", true, [], 50)}
-              {renderField("email", "Email", "email", true, [], 254)}
-            </div>{" "}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {renderField("phone", "Teléfono", "tel", false, [], 20)}
-              {renderField(
-                "company",
-                "Empresa/Organización",
-                "text",
-                false,
-                [],
-                100
-              )}
-            </div>
-          </div>
-          {/* Campos específicos según el modo */}
-          {mode === "contact" && (
-            <div className="bg-gradient-to-br from-gray-800/40 to-gray-900/40 backdrop-blur-sm p-6 rounded-2xl border border-gray-700/30 shadow-xl">
-              <h3 className="text-lg font-semibold text-white mb-4 flex items-center">
-                <svg
-                  className="w-5 h-5 mr-2 text-green-400"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
-                  ></path>
-                </svg>
-                Tu Mensaje
-              </h3>{" "}
-              {renderField("message", "Mensaje", "textarea", true, [], 1000)}
+          {/* Para el modo contact, renderizar según la sección */}
+          {mode === "contact" && section === "basic" && (
+            <div className="space-y-4">
+              {/* Información personal básica */}
+              <div className="space-y-4">
+                {renderField("name", "Nombre completo", "text", true, [], 50)}
+                {renderField("email", "Email", "email", true, [], 254)}
+                {renderField("phone", "Teléfono", "tel", false, [], 20)}
+                {renderField("company", "Empresa/Organización", "text", false, [], 100)}
+              </div>
             </div>
           )}
+
+          {mode === "contact" && section === "details" && (
+            <div className="space-y-4">
+              {/* Detalles del proyecto */}
+              <div className="space-y-4">
+                {renderField("projectType", "Tipo de proyecto", "select", true, PROJECT_TYPES)}
+                {renderField("message", "Describe tu proyecto", "textarea", true, [], 1000)}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {renderField("city", "Ciudad", "text", false, [], 50)}
+                  {renderField("clientType", "Tipo de cliente", "select", false, CLIENT_TYPES)}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Para el modo contact sin sección (formulario completo original) */}
+          {mode === "contact" && !section && (
+            <div className="space-y-6">
+              {/* Sección de información personal */}
+              <div className="bg-gradient-to-br from-gray-900/80 to-gray-800/80 backdrop-blur-sm p-6 rounded-2xl border border-gray-700/50 shadow-xl">
+                <h3 className="text-lg font-semibold text-white mb-4 flex items-center">
+                  <svg
+                    className="w-5 h-5 mr-2 text-blue-400"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                    ></path>
+                  </svg>
+                  Información Personal
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {renderField("name", "Nombre completo", "text", true, [], 50)}
+                  {renderField("email", "Email", "email", true, [], 254)}
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {renderField("phone", "Teléfono", "tel", false, [], 20)}
+                  {renderField("company", "Empresa/Organización", "text", false, [], 100)}
+                </div>
+              </div>
+
+              {/* Sección de mensaje */}
+              <div className="bg-gradient-to-br from-gray-900/80 to-gray-800/80 backdrop-blur-sm p-6 rounded-2xl border border-gray-700/50 shadow-xl">
+                <h3 className="text-lg font-semibold text-white mb-4 flex items-center">
+                  <svg
+                    className="w-5 h-5 mr-2 text-green-400"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
+                    ></path>
+                  </svg>
+                  Tu Mensaje
+                </h3>
+                {renderField("message", "Mensaje", "textarea", true, [], 1000)}
+              </div>
+            </div>
+          )}
+
           {mode === "quote" && (
             <div className="space-y-6">
+              {/* Sección de información personal */}
+              <div className="bg-gradient-to-br from-gray-900/80 to-gray-800/80 backdrop-blur-sm p-6 rounded-2xl border border-gray-700/50 shadow-xl">
+                <h3 className="text-lg font-semibold text-white mb-4 flex items-center">
+                  <svg
+                    className="w-5 h-5 mr-2 text-blue-400"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                    ></path>
+                  </svg>
+                  Información Personal
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {renderField("name", "Nombre completo", "text", true, [], 50)}
+                  {renderField("email", "Email", "email", true, [], 254)}
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {renderField("phone", "Teléfono", "tel", false, [], 20)}
+                  {renderField("company", "Empresa/Organización", "text", false, [], 100)}
+                </div>
+              </div>
+
               {/* Información del proyecto */}
-              <div className="bg-gradient-to-br from-gray-800/40 to-gray-900/40 backdrop-blur-sm p-6 rounded-2xl border border-gray-700/30 shadow-xl">
+              <div className="bg-gradient-to-br from-gray-900/80 to-gray-800/80 backdrop-blur-sm p-6 rounded-2xl border border-gray-700/50 shadow-xl">
                 <h3 className="text-lg font-semibold text-white mb-4 flex items-center">
                   <svg
                     className="w-5 h-5 mr-2 text-yellow-400"
@@ -789,47 +843,50 @@ export const UnifiedContactForm = React.memo(
                     ></path>
                   </svg>
                   Detalles del Proyecto
-                </h3>{" "}
+                </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {renderField("city", "Ciudad", "text", false, [], 50)}
-                  {renderField(
-                    "clientType",
-                    "Tipo de cliente",
-                    "select",
-                    false,
-                    CLIENT_TYPES
-                  )}
-                </div>{" "}
-                {renderField(
-                  "projectType",
-                  "Tipo de proyecto",
-                  "select",
-                  true,
-                  PROJECT_TYPES
-                )}
-                {renderField(
-                  "projectDescription",
-                  "Descripción del proyecto",
-                  "textarea",
-                  true,
-                  [],
-                  1000
-                )}
-                {renderField(
-                  "additionalRequirements",
-                  "Requisitos adicionales",
-                  "textarea",
-                  false,
-                  [],
-                  1000
-                )}
+                  {renderField("clientType", "Tipo de cliente", "select", false, CLIENT_TYPES)}
+                </div>
+                {renderField("projectType", "Tipo de proyecto", "select", true, PROJECT_TYPES)}
+                {renderField("projectDescription", "Descripción del proyecto", "textarea", true, [], 1000)}
+                {renderField("additionalRequirements", "Requisitos adicionales", "textarea", false, [], 1000)}
               </div>
             </div>
           )}
+
           {mode === "consultation" && (
             <div className="space-y-6">
+              {/* Sección de información personal */}
+              <div className="bg-gradient-to-br from-gray-900/80 to-gray-800/80 backdrop-blur-sm p-6 rounded-2xl border border-gray-700/50 shadow-xl">
+                <h3 className="text-lg font-semibold text-white mb-4 flex items-center">
+                  <svg
+                    className="w-5 h-5 mr-2 text-blue-400"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                    ></path>
+                  </svg>
+                  Información Personal
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {renderField("name", "Nombre completo", "text", true, [], 50)}
+                  {renderField("email", "Email", "email", true, [], 254)}
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {renderField("phone", "Teléfono", "tel", false, [], 20)}
+                  {renderField("company", "Empresa/Organización", "text", false, [], 100)}
+                </div>
+              </div>
+
               {/* Información de la consulta */}
-              <div className="bg-gradient-to-br from-gray-800/40 to-gray-900/40 backdrop-blur-sm p-6 rounded-2xl border border-gray-700/30 shadow-xl">
+              <div className="bg-gradient-to-br from-gray-900/80 to-gray-800/80 backdrop-blur-sm p-6 rounded-2xl border border-gray-700/50 shadow-xl">
                 <h3 className="text-lg font-semibold text-white mb-4 flex items-center">
                   <svg
                     className="w-5 h-5 mr-2 text-purple-400"
@@ -845,48 +902,18 @@ export const UnifiedContactForm = React.memo(
                     ></path>
                   </svg>
                   Detalles de la Consulta
-                </h3>{" "}
+                </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {renderField("city", "Ciudad", "text", false, [], 50)}
-                  {renderField(
-                    "clientType",
-                    "Tipo de cliente",
-                    "select",
-                    false,
-                    CLIENT_TYPES
-                  )}
+                  {renderField("clientType", "Tipo de cliente", "select", false, CLIENT_TYPES)}
                 </div>
-                {renderField(
-                  "consultationType",
-                  "Tipo de consulta",
-                  "select",
-                  true,
-                  CONSULTATION_TYPES
-                )}{" "}
-                {renderField(
-                  "topics",
-                  "Temas a tratar",
-                  "textarea",
-                  true,
-                  [],
-                  1000
-                )}
+                {renderField("consultationType", "Tipo de consulta", "select", true, CONSULTATION_TYPES)}
+                {renderField("topics", "Temas a tratar", "textarea", true, [], 1000)}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {renderField(
-                    "preferredDate",
-                    "Fecha preferida",
-                    "date",
-                    false,
-                    []
-                  )}
-                  {renderField(
-                    "preferredTime",
-                    "Hora preferida",
-                    "time",
-                    false,
-                    []
-                  )}
+                  {renderField("preferredDate", "Fecha preferida", "date", false, [])}
+                  {renderField("preferredTime", "Hora preferida", "time", false, [])}
                 </div>
+
                 {/* Tipo de reunión con diseño mejorado */}
                 <div className="group mb-6">
                   <label className="flex items-center text-sm font-semibold text-gray-200 mb-3">
@@ -942,12 +969,12 @@ export const UnifiedContactForm = React.memo(
                       </label>
                     ))}
                   </div>
-                </div>{" "}
+                </div>
               </div>
             </div>
-          )}{" "}
+          )}
           {/* Sistema de seguridad */}
-          <div className="bg-gradient-to-br from-gray-800/40 to-gray-900/40 backdrop-blur-sm p-6 rounded-2xl border border-gray-700/30 shadow-xl">
+          <div className="bg-gradient-to-br from-gray-900/80 to-gray-800/80 backdrop-blur-sm p-6 rounded-2xl border border-gray-700/50 shadow-xl">
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center space-x-3">
                 <div className="w-8 h-8 bg-gradient-to-br from-green-500 to-emerald-600 rounded-lg flex items-center justify-center">
@@ -972,7 +999,7 @@ export const UnifiedContactForm = React.memo(
             </div>
 
             {/* Botón de envío mejorado con estado dinámico */}
-            <div className="bg-gradient-to-br from-gray-800/40 to-gray-900/40 backdrop-blur-sm p-6 rounded-2xl border border-gray-700/30 shadow-xl">
+            <div className="bg-gradient-to-br from-gray-900/80 to-gray-800/80 backdrop-blur-sm p-6 rounded-2xl border border-gray-700/50 shadow-xl">
               {/* Indicador de estado antes del botón */}
               {!isFormComplete && (
                 <div className="flex items-center space-x-2 mb-4">

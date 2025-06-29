@@ -491,14 +491,23 @@ body {
 
 @keyframes lightReflection {
   0% {
-    filter: brightness(1.1) drop-shadow(0 0 3px rgba(255, 255, 255, 0.4));
+    filter: brightness(1.2) drop-shadow(0 0 5px rgba(255, 255, 255, 0.5));
+  }
+  25% {
+    filter: brightness(1.5) drop-shadow(0 0 10px rgba(255, 255, 255, 0.7))
+      drop-shadow(0 0 15px rgba(255, 255, 255, 0.5));
   }
   50% {
-    filter: brightness(1.6) drop-shadow(0 0 15px rgba(255, 255, 255, 0.9))
-      drop-shadow(0 0 25px rgba(255, 255, 255, 0.6));
+    filter: brightness(1.8) drop-shadow(0 0 20px rgba(255, 255, 255, 1.0))
+      drop-shadow(0 0 30px rgba(255, 255, 255, 0.8))
+      drop-shadow(0 0 40px rgba(0, 195, 255, 0.5));
+  }
+  75% {
+    filter: brightness(1.5) drop-shadow(0 0 10px rgba(255, 255, 255, 0.7))
+      drop-shadow(0 0 15px rgba(255, 255, 255, 0.5));
   }
   100% {
-    filter: brightness(1.1) drop-shadow(0 0 3px rgba(255, 255, 255, 0.4));
+    filter: brightness(1.2) drop-shadow(0 0 5px rgba(255, 255, 255, 0.5));
   }
 }
 
@@ -1165,11 +1174,6 @@ select option:checked {
   animation: horizontal-rotate 20s linear infinite;
 }
 
-/* Mejora para el logo de fondo */
-.animate-horizontal-rotate:hover {
-  animation-duration: 8s;
-}
-
 /* Professional Banner Animations */
 
 /* Rotating Squares Animation */
@@ -1232,20 +1236,29 @@ select option:checked {
   font-family: 'Orbitron', 'Inter', sans-serif;
   color: #ffffff;
   text-shadow:
-    0 1px 0 #334155,
-    0 2px 0 #1e293b,
-    0 3px 0 #0f172a,
-    0 4px 0 #020617,
-    0 5px 0 #000000,
-    0 6px 1px rgba(0, 0, 0, 0.1),
-    0 0 5px rgba(59, 130, 246, 0.1),
-    0 1px 3px rgba(0, 0, 0, 0.3),
-    0 3px 5px rgba(0, 0, 0, 0.2),
-    0 5px 10px rgba(0, 0, 0, 0.25),
-    0 10px 10px rgba(0, 0, 0, 0.2),
-    0 20px 20px rgba(0, 0, 0, 0.15);
+    /* Profundidad 3D mejorada */
+    0 1px 0 #cbd5e1,
+    0 2px 0 #94a3b8,
+    0 3px 0 #64748b,
+    0 4px 0 #475569,
+    0 5px 0 #334155,
+    0 6px 0 #1e293b,
+    0 7px 0 #0f172a,
+    0 8px 0 #020617,
+    0 9px 0 #000000,
+    /* Sombras suaves para profundidad */
+    0 10px 2px rgba(0, 0, 0, 0.2),
+    0 12px 4px rgba(0, 0, 0, 0.15),
+    0 15px 8px rgba(0, 0, 0, 0.1),
+    0 20px 16px rgba(0, 0, 0, 0.08),
+    0 25px 25px rgba(0, 0, 0, 0.05),
+    /* Efectos de luz */
+    0 0 20px rgba(59, 130, 246, 0.2),
+    0 0 40px rgba(59, 130, 246, 0.1);
   position: relative;
   filter: drop-shadow(0 0 30px rgba(59, 130, 246, 0.3));
+  transform: perspective(800px) rotateX(15deg);
+  transform-style: preserve-3d;
 }
 
 .professional-3d-title::before {
@@ -1254,12 +1267,18 @@ select option:checked {
   top: 0;
   left: 0;
   z-index: -1;
-  background: linear-gradient(135deg, #1e293b, #334155, #475569);
+  background: linear-gradient(135deg,
+    #1e293b 0%,
+    #334155 25%,
+    #475569 50%,
+    #64748b 75%,
+    #94a3b8 100%);
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   text-shadow: none;
-  transform: translate(2px, 2px);
+  transform: translate(3px, 3px) rotateX(15deg);
+  opacity: 0.8;
 }
 
 /* Enhanced Grid Animation */
@@ -1318,4 +1337,64 @@ select option:checked {
 
 .float-gentle {
   animation: floatGentle 6s ease-in-out infinite;
+}
+
+/* Reflejo blanco para el logo del banner principal */
+.logo-banner-white-reflection {
+  filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.9))
+          drop-shadow(0 0 40px rgba(255, 255, 255, 0.6))
+          drop-shadow(0 0 60px rgba(255, 255, 255, 0.4))
+          brightness(1.3);
+  transition: filter 0.3s ease;
+}
+
+.logo-banner-white-reflection:hover {
+  filter: drop-shadow(0 0 25px rgba(255, 255, 255, 1.0))
+          drop-shadow(0 0 50px rgba(255, 255, 255, 0.8))
+          drop-shadow(0 0 75px rgba(255, 255, 255, 0.5))
+          brightness(1.5);
+}
+
+/* Animaciones personalizadas para tarjetas del blog */
+@keyframes bounce-slow {
+  0%, 100% {
+    transform: translateY(-2px);
+  }
+  50% {
+    transform: translateY(2px);
+  }
+}
+
+@keyframes reverse-spin {
+  0% {
+    transform: rotate(360deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+.animate-bounce-slow {
+  animation: bounce-slow 3s ease-in-out infinite;
+}
+
+.animate-reverse-spin {
+  animation: reverse-spin 15s linear infinite;
+}
+
+/* Animación de entrada escalonada */
+@keyframes staggeredFadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.animate-staggered {
+  animation: staggeredFadeIn 0.8s ease-out forwards;
+  opacity: 0;
 }

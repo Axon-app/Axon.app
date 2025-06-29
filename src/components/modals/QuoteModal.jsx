@@ -378,7 +378,7 @@ export const QuoteRequestModal = React.memo(({ isOpen, onClose, _service }) => {
                     onChange={handleInputChange}
                     required
                     autoComplete="name"
-                    className="w-full p-3 bg-slate-700 border border-gray-600 rounded-lg text-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
+                    className="w-full p-3 bg-white border border-gray-600 rounded-lg text-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
                     placeholder="Tu nombre completo"
                     style={{
                       zIndex: 9999,
@@ -408,7 +408,7 @@ export const QuoteRequestModal = React.memo(({ isOpen, onClose, _service }) => {
                     onChange={handleInputChange}
                     required
                     autoComplete="email"
-                    className={`w-full p-3 bg-slate-700 border rounded-lg focus:ring-2 focus:ring-blue-500/20 text-white transition-all ${
+                    className={`w-full p-3 bg-white border rounded-lg focus:ring-2 focus:ring-blue-500/20 text-gray-900 transition-all ${
                       validationErrors.email
                         ? "border-red-500 focus:border-red-500"
                         : "border-gray-600 focus:border-blue-500"
@@ -437,7 +437,7 @@ export const QuoteRequestModal = React.memo(({ isOpen, onClose, _service }) => {
                     value={formData.phone}
                     onChange={handleInputChange}
                     autoComplete="tel"
-                    className={`w-full p-3 bg-slate-700 border rounded-lg focus:ring-2 focus:ring-blue-500/20 text-white transition-all ${
+                    className={`w-full p-3 bg-white border rounded-lg focus:ring-2 focus:ring-blue-500/20 text-gray-900 transition-all ${
                       validationErrors.phone
                         ? "border-red-500 focus:border-red-500"
                         : "border-gray-600 focus:border-blue-500"
@@ -463,7 +463,7 @@ export const QuoteRequestModal = React.memo(({ isOpen, onClose, _service }) => {
                     value={formData.clientType}
                     onChange={handleInputChange}
                     required
-                    className={`w-full p-3 bg-slate-700 border rounded-lg focus:ring-2 focus:ring-blue-500/20 text-white transition-all cursor-pointer ${
+                    className={`w-full p-3 bg-white border rounded-lg focus:ring-2 focus:ring-blue-500/20 text-gray-900 transition-all cursor-pointer ${
                       validationErrors.clientType
                         ? "border-red-500 focus:border-red-500"
                         : "border-gray-600 focus:border-blue-500"
@@ -476,16 +476,16 @@ export const QuoteRequestModal = React.memo(({ isOpen, onClose, _service }) => {
                     <option
                       value=""
                       disabled
-                      className="bg-slate-800 text-gray-400"
+                      className="bg-white text-gray-400"
                     >
                       Selecciona tipo de cliente
                     </option>
-                    <option value="empresa" className="bg-slate-800 text-white">
+                    <option value="empresa" className="bg-white text-gray-900">
                       Empresa
                     </option>
                     <option
                       value="persona-natural"
-                      className="bg-slate-800 text-white"
+                      className="bg-white text-gray-900"
                     >
                       Persona Natural
                     </option>
@@ -514,7 +514,7 @@ export const QuoteRequestModal = React.memo(({ isOpen, onClose, _service }) => {
                     value={formData.company}
                     onChange={handleInputChange}
                     autoComplete="organization"
-                    className="w-full p-3 bg-slate-700 border border-gray-600 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 text-white transition-all"
+                    className="w-full p-3 bg-white border border-gray-600 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 text-gray-900 transition-all"
                     placeholder={
                       formData.clientType === "empresa"
                         ? "Nombre de tu empresa"
@@ -536,7 +536,7 @@ export const QuoteRequestModal = React.memo(({ isOpen, onClose, _service }) => {
                     value={formData.city}
                     onChange={handleInputChange}
                     required
-                    className={`w-full p-3 bg-slate-700 border rounded-lg focus:ring-2 focus:ring-blue-500/20 text-white transition-all ${
+                    className={`w-full p-3 bg-white border rounded-lg focus:ring-2 focus:ring-blue-500/20 text-gray-900 transition-all ${
                       validationErrors.city
                         ? "border-red-500 focus:border-red-500"
                         : "border-gray-600 focus:border-blue-500"
@@ -559,7 +559,7 @@ export const QuoteRequestModal = React.memo(({ isOpen, onClose, _service }) => {
                   value={formData.projectType}
                   onChange={handleInputChange}
                   required
-                  className="w-full p-3 bg-slate-700 border border-gray-600 rounded-lg text-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
+                  className="w-full p-3 bg-white border border-gray-600 rounded-lg text-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
                   style={{
                     zIndex: 9999,
                     position: "relative",
@@ -569,77 +569,77 @@ export const QuoteRequestModal = React.memo(({ isOpen, onClose, _service }) => {
                   <option
                     value=""
                     disabled
-                    className="bg-slate-800 text-gray-400"
+                    className="bg-white text-gray-400"
                   >
                     Selecciona un tipo de proyecto
                   </option>
                   <option
                     value="Desarrollo Web Full-Stack"
-                    className="bg-slate-800 text-white"
+                    className="bg-white text-gray-900"
                   >
                     Desarrollo Web Full-Stack
                   </option>
                   <option
                     value="Aplicaciones Móviles"
-                    className="bg-slate-800 text-white"
+                    className="bg-white text-gray-900"
                   >
                     Aplicaciones Móviles
                   </option>
                   <option
                     value="Sistemas de Gestión"
-                    className="bg-slate-800 text-white"
+                    className="bg-white text-gray-900"
                   >
                     Sistemas de Gestión
                   </option>
                   <option
                     value="E-commerce"
-                    className="bg-slate-800 text-white"
+                    className="bg-white text-gray-900"
                   >
                     E-commerce
                   </option>
                   <option
                     value="APIs y Microservicios"
-                    className="bg-slate-800 text-white"
+                    className="bg-white text-gray-900"
                   >
                     APIs y Microservicios
                   </option>{" "}
                   <option
                     value="Marketing Digital"
-                    className="bg-slate-800 text-white"
+                    className="bg-white text-gray-900"
                   >
                     Marketing Digital
                   </option>
                   <option
                     value="Soporte Hardware y Software"
-                    className="bg-slate-800 text-white"
+                    className="bg-white text-gray-900"
                   >
                     Soporte Hardware y Software
                   </option>
                   <option
                     value="Migración de Sistemas"
-                    className="bg-slate-800 text-white"
+                    className="bg-white text-gray-900"
                   >
                     Migración de Sistemas
                   </option>
                   <option
                     value="Integración de Sistemas"
-                    className="bg-slate-800 text-white"
+                    className="bg-white text-gray-900"
                   >
                     Integración de Sistemas
                   </option>
                   <option
                     value="Automatización de Procesos"
-                    className="bg-slate-800 text-white"
+                    className="bg-white text-gray-900"
                   >
                     Automatización de Procesos
                   </option>
                   <option
                     value="Análisis de Datos"
-                    className="bg-slate-800 text-white"
+                    className="bg-white text-gray-900"
                   >
                     Análisis de Datos
                   </option>
-                  <option value="Otro" className="bg-slate-800 text-white">
+                  <option value="Otro" className="bg-white text-gray-900">
                     Otro
                   </option>
                 </select>
@@ -660,7 +660,7 @@ export const QuoteRequestModal = React.memo(({ isOpen, onClose, _service }) => {
                   onChange={handleInputChange}
                   required
                   rows="4"
-                  className={`w-full p-3 bg-slate-700 border rounded-lg focus:ring-2 focus:ring-blue-500/20 text-white transition-all resize-none ${
+                  className={`w-full p-3 bg-white border rounded-lg focus:ring-2 focus:ring-blue-500/20 text-gray-900 transition-all resize-none ${
                     validationErrors.description
                       ? "border-red-500 focus:border-red-500"
                       : "border-gray-600 focus:border-blue-500"
@@ -682,7 +682,7 @@ export const QuoteRequestModal = React.memo(({ isOpen, onClose, _service }) => {
                   value={formData.additionalRequirements}
                   onChange={handleInputChange}
                   rows="3"
-                  className={`w-full p-3 bg-slate-700 border rounded-lg focus:ring-2 focus:ring-blue-500/20 text-white transition-all resize-none ${
+                  className={`w-full p-3 bg-white border rounded-lg focus:ring-2 focus:ring-blue-500/20 text-gray-900 transition-all resize-none ${
                     validationErrors.additionalRequirements
                       ? "border-red-500 focus:border-red-500"
                       : "border-gray-600 focus:border-blue-500"
@@ -798,7 +798,7 @@ export const QuoteRequestModal = React.memo(({ isOpen, onClose, _service }) => {
                 <button
                   type="button"
                   onClick={onClose}
-                  className="px-6 py-3 bg-slate-700 hover:bg-slate-600 text-white rounded-lg transition-all duration-300 font-semibold border border-gray-600"
+                  className="px-6 py-3 bg-white hover:bg-slate-600 text-white rounded-lg transition-all duration-300 font-semibold border border-gray-600"
                 >
                   Cancelar
                 </button>{" "}
