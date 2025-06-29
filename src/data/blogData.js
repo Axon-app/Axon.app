@@ -1,4 +1,20 @@
-// Datos del blog de Axon.App
+// blogData.js - Datos y utilidades del blog de Axon.App
+// =====================================================
+// Este archivo contiene los datos de los posts del blog y funciones utilitarias para acceder a ellos.
+// Cumple con buenas prácticas de organización, documentación y seguridad.
+
+// --- Estructura de blogPosts ---
+// Cada post contiene:
+//   - id: número único
+//   - title: string (título)
+//   - excerpt: string (resumen)
+//   - content: string (contenido en markdown)
+//   - author: string
+//   - date: string (YYYY-MM-DD)
+//   - readTime: string
+//   - tags: array de strings
+//   - image: string (ruta de imagen)
+//   - featured: boolean
 export const blogPosts = [
   {
     id: 1,
@@ -290,7 +306,7 @@ const verifyToken = (token) => {
 
 ### Content Security Policy
 \`\`\`html
-<meta http-equiv="Content-Security-Policy" 
+<meta http-equiv="Content-Security-Policy"
       content="default-src 'self'; script-src 'self' 'unsafe-inline'">
 \`\`\`
 
@@ -329,38 +345,69 @@ En Axon.App, la seguridad es nuestra prioridad. Implementamos todas estas práct
   }
 ];
 
-// Función para obtener posts destacados
+// --- Utilidades para acceder a los posts del blog ---
+
+/**
+ * Obtiene los posts destacados (featured)
+ * @returns {Array} Array de posts destacados
+ */
 export const getFeaturedPosts = () => {
   return blogPosts.filter(post => post.featured);
 };
 
-// Función para obtener posts recientes
+/**
+ * Obtiene los posts más recientes, ordenados por fecha descendente
+ * @param {number} limit - Número máximo de posts a devolver (default: 3)
+ * @returns {Array} Array de posts recientes
+ */
 export const getRecentPosts = (limit = 3) => {
   return blogPosts
+    .slice() // Copia para no mutar el array original
     .sort((a, b) => new Date(b.date) - new Date(a.date))
     .slice(0, limit);
 };
 
-// Función para obtener post por ID
+/**
+ * Obtiene un post por su ID
+ * @param {number|string} id - ID del post
+ * @returns {Object|undefined} Post encontrado o undefined
+ */
 export const getPostById = (id) => {
   return blogPosts.find(post => post.id === parseInt(id));
 };
 
-// Función para obtener posts por tag
+/**
+ * Obtiene posts que contengan un tag específico (case-insensitive)
+ * @param {string} tag - Tag a buscar
+ * @returns {Array} Array de posts que contienen el tag
+ */
 export const getPostsByTag = (tag) => {
-  return blogPosts.filter(post => 
-    post.tags.some(postTag => 
+  return blogPosts.filter(post =>
+    post.tags.some(postTag =>
       postTag.toLowerCase().includes(tag.toLowerCase())
     )
   );
 };
 
-// Función para búsqueda de posts
+/**
+ * Busca posts por título, resumen o tags (case-insensitive)
+ * @param {string} query - Texto de búsqueda
+ * @returns {Array} Array de posts que coinciden con la búsqueda
+ */
 export const searchPosts = (query) => {
   const searchQuery = query.toLowerCase();
-  return blogPosts.filter(post => 
+  return blogPosts.filter(post =>
     post.title.toLowerCase().includes(searchQuery) ||
     post.excerpt.toLowerCase().includes(searchQuery) ||
     post.tags.some(tag => tag.toLowerCase().includes(searchQuery))
   );
 };
+
+// --- SUGERENCIAS DE MEJORA PROFESIONAL ---
+// 1. Migrar a TypeScript para tipado estricto de los datos y funciones.
+// 2. Validar la estructura de los posts al cargar (por ejemplo, con zod o yup).
+// 3. Internacionalizar los contenidos si el blog es multilenguaje.
+// 4. Implementar paginación y filtrado avanzado en las utilidades.
+// 5. Añadir tests unitarios para todas las funciones de acceso y búsqueda.
+// 6. Considerar lazy loading o fetch dinámico si el blog crece mucho.
+// 7. Documentar ejemplos de uso de cada función en la documentación técnica.

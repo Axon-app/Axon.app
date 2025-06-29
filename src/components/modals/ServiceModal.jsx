@@ -1,36 +1,38 @@
 import React from "react";
 
+// --- Modal de Detalle de Servicio ---
+// Muestra información detallada de un servicio, con opciones para solicitar propuesta o consulta.
+// Accesible, seguro y optimizado para experiencia de usuario profesional.
 export const ServiceDetailModal = React.memo(
   ({ isOpen, onClose, service, onOpenQuote, onOpenConsultation }) => {
-    // Manejar escape key
+    // Cierra el modal con la tecla Escape y bloquea el scroll de fondo
     React.useEffect(() => {
       const handleEscape = (event) => {
         if (event.key === "Escape") {
           onClose();
         }
       };
-
       if (isOpen) {
         document.addEventListener("keydown", handleEscape);
         document.body.style.overflow = "hidden";
       }
-
       return () => {
         document.removeEventListener("keydown", handleEscape);
         document.body.style.overflow = "unset";
       };
     }, [isOpen, onClose]);
 
-    // Early return si no está abierto o no hay servicio
+    // Early return: no renderiza si el modal no está abierto o no hay servicio seleccionado
     if (!isOpen || !service) return null;
 
-    // Manejar click en backdrop
+    // Cierra el modal al hacer click en el backdrop (fuera del contenido)
     const handleBackdropClick = (e) => {
       if (e.target === e.currentTarget) {
         onClose();
       }
     };
 
+    // --- Renderizado principal del modal ---
     return (
       <div
         className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4"
@@ -40,7 +42,7 @@ export const ServiceDetailModal = React.memo(
         aria-labelledby="service-modal-title"
       >
         <div className="bg-gradient-to-br from-gray-900 via-black to-gray-900 rounded-xl max-w-4xl w-full max-h-[80vh] overflow-y-auto shadow-2xl border border-gray-700/50">
-          {/* Header */}
+          {/* Header con título e ícono del servicio */}
           <div className="sticky top-0 bg-gray-900/95 backdrop-blur-md border-b border-gray-700 p-4 sm:p-6 flex items-center justify-between">
             <div className="flex items-center">
               <div className="text-3xl sm:text-4xl mr-4 text-blue-400">
@@ -68,7 +70,7 @@ export const ServiceDetailModal = React.memo(
               </svg>
             </button>
           </div>{" "}
-          {/* Content */}
+          {/* Contenido principal: descripción, características, tecnologías, proceso, cards */}
           <div className="p-4 sm:p-6 space-y-6 text-gray-300">
             <div className="prose prose-invert prose-blue max-w-none">
               {/* Descripción principal */}
@@ -77,8 +79,7 @@ export const ServiceDetailModal = React.memo(
                   {service.description}
                 </p>
               </section>
-
-              {/* Descripción detallada */}
+              {/* Descripción detallada (opcional) */}
               {service.detailedDescription && (
                 <section>
                   <h3 className="text-xl font-semibold text-blue-300 mb-3">
@@ -89,8 +90,7 @@ export const ServiceDetailModal = React.memo(
                   </p>
                 </section>
               )}
-
-              {/* Características principales */}
+              {/* Características principales (opcional) */}
               {service.features && service.features.length > 0 && (
                 <section>
                   <h3 className="text-xl font-semibold text-blue-300 mb-3">
@@ -111,8 +111,7 @@ export const ServiceDetailModal = React.memo(
                   </div>
                 </section>
               )}
-
-              {/* Tecnologías utilizadas */}
+              {/* Tecnologías utilizadas (opcional) */}
               {service.technologies && service.technologies.length > 0 && (
                 <section>
                   <h3 className="text-xl font-semibold text-blue-300 mb-3">
@@ -130,8 +129,7 @@ export const ServiceDetailModal = React.memo(
                   </div>
                 </section>
               )}
-
-              {/* Proceso de trabajo */}
+              {/* Proceso de trabajo (opcional) */}
               {service.process && service.process.length > 0 && (
                 <section>
                   <h3 className="text-xl font-semibold text-blue-300 mb-3">
@@ -156,8 +154,7 @@ export const ServiceDetailModal = React.memo(
                   </div>
                 </section>
               )}
-
-              {/* Información adicional en cards */}
+              {/* Cards informativas: tiempo estimado y rango de precios (opcional) */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {/* Tiempo estimado */}
                 {service.estimatedTime && (
@@ -177,7 +174,6 @@ export const ServiceDetailModal = React.memo(
                     </p>
                   </div>
                 )}
-
                 {/* Rango de precios */}
                 {service.priceRange && (
                   <div className="bg-slate-700/30 rounded-lg p-4 border border-cyan-500/20">
@@ -198,7 +194,7 @@ export const ServiceDetailModal = React.memo(
                 )}
               </div>
             </div>{" "}
-            {/* Panel informativo */}
+            {/* Panel informativo sobre los siguientes pasos */}
             <div className="bg-blue-500/10 border border-blue-500/30 rounded-lg p-4">
               <h4 className="text-blue-300 font-semibold mb-2 flex items-center">
                 💡 Siguiente Paso
@@ -217,13 +213,13 @@ export const ServiceDetailModal = React.memo(
                 </li>
               </ul>
             </div>
-            {/* Botones de acción */}
+            {/* Botones de acción: solicitar propuesta o consulta */}
             <div className="flex flex-col sm:flex-row gap-3 pt-4 border-t border-gray-700">
               {" "}
               <button
                 onClick={() => {
-                  onClose(); // Cerrar el modal actual
-                  if (onOpenQuote) onOpenQuote(); // Abrir modal de propuesta
+                  onClose(); // Cierra el modal actual
+                  if (onOpenQuote) onOpenQuote(); // Abre modal de propuesta
                 }}
                 className="flex-1 px-6 py-3 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white rounded-lg transition-all duration-300 transform hover:scale-105 font-semibold shadow-lg flex items-center justify-center"
                 aria-label={`Solicitar propuesta para ${service.title}`}
@@ -245,8 +241,8 @@ export const ServiceDetailModal = React.memo(
               </button>{" "}
               <button
                 onClick={() => {
-                  onClose(); // Cerrar el modal actual
-                  if (onOpenConsultation) onOpenConsultation(); // Abrir modal de consulta
+                  onClose(); // Cierra el modal actual
+                  if (onOpenConsultation) onOpenConsultation(); // Abre modal de consulta
                 }}
                 className="flex-1 px-6 py-3 bg-slate-700 hover:bg-slate-600 text-white rounded-lg transition-all duration-300 font-semibold border border-gray-600 hover:border-gray-500 flex items-center justify-center"
                 aria-label={`Programar consulta para ${service.title}`}
@@ -275,3 +271,10 @@ export const ServiceDetailModal = React.memo(
 );
 
 ServiceDetailModal.displayName = "ServiceDetailModal";
+
+// --- SUGERENCIAS DE MEJORA ---
+// 1. Modularizar secciones internas si el archivo crece (cards, features, proceso).
+// 2. Añadir animaciones de entrada/salida para mejorar la experiencia de usuario.
+// 3. Permitir navegación por teclado entre botones de acción (accesibilidad).
+// 4. Considerar internacionalización si se requiere multilenguaje.
+// 5. Añadir tests unitarios para la lógica de cierre y renderizado condicional.

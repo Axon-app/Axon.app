@@ -1,3 +1,17 @@
+# .gitignore - Configuración profesional para Axon.App
+# ===================================================
+# Ignora archivos y carpetas generados por dependencias, builds, IDEs, sistemas operativos y temporales.
+# Cumple con buenas prácticas de seguridad y limpieza de repositorios.
+#
+# Estructura:
+# 1. Logs y archivos de debug
+# 2. Dependencias y builds
+# 3. Configuración de editores/IDEs
+# 4. Variables de entorno y archivos sensibles
+# 5. Archivos temporales y de sistema operativo
+# 6. Caches y directorios de frameworks
+# 7. Sugerencias de mejora profesional al final
+
 # Logs
 logs
 *.log
@@ -7,12 +21,15 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+# Dependencias y builds
 node_modules
 dist
 dist-ssr
+build/
+coverage/
 *.local
 
-# Editor directories and files
+# Configuración de editores y archivos de proyecto
 .vscode/*
 !.vscode/extensions.json
 !.vscode/settings.json
@@ -24,38 +41,32 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+.project
+.settings/
+.classpath
 
-# Build and deployment
-dist/
-build/
-coverage/
-
-# Environment variables
+# Variables de entorno y archivos sensibles
 .env
 .env.local
 .env.development.local
 .env.test.local
 .env.production.local
 
-# OS generated files
+# Archivos de sistema operativo
 Thumbs.db
 .DS_Store?
 ehthumbs.db
 Icon?
 
-# Temporary files and scripts (project specific) - REVISADOS
+# Archivos temporales y scripts (proyecto)
 *.temp
 *.tmp
-
-# Scripts temporales que SÍ deben ignorarse (seguros)
 temp-*.cjs
 temp-*.js
-
-# Documentation files (solo temporales)
 temp_docs/
 *_TEMP*.md
 
-# Cache directories
+# Caches y directorios de frameworks
 .cache/
 .parcel-cache/
 .next/
@@ -63,10 +74,16 @@ temp_docs/
 .vuepress/dist
 .serverless/
 
-# IDE and editor files
+# Archivos swap y temporales de editores
 *.swp
 *.swo
 *~
-.project
-.settings/
-.classpath
+
+# --- SUGERENCIAS DE MEJORA PROFESIONAL ---
+# 1. Revisar y actualizar este archivo periódicamente según nuevas herramientas/frameworks.
+# 2. Añadir reglas específicas para archivos temporales de scripts propios.
+# 3. Documentar excepciones (por ejemplo, archivos de configuración compartidos).
+# 4. No ignorar archivos de configuración que deban versionarse (.vscode/settings.json, etc.).
+# 5. Añadir reglas para nuevas plataformas si el proyecto crece (por ejemplo, .expo, .firebase, etc.).
+# 6. Validar que no se suban archivos sensibles antes de cada push.
+# 7. Mantener este archivo sincronizado en todos los entornos del equipo.

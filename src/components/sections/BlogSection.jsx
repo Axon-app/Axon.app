@@ -1,13 +1,16 @@
 import React from "react";
 import { blogPosts, getFeaturedPosts } from "../../data/blogData";
 
+// --- Sección principal del Blog ---
+// Muestra posts destacados y recientes con efectos visuales y tarjetas interactivas.
 export const BlogSection = ({ onOpenBlogModal }) => {
+  // Obtiene posts destacados y los 3 más recientes
   const featuredPosts = getFeaturedPosts();
   const recentPosts = blogPosts.slice(0, 3);
 
   return (
     <section id="blog" className="py-20 bg-gradient-to-br from-gray-900 via-black to-gray-900 relative overflow-hidden">
-      {/* Efectos de fondo animados */}
+      {/* Efectos de fondo animados decorativos */}
       <div className="absolute inset-0">
         <div className="absolute top-1/4 left-1/4 w-72 h-72 bg-blue-500/10 rounded-full blur-3xl animate-blob"></div>
         <div className="absolute bottom-1/4 right-1/4 w-72 h-72 bg-purple-500/10 rounded-full blur-3xl animate-blob" style={{ animationDelay: '2s' }}></div>
@@ -25,7 +28,7 @@ export const BlogSection = ({ onOpenBlogModal }) => {
           </p>
         </div>
 
-        {/* Posts destacados */}
+        {/* Posts destacados (solo si existen) */}
         {featuredPosts.length > 0 && (
           <div className="mb-16">
             <h3 className="text-2xl font-semibold mb-8 text-blue-300 text-center">
@@ -44,7 +47,7 @@ export const BlogSection = ({ onOpenBlogModal }) => {
           </div>
         )}
 
-        {/* Posts recientes */}
+        {/* Posts recientes (máx. 3) */}
         <div>
           <h3 className="text-2xl font-semibold mb-8 text-blue-300 text-center">
             🕒 Últimas Publicaciones
@@ -60,15 +63,15 @@ export const BlogSection = ({ onOpenBlogModal }) => {
             ))}
           </div>
         </div>
-
-
       </div>
     </section>
   );
 };
 
-// Componente de tarjeta de blog
+// --- Tarjeta individual de blog ---
+// Muestra información resumida de un post y permite abrir el modal de detalle.
 const BlogCard = React.memo(({ post, onOpenModal, featured }) => {
+  // Llama al callback para abrir el modal con el post seleccionado
   const handleReadMore = () => {
     onOpenModal(post);
   };
@@ -77,7 +80,7 @@ const BlogCard = React.memo(({ post, onOpenModal, featured }) => {
     <article
       className={`bg-slate-800/60 backdrop-blur-sm rounded-xl overflow-hidden transform transition-all duration-300 hover:shadow-blue-500/30 hover:-translate-y-2 shadow-xl border border-blue-500/30 group w-full ${featured ? 'lg:col-span-1' : ''}`}
     >
-      {/* Imagen del post */}
+      {/* Imagen y decoraciones visuales */}
       <div className="h-48 bg-gradient-to-br from-blue-600/50 to-purple-600/50 relative overflow-hidden">
         {/* Patrón de fondo decorativo */}
         <div className="absolute inset-0 opacity-10">
@@ -85,11 +88,9 @@ const BlogCard = React.memo(({ post, onOpenModal, featured }) => {
           <div className="absolute top-8 right-16 w-8 h-8 border border-white/20 rounded-full animate-pulse"></div>
           <div className="absolute bottom-8 right-4 w-12 h-12 border border-white/25 rotate-45 animate-bounce-slow"></div>
         </div>
-
         {/* Gradiente overlay */}
         <div className="absolute inset-0 bg-gradient-to-t from-slate-800/80 to-transparent"></div>
-
-        {/* Icono de categoría dinámico - esquina superior derecha */}
+        {/* Icono de categoría dinámico */}
         <div className="absolute top-4 right-4 group-hover:scale-110 transition-transform duration-300">
           <div className="w-12 h-12 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center border border-white/20 shadow-lg">
             <svg className="w-6 h-6 text-white animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -97,8 +98,7 @@ const BlogCard = React.memo(({ post, onOpenModal, featured }) => {
             </svg>
           </div>
         </div>
-
-        {/* Indicador de nueva tecnología - esquina superior izquierda */}
+        {/* Indicador de nueva tecnología */}
         <div className="absolute top-4 left-4 group-hover:rotate-12 transition-transform duration-300">
           <div className="w-10 h-10 bg-gradient-to-r from-cyan-400 to-blue-500 rounded-lg flex items-center justify-center shadow-lg animate-pulse">
             <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -106,7 +106,6 @@ const BlogCard = React.memo(({ post, onOpenModal, featured }) => {
             </svg>
           </div>
         </div>
-
         {/* Badge destacado */}
         <div className="absolute bottom-4 left-4">
           {featured && (
@@ -115,18 +114,16 @@ const BlogCard = React.memo(({ post, onOpenModal, featured }) => {
             </span>
           )}
         </div>
-
-        {/* Elemento decorativo central - solo visible en hover */}
+        {/* Elemento decorativo central (hover) */}
         <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-20 transition-opacity duration-500">
           <div className="w-20 h-20 border-2 border-white rounded-full animate-spin-slow">
             <div className="w-full h-full border-2 border-transparent border-t-white rounded-full animate-reverse-spin"></div>
           </div>
         </div>
       </div>
-
       {/* Contenido del post */}
       <div className="p-6">
-        {/* Tags */}
+        {/* Tags principales */}
         <div className="flex flex-wrap gap-2 mb-3">
           {post.tags.slice(0, 2).map((tag, index) => (
             <span
@@ -137,18 +134,15 @@ const BlogCard = React.memo(({ post, onOpenModal, featured }) => {
             </span>
           ))}
         </div>
-
-        {/* Título */}
+        {/* Título del post */}
         <h3 className="text-xl font-semibold mb-3 text-blue-300 group-hover:text-blue-200 transition-colors">
           {post.title}
         </h3>
-
-        {/* Excerpt */}
+        {/* Extracto */}
         <p className="text-gray-300 mb-4 leading-relaxed text-sm">
           {post.excerpt}
         </p>
-
-        {/* Footer de la tarjeta */}
+        {/* Footer: autor, fecha y botón */}
         <div className="flex justify-between items-center">
           <div className="text-sm text-gray-400">
             <span>✍️ {post.author}</span>
@@ -168,5 +162,12 @@ const BlogCard = React.memo(({ post, onOpenModal, featured }) => {
 });
 
 BlogCard.displayName = "BlogCard";
+
+// --- SUGERENCIAS DE MEJORA ---
+// 1. Modularizar los efectos de fondo animados si se reutilizan en otras secciones.
+// 2. Permitir paginación o lazy loading para posts recientes si la lista crece.
+// 3. Añadir prop-types o TypeScript para tipado estricto.
+// 4. Considerar internacionalización si se requiere multilenguaje.
+// 5. Añadir tests unitarios para la lógica de renderizado y el botón "Leer más".
 
 export default BlogSection;

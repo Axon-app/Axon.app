@@ -1,36 +1,37 @@
 import React from "react";
 import { EmailLink } from "../ui/EmailLink";
 
+// --- Modal de Términos y Condiciones ---
+// Muestra los términos legales de uso del servicio Axon.app de forma accesible y profesional.
 export const EnhancedTermsModal = React.memo(({ isOpen, onClose }) => {
-  // Manejar escape key
+  // Cierra el modal con la tecla Escape y bloquea el scroll de fondo
   React.useEffect(() => {
     const handleEscape = (event) => {
       if (event.key === "Escape") {
         onClose();
       }
     };
-
     if (isOpen) {
       document.addEventListener("keydown", handleEscape);
       document.body.style.overflow = "hidden";
     }
-
     return () => {
       document.removeEventListener("keydown", handleEscape);
       document.body.style.overflow = "unset";
     };
   }, [isOpen, onClose]);
 
-  // Early return si no está abierto
+  // Early return: no renderiza si el modal no está abierto
   if (!isOpen) return null;
 
-  // Manejar click en backdrop
+  // Cierra el modal al hacer click en el backdrop (fuera del contenido)
   const handleBackdropClick = (e) => {
     if (e.target === e.currentTarget) {
       onClose();
     }
   };
 
+  // --- Renderizado principal del modal ---
   return (
     <div
       className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4"
@@ -40,7 +41,7 @@ export const EnhancedTermsModal = React.memo(({ isOpen, onClose }) => {
       aria-labelledby="terms-modal-title"
     >
       <div className="bg-gradient-to-br from-gray-900 via-black to-gray-900 rounded-xl max-w-4xl w-full max-h-[80vh] overflow-y-auto shadow-2xl border border-gray-700/50">
-        {/* Header */}
+        {/* Header con título y botón de cierre */}
         <div className="sticky top-0 bg-gray-900/95 backdrop-blur-md border-b border-gray-700 p-4 sm:p-6 flex items-center justify-between">
           <h2
             id="terms-modal-title"
@@ -63,9 +64,10 @@ export const EnhancedTermsModal = React.memo(({ isOpen, onClose }) => {
             </svg>
           </button>
         </div>{" "}
-        {/* Content */}
+        {/* Contenido legal y secciones */}
         <div className="p-4 sm:p-6 space-y-6 text-gray-300">
           <div className="prose prose-invert prose-blue max-w-none">
+            {/* Secciones legales, cada una con título y contenido */}
             <section>
               <h3 className="text-xl font-semibold text-blue-300 mb-3">
                 1. Aceptación de los Términos
@@ -296,7 +298,7 @@ export const EnhancedTermsModal = React.memo(({ isOpen, onClose }) => {
               </p>
             </section>
           </div>
-
+          {/* Pie de página con fecha de actualización y versión */}
           <div className="text-sm text-gray-400 pt-4 border-t border-gray-700 bg-slate-900/30 rounded-lg p-4">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
               <p>
@@ -319,3 +321,10 @@ export const EnhancedTermsModal = React.memo(({ isOpen, onClose }) => {
 });
 
 EnhancedTermsModal.displayName = "EnhancedTermsModal";
+
+// --- SUGERENCIAS DE MEJORA ---
+// 1. Modularizar el contenido legal si el archivo crece (por ejemplo, cada sección como componente).
+// 2. Permitir navegación por teclado entre secciones y botón de cierre (accesibilidad).
+// 3. Considerar internacionalización si se requiere multilenguaje.
+// 4. Añadir tests unitarios para la lógica de cierre y renderizado condicional.
+// 5. Permitir scroll automático al encabezado al abrir el modal.

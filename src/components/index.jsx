@@ -2,16 +2,15 @@
  * ARCHIVO DE EXPORTACIONES CENTRALIZADAS
  * ======================================
  *
- * Este archivo centraliza todas las exportaciones de componentes
- * para facilitar las importaciones y mantener un código limpio.
+ * Centraliza todas las exportaciones de componentes para facilitar las importaciones y mantener un código limpio y profesional.
  *
- * Ventajas de esta estructura:
- * - Importaciones más limpias en otros archivos
- * - Fácil mantenimiento de dependencias
+ * Ventajas:
+ * - Importaciones más limpias y consistentes
+ * - Fácil mantenimiento y escalabilidad
  * - Mejor organización del código
- * - Posibilidad de lazy loading futuro
+ * - Permite futuras estrategias de lazy loading
  *
- * Estructura de exportaciones:
+ * Estructura:
  * 1. Componentes básicos de UI
  * 2. Tarjetas y elementos interactivos
  * 3. Componentes de UI adicionales
@@ -22,14 +21,12 @@
  * @version 2.4.0
  */
 
-
 // ===================================================================
 // COMPONENTES BÁSICOS DE UI
 // ===================================================================
-
 /**
- * Componentes fundamentales de la interfaz de usuario
- * Incluye elementos como logos, botones y fondos animados
+ * Componentes fundamentales de la interfaz de usuario.
+ * Incluye elementos como logos, botones y fondos animados.
  */
 export {
   AnimatedBackground, // Fondo animado con efectos visuales
@@ -40,10 +37,9 @@ export {
 // ===================================================================
 // TARJETAS Y ELEMENTOS DE CONTENIDO
 // ===================================================================
-
 /**
- * Componentes de tarjetas para mostrar información
- * Servicios, testimonios y otros elementos de contenido
+ * Componentes de tarjetas para mostrar información relevante.
+ * Ejemplo: servicios, testimonios y otros elementos de contenido.
  */
 export {
   ServiceCard, // Tarjeta individual de servicio
@@ -53,10 +49,9 @@ export {
 // ===================================================================
 // COMPONENTES INTERACTIVOS Y ANIMADOS
 // ===================================================================
-
 /**
- * Componentes con funcionalidades interactivas y animaciones
- * Contadores, carruseles y banners dinámicos
+ * Componentes con funcionalidades interactivas y animaciones.
+ * Ejemplo: contadores, carruseles y banners dinámicos.
  */
 export {
   AnimatedCounter, // Contador con animación
@@ -69,28 +64,25 @@ export {
 // ===================================================================
 // COMPONENTES DE UI ADICIONALES
 // ===================================================================
-
 /**
- * Componentes específicos de funcionalidades
+ * Componentes específicos de funcionalidades adicionales.
  */
 export { FloatingBlogButton } from "./ui/FloatingBlogButton"; // Botón flotante del blog
 
 // ===================================================================
 // SECCIONES DE LA APLICACIÓN
 // ===================================================================
-
 /**
- * Secciones completas de la página web
+ * Secciones completas de la página web.
  */
 export { BlogSection } from "./sections/BlogSection"; // Sección completa del blog
 
 // ===================================================================
 // MODALES DEL SISTEMA
 // ===================================================================
-
 /**
- * Modales para diferentes funcionalidades del sistema
- * Incluye modales de información, servicios y blog
+ * Modales para diferentes funcionalidades del sistema.
+ * Incluye modales de información, servicios y blog.
  */
 export { BlogModal } from "./modals/BlogModal"; // Modal del blog
 export { ConsultationModal } from "./modals/ConsultationModal"; // Modal de consulta
@@ -99,3 +91,14 @@ export { EnhancedPrivacyModal } from "./modals/PrivacyModal"; // Modal de privac
 export { QuoteRequestModal } from "./modals/QuoteModal"; // Modal de solicitud de cotización
 export { ServiceDetailModal } from "./modals/ServiceModal"; // Modal de detalles de servicio
 export { EnhancedTermsModal } from "./modals/TermsModal"; // Modal de términos mejorado
+
+// ===================================================================
+// SUGERENCIAS DE MEJORA PROFESIONAL
+// ===================================================================
+/**
+ * 1. Añadir validación de exportaciones con tests automáticos para evitar rupturas.
+ * 2. Documentar ejemplos de uso de cada componente en Storybook o similar.
+ * 3. Considerar el uso de index.ts para tipado estricto si se migra a TypeScript.
+ * 4. Mantener la nomenclatura y estructura consistente para facilitar el mantenimiento.
+ * 5. Si se agregan más secciones, agruparlas lógicamente y documentar su propósito.
+ */

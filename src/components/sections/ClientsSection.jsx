@@ -1,25 +1,27 @@
-import React, { useState } from "react";
-import { ClientCard } from "../ui/ClientCard";
+import { useState } from "react";
 import { clientsData, clientsStats } from "../../data/clientsData";
+import { ClientCard } from "../ui/ClientCard";
 
 /**
- * Sección completa de clientes con estadísticas y filtros
- * Muestra casos de éxito y testimoniales de clientes
+ * Sección de clientes con estadísticas, filtros y vista grid/lista.
+ * Muestra casos de éxito y testimoniales de clientes de forma profesional.
  */
 export const ClientsSection = () => {
+  // Estado para filtro de industria y modo de vista
   const [selectedIndustry, setSelectedIndustry] = useState("Todos");
   const [viewMode, setViewMode] = useState("grid"); // grid o list
 
-  // Obtener industrias únicas para filtros
+  // Obtiene industrias únicas para los filtros
   const industries = ["Todos", ...new Set(clientsData.map(client => client.industry))];
 
-  // Filtrar clientes por industria
-  const filteredClients = selectedIndustry === "Todos" 
-    ? clientsData 
+  // Filtra clientes según la industria seleccionada
+  const filteredClients = selectedIndustry === "Todos"
+    ? clientsData
     : clientsData.filter(client => client.industry === selectedIndustry);
 
-  return (    <section className="py-20 bg-gradient-to-br from-gray-900 via-black to-gray-900 relative overflow-hidden">
-      {/* Efectos de fondo animados */}
+  return (
+    <section className="py-20 bg-gradient-to-br from-gray-900 via-black to-gray-900 relative overflow-hidden">
+      {/* Efectos de fondo animados decorativos */}
       <div className="absolute inset-0">
         <div className="absolute top-1/4 left-1/4 w-72 h-72 bg-blue-500/10 rounded-full blur-3xl animate-blob"></div>
         <div className="absolute bottom-1/4 right-1/4 w-72 h-72 bg-purple-500/10 rounded-full blur-3xl animate-blob" style={{ animationDelay: '2s' }}></div>
@@ -33,16 +35,15 @@ export const ClientsSection = () => {
             <div className="w-2 h-2 bg-blue-400 rounded-full animate-pulse"></div>
             <span className="text-blue-300 text-sm font-medium">Casos de Éxito</span>
           </div>
-          
           <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
             Nuestros <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">Clientes</span>
           </h2>
-          
           <p className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
-            Transformamos ideas en soluciones digitales exitosas. Conoce algunos de los proyectos 
+            Transformamos ideas en soluciones digitales exitosas. Conoce algunos de los proyectos
             que han revolucionado industrias y generado resultados excepcionales.
           </p>
-        </div>        {/* Estadísticas destacadas */}
+        </div>
+        {/* Estadísticas destacadas */}
         <div className="grid grid-cols-2 md:grid-cols-6 gap-4 mb-12">
           <div className="glass-card rounded-xl p-4 text-center group hover:scale-105 transition-all duration-300">
             <div className="text-2xl font-bold text-blue-300 animate-stats-counter group-hover:scale-110 transition-transform duration-300">{clientsStats.totalClients}+</div>
@@ -69,7 +70,6 @@ export const ClientsSection = () => {
             <div className="text-sm text-gray-400">Tecnologías</div>
           </div>
         </div>
-
         {/* Controles de filtro y vista */}
         <div className="flex flex-col md:flex-row items-center justify-between mb-8 space-y-4 md:space-y-0">
           {/* Filtros por industria */}
@@ -88,8 +88,7 @@ export const ClientsSection = () => {
               </button>
             ))}
           </div>
-
-          {/* Selector de vista */}
+          {/* Selector de vista grid/lista */}
           <div className="flex items-center space-x-2 bg-gray-800/50 rounded-lg p-1">
             <button
               onClick={() => setViewMode("grid")}
@@ -117,22 +116,20 @@ export const ClientsSection = () => {
             </button>
           </div>
         </div>
-
-        {/* Grid de clientes */}
+        {/* Grid de clientes (o lista) */}
         <div className={`grid gap-6 ${
-          viewMode === "grid" 
-            ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-3" 
+          viewMode === "grid"
+            ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
             : "grid-cols-1"
         }`}>
           {filteredClients.map((client, index) => (
-            <ClientCard 
-              key={client.id} 
-              client={client} 
+            <ClientCard
+              key={client.id}
+              client={client}
               index={index}
             />
           ))}
         </div>
-
         {/* Mensaje si no hay resultados */}
         {filteredClients.length === 0 && (
           <div className="text-center py-12">
@@ -141,8 +138,7 @@ export const ClientsSection = () => {
             <p className="text-gray-400">Intenta seleccionar otra categoría o "Todos"</p>
           </div>
         )}
-
-        {/* Call to action */}
+        {/* Call to action final */}
         <div className="text-center mt-16">
           <div className="bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-blue-500/30 rounded-3xl p-8 max-w-4xl mx-auto">
             <h3 className="text-2xl font-bold text-white mb-4">
@@ -165,3 +161,11 @@ export const ClientsSection = () => {
     </section>
   );
 };
+
+// --- SUGERENCIAS DE MEJORA ---
+// 1. Modularizar los efectos de fondo animados si se reutilizan en otras secciones.
+// 2. Permitir paginación o lazy loading si la lista de clientes crece.
+// 3. Añadir prop-types o TypeScript para tipado estricto.
+// 4. Considerar internacionalización si se requiere multilenguaje.
+// 5. Añadir tests unitarios para la lógica de filtrado y renderizado.
+// 6. Permitir que los botones de call-to-action reciban callbacks por props para mayor flexibilidad.

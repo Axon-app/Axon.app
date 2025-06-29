@@ -1,12 +1,16 @@
 import { UnifiedContactForm } from "../forms/UnifiedContactForm";
 
+// --- Modal de Contacto Unificado ---
+// Muestra un formulario de contacto general en un modal accesible y profesional.
 export const ContactModal = ({ isOpen, onClose }) => {
+  // Early return: no renderiza si el modal no está abierto
   if (!isOpen) return null;
 
+  // SUGERENCIA: Unificar el manejo de cierre por Escape y click en backdrop como en otros modales
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
       <div className="bg-gradient-to-br from-gray-600 via-gray-700 to-gray-800 rounded-3xl max-w-3xl w-full max-h-[95vh] overflow-y-auto border border-gray-700/50 shadow-2xl">
-        {/* Header del modal mejorado */}
+        {/* Header del modal con icono y título */}
         <div className="sticky top-0 z-10 bg-gradient-to-r from-gray-900/95 to-gray-800/95 backdrop-blur-md p-6 border-b border-gray-700/50 rounded-t-3xl">
           <div className="flex justify-between items-center">
             <div className="flex items-center space-x-3">
@@ -55,7 +59,6 @@ export const ContactModal = ({ isOpen, onClose }) => {
             </button>
           </div>
         </div>
-
         <div className="p-6">
           <UnifiedContactForm mode="contact" onClose={onClose} />
         </div>
@@ -64,13 +67,15 @@ export const ContactModal = ({ isOpen, onClose }) => {
   );
 };
 
+// --- Modal de Solicitud de Propuesta Unificado ---
+// Muestra un formulario de solicitud de propuesta en un modal profesional.
 export const QuoteModal = ({ isOpen, onClose }) => {
   if (!isOpen) return null;
-
+  // SUGERENCIA: Unificar el manejo de cierre por Escape y click en backdrop como en otros modales
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
       <div className="bg-gradient-to-br from-gray-600 via-gray-700 to-gray-800 rounded-3xl max-w-4xl w-full max-h-[95vh] overflow-y-auto border border-gray-700/50 shadow-2xl">
-        {/* Header del modal mejorado */}
+        {/* Header del modal con icono y título */}
         <div className="sticky top-0 z-10 bg-gradient-to-r from-gray-900/95 to-gray-800/95 backdrop-blur-md p-6 border-b border-gray-700/50 rounded-t-3xl">
           <div className="flex justify-between items-center">
             <div className="flex items-center space-x-3">
@@ -120,7 +125,6 @@ export const QuoteModal = ({ isOpen, onClose }) => {
             </button>
           </div>
         </div>
-
         <div className="p-6">
           <UnifiedContactForm mode="quote" onClose={onClose} />
         </div>
@@ -129,13 +133,15 @@ export const QuoteModal = ({ isOpen, onClose }) => {
   );
 };
 
+// --- Modal de Consulta Unificado ---
+// Muestra un formulario de consulta en un modal profesional.
 export const ConsultationModal = ({ isOpen, onClose }) => {
   if (!isOpen) return null;
-
+  // SUGERENCIA: Unificar el manejo de cierre por Escape y click en backdrop como en otros modales
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
       <div className="bg-gradient-to-br from-gray-900 via-black to-gray-900 rounded-3xl max-w-4xl w-full max-h-[95vh] overflow-y-auto border border-gray-700/50 shadow-2xl">
-        {/* Header del modal mejorado */}
+        {/* Header del modal con icono y título */}
         <div className="sticky top-0 z-10 bg-gradient-to-r from-gray-900/95 to-gray-800/95 backdrop-blur-md p-6 border-b border-gray-700/50 rounded-t-3xl">
           <div className="flex justify-between items-center">
             <div className="flex items-center space-x-3">
@@ -184,7 +190,6 @@ export const ConsultationModal = ({ isOpen, onClose }) => {
             </button>
           </div>
         </div>
-
         <div className="p-6">
           <UnifiedContactForm mode="consultation" onClose={onClose} />
         </div>
@@ -192,3 +197,10 @@ export const ConsultationModal = ({ isOpen, onClose }) => {
     </div>
   );
 };
+
+// --- SUGERENCIAS DE MEJORA ---
+// 1. Unificar el manejo de cierre por Escape y click en backdrop para todos los modales (consistencia UX).
+// 2. Modularizar el header del modal si se repite mucho.
+// 3. Permitir navegación por teclado entre campos y botón de cierre (accesibilidad).
+// 4. Considerar internacionalización si se requiere multilenguaje.
+// 5. Añadir tests unitarios para la lógica de cierre y renderizado condicional.

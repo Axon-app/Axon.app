@@ -1,6 +1,7 @@
 import React from "react";
 
-// Iconos SVG profesionales
+// --- Librería de iconos SVG profesionales ---
+// Provee iconos para las tarjetas de servicios según el tipo de servicio.
 const IconsLibrary = {
   web: (
     <svg className="w-full h-full" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -61,7 +62,8 @@ const IconsLibrary = {
   )
 };
 
-// Mapeo de iconos basado en el ID del servicio
+// --- Mapeo de iconos basado en el ID del servicio ---
+// Devuelve el icono SVG correspondiente según el id del servicio.
 const getIconByService = (id) => {
   const iconMap = {
     'desarrollo-web': IconsLibrary.web,
@@ -78,7 +80,13 @@ const getIconByService = (id) => {
   return iconMap[id] || IconsLibrary.default;
 };
 
-// Componente de tarjeta de servicio mejorado
+// --- Componente de tarjeta de servicio ---
+// Muestra información de un servicio con icono, título, descripción y botón CTA.
+// Props:
+//   - title: string
+//   - description: string
+//   - onOpenModal: función (opcional)
+//   - id: string (identificador del servicio)
 export const ServiceCard = React.memo(
   ({ title, description, onOpenModal, id }) => {
     const iconSvg = getIconByService(id);
@@ -86,13 +94,11 @@ export const ServiceCard = React.memo(
     return (
       <div className="group relative bg-gradient-to-br from-slate-800/80 via-slate-700/60 to-slate-800/80 backdrop-blur-sm rounded-2xl p-6 sm:p-8 flex flex-col items-center text-center transform transition-all duration-500 hover:shadow-2xl hover:shadow-cyan-500/25 hover:-translate-y-3 shadow-xl border border-slate-600/50 hover:border-cyan-500/50 h-full min-h-[320px] sm:min-h-[360px] overflow-hidden">
 
-        {/* Background Pattern */}
+        {/* Fondo decorativo y acentos visuales */}
         <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 via-transparent to-blue-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-
-        {/* Floating Decoration */}
         <div className="absolute top-4 right-4 w-16 h-16 bg-gradient-to-br from-cyan-500/10 to-blue-500/10 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
 
-        {/* Icon Container */}
+        {/* Icono principal */}
         <div className="relative z-10 w-20 h-20 sm:w-24 sm:h-24 mb-6 sm:mb-8 transition-transform duration-500 group-hover:scale-110">
           <div className="absolute inset-0 bg-gradient-to-br from-cyan-500 to-blue-500 rounded-2xl blur-md opacity-0 group-hover:opacity-40 transition-opacity duration-500"></div>
           <div className="relative w-full h-full bg-gradient-to-br from-cyan-500/20 to-blue-500/20 backdrop-blur-sm rounded-2xl flex items-center justify-center border border-cyan-500/30 group-hover:border-cyan-400/60 transition-all duration-500">
@@ -102,7 +108,7 @@ export const ServiceCard = React.memo(
           </div>
         </div>
 
-        {/* Content */}
+        {/* Contenido textual */}
         <div className="relative z-10 flex-1 flex flex-col">
           <h3 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6 text-cyan-300 group-hover:text-cyan-200 transition-colors duration-300">
             {title}
@@ -111,7 +117,7 @@ export const ServiceCard = React.memo(
             {description}
           </p>
 
-          {/* CTA Button */}
+          {/* Botón CTA */}
           {onOpenModal && (
             <button
               onClick={() => onOpenModal(id)}
@@ -123,7 +129,7 @@ export const ServiceCard = React.memo(
           )}
         </div>
 
-        {/* Bottom Accent */}
+        {/* Acento inferior visual */}
         <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-cyan-500 to-blue-500 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
       </div>
     );
@@ -132,7 +138,10 @@ export const ServiceCard = React.memo(
 
 ServiceCard.displayName = "ServiceCard";
 
-// Componente de tarjeta de testimonio optimizado
+// --- Componente de tarjeta de testimonio ---
+// Muestra un testimonio de cliente con avatar, nombre, rol, review y rating.
+// Props:
+//   - testimonial: objeto con { avatar, name, role, review, rating }
 export const TestimonialCard = React.memo(({ testimonial }) => {
   return (
     <div className="bg-slate-800/60 backdrop-blur-md rounded-xl p-6 sm:p-8 transform transition-all duration-300 hover:shadow-cyan-500/30 hover:-translate-y-2 shadow-xl border border-cyan-500/30">
@@ -169,3 +178,9 @@ export const TestimonialCard = React.memo(({ testimonial }) => {
 });
 
 TestimonialCard.displayName = "TestimonialCard";
+
+// --- SUGERENCIAS DE MEJORA ---
+// 1. Añadir prop-types o TypeScript para tipado estricto.
+// 2. Permitir personalización de iconos y estilos por props si se requiere reutilización avanzada.
+// 3. Añadir tests unitarios para la lógica de iconos y renderizado de tarjetas.
+// 4. Considerar internacionalización para textos y atributos accesibles si el proyecto es multilenguaje.

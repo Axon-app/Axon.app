@@ -1,7 +1,19 @@
-/* CSS optimizado - Axon.App v2025062701 */
+/* index.css - Estilos globales y animaciones personalizadas Axon.App
+ * ================================================================
+ * Incluye configuración base, animaciones, utilidades y mejoras visuales.
+ * Cumple con buenas prácticas de organización, comentarios y optimización.
+ *
+ * Estructura:
+ * 1. Configuración base y fuentes
+ * 2. Animaciones personalizadas (keyframes)
+ * 3. Clases utilitarias para animaciones y efectos
+ * 4. Mejoras de accesibilidad y usabilidad
+ * 5. Sugerencias de mejora profesional al final
+ */
+
 @import "tailwindcss";
 
-/* Configuración de fuentes base */
+/* Configuración de fuentes base y renderizado */
 :root {
   font-family: 'Rajdhani', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
@@ -1398,3 +1410,13 @@ select option:checked {
   animation: staggeredFadeIn 0.8s ease-out forwards;
   opacity: 0;
 }
+
+/* --- SUGERENCIAS DE MEJORA PROFESIONAL ---
+1. Modularizar animaciones y utilidades en archivos CSS/SCSS separados si el proyecto crece.
+2. Documentar cada animación y clase utilitaria en la documentación técnica.
+3. Añadir tests visuales (visual regression) para detectar cambios inesperados en estilos.
+4. Permitir personalización avanzada de temas y colores vía CSS variables o Tailwind config.
+5. Revisar y eliminar animaciones o clases no utilizadas periódicamente.
+6. Mejorar la accesibilidad visual (contrastes, focus, motion safe/reduce).
+7. Considerar el uso de Tailwind plugins para animaciones recurrentes.
+*/

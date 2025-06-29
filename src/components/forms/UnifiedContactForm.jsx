@@ -1,7 +1,14 @@
+// UnifiedContactForm.jsx
+// =====================================================
+// Formulario unificado para contacto, cotización y consulta.
+// Incluye validaciones estrictas, UX profesional y feedback visual.
+// Autor: Axon.App Team | Última revisión: 29/06/2025
+
 import React, { useCallback, useMemo, useState } from "react";
 import { sendUnifiedEmail } from "../../services/emailService";
 
-// === CONSTANTES EXTRAÍDAS ===
+// === CONSTANTES DE OPCIONES DE FORMULARIO ===
+// Tipos de proyecto disponibles para cotización
 const PROJECT_TYPES = [
   { value: "Desarrollo Web", label: "Desarrollo Web" },
   { value: "Aplicación Móvil", label: "Aplicación Móvil" },
@@ -11,7 +18,7 @@ const PROJECT_TYPES = [
   { value: "Mantenimiento Web", label: "Mantenimiento Web" },
   { value: "Otro", label: "Otro" },
 ];
-
+// Tipos de cliente
 const CLIENT_TYPES = [
   { value: "Empresa", label: "Empresa" },
   { value: "Emprendedor", label: "Emprendedor" },
@@ -24,7 +31,7 @@ const CLIENT_TYPES = [
   { value: "Estudiante", label: "Estudiante" },
   { value: "Otro", label: "Otro" },
 ];
-
+// Tipos de consulta
 const CONSULTATION_TYPES = [
   { value: "Consulta General", label: "Consulta General" },
   { value: "Consulta Técnica", label: "Consulta Técnica" },
@@ -33,25 +40,24 @@ const CONSULTATION_TYPES = [
   { value: "Asesoría de Desarrollo", label: "Asesoría de Desarrollo" },
   { value: "Otro", label: "Otro" },
 ];
-
+// Tipos de reunión para consultas
 const MEETING_TYPES = [
   { value: "video-call", label: "Videollamada", icon: "🎥" },
   { value: "phone-call", label: "Llamada telefónica", icon: "📞" },
   { value: "in-person", label: "Presencial", icon: "🤝" },
 ];
 
+// Títulos y mensajes para los diferentes modos y modales
 const FORM_TITLES = {
   contact: "Formulario de información y contacto",
   quote: "Detalles del Proyecto",
   consultation: "Agenda tu Consulta",
 };
-
 const MODAL_TITLES = {
   contact: "¡Mensaje Enviado Exitosamente!",
   quote: "¡Solicitud de Propuesta Recibida!",
   consultation: "¡Consulta Programada Correctamente!",
 };
-
 const MODAL_MESSAGES = {
   contact:
     "Hemos recibido tu mensaje exitosamente. Nuestro equipo lo revisará y te contactaremos dentro de las próximas 24 horas.",
@@ -61,7 +67,11 @@ const MODAL_MESSAGES = {
     "Hemos recibido tu solicitud de consulta. Te contactaremos para confirmar la fecha, hora y modalidad de la reunión dentro de las próximas 24 horas.",
 };
 
-// === COMPONENTES DE MODAL MEJORADOS ===
+// === COMPONENTES DE MODAL PARA FEEDBACK ===
+/**
+ * SuccessModal
+ * Modal visual para mostrar éxito en el envío del formulario.
+ */
 const SuccessModal = ({ type, onClose }) => (
   <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
     <div className="bg-gradient-to-br from-green-900 to-emerald-900 rounded-2xl p-6 sm:p-8 max-w-lg w-full border border-green-500/30 shadow-2xl animate-fade-in">
@@ -96,6 +106,10 @@ const SuccessModal = ({ type, onClose }) => (
   </div>
 );
 
+/**
+ * ErrorModal
+ * Modal visual para mostrar errores en el envío del formulario.
+ */
 const ErrorModal = ({ error, onClose }) => (
   <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
     <div className="bg-gradient-to-br from-red-900 to-red-800 rounded-2xl p-6 sm:p-8 max-w-md w-full border border-red-500/30 shadow-2xl">
@@ -130,15 +144,21 @@ const ErrorModal = ({ error, onClose }) => (
   </div>
 );
 
-// === UTILIDADES EXTRAÍDAS ===
-
+// === COMPONENTE PRINCIPAL ===
+/**
+ * UnifiedContactForm
+ * Formulario profesional reutilizable para contacto, cotización y consulta.
+ * - Validación estricta de campos.
+ * - Feedback visual y accesibilidad.
+ * - Modularidad y personalización por modo.
+ *
+ * @param {string} mode - Modo del formulario: 'contact', 'quote', 'consultation'.
+ * @param {string|null} section - Sección específica para modo contacto.
+ * @param {function|null} onClose - Callback para cerrar el modal.
+ * @param {string} className - Clases CSS adicionales.
+ */
 export const UnifiedContactForm = React.memo(
-  ({
-    mode = "contact", // 'contact', 'quote', 'consultation'
-    section = null, // 'basic', 'details' (para contact mode únicamente)
-    onClose = null,
-    className = "",
-  }) => {
+  ({ mode = "contact", section = null, onClose = null, className = "" }) => {
     const [formData, setFormData] = useState({
       // Campos básicos (para todos los tipos)
       name: "",

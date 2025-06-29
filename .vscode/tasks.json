@@ -1,6 +1,8 @@
 {
+    // === Configuración de tareas automatizadas para Axon.App ===
     "version": "2.0.0",
     "tasks": [
+        // Inicia el servidor de desarrollo con Vite
         {
             "label": "dev",
             "type": "shell",
@@ -27,7 +29,7 @@
                 }
             }
         },
-
+        // Compila el proyecto para producción
         {
             "label": "build",
             "type": "shell",
@@ -45,6 +47,7 @@
             },
             "problemMatcher": ["$tsc"]
         },
+        // Previsualiza el build de producción (requiere build previo)
         {
             "label": "preview",
             "type": "shell",
@@ -59,6 +62,7 @@
             },
             "problemMatcher": []
         },
+        // Ejecuta el análisis de código con ESLint
         {
             "label": "lint",
             "type": "shell",
@@ -66,6 +70,7 @@
             "group": "test",
             "problemMatcher": ["$eslint-stylish"]
         },
+        // Ejecuta ESLint y corrige errores automáticamente
         {
             "label": "lint:fix",
             "type": "shell",
@@ -73,6 +78,7 @@
             "group": "test",
             "problemMatcher": ["$eslint-stylish"]
         },
+        // Limpia la carpeta dist (Windows PowerShell)
         {
             "label": "clean",
             "type": "shell",
@@ -80,6 +86,7 @@
             "group": "build",
             "problemMatcher": []
         },
+        // Limpia y luego compila el proyecto
         {
             "label": "clean:build",
             "type": "shell",
@@ -87,6 +94,7 @@
             "group": "build",
             "problemMatcher": ["$tsc"]
         },
+        // Instala las dependencias del proyecto
         {
             "label": "install",
             "type": "shell",

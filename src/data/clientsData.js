@@ -1,6 +1,18 @@
 /**
- * Datos de clientes ficticios para mostrar en la sección de portafolio
- * Incluye información del cliente, proyecto realizado y logo
+ * clientsData.js - Datos y estadísticas de clientes ficticios para portafolio Axon.App
+ * =====================================================
+ * Incluye información de clientes, proyectos realizados, testimonios y resultados.
+ * Cumple con buenas prácticas de organización, documentación y seguridad.
+ *
+ * Estructura de cada cliente:
+ *   - id: número único
+ *   - name: string (nombre del cliente)
+ *   - industry: string (industria)
+ *   - logo: string (emoji o ruta de logo)
+ *   - logoColor: string (clases Tailwind para gradiente)
+ *   - project: objeto con detalles del proyecto
+ *   - testimonial: string (testimonio del cliente)
+ *   - results: array de strings (resultados destacados)
  */
 
 export const clientsData = [
@@ -132,7 +144,15 @@ export const clientsData = [
   }
 ];
 
-// Estadísticas generales de clientes
+/**
+ * Estadísticas generales de clientes y proyectos
+ * - totalClients: número total de clientes atendidos
+ * - projectsCompleted: proyectos finalizados
+ * - industriesCovered: industrias distintas
+ * - satisfactionRate: porcentaje de satisfacción
+ * - averageProjectDuration: duración promedio de proyectos
+ * - technologiesUsed: tecnologías distintas utilizadas
+ */
 export const clientsStats = {
   totalClients: 50,
   projectsCompleted: 127,
@@ -141,3 +161,12 @@ export const clientsStats = {
   averageProjectDuration: "6.5 meses",
   technologiesUsed: 35
 };
+
+// --- SUGERENCIAS DE MEJORA PROFESIONAL ---
+// 1. Migrar a TypeScript para tipado estricto de los datos.
+// 2. Validar la estructura de los clientes y proyectos (zod/yup).
+// 3. Permitir internacionalización de los textos si la app es multilenguaje.
+// 4. Añadir utilidades para filtrar/buscar clientes por industria, año, tecnología, etc.
+// 5. Añadir tests unitarios para validar la integridad de los datos.
+// 6. Documentar ejemplos de uso en la documentación técnica.
+// 7. Considerar cargar los datos desde una API o CMS si el portafolio crece.

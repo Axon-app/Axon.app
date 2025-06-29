@@ -1,7 +1,17 @@
+// ConsultationModal.jsx
+// =====================================================
+// Modal profesional para agendar consultas técnicas o comerciales.
+// Incluye validaciones estrictas, sanitización y feedback visual.
+// Autor: Axon.App Team | Última revisión: 29/06/2025
+
 import React from "react";
 import { sendConsultationRequest } from "../../services/emailService";
 
-// Generar opciones de horario una sola vez (9 AM - 5 PM, intervalos de 30 min)
+// === UTILIDADES Y CONSTANTES ===
+/**
+ * Genera opciones de horario (9:00 a 17:00, cada 30 min)
+ * @returns {string[]} Array de horarios en formato HH:mm
+ */
 const generateTimeOptions = () => {
   const options = [];
   for (let hour = 9; hour <= 17; hour++) {
@@ -14,10 +24,13 @@ const generateTimeOptions = () => {
   }
   return options;
 };
-
 const TIME_OPTIONS = generateTimeOptions();
 
-// Sanitización de entrada para prevenir XSS y SQL injection
+/**
+ * Sanitiza la entrada para prevenir XSS y SQL injection
+ * @param {string} input
+ * @returns {string} Entrada segura
+ */
 const sanitizeInput = (input) => {
   if (typeof input !== "string") return "";
 
@@ -30,19 +43,36 @@ const sanitizeInput = (input) => {
     .substring(0, 1000); // Limitar longitud
 };
 
-// Validar email
+/**
+ * Valida formato de email
+ * @param {string} email
+ * @returns {boolean}
+ */
 const isValidEmail = (email) => {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return emailRegex.test(email);
 };
 
-// Validar teléfono colombiano
+/**
+ * Valida formato de teléfono colombiano
+ * @param {string} phone
+ * @returns {boolean}
+ */
 const isValidPhone = (phone) => {
   if (!phone) return true; // Campo opcional
   const phoneRegex = /^(\+57|57)?[\s-]?[3][0-9]{9}$/;
   return phoneRegex.test(phone.replace(/[\s-]/g, ""));
 };
 
+/**
+ * ConsultationModal
+ * Modal para agendar consultas con validación y sanitización avanzada.
+ * - Feedback visual y accesibilidad.
+ * - Modularidad y personalización.
+ *
+ * @param {boolean} isOpen - Si el modal está abierto.
+ * @param {function} onClose - Callback para cerrar el modal.
+ */
 export const ConsultationModal = React.memo(({ isOpen, onClose }) => {
   const [formData, setFormData] = React.useState({
     name: "",

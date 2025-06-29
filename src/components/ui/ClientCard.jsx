@@ -1,53 +1,54 @@
-import React, { useState } from "react";
+import { useState } from "react";
 
 /**
- * Componente de tarjeta individual para mostrar información del cliente
- * Incluye animaciones, hover effects y modal de detalles
+ * Componente de tarjeta individual para mostrar información del cliente.
+ * Incluye animaciones, hover effects y modal de detalles.
+ * Props:
+ *   - client: objeto con datos del cliente
+ *   - index: número de orden para animación escalonada
  */
 export const ClientCard = ({ client, index }) => {
   const [showDetails, setShowDetails] = useState(false);
-
-  // Animación de entrada escalonada
+  // Calcula el delay de animación para efecto escalonado
   const animationDelay = `${index * 0.1}s`;
 
   return (
-    <>      <div        className={`group relative glass-card rounded-2xl p-6 
-          transition-all duration-500 hover:scale-105 
-          animate-fade-in-up cursor-pointer transform-gpu
-          hover:animate-client-card-hover`}
+    <>
+      {/* Tarjeta principal del cliente */}
+      <div
+        className={`group relative glass-card rounded-2xl p-6 \
+          transition-all duration-500 hover:scale-105 \
+          animate-fade-in-up cursor-pointer transform-gpu\n          hover:animate-client-card-hover`}
         style={{ animationDelay }}
         onClick={() => setShowDetails(true)}
       >
         {/* Efecto de brillo en hover */}
-        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent 
+        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent \
           opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl" />
-
-        {/* Header con logo y nombre */}
+        {/* Header con logo, nombre e industria */}
         <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center space-x-4">            <div className={`w-12 h-12 bg-gradient-to-br ${client.logoColor} 
-              rounded-xl flex items-center justify-center text-2xl
-              group-hover:animate-logo-float transition-all duration-300 
+          <div className="flex items-center space-x-4">
+            <div className={`w-12 h-12 bg-gradient-to-br ${client.logoColor} \
+              rounded-xl flex items-center justify-center text-2xl\n              group-hover:animate-logo-float transition-all duration-300 \
               shadow-lg shadow-blue-500/20`}>
               {client.logo}
             </div>
             <div>
-              <h3 className="text-lg font-bold text-white group-hover:text-blue-300 
+              <h3 className="text-lg font-bold text-white group-hover:text-blue-300 \
                 transition-colors duration-300">
                 {client.name}
               </h3>
               <p className="text-sm text-gray-400">{client.industry}</p>
             </div>
           </div>
-          
           {/* Año del proyecto */}
           <div className="bg-blue-500/20 text-blue-300 px-3 py-1 rounded-lg text-sm font-medium">
             {client.project.year}
           </div>
         </div>
-
         {/* Información del proyecto */}
         <div className="mb-4">
-          <h4 className="text-white font-semibold mb-2 group-hover:text-blue-300 
+          <h4 className="text-white font-semibold mb-2 group-hover:text-blue-300 \
             transition-colors duration-300">
             {client.project.title}
           </h4>
@@ -55,15 +56,13 @@ export const ClientCard = ({ client, index }) => {
             {client.project.description}
           </p>
         </div>
-
-        {/* Tecnologías utilizadas */}
+        {/* Tecnologías utilizadas (máx. 3 visibles) */}
         <div className="mb-4">
           <div className="flex flex-wrap gap-2">
             {client.project.technologies.slice(0, 3).map((tech, techIndex) => (
               <span
                 key={techIndex}
-                className="bg-gray-700/50 text-gray-300 px-2 py-1 rounded-md text-xs
-                  group-hover:bg-blue-500/20 group-hover:text-blue-300 
+                className="bg-gray-700/50 text-gray-300 px-2 py-1 rounded-md text-xs\n                  group-hover:bg-blue-500/20 group-hover:text-blue-300 \
                   transition-all duration-300"
               >
                 {tech}
@@ -76,7 +75,6 @@ export const ClientCard = ({ client, index }) => {
             )}
           </div>
         </div>
-
         {/* Resultados clave */}
         <div className="mb-4">
           <div className="bg-green-500/10 border border-green-500/30 rounded-lg p-3">
@@ -89,8 +87,7 @@ export const ClientCard = ({ client, index }) => {
             </p>
           </div>
         </div>
-
-        {/* Footer con duración y tipo */}
+        {/* Footer con duración y tipo de proyecto */}
         <div className="flex items-center justify-between text-sm">
           <div className="flex items-center space-x-2 text-gray-400">
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -102,9 +99,8 @@ export const ClientCard = ({ client, index }) => {
             {client.project.type}
           </div>
         </div>
-
-        {/* Indicador de click */}
-        <div className="absolute bottom-4 right-4 opacity-0 group-hover:opacity-100 
+        {/* Indicador de click para ver detalles */}
+        <div className="absolute bottom-4 right-4 opacity-0 group-hover:opacity-100 \
           transition-opacity duration-300">
           <div className="bg-blue-500 text-white p-2 rounded-full">
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -114,12 +110,11 @@ export const ClientCard = ({ client, index }) => {
           </div>
         </div>
       </div>
-
-      {/* Modal de detalles */}
+      {/* Modal de detalles del cliente */}
       {showDetails && (
-        <ClientDetailModal 
-          client={client} 
-          onClose={() => setShowDetails(false)} 
+        <ClientDetailModal
+          client={client}
+          onClose={() => setShowDetails(false)}
         />
       )}
     </>
@@ -127,7 +122,10 @@ export const ClientCard = ({ client, index }) => {
 };
 
 /**
- * Modal con información detallada del cliente y proyecto
+ * Modal con información detallada del cliente y proyecto.
+ * Props:
+ *   - client: objeto con datos del cliente
+ *   - onClose: función para cerrar el modal
  */
 const ClientDetailModal = ({ client, onClose }) => {
   return (
@@ -137,7 +135,7 @@ const ClientDetailModal = ({ client, onClose }) => {
         <div className="sticky top-0 bg-gradient-to-br from-gray-800 to-gray-900 p-6 border-b border-gray-700/50">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
-              <div className={`w-16 h-16 bg-gradient-to-br ${client.logoColor} 
+              <div className={`w-16 h-16 bg-gradient-to-br ${client.logoColor} \
                 rounded-2xl flex items-center justify-center text-3xl`}>
                 {client.logo}
               </div>
@@ -156,14 +154,13 @@ const ClientDetailModal = ({ client, onClose }) => {
             </button>
           </div>
         </div>
-
         {/* Contenido del modal */}
         <div className="p-6 space-y-6">
           {/* Información del proyecto */}
           <div>
             <h3 className="text-xl font-bold text-white mb-4">{client.project.title}</h3>
             <p className="text-gray-300 leading-relaxed mb-4">{client.project.description}</p>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
               <div className="bg-blue-500/10 border border-blue-500/30 rounded-lg p-4">
                 <h4 className="text-blue-300 font-semibold mb-2">Duración</h4>
@@ -218,3 +215,10 @@ const ClientDetailModal = ({ client, onClose }) => {
     </div>
   );
 };
+
+// --- SUGERENCIAS DE MEJORA ---
+// 1. Añadir prop-types o TypeScript para tipado estricto.
+// 2. Permitir personalización de estilos y animaciones por props si se requiere reutilización avanzada.
+// 3. Añadir tests unitarios para la lógica de modal y renderizado.
+// 4. Considerar internacionalización para textos y atributos accesibles si el proyecto es multilenguaje.
+// 5. Permitir cerrar el modal con Escape y click en backdrop para mejor UX.

@@ -1,4 +1,19 @@
-// Información detallada de servicios
+/**
+ * servicesData.js - Información detallada de servicios Axon.App
+ * ============================================================
+ * Contiene la definición de todos los servicios ofrecidos, procesos, tecnologías y features.
+ * Cumple con buenas prácticas de organización, documentación y seguridad.
+ *
+ * Estructura de cada servicio:
+ *   - title: string (nombre del servicio)
+ *   - icon: string (emoji)
+ *   - subtitle: string
+ *   - description: string
+ *   - process: array de pasos (cada uno con step, description, tools)
+ *   - technologies: array de strings
+ *   - features: array de strings
+ */
+
 export const servicesData = {
   "desarrollo-web": {
     title: "Desarrollo Web Full-Stack",
@@ -498,3 +513,16 @@ export const servicesData = {
     ],
   },
 };
+
+// ===================================================================
+// SUGERENCIAS DE MEJORA PROFESIONAL
+// ===================================================================
+/**
+ * 1. Migrar a TypeScript para tipado estricto y validación de datos.
+ * 2. Validar la estructura de los servicios (zod/yup).
+ * 3. Permitir internacionalización de textos y features.
+ * 4. Añadir utilidades para filtrar/buscar servicios por tecnología, feature, etc.
+ * 5. Añadir tests unitarios para validar la integridad de los datos.
+ * 6. Documentar ejemplos de uso en la documentación técnica.
+ * 7. Considerar cargar los datos desde una API o CMS si la oferta de servicios crece.
+ */

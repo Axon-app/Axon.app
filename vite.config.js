@@ -35,10 +35,12 @@ const __dirname = dirname(__filename);
  */
 export default defineConfig(({ mode }) => ({
   // === PLUGINS ===
-  plugins: [react()], // Plugin oficial de React para Vite
+  plugins: [
+    react(), // Plugin oficial de React para Vite (JSX, Fast Refresh, etc.)
+  ],
 
   // === CONFIGURACIÓN BASE ===
-  // Ruta base para el deploy en GitHub Pages
+  // Ruta base para el deploy en GitHub Pages o raíz local
   base: mode === "production" ? "/Axon.app/" : "/",
 
   // === CONFIGURACIÓN DEL SERVIDOR DE DESARROLLO ===
@@ -51,7 +53,7 @@ export default defineConfig(({ mode }) => ({
       overlay: true,               // Mostrar errores en overlay del navegador
     },
     watch: {
-      usePolling: true,            // Usar polling para detectar cambios (útil en Windows)
+      usePolling: true,            // Usar polling para detectar cambios (útil en Windows/WSL)
       interval: 1000,              // Intervalo de polling en ms
     },
   },
@@ -85,6 +87,7 @@ export default defineConfig(({ mode }) => ({
             return 'fonts';
           }
         },
+        // Nombres personalizados para assets y chunks
         assetFileNames: (assetInfo) => {
           const extType = assetInfo.name.split('.').pop();
           if (/png|jpe?g|svg|gif|tiff|bmp|ico/i.test(extType)) {
@@ -107,13 +110,13 @@ export default defineConfig(({ mode }) => ({
     modulePreload: true,
   },
 
-  // Optimizaciones generales
+  // Optimizaciones generales para dependencias
   optimizeDeps: {
     include: ["react", "react-dom"],
     exclude: []
   },
 
-  // Alias para importaciones
+  // Alias para importaciones limpias y mantenibles
   resolve: {
     alias: [
       { find: '@', replacement: resolve(__dirname, 'src') },
@@ -122,3 +125,17 @@ export default defineConfig(({ mode }) => ({
     ]
   },
 }));
+
+/**
+ * --- SUGERENCIAS DE MEJORA PROFESIONAL ---
+ * 1. Añadir plugin de análisis de bundle (ej: vite-plugin-visualizer) para builds grandes.
+ * 2. Documentar en README la estructura de alias y convenciones de imports.
+ * 3. Revisar y actualizar el scope de optimizeDeps según crezcan las dependencias.
+ * 4. Si se usan variables de entorno, documentar y validar con dotenv.
+ * 5. Añadir soporte para PWA con vite-plugin-pwa si se requiere.
+ * 6. Revisar periódicamente la configuración de Rollup para nuevas features.
+ * 7. Si se usan assets dinámicos, considerar safelist en Tailwind y configuración de assets en Vite.
+ * 8. Validar que los paths de salida no sobrescriban archivos críticos.
+ * 9. Añadir tests de integración para el build si el proyecto escala.
+ * 10. Mantener la configuración alineada con la versión de Vite y plugins instalados.
+ */

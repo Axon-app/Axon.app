@@ -1,12 +1,9 @@
 /**
- * DATOS DE CONTENIDO PARA AXON.APP
+ * content.js - Datos estáticos y utilidades para Axon.App
  * =================================
+ * Centraliza tecnologías, testimonios y constantes globales de la aplicación.
  *
- * Este archivo centraliza todos los datos estáticos de la aplicación,
- * incluyendo tecnologías, testimonios, y constantes utilizadas
- * en toda la aplicación.
- *
- * Estructura del archivo:
+ * Estructura:
  * 1. Constantes de configuración (niveles, categorías)
  * 2. Índices para búsqueda optimizada
  * 3. Array de tecnologías con información detallada
@@ -23,7 +20,6 @@
 // ===================================================================
 // CONSTANTES DE CONFIGURACIÓN
 // ===================================================================
-
 /**
  * Niveles de experiencia utilizados para clasificar tecnologías
  * Estos niveles se muestran como badges en las tarjetas de tecnología
@@ -52,7 +48,6 @@ const CATEGORIES = {
 // ===================================================================
 // ÍNDICES PARA BÚSQUEDA OPTIMIZADA
 // ===================================================================
-
 /**
  * Mapas para búsqueda rápida de tecnologías por categoría y nivel
  * Mejoran el rendimiento en filtros y búsquedas
@@ -60,17 +55,18 @@ const CATEGORIES = {
 const categoryIndex = new Map();  // Índice por categoría
 const levelIndex = new Map();     // Índice por nivel
 
+// ===================================================================
+// ARRAY PRINCIPAL DE TECNOLOGÍAS
+// ===================================================================
 /**
- * ARRAY PRINCIPAL DE TECNOLOGÍAS
- * ==============================
- *
- * Cada objeto de tecnología contiene:
- * - name: Nombre de la tecnología
- * - category: Categoría (FRONTEND, BACKEND, etc.)
- * - icon: Emoji representativo
- * - description: Descripción breve
- * - gradient: Clases CSS para gradiente de color
- * - level: Nivel de experiencia
+ * technologies: Array de objetos de tecnología
+ * Cada objeto contiene:
+ *   - name: string
+ *   - category: string
+ *   - icon: string (emoji)
+ *   - description: string
+ *   - gradient: string (clases CSS)
+ *   - level: string
  */
 export const technologies = [
   // === FRONTEND & FRAMEWORKS ===
@@ -262,16 +258,47 @@ technologies.forEach((tech) => {
   levelIndex.get(tech.level).push(tech);
 });
 
-// Funciones de ayuda para filtrado rápido
+// ===================================================================
+// FUNCIONES DE UTILIDAD PARA FILTRADO Y BÚSQUEDA
+// ===================================================================
+/**
+ * Obtiene tecnologías por categoría
+ * @param {string} category
+ * @returns {Array}
+ */
 export const getTechnologiesByCategory = (category) =>
   categoryIndex.get(category) || [];
+
+/**
+ * Obtiene tecnologías por nivel de experiencia
+ * @param {string} level
+ * @returns {Array}
+ */
 export const getTechnologiesByLevel = (level) => levelIndex.get(level) || [];
+
+/**
+ * Obtiene todas las categorías disponibles
+ * @returns {Array}
+ */
 export const getCategories = () => Object.values(CATEGORIES);
+
+/**
+ * Obtiene todos los niveles de experiencia disponibles
+ * @returns {Array}
+ */
 export const getLevels = () => Object.values(LEVELS);
+
 export const TECH_CATEGORIES = CATEGORIES;
 export const TECH_LEVELS = LEVELS;
 
-// Testimonios de clientes
+// ===================================================================
+// TESTIMONIOS DE CLIENTES
+// ===================================================================
+/**
+ * testimonials: Array de testimonios de clientes
+ * Cada objeto contiene:
+ *   - id, name, role, company, avatar, rating, review, project, gradient
+ */
 export const testimonials = [
   {
     id: 1,
@@ -353,8 +380,25 @@ export const testimonials = [
   },
 ];
 
-// Función para obtener testimonios aleatorios
+/**
+ * Obtiene testimonios aleatorios
+ * @param {number} count - cantidad de testimonios a devolver
+ * @returns {Array}
+ */
 export const getRandomTestimonials = (count = 3) => {
   const shuffled = [...testimonials].sort(() => 0.5 - Math.random());
   return shuffled.slice(0, count);
 };
+
+// ===================================================================
+// SUGERENCIAS DE MEJORA PROFESIONAL
+// ===================================================================
+/**
+ * 1. Migrar a TypeScript para tipado estricto y validación de datos.
+ * 2. Validar la estructura de tecnologías y testimonios (zod/yup).
+ * 3. Permitir internacionalización de textos y categorías.
+ * 4. Añadir utilidades para búsqueda avanzada y paginación.
+ * 5. Añadir tests unitarios para todas las funciones de filtrado.
+ * 6. Documentar ejemplos de uso en la documentación técnica.
+ * 7. Considerar cargar los datos desde una API o CMS si la app crece.
+ */

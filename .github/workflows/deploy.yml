@@ -1,3 +1,9 @@
+# Despliegue automático a GitHub Pages para Axon.App
+# ===================================================
+# Este workflow valida, construye y despliega el sitio a GitHub Pages
+# en cada push o pull request a la rama main.
+# Incluye cacheo de dependencias, validación de código y verificación de artefactos.
+
 name: Deploy to GitHub Pages
 
 on:
@@ -19,10 +25,11 @@ on:
       - ".gitignore"
   workflow_dispatch:
 
+# Variables de entorno globales
 env:
   NODE_VERSION: "20"
   HUSKY: "0"
-  CACHE_KEY_PREFIX: "v1" # Para invalidar cache cuando sea necesario
+  CACHE_KEY_PREFIX: "v1" # Cambia este valor para invalidar la cache manualmente
 
 permissions:
   contents: read
@@ -35,7 +42,7 @@ concurrency:
 
 jobs:
   validate:
-    name: "Validate"
+    name: "Validar código y dependencias"
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
@@ -60,15 +67,15 @@ jobs:
           restore-keys: |
             ${{ env.CACHE_KEY_PREFIX }}-${{ runner.os }}-node-
 
-      - name: Install dependencies
+      - name: Install dependencies (solo si no hay cache)
         if: steps.node-cache.outputs.cache-hit != 'true'
         run: npm ci --prefer-offline --no-audit --no-optional
 
-      - name: Run linting
+      - name: Run linting (análisis de código)
         run: npm run lint
 
   build:
-    name: "Build"
+    name: "Build de producción"
     needs: validate
     runs-on: ubuntu-latest
     timeout-minutes: 10
@@ -92,22 +99,22 @@ jobs:
           path: node_modules
           key: ${{ env.CACHE_KEY_PREFIX }}-${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
 
-      - name: Install dependencies
+      - name: Install dependencies (solo si no hay cache)
         if: steps.node-cache.outputs.cache-hit != 'true'
         run: npm ci --prefer-offline --no-audit --no-optional
 
-      - name: Build project
+      - name: Build project (compilación y optimización)
         run: |
           echo "Starting build process at $(date)"
           npm run build
           echo "Build completed at $(date)"
-          # Asegurar que .nojekyll está presente en dist
+          # Asegurar que .nojekyll está presente en dist para soportar rutas avanzadas
           touch dist/.nojekyll
         env:
           NODE_ENV: production
           CI: true
 
-      - name: Verify build output
+      - name: Verify build output (verifica artefactos generados)
         run: |
           if [ ! -d "dist" ]; then
             echo "::error::Build failed - dist directory not found"
@@ -120,14 +127,14 @@ jobs:
           echo "::notice::Build verified successfully"
           echo "Build size: $(du -sh dist | cut -f1)"
 
-      - name: Upload Pages artifact
+      - name: Upload Pages artifact (sube artefacto para deploy)
         uses: actions/upload-pages-artifact@v3
         with:
           path: dist
           retention-days: 7
 
   deploy:
-    name: "Deploy"
+    name: "Desplegar a GitHub Pages"
     needs: build
     runs-on: ubuntu-latest
     timeout-minutes: 5
@@ -139,7 +146,7 @@ jobs:
         id: deployment
         uses: actions/deploy-pages@v4
 
-      - name: Verify deployment
+      - name: Verify deployment (muestra URL y hora)
         run: |
           echo "::notice::Site deployed to: ${{ steps.deployment.outputs.page_url }}"
           echo "::notice::Deployment completed at $(date)"

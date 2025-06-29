@@ -1,19 +1,10 @@
 # 🚀 Axon.App - Sitio Web Corporativo v2.4.0
 
-[![Vite](https://img.shields.io/badge/Vite-6.3.5-646CFF?logo=vite&logoColor=white)](https://vitej├── 📁 public/                      # Archivos públicos
-│   ├── 🖼️ logo1.png               # Logo principal
-│   ├── 📄 favicon.ico             # Favicon
-│   ├── 📄 og-image.png            # Imagen social
-│   └── 📄 twitter-image.png       # Imagen Twitter
-├── 📄 vite.config.js              # Configuración Vite
-├── 📄 tailwind.config.js          # Configuración Tailwind
-├── 📄 postcss.config.js           # Configuración PostCSS
-├── 📄 CHANGELOG.md                # Historial de cambios
-├── 📄 FINAL_SUMMARY.md            # Resumen completo del proyecto
-└── 📄 EMAIL_SETUP.md              # Configuración de emailsReact](https://img.shields.io/badge/React-18+-61DAFB?logo=react&logoColor=white)](https://reactjs.org/)
+[![Vite](https://img.shields.io/badge/Vite-6.3.5-646CFF?logo=vite&logoColor=white)](https://vitejs.dev/)
+[![React](https://img.shields.io/badge/React-18+-61DAFB?logo=react&logoColor=white)](https://reactjs.org/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind-4.1+-38B2AC?logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
 
-> **Sitio web profesional moderno para Axon.App** - Soluciones tecnológicas innovadoras con sistema completo de formularios y captación de leads
+> **Sitio web profesional moderno para Axon.App** - Soluciones tecnológicas innovadoras con sistema completo de formularios, modales y captación de leads. Documentación, código y configuración revisados y optimizados profesionalmente.
 
 ---
 
@@ -43,25 +34,19 @@
 - ✅ **Formulario de Contacto** - Contacto directo desde el sitio
 - ✅ **Solicitud de Propuesta** - Formulario detallado para presupuestos
 - ✅ **Agendar Consulta** - Sistema de agendamiento de citas
-- ✅ **Sistema de Formularios** - Conectado a `axonapp.info@gmail.com`
 - ✅ **Validación Completa** - Validación HTML5 y feedback visual
 - ✅ **Modales Profesionales** - Sistema avanzado de modales especializados
-
-- ✅ **Sección Misión y Visión** - Rediseñada con valores y objetivos
-- ✅ **6 Servicios Principales** - Desarrollo Web, Apps, AI, etc.
-- ✅ **Modales Detallados** - Información completa de cada servicio
-- ✅ **Base de Datos de Servicios** - Procesos, tecnologías y características
-- ✅ **Información de Contacto** - Visible en múltiples secciones
 
 ### ⚡ **Rendimiento y Técnica**
 
 - ✅ **Alto Rendimiento** - Construido con Vite para máxima velocidad
 - ✅ **Arquitectura Modular** - Componentes React reutilizables
-- ✅ **Configuración Optimizada** - Vite configurado para desarrollo y producción
+- ✅ **Configuración Optimizada** - Vite, Tailwind y PostCSS revisados y documentados
+- ✅ **Build profesional** - Separación de chunks, minificación, assets optimizados
 
 ## 🛠️ Stack Tecnológico
 
-- **Frontend:** React 19+ con Hooks modernos y Concurrent Features
+- **Frontend:** React 18+ con Hooks modernos
 - **Build Tool:** Vite 6.3.5 (ultra-rápido)
 - **Styling:** Tailwind CSS 4.1+ (utility-first)
 - **Contact System:** Sistema de formularios (modo demo funcional)
@@ -90,34 +75,23 @@ npm install
 # Iniciar servidor de desarrollo
 npm run dev
 
-# Abrir http://localhost:5177/
+# Abrir http://localhost:3000/
 ```
 
 ### Scripts Disponibles
 
 ```bash
 npm run dev                 # Servidor de desarrollo
-npm run build              # Build para producción
-npm run preview            # Preview del build
-npm run lint               # Linting del código
-npm run clean              # Limpiar archivos build
-npm run clean:build        # Limpiar y construir
-```
-
-## 🚀 **COMANDOS DE BUILD**
-
-```bash
-# Build para desarrollo
-npm run dev
-
-# Build para producción
-npm run build
-
-# Preview del build de producción
-npm run preview
-
-# Limpiar archivos de build
-npm run clean
+npm run build               # Build para producción
+npm run preview             # Preview del build
+npm run lint                # Linting del código
+npm run lint:fix            # Corrección automática de lint
+npm run clean               # Limpiar archivos build
+npm run clean:modules       # Limpiar node_modules
+npm run clean:all           # Limpieza total (dist, node_modules, lock)
+npm run clean:build         # Limpia y recompila
+npm run analyze             # Visualización de bundle
+npm run deploy              # Despliegue a GitHub Pages
 ```
 
 ---
@@ -126,169 +100,83 @@ npm run clean
 
 ```
 Axon/
+├── 📁 public/                      # Archivos públicos
+│   ├── 🖼️ logo1.png               # Logo principal
+│   ├── 📄 favicon.ico             # Favicon
+│   ├── 📄 og-image.png            # Imagen social
+│   ├── 📄 twitter-image.png       # Imagen Twitter
+│   └── 📄 whatsapp-image.png      # Imagen WhatsApp
 ├── 📁 src/
 │   ├── 📁 components/
-│   │   ├── � ui/                  # Componentes UI básicos
-│   │   │   ├── BasicComponents.jsx
-│   │   │   ├── Cards.jsx
-│   │   │   └── Interactive.jsx
+│   │   ├── 📁 ui/                  # Componentes UI básicos
 │   │   ├── 📁 forms/               # Formularios
-│   │   │   └── ContactForm.jsx
 │   │   ├── 📁 modals/              # Sistema de modales
-│   │   │   ├── PrivacyModal.jsx
-│   │   │   ├── TermsModal.jsx
-│   │   │   ├── ServiceModal.jsx
-│   │   │   ├── QuoteModal.jsx
-│   │   │   └── ConsultationModal.jsx
-│   │   ├── 📁 utils/               # Utilidades
-│   │   │   └── withSuspense.jsx
+│   │   ├── 📁 sections/            # Secciones de página
 │   │   └── 📄 index.jsx            # Barrel exports
-│   ├── 📁 data/
-│   │   ├── 📄 content.js           # Datos de contenido
-│   │   └── 📄 servicesData.js      # Datos de servicios
-│   ├── 📁 services/
-│   │   └── 📄 emailService.js      # Sistema de formularios
-│   ├── 📁 assets/                  # Recursos estáticos
+│   ├── 📁 data/                    # Datos de contenido y servicios
+│   ├── 📁 hooks/                   # Hooks personalizados
+│   ├── 📁 services/                # Servicios y utilidades
 │   ├── 📄 App.jsx                  # Componente principal
 │   ├── 📄 index.css                # Estilos globales
 │   └── 📄 main.jsx                 # Punto de entrada
-├── 📁 public/                      # Archivos públicos
-│   ├── � logo1.png               # Logo principal
-│   ├── 📄 favicon.ico             # Favicon
-│   ├── 📄 og-image.png            # Imagen social
-│   └── 📄 twitter-image.png       # Imagen Twitter
-├── �📁 .github/workflows/           # GitHub Actions
-├── 📄 vite.config.js              # Configuración Vite
-├── 📄 tailwind.config.js          # Configuración Tailwind
-├── 📄 postcss.config.js           # Configuración PostCSS
-├── 📄 CHANGELOG.md                # Historial de cambios
-├── 📄 FINAL_SUMMARY.md            # Resumen completo del proyecto
-└── 📄 EMAIL_SETUP.md              # Configuración de emails
+├── 📄 vite.config.js               # Configuración Vite
+├── 📄 tailwind.config.js           # Configuración Tailwind
+├── 📄 postcss.config.js            # Configuración PostCSS
+├── 📄 jsconfig.json                # Configuración de paths
+├── 📄 package.json                 # Dependencias y scripts
+├── 📄 index.html                   # Plantilla HTML principal
+├── 📄 TECHNICAL_DOCUMENTATION.md   # Documentación técnica
+└── 📄 COPILOT_PROJECT_GUIDE.md     # Registro de contexto y cambios
 ```
 
 ## 🎨 Componentes Principales
 
-### Arquitectura Modular (v2.5.0)
+### Arquitectura Modular
 
-**Componentes UI Básicos:**
+- `BasicComponents.jsx`, `Cards.jsx`, `Interactive.jsx`, `EmailLink.jsx`, `ClientCard.jsx`, `SuspenseLoader.jsx` (documentados y optimizados)
+- Formularios: `UnifiedContactForm.jsx`
+- Modales: `UnifiedModals.jsx`, `PrivacyModal.jsx`, `TermsModal.jsx`, `CookiesModal.jsx`, `ServiceModal.jsx`, `BlogModal.jsx`, `ConsultationModal.jsx`, `QuoteModal.jsx`
+- Secciones: `BlogSection.jsx`, `ClientsSection.jsx`
+- Hooks: `useModals.js`, `useEmailSelector.js`
+- Servicios: `emailService.js`
+- Datos: `content.js`, `servicesData.js`, `blogData.js`, `clientsData.js`
 
-- `AxonLogo` - Logo principal con gradiente
-- `AnimatedBackground` - Efectos de fondo animados
-- `ScrollToTopButton` - Botón scroll to top
+## ⚙️ Configuración y Scripts
 
-**Componentes de Tarjetas:**
+- Todos los archivos de configuración (`vite.config.js`, `tailwind.config.js`, `postcss.config.js`, `jsconfig.json`, `index.html`) han sido revisados, optimizados y documentados profesionalmente.
+- Scripts de build, limpieza, análisis y despliegue listos para CI/CD.
 
-- `ServiceCard` - Tarjetas de servicios interactivas
-- `TestimonialCard` - Tarjetas de testimonios
-- `TechItem` - Items de tecnología con animaciones
+## 🧪 Testing y Calidad
 
-**Componentes Interactivos:**
+- ✅ ESLint sin errores (29/06/2025)
+- ✅ Build de producción exitoso (29/06/2025)
+- ✅ Optimización de assets y dependencias
+- ✅ Comentarios y sugerencias de mejora profesional en cada archivo clave
+- ✅ Confirmación de ausencia de código malicioso
 
-- `AnimatedCounter` - Contadores animados
-- `TestimonialsBanner` - Banner rotativo de testimonios
+## 📝 Convenciones de Comentarios
 
-**Sistema de Formularios:**
-
-- `ContactForm` - Formulario principal de contacto
-- Formularios especializados en modales
-
-**Sistema de Modales:**
-
-- `PrivacyModal` - Política de privacidad
-- `TermsModal` - Términos y condiciones
-- `ServiceModal` - Información detallada de servicios
-- `QuoteModal` - Solicitud de propuesta
-- `ConsultationModal` - Agendamiento de consultas
-
-### Secciones de la Página
-
-- **Hero** - Presentación principal con CTA
-- **Servicios** - 6 servicios principales
-- **Contacto** - Formulario funcional
-- **Footer** - Información y enlaces
-
-## 🚀 Desarrollo
-
-### Scripts Disponibles
-
-```bash
-npm run dev      # Servidor de desarrollo
-npm run build    # Build para producción
-npm run preview  # Preview del build
-npm run clean    # Limpiar archivos
+```javascript
+/**
+ * TÍTULO DEL COMPONENTE/FUNCIÓN
+ * =============================
+ *
+ * Descripción detallada del propósito y funcionamiento
+ *
+ * @param {Type} param - Descripción del parámetro
+ * @returns {Type} Descripción del retorno
+ * @author Axon.app Team
+ * @version 2.4.0
+ */
 ```
 
-### Estructura de Desarrollo
+## 🚀 Estado Actual del Proyecto
 
-```bash
-npm run build
-npm run preview  # Para probar localmente
-```
-
-## 🎯 Servicios Ofrecidos
-
-- 💻 **Desarrollo Web** - Sitios responsivos y optimizados
-- 📱 **Apps Móviles** - iOS y Android
-- 🎨 **Diseño UI/UX** - Interfaces modernas
-- ☁️ **Soluciones Cloud** - Infraestructura escalable
-- 🧠 **Inteligencia Artificial** - ML y automatización
-- � **Marketing Digital** - Estrategias online
-- 🔧 **Soporte Técnico** - Hardware y Software
-
-## 🛠️ Desarrollo
-
-### Agregar Nuevos Componentes
-
-1. Crear componente en la carpeta apropiada (`src/components/ui/`, `forms/`, `modals/`)
-2. Exportar el componente en `src/components/index.jsx`
-3. Importar en `App.jsx` usando barrel imports
-4. Actualizar `CHANGELOG.md`
-
-### Modificar Contenido
-
-- Editar `src/data/content.js` para contenido general
-- Modificar `src/data/servicesData.js` para servicios
-- Actualizar `App.jsx` para contenido estático
-
-### Personalizar Estilos
-
-- Configurar colores en `tailwind.config.js`
-- Añadir estilos globales en `src/index.css`
-
-## 📊 Performance
-
-- ⚡ Vite para builds ultra-rápidos
-- 🎨 CSS optimizado con Tailwind
-- 📦 Code splitting automático
-- 🔄 Hot Module Replacement (HMR)
-
-## 🐛 Solución de Problemas
-
-### Errores Comunes
-
-- **Port ya en uso:** Cambiar puerto en `vite.config.js`
-- **Dependencias:** Ejecutar `npm install` para reinstalar
-- **Build errors:** Verificar sintaxis JSX y imports
-
-### Logs y Debugging
-
-```bash
-npm run dev --debug     # Modo debug
-npm run build --debug   # Build con logs detallados
-```
-
-## 📝 Contribución
-
-1. Fork el proyecto
-2. Crear branch para feature (`git checkout -b feature/NuevaCaracteristica`)
-3. Commit cambios (`git commit -m 'Añadir nueva característica'`)
-4. Push al branch (`git push origin feature/NuevaCaracteristica`)
-5. Abrir Pull Request
-6. Actualizar `CHANGELOG.md`
-
-## 📄 Licencia
-
-Este proyecto está bajo la Licencia MIT - ver archivo [LICENSE](LICENSE) para detalles.
+- [x] Limpieza completa de código y dependencias
+- [x] Documentación técnica exhaustiva y actualizada
+- [x] Comentarios y sugerencias de mejora profesional en todos los archivos clave
+- [x] Build y linting sin errores
+- [x] Listo para despliegue y mantenimiento profesional
 
 ## 🤝 Contacto
 
@@ -301,7 +189,5 @@ Este proyecto está bajo la Licencia MIT - ver archivo [LICENSE](LICENSE) para d
 
 _Construido con ❤️ usando React + Vite + Tailwind CSS_
 
-# Deploy - 2025-06-15 19:53:30
-#   � l t i m o   d e p l o y :   0 6 / 2 7 / 2 0 2 5   2 0 : 0 4 : 5 4  
- #   D e p l o y   v e r i f i c a c i � n   -   2 0 2 5 - 0 6 - 2 7   2 0 : 1 9  
- 
+# Deploy - 2025-06-29
+# Última revisión y optimización profesional: 29/06/2025

@@ -1,12 +1,22 @@
-/** @type {import('tailwindcss').Config} */
+/**
+ * Configuración principal de Tailwind CSS para Axon.App
+ * - Define el scope de archivos a analizar para purgado de CSS
+ * - Extiende el tema con fuentes, animaciones y keyframes personalizados
+ * - Permite una personalización visual avanzada y coherente con la marca
+ *
+ * @type {import('tailwindcss').Config}
+ */
 export default {
+  // Archivos a escanear para generar las clases CSS necesarias
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
+      // Fuentes personalizadas para branding
       fontFamily: {
         orbitron: ["Orbitron", "monospace"],
         rajdhani: ["Rajdhani", "sans-serif"],
       },
+      // Keyframes personalizados para animaciones avanzadas
       keyframes: {
         blob: {
           "0%": {
@@ -68,6 +78,7 @@ export default {
           },
         },
       },
+      // Animaciones personalizadas usando los keyframes definidos
       animation: {
         blob: "blob 10s infinite ease-in-out",
         "blob-delay-2000": "blob 10s infinite ease-in-out 2s",
@@ -77,11 +88,25 @@ export default {
         fadeInScale: "fadeInScale 0.6s ease-out",
         bounceIn: "bounceIn 0.6s ease-out",
       },
+      // Delays personalizadas para animaciones
       animationDelay: {
         200: "200ms",
         400: "400ms",
       },
     },
   },
+  // Plugins adicionales de Tailwind (vacío por ahora, se pueden agregar según necesidades)
   plugins: [],
 };
+
+// --- SUGERENCIAS DE MEJORA PROFESIONAL ---
+// 1. Añadir plugins oficiales de Tailwind (forms, typography, aspect-ratio) si se requieren.
+// 2. Documentar en README las animaciones y utilidades personalizadas disponibles.
+// 3. Revisar y optimizar el scope de content para evitar CSS innecesario.
+// 4. Si se usan colores personalizados, definirlos en theme.extend.colors.
+// 5. Mantener la configuración alineada con la versión de Tailwind instalada.
+// 6. Añadir variantes responsivas o de estado si se requieren para animaciones.
+// 7. Validar que las fuentes personalizadas estén correctamente cargadas en el HTML.
+// 8. Si se usan utilidades avanzadas, considerar el uso de safelist para clases generadas dinámicamente.
+// 9. Revisar periódicamente la documentación oficial de Tailwind para nuevas features.
+// 10. Si se requiere dark mode, habilitarlo explícitamente en la configuración.

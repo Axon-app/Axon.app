@@ -1,6 +1,23 @@
+// CookiesModal.jsx
+// =====================================================
+// Modal profesional para gestión de preferencias de cookies.
+// Cumple con buenas prácticas de privacidad y accesibilidad.
+// Autor: Axon.App Team | Última revisión: 29/06/2025
+
 import React, { useEffect, useState } from "react";
 
+/**
+ * EnhancedCookiesModal
+ * Modal para configurar preferencias de cookies.
+ * - Guarda preferencias en localStorage.
+ * - Permite aceptar, rechazar o personalizar cookies.
+ * - Accesible y seguro.
+ *
+ * @param {boolean} isOpen - Si el modal está abierto.
+ * @param {function} onClose - Callback para cerrar el modal.
+ */
 export const EnhancedCookiesModal = React.memo(({ isOpen, onClose }) => {
+  // Estado de preferencias de cookies
   const [cookiePreferences, setCookiePreferences] = useState({
     necessary: true, // Las cookies necesarias siempre están habilitadas
     analytics: false,
@@ -8,7 +25,7 @@ export const EnhancedCookiesModal = React.memo(({ isOpen, onClose }) => {
     preferences: false,
   });
 
-  // Cargar preferencias guardadas
+  // Cargar preferencias guardadas al montar
   useEffect(() => {
     const savedPreferences = localStorage.getItem("axon-cookie-preferences");
     if (savedPreferences) {
@@ -16,33 +33,31 @@ export const EnhancedCookiesModal = React.memo(({ isOpen, onClose }) => {
     }
   }, []);
 
-  // Manejar escape key
+  // Efecto: Cierra el modal con Escape y bloquea scroll de fondo
   useEffect(() => {
     const handleEscape = (event) => {
       if (event.key === "Escape") {
         onClose();
       }
     };
-
     if (isOpen) {
       document.addEventListener("keydown", handleEscape);
       document.body.style.overflow = "hidden";
     }
-
     return () => {
       document.removeEventListener("keydown", handleEscape);
       document.body.style.overflow = "unset";
     };
   }, [isOpen, onClose]);
 
-  // Manejar click en backdrop
+  // Manejar click en backdrop para cerrar modal
   const handleBackdropClick = (e) => {
     if (e.target === e.currentTarget) {
       onClose();
     }
   };
 
-  // Guardar preferencias
+  // Guardar preferencias personalizadas
   const savePreferences = () => {
     localStorage.setItem(
       "axon-cookie-preferences",
@@ -86,10 +101,9 @@ export const EnhancedCookiesModal = React.memo(({ isOpen, onClose }) => {
     onClose();
   };
 
-  // Cambiar preferencia individual
+  // Cambiar preferencia individual (no permite desactivar necesarias)
   const togglePreference = (type) => {
-    if (type === "necessary") return; // Las cookies necesarias no se pueden desactivar
-
+    if (type === "necessary") return;
     setCookiePreferences((prev) => ({
       ...prev,
       [type]: !prev[type],

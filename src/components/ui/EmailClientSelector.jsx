@@ -1,8 +1,14 @@
 import React from "react";
 
+// --- Selector de cliente de correo electrónico ---
+// Permite al usuario elegir entre Gmail, Outlook o el cliente predeterminado para enviar un email.
+// Props:
+//   - emailData: { to, subject, body }
+//   - onClose: función para cerrar el modal
+//   - isOpen: boolean (si el modal debe mostrarse)
 export const EmailClientSelector = React.memo(
   ({ emailData, onClose, isOpen }) => {
-    // URLs para diferentes clientes de correo
+    // Genera la URL para Gmail con los parámetros del email
     const getGmailUrl = () => {
       const params = new URLSearchParams({
         to: emailData.to,
@@ -11,6 +17,7 @@ export const EmailClientSelector = React.memo(
       });
       return `https://mail.google.com/mail/?view=cm&fs=1&${params.toString()}`;
     };
+    // Genera la URL para Outlook con los parámetros del email
     const getOutlookUrl = () => {
       const params = new URLSearchParams({
         to: emailData.to,
@@ -19,13 +26,14 @@ export const EmailClientSelector = React.memo(
       });
       return `https://outlook.live.com/mail/0/deeplink/compose?${params.toString()}`;
     };
-
+    // Genera la URL mailto para el cliente predeterminado
     const getMailtoUrl = () => {
       return `mailto:${emailData.to}?subject=${encodeURIComponent(
         emailData.subject
       )}&body=${encodeURIComponent(emailData.body)}`;
     };
-
+    // Maneja la selección del cliente de correo
+    // Si es externo (Gmail/Outlook) abre en nueva pestaña, si no redirige mailto
     const handleClientSelection = (url, isExternal = false) => {
       if (isExternal) {
         window.open(url, "_blank", "noopener,noreferrer");
@@ -34,9 +42,8 @@ export const EmailClientSelector = React.memo(
       }
       onClose();
     };
-
+    // Early return: no renderiza si el modal no está abierto
     if (!isOpen) return null;
-
     return (
       <div
         className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4"
@@ -49,8 +56,7 @@ export const EmailClientSelector = React.memo(
           className="bg-gradient-to-br from-gray-900 via-black to-gray-900 rounded-xl max-w-md w-full shadow-2xl border border-gray-700/50"
           onClick={(e) => e.stopPropagation()}
         >
-          {" "}
-          {/* Header */}
+          {/* Header del selector */}
           <div className="p-6 border-b border-gray-700">
             <div className="flex items-center gap-3 mb-3">
               <img
@@ -69,7 +75,7 @@ export const EmailClientSelector = React.memo(
               Selecciona dónde quieres redactar tu mensaje
             </p>
           </div>
-          {/* Email preview */}
+          {/* Vista previa del email */}
           <div className="p-4 bg-slate-900/50 border-b border-gray-700">
             <div className="text-xs text-gray-400 space-y-1">
               <p>
@@ -80,7 +86,7 @@ export const EmailClientSelector = React.memo(
               </p>
             </div>
           </div>{" "}
-          {/* Client options - Solo Gmail y Outlook */}
+          {/* Opciones de cliente de correo */}
           <div className="p-6 space-y-3">
             {/* Gmail */}
             <button
@@ -161,7 +167,7 @@ export const EmailClientSelector = React.memo(
               </div>
             </button>
           </div>
-          {/* Footer */}
+          {/* Footer con botón cancelar */}
           <div className="p-4 border-t border-gray-700 text-center">
             <button
               onClick={onClose}
@@ -177,3 +183,10 @@ export const EmailClientSelector = React.memo(
 );
 
 EmailClientSelector.displayName = "EmailClientSelector";
+
+// --- SUGERENCIAS DE MEJORA ---
+// 1. Añadir prop-types o TypeScript para tipado estricto.
+// 2. Permitir personalización de clientes de correo por props si se requiere reutilización avanzada.
+// 3. Añadir tests unitarios para la lógica de generación de URLs y selección de cliente.
+// 4. Considerar internacionalización para textos y atributos accesibles si el proyecto es multilenguaje.
+// 5. Permitir cierre por Escape y click en backdrop para mejor UX.

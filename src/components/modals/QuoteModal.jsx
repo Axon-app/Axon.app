@@ -1,9 +1,13 @@
 import React from "react";
 import { sendQuoteRequest } from "../../services/emailService";
 
-// Funciones de validación y seguridad
+// --- Validadores y utilidades de seguridad para el formulario de cotización ---
+// Considera extraer este bloque a un archivo utilitario si se reutiliza en otros formularios
 const SecurityValidators = {
-  // Sanitizar entrada para prevenir XSS
+  /**
+   * Sanitiza la entrada para prevenir XSS y otros ataques de inyección de scripts.
+   * Elimina etiquetas <script>, HTML y atributos peligrosos.
+   */
   sanitizeInput: (input) => {
     if (typeof input !== "string") return "";
     return input
@@ -11,36 +15,46 @@ const SecurityValidators = {
       .replace(/<[^>]*>/g, "")
       .replace(/javascript:/gi, "")
       .replace(/on\w+\s*=/gi, "");
-    // Removido .trim() para permitir espacios normales
+    // .trim() removido para permitir espacios normales
   },
 
-  // Validar email con regex seguro
+  /**
+   * Valida emails con una expresión regular robusta y longitud máxima estándar.
+   */
   validateEmail: (email) => {
     const emailRegex =
       /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
     return emailRegex.test(email) && email.length <= 254;
   },
 
-  // Validar teléfono
+  /**
+   * Valida teléfonos internacionales (opcional).
+   */
   validatePhone: (phone) => {
     if (!phone) return true; // Campo opcional
     const phoneRegex = /^[+]?[0-9\s()-]{7,20}$/;
     return phoneRegex.test(phone);
   },
 
-  // Validar nombre (solo letras, espacios, acentos)
+  /**
+   * Valida nombres (letras, espacios, acentos, longitud razonable).
+   */
   validateName: (name) => {
     const nameRegex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]{2,50}$/;
     return nameRegex.test(name);
   },
 
-  // Validar ciudad
+  /**
+   * Valida ciudades (letras, espacios, signos básicos, longitud razonable).
+   */
   validateCity: (city) => {
     const cityRegex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s,.-]{2,100}$/;
     return cityRegex.test(city);
   },
 
-  // Detectar patrones de inyección SQL básicos
+  /**
+   * Detecta patrones básicos de inyección SQL (defensa en profundidad, poco común en frontend).
+   */
   detectSQLInjection: (input) => {
     const sqlPatterns = [
       /(\b(SELECT|INSERT|UPDATE|DELETE|DROP|CREATE|ALTER|EXEC|UNION|SCRIPT)\b)/gi,
@@ -51,13 +65,18 @@ const SecurityValidators = {
     return sqlPatterns.some((pattern) => pattern.test(input));
   },
 
-  // Validar longitud de campos
+  /**
+   * Valida la longitud de un campo entre un mínimo y máximo.
+   */
   validateLength: (value, min = 0, max = 1000) => {
     return value.length >= min && value.length <= max;
   },
 };
 
+// --- Modal de Solicitud de Cotización ---
+// Componente principal, profesional y seguro para solicitar propuestas
 export const QuoteRequestModal = React.memo(({ isOpen, onClose, _service }) => {
+  // Estado del formulario y control de errores
   const [formData, setFormData] = React.useState({
     name: "",
     email: "",
@@ -74,7 +93,7 @@ export const QuoteRequestModal = React.memo(({ isOpen, onClose, _service }) => {
   const [validationErrors, setValidationErrors] = React.useState({});
   const [securityError, setSecurityError] = React.useState("");
 
-  // Calcular si el formulario está completo
+  // Calcula si el formulario está completo y sin errores
   const isFormComplete = React.useMemo(() => {
     const requiredFields = [
       "name",
@@ -92,18 +111,18 @@ export const QuoteRequestModal = React.memo(({ isOpen, onClose, _service }) => {
     return hasRequiredFields && hasNoErrors;
   }, [formData, validationErrors, securityError]);
 
-  // Función para obtener campos faltantes y errores
+  // Devuelve campos faltantes y errores de validación
   const getMissingFields = React.useMemo(() => {
     const missing = [];
     const errors = [];
-
-    // Verificar campos requeridos
+    // Verifica campos requeridos
     if (!formData.name.trim()) missing.push("Nombre");
     if (!formData.email.trim()) missing.push("Email");
     if (!formData.clientType.trim()) missing.push("Tipo de Cliente");
     if (!formData.city.trim()) missing.push("Ciudad");
     if (!formData.projectType.trim()) missing.push("Tipo de Proyecto");
-    if (!formData.description.trim()) missing.push("Descripción del Proyecto"); // Verificar errores de validación
+    if (!formData.description.trim()) missing.push("Descripción del Proyecto");
+    // Agrega errores de validación
     Object.entries(validationErrors).forEach(([, error]) => {
       if (error) errors.push(error);
     });
@@ -114,27 +133,26 @@ export const QuoteRequestModal = React.memo(({ isOpen, onClose, _service }) => {
     };
   }, [formData, validationErrors]);
 
-  // Manejar escape key
+  // Cierra modal con Escape y bloquea scroll de fondo
   React.useEffect(() => {
     const handleEscape = (event) => {
       if (event.key === "Escape") {
         onClose();
       }
     };
-
     if (isOpen) {
       document.addEventListener("keydown", handleEscape);
       document.body.style.overflow = "hidden";
     }
-
     return () => {
       document.removeEventListener("keydown", handleEscape);
       document.body.style.overflow = "unset";
     };
-  }, [isOpen, onClose]); // Reset form cuando se abre/cierra
+  }, [isOpen, onClose]);
+
+  // Resetea el formulario al abrir/cerrar el modal
   React.useEffect(() => {
     if (isOpen) {
-      // Resetear completamente el formulario
       setFormData({
         name: "",
         email: "",
@@ -142,7 +160,7 @@ export const QuoteRequestModal = React.memo(({ isOpen, onClose, _service }) => {
         clientType: "",
         company: "",
         city: "",
-        projectType: "", // Siempre inicia vacío para permitir selección manual
+        projectType: "",
         description: "",
         additionalRequirements: "",
       });
@@ -152,54 +170,46 @@ export const QuoteRequestModal = React.memo(({ isOpen, onClose, _service }) => {
     }
   }, [isOpen]);
 
-  // Early return si no está abierto
-  if (!isOpen) return null; // Manejar cambios en el formulario - VERSION DEBUG
+  // Early return si el modal no está abierto
+  if (!isOpen) return null;
+
+  // Maneja cambios en los campos del formulario
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-
-    // Debug: verificar si el evento llega
-    if (typeof window !== "undefined" && window.console) {
-      window.console.log("Input change:", name, value);
-    }
-
-    // Actualizar directamente sin validación para debug
+    // Eliminado console.log de debug para producción
     setFormData((prev) => {
       const newData = { ...prev, [name]: value };
       return newData;
     });
-
-    // Limpiar errores
+    // Limpia errores globales al cambiar cualquier campo
     setSecurityError("");
     setValidationErrors({});
-  }; // Manejar envío del formulario
+  };
+
+  // Maneja el envío del formulario de cotización
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     setIsSubmitting(true);
     setSecurityError("");
     try {
-      // Validación de campos
+      // Validación de campos requeridos y errores
       const missing = getMissingFields;
       if (missing.missing.length > 0 || missing.errors.length > 0) {
         let errorMessage = "⚠️ Por favor completa la información faltante:\n\n";
-
         if (missing.missing.length > 0) {
           errorMessage += `📝 Campos requeridos:\n• ${missing.missing.join(
             "\n• "
           )}\n\n`;
         }
-
         if (missing.errors.length > 0) {
           errorMessage += `❌ Errores a corregir:\n• ${missing.errors.join(
             "\n• "
           )}\n\n`;
         }
-
         setSecurityError(errorMessage);
         return;
       }
-
-      // 3. Validación adicional de longitud para prevenir ataques
+      // Validación de longitud para prevenir ataques
       if (
         !SecurityValidators.validateLength(formData.name, 2, 50) ||
         !SecurityValidators.validateLength(formData.email, 5, 254) ||
@@ -210,8 +220,7 @@ export const QuoteRequestModal = React.memo(({ isOpen, onClose, _service }) => {
         );
         return;
       }
-
-      // 4. Preparar datos para envío con sanitización final
+      // Sanitiza y prepara los datos para el envío
       const sanitizedData = {
         name: SecurityValidators.sanitizeInput(formData.name.trim()),
         email: SecurityValidators.sanitizeInput(formData.email.trim()),
@@ -232,7 +241,8 @@ export const QuoteRequestModal = React.memo(({ isOpen, onClose, _service }) => {
         ),
         timestamp: new Date().toISOString(),
         formType: "quote-request",
-      }; // Validación final antes del envío
+      };
+      // Validación final de seguridad (SQLi)
       for (const [key, value] of Object.entries(sanitizedData)) {
         if (
           typeof value === "string" &&
@@ -240,16 +250,15 @@ export const QuoteRequestModal = React.memo(({ isOpen, onClose, _service }) => {
         ) {
           throw new Error(`Entrada inválida detectada en campo ${key}`);
         }
-      } // 4. Enviar formulario de cotización
+      }
+      // Envía el formulario de cotización
       const emailResult = await sendQuoteRequest(sanitizedData);
-
       if (!emailResult.success) {
         throw new Error(emailResult.error || "Error al enviar la propuesta");
       }
       setSubmitStatus("success");
       setTimeout(() => {
         onClose();
-        // Reset form - NUNCA usar service.title para projectType
         setFormData({
           name: "",
           email: "",
@@ -257,7 +266,7 @@ export const QuoteRequestModal = React.memo(({ isOpen, onClose, _service }) => {
           clientType: "",
           company: "",
           city: "",
-          projectType: "", // Siempre vacío - selección manual requerida
+          projectType: "",
           description: "",
           additionalRequirements: "",
         });
@@ -849,3 +858,10 @@ export const QuoteRequestModal = React.memo(({ isOpen, onClose, _service }) => {
 });
 
 QuoteRequestModal.displayName = "QuoteRequestModal";
+
+// --- SUGERENCIAS DE MEJORA ---
+// 1. Implementar validación en tiempo real por campo y mostrar errores específicos.
+// 2. Extraer los validadores a un archivo utilitario compartido si se usan en otros formularios.
+// 3. Añadir tests unitarios para validadores y lógica de envío.
+// 4. Considerar internacionalización si se requiere multilenguaje.
+// 5. Mejorar la gestión de errores del backend para mostrar mensajes más específicos.

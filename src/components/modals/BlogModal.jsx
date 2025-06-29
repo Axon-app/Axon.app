@@ -1,6 +1,23 @@
+// BlogModal.jsx
+// =====================================================
+// Modal profesional para mostrar artículos del blog con sanitización y renderizado seguro.
+// Autor: Axon.App Team | Última revisión: 29/06/2025
+
 import React from "react";
 
+/**
+ * BlogModal
+ * Modal para mostrar el contenido de un post del blog.
+ * - Sanitiza el contenido para evitar XSS.
+ * - Renderiza markdown enriquecido a HTML seguro.
+ * - Cierra con Escape y bloquea scroll de fondo.
+ *
+ * @param {boolean} isOpen - Si el modal está abierto.
+ * @param {function} onClose - Callback para cerrar el modal.
+ * @param {object} post - Objeto con datos del post (title, content, etc).
+ */
 export const BlogModal = ({ isOpen, onClose, post }) => {
+  // Efecto: Cierra el modal con Escape y bloquea scroll de fondo
   React.useEffect(() => {
     const handleEscape = (event) => {
       if (event.key === "Escape") {
@@ -18,15 +35,26 @@ export const BlogModal = ({ isOpen, onClose, post }) => {
       document.body.style.overflow = "unset";
     };
   }, [isOpen, onClose]);
+
+  /**
+   * renderContent
+   * Sanitiza y transforma markdown enriquecido a HTML seguro.
+   * Elimina scripts, iframes y atributos peligrosos.
+   *
+   * @param {string} content - Contenido markdown/raw.
+   * @returns {string} HTML seguro para renderizar.
+   */
   const renderContent = (content) => {
     if (!content) return '';
 
+    // Sanitización básica contra XSS y atributos peligrosos
     const sanitizedContent = content
       .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
       .replace(/<iframe\b[^<]*(?:(?!<\/iframe>)<[^<]*)*<\/iframe>/gi, '')
       .replace(/javascript:/gi, '')
       .replace(/on\w+\s*=/gi, '');
 
+    // Conversión markdown a HTML enriquecido
     return sanitizedContent
       .replace(/# (.*)/g, '<h1 class="text-3xl font-bold mb-6 text-blue-300">$1</h1>')
       .replace(/## (.*)/g, '<h2 class="text-2xl font-semibold mb-4 text-blue-400 mt-8">$2</h2>')
@@ -45,7 +73,8 @@ export const BlogModal = ({ isOpen, onClose, post }) => {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
-      <div className="bg-gradient-to-br from-gray-900 via-black to-gray-900 rounded-3xl max-w-4xl w-full max-h-[95vh] overflow-y-auto border border-gray-700/50 shadow-2xl">        <div className="sticky top-0 z-10 bg-gradient-to-r from-gray-900/95 to-gray-800/95 backdrop-blur-md p-6 border-b border-gray-700/50 rounded-t-3xl">
+      <div className="bg-gradient-to-br from-gray-900 via-black to-gray-900 rounded-3xl max-w-4xl w-full max-h-[95vh] overflow-y-auto border border-gray-700/50 shadow-2xl">
+        <div className="sticky top-0 z-10 bg-gradient-to-r from-gray-900/95 to-gray-800/95 backdrop-blur-md p-6 border-b border-gray-700/50 rounded-t-3xl">
           <div className="flex justify-between items-start">
             <div className="flex-1 pr-4">
               <div className="flex flex-wrap gap-2 mb-3">
@@ -103,7 +132,8 @@ export const BlogModal = ({ isOpen, onClose, post }) => {
               </svg>
             </button>
           </div>
-        </div>        <div className="p-6 md:p-8">
+        </div>
+        <div className="p-6 md:p-8">
           {post.image && (
             <div className="mb-8 rounded-xl overflow-hidden">
               <div className="h-64 bg-gradient-to-br from-blue-600/50 to-purple-600/50 rounded-xl flex items-center justify-center">

@@ -1,8 +1,23 @@
+// PrivacyModal.jsx
+// =====================================================
+// Modal profesional para mostrar la política de privacidad.
+// Cumple con buenas prácticas legales, accesibilidad y UX.
+// Autor: Axon.App Team | Última revisión: 29/06/2025
+
 import React from "react";
 import { EmailLink } from "../ui/EmailLink";
 
+/**
+ * EnhancedPrivacyModal
+ * Modal para mostrar la política de privacidad y contacto legal.
+ * - Accesible y seguro.
+ * - Permite contacto directo para ejercer derechos de usuario.
+ *
+ * @param {boolean} isOpen - Si el modal está abierto.
+ * @param {function} onClose - Callback para cerrar el modal.
+ */
 export const EnhancedPrivacyModal = React.memo(({ isOpen, onClose }) => {
-  // Manejar escape key
+  // Efecto: Cierra el modal con Escape y bloquea scroll de fondo
   React.useEffect(() => {
     const handleEscape = (event) => {
       if (event.key === "Escape") {
@@ -21,7 +36,7 @@ export const EnhancedPrivacyModal = React.memo(({ isOpen, onClose }) => {
     };
   }, [isOpen, onClose]);
 
-  // Manejar click en backdrop
+  // Manejar click en backdrop para cerrar modal
   const handleBackdropClick = (e) => {
     if (e.target === e.currentTarget) {
       onClose();

@@ -1,6 +1,7 @@
 import React from "react";
 
-// Componente del Logo de Axon optimizado
+// --- Componente del Logo de Axon ---
+// Muestra el logo y nombre de la marca con estilos modernos.
 export const AxonLogo = React.memo(() => {
   return (
     <div className="flex items-center">
@@ -24,7 +25,8 @@ export const AxonLogo = React.memo(() => {
 
 AxonLogo.displayName = "AxonLogo";
 
-// Componente de animación de fondo optimizado
+// --- Componente de animación de fondo ---
+// Renderiza círculos animados para efectos visuales decorativos.
 export const AnimatedBackground = React.memo(() => {
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -40,7 +42,11 @@ export const AnimatedBackground = React.memo(() => {
 
 AnimatedBackground.displayName = "AnimatedBackground";
 
-// Componente de botón scroll to top optimizado
+// --- Componente de botón scroll to top ---
+// Muestra un botón flotante para volver al inicio de la página.
+// Props:
+//   - isVisible: boolean (si el botón debe mostrarse)
+//   - onClick: función a ejecutar al hacer click
 export const ScrollToTopButton = React.memo(({ isVisible, onClick }) => {
   return (
     <button
@@ -71,3 +77,9 @@ export const ScrollToTopButton = React.memo(({ isVisible, onClick }) => {
 });
 
 ScrollToTopButton.displayName = "ScrollToTopButton";
+
+// --- SUGERENCIAS DE MEJORA ---
+// 1. Añadir prop-types o TypeScript para tipado estricto.
+// 2. Permitir personalización de estilos y tamaños por props si se requiere reutilización avanzada.
+// 3. Añadir tests unitarios para la lógica de visibilidad y renderizado del botón scroll.
+// 4. Considerar internacionalización para el aria-label si el proyecto es multilenguaje.

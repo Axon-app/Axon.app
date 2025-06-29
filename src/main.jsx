@@ -1,13 +1,11 @@
 /**
- * PUNTO DE ENTRADA PRINCIPAL DE LA APLICACIÓN AXON.APP
- * ====================================================
- *
- * Este archivo es el punto de entrada de la aplicación React.
- * Se encarga de renderizar el componente App principal en el DOM.
+ * main.jsx - Punto de entrada principal de la aplicación Axon.App
+ * ==============================================================
+ * Renderiza el componente App principal en el DOM usando React 18+.
  *
  * Características:
- * - Utiliza React 18+ con createRoot (Concurrent Features)
- * - StrictMode activado para desarrollo más seguro
+ * - Utiliza createRoot (Concurrent Features)
+ * - StrictMode activado para desarrollo seguro
  * - Importación de estilos globales
  * - Renderizado en el elemento #root del HTML
  *
@@ -21,9 +19,7 @@ import App from './App.jsx'; // Componente principal de la aplicación
 import './index.css'; // Estilos globales de la aplicación
 
 /**
- * RENDERIZADO PRINCIPAL DE LA APLICACIÓN
- * ======================================
- *
+ * Renderizado principal de la aplicación
  * Crea la raíz de React y renderiza la aplicación completa
  * con StrictMode activado para mejor desarrollo y debugging
  */
@@ -31,4 +27,12 @@ createRoot(document.getElementById('root')).render(
   <StrictMode>
     <App />
   </StrictMode>,
-)
+);
+
+// --- SUGERENCIAS DE MEJORA PROFESIONAL ---
+// 1. Añadir soporte para ErrorBoundary global en el árbol de componentes.
+// 2. Implementar lazy loading y Suspense para rutas o módulos pesados.
+// 3. Añadir soporte para internacionalización (i18n) desde el entrypoint.
+// 4. Añadir tests de integración para el punto de entrada.
+// 5. Documentar el flujo de arranque en la documentación técnica.
+// 6. Permitir inicialización de servicios globales (analytics, monitoring, etc.).
