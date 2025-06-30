@@ -13,10 +13,15 @@
  * @version 2.4.0
  */
 
-import { StrictMode } from 'react'; // Modo estricto de React para detectar problemas
+import { StrictMode, Suspense, lazy } from 'react'; // Añadido Suspense y lazy
 import { createRoot } from 'react-dom/client'; // API moderna de React 18 para renderizado
-import App from './App.jsx'; // Componente principal de la aplicación
+import ErrorBoundary from './components/ErrorBoundary.jsx'; // Manejo global de errores
+import Loader from './components/Loader.jsx'; // Loader internacionalizado
+import './i18n'; // Configuración de internacionalización
 import './index.css'; // Estilos globales de la aplicación
+
+// Lazy load del componente App
+const App = lazy(() => import('./App.jsx'));
 
 /**
  * Renderizado principal de la aplicación
@@ -25,7 +30,11 @@ import './index.css'; // Estilos globales de la aplicación
  */
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <App />
+    <ErrorBoundary>
+      <Suspense fallback={<Loader />}>
+        <App />
+      </Suspense>
+    </ErrorBoundary>
   </StrictMode>,
 );
 
