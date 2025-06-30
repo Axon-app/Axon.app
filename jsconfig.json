@@ -1,0 +1,71 @@
+{
+    // Configuración principal para el workspace JavaScript/React
+    "compilerOptions": {
+        // Versión objetivo de ECMAScript
+        "target": "ES2020",
+        // Librerías incluidas para autocompletado y tipado
+        "lib": [
+            "ES2020",
+            "DOM",
+            "DOM.Iterable"
+        ],
+        // Módulo ECMAScript moderno
+        "module": "ESNext",
+        // Resolución de módulos para bundlers modernos (Vite, Webpack)
+        "moduleResolution": "bundler",
+        // Permite archivos .js junto a .jsx
+        "allowJs": true,
+        // No verifica errores en archivos JS puros
+        "checkJs": false,
+        // Soporte para JSX moderno (React 17+)
+        "jsx": "react-jsx",
+        "jsxImportSource": "react",
+        // Permite importar archivos .json como módulos
+        "resolveJsonModule": true,
+        // Aísla módulos para compatibilidad con herramientas modernas
+        "isolatedModules": true,
+        // No emite archivos de salida (solo chequeo y autocompletado)
+        "noEmit": true,
+        // Omite chequeo de tipos en dependencias
+        "skipLibCheck": true,
+        // Permite importaciones por defecto de módulos CommonJS
+        "esModuleInterop": true,
+        // Permite importaciones sintéticas por defecto
+        "allowSyntheticDefaultImports": true,
+        // Fuerza el uso consistente de mayúsculas/minúsculas en imports
+        "forceConsistentCasingInFileNames": true,
+        // Base para los paths personalizados
+        "baseUrl": ".",
+        // Alias de paths para imports limpios y mantenibles
+        "paths": {
+            "@/*": ["./src/*"],
+            "@components/*": ["./src/components/*"],
+            "@hooks/*": ["./src/hooks/*"],
+            "@services/*": ["./src/services/*"],
+            "@data/*": ["./src/data/*"]
+        }
+    },
+    // Archivos y carpetas incluidos en el scope del proyecto
+    "include": [
+        "src/**/*",
+        "vite.config.js",
+        "tailwind.config.js",
+        "postcss.config.js"
+    ],
+    // Exclusiones para evitar chequeo en dependencias y builds
+    "exclude": [
+        "node_modules",
+        "dist",
+        "coverage"
+    ]
+}
+
+// --- SUGERENCIAS DE MEJORA PROFESIONAL ---
+// 1. Si se migra a TypeScript, usar tsconfig.json y tipado estricto.
+// 2. Revisar y actualizar paths si se reorganiza la estructura de carpetas.
+// 3. Añadir paths para utilidades, contextos o assets si se usan frecuentemente.
+// 4. Documentar en README el uso de alias y convenciones de imports.
+// 5. Validar que las exclusiones cubran todos los directorios de builds temporales.
+// 6. Si se usan tests, incluir la carpeta de tests en include/exclude según convenga.
+// 7. Mantener la configuración alineada con la del bundler (Vite/Webpack).
+// 8. Revisar periódicamente las opciones de ECMAScript soportadas por el entorno.

@@ -1,0 +1,43 @@
+# .gitmessage - Template profesional para mensajes de commit Axon.App
+# ================================================================
+# Estandariza los mensajes de commit para mejorar la trazabilidad y colaboración.
+#
+# Instrucciones:
+# 1. Primera línea: tipo y descripción breve (máx. 50 caracteres)
+# 2. Segunda línea: en blanco
+# 3. Cuerpo: explicación detallada (máx. 72 caracteres por línea)
+#
+# --- TIPOS DE COMMIT PROFESIONALES ---
+# feat:     Nueva funcionalidad
+# fix:      Corrección de bug
+# docs:     Cambios en documentación
+# style:    Cambios de formato (espacios, comas, etc)
+# refactor: Refactorización de código
+# perf:     Mejoras de rendimiento
+# test:     Agregar o modificar tests
+# chore:    Cambios en build, dependencias, etc
+#
+# --- EJEMPLOS PROFESIONALES ---
+# feat: agregar validación de formulario de contacto
+# fix: corregir error en cálculo de totales
+# docs: actualizar README con instrucciones de instalación
+# style: aplicar formato consistente en componentes
+# refactor: extraer lógica de autenticación a hook personalizado
+# perf: optimizar renderizado de lista de productos
+# test: agregar tests unitarios para utilidades de fecha
+# chore: actualizar dependencias a versiones LTS
+#
+# --- REGLAS PARA COMMITS PROFESIONALES ---
+# 1. Primera línea: máximo 50 caracteres
+# 2. Segunda línea: en blanco
+# 3. Descripción: máximo 72 caracteres por línea
+# 4. Usar imperativo: "agregar" no "agregado"
+# 5. Sin punto final en la primera línea
+# 6. Ser específico pero conciso
+#
+# --- SUGERENCIAS DE MEJORA PROFESIONAL ---
+# 1. Revisar y actualizar este template según necesidades del equipo.
+# 2. Añadir ejemplos de commits multi-línea y con referencias a issues.
+# 3. Documentar el uso de este template en el README del proyecto.
+# 4. Integrar herramientas de linting de commits (commitlint, husky).
+# 5. Fomentar el uso de mensajes claros y consistentes en todo el equipo.

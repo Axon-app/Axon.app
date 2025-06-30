@@ -1,0 +1,112 @@
+{
+    // === Configuración de tareas automatizadas para Axon.App ===
+    "version": "2.0.0",
+    "tasks": [
+        // Inicia el servidor de desarrollo con Vite
+        {
+            "label": "dev",
+            "type": "shell",
+            "command": "npm run dev",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "isBackground": true,
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "clear": false
+            },
+            "problemMatcher": {
+                "owner": "typescript",
+                "pattern": "$tsc",
+                "background": {
+                    "activeOnStart": true,
+                    "beginsPattern": ".",
+                    "endsPattern": "ready in"
+                }
+            }
+        },
+        // Compila el proyecto para producción
+        {
+            "label": "build",
+            "type": "shell",
+            "command": "npm run build",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "clear": true
+            },
+            "problemMatcher": ["$tsc"]
+        },
+        // Previsualiza el build de producción (requiere build previo)
+        {
+            "label": "preview",
+            "type": "shell",
+            "command": "npm run preview",
+            "group": "test",
+            "dependsOn": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
+            "problemMatcher": []
+        },
+        // Ejecuta el análisis de código con ESLint
+        {
+            "label": "lint",
+            "type": "shell",
+            "command": "npm run lint",
+            "group": "test",
+            "problemMatcher": ["$eslint-stylish"]
+        },
+        // Ejecuta ESLint y corrige errores automáticamente
+        {
+            "label": "lint:fix",
+            "type": "shell",
+            "command": "npm run lint -- --fix",
+            "group": "test",
+            "problemMatcher": ["$eslint-stylish"]
+        },
+        // Limpia la carpeta dist (Windows PowerShell)
+        {
+            "label": "clean",
+            "type": "shell",
+            "command": "Remove-Item -Path dist -Recurse -Force -ErrorAction SilentlyContinue",
+            "group": "build",
+            "problemMatcher": []
+        },
+        // Limpia y luego compila el proyecto
+        {
+            "label": "clean:build",
+            "type": "shell",
+            "command": "Remove-Item -Path dist -Recurse -Force -ErrorAction SilentlyContinue && npm run build",
+            "group": "build",
+            "problemMatcher": ["$tsc"]
+        },
+        // Instala las dependencias del proyecto
+        {
+            "label": "install",
+            "type": "shell",
+            "command": "npm install",
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
+            "problemMatcher": []
+        }
+    ]
+}

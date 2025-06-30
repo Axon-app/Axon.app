@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<!-- Axon.App - Version 2025062301 - Deploy Test -->
+<!--
+  Archivo principal HTML para la SPA de Axon.App
+  - Incluye configuración SEO, accesibilidad, seguridad y optimización de recursos.
+  - Cumple con buenas prácticas modernas para aplicaciones web profesionales.
+-->
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+
+    <!-- Google Fonts - Fuentes principales para UI y branding -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Favicon y Iconos para diferentes dispositivos y navegadores -->
+    <link rel="icon" type="image/png" href="favicon.png?v=2025062301" />
+    <link rel="icon" type="image/x-icon" href="favicon.ico?v=2025062301" />
+    <link rel="shortcut icon" href="favicon.ico?v=2025062301" />
+    <link rel="apple-touch-icon" sizes="180x180" href="favicon.png?v=2025061902" />
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon.png?v=2025061902" />
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon.png?v=2025061902" />
+    <meta name="theme-color" content="#1f2937" />
+
+    <!-- Viewport y Configuración Básica para responsive design -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Content Security Policy (CSP) -->
+    <!--
+      Nota: 'unsafe-inline' y 'unsafe-eval' solo deben usarse si es estrictamente necesario.
+      Para máxima seguridad, migrar scripts y estilos a archivos externos y eliminar estos valores.
+    -->
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="
+      default-src 'self';
+      script-src 'self' 'unsafe-inline' 'unsafe-eval';
+      style-src 'self' 'unsafe-inline'
+        https://fonts.googleapis.com
+        https://www.gstatic.com;
+      img-src 'self' data: https: blob:;
+      font-src 'self'
+        https://fonts.gstatic.com
+        https://fonts.googleapis.com;
+      connect-src 'self';
+      form-action 'self';"
+    />
+
+    <!-- Meta Tags SEO Básicos -->
+    <title>
+      Axon.App - Desarrollo Web Profesional | Soluciones Tecnológicas Innovadoras
+    </title>
+    <meta
+      name="description"
+      content="Axon.App ofrece desarrollo web profesional, aplicaciones móviles, inteligencia artificial y soluciones cloud. Transformamos ideas en realidad digital con tecnologías de vanguardia."
+    />
+    <meta
+      name="keywords"
+      content="desarrollo web, aplicaciones móviles, inteligencia artificial, cloud computing, React, Node.js, Python, full-stack, tecnología, innovación"
+    />
+    <meta name="author" content="Axon.App" />
+    <meta name="robots" content="index, follow" />
+
+    <!-- Open Graph / Facebook para compartir en redes sociales -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="/" />
+    <meta property="og:title" content="Axon.App - Desarrollo Web Profesional" />
+    <meta
+      property="og:description"
+      content="Transformamos ideas en realidad digital. Desarrollo web, apps móviles, IA y soluciones cloud con tecnologías de vanguardia."
+    />
+    <meta property="og:image" content="/og-image.png?v=2025061401" />
+    <meta property="og:image:alt" content="Axon.App - Desarrollo Web Profesional" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:site_name" content="Axon.App" />
+    <meta property="og:locale" content="es_ES" />
+
+    <!-- Twitter Card para previsualización en Twitter/X -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content="/" />
+    <meta name="twitter:title" content="Axon.App - Desarrollo Web Profesional" />
+    <meta name="twitter:description" content="Transformamos ideas en realidad digital. Desarrollo web, apps móviles, IA y soluciones cloud." />
+    <meta name="twitter:image" content="/redes.png?v=2025061401" />
+    <meta name="twitter:image:alt" content="Axon.App - Desarrollo Web Profesional" />
+    <meta name="twitter:creator" content="@axonapp_co" />
+    <meta name="twitter:site" content="@axonapp_co" />
+
+    <!-- LinkedIn (usa Open Graph) -->
+    <meta property="og:image:secure_url" content="/redes.png?v=2025061401" />
+
+    <!-- WhatsApp Optimized (imagen cuadrada) -->
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="whatsapp:image" content="/whatsapp-image.png" />
+    <meta name="whatsapp:title" content="Axon.App - Desarrollo Web" />
+    <meta name="whatsapp:description" content="Soluciones tecnológicas innovadoras con logo claro y profesional" />
+
+    <!-- Canonical URL para SEO -->
+    <link rel="canonical" href="/" />
+
+    <!-- Schema.org Structured Data para SEO avanzado -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "Axon.App",
+        "url": "/",
+        "logo": "/logo1.png",
+        "description": "Empresa de desarrollo web profesional, aplicaciones móviles e inteligencia artificial",
+        "address": {
+          "@type": "PostalAddress",
+          "addressCountry": "CO"
+        },
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "telephone": "+57-323-393-2071",
+          "contactType": "customer service",
+          "email": "axonapp.info@gmail.com"
+        },
+        "sameAs": [
+          "https://www.instagram.com/axonapp_co/",
+          "https://x.com/axonapp_co",
+          "https://www.linkedin.com/company/axonapp-co/"
+        ],
+        "serviceType": [
+          "Desarrollo Web",
+          "Aplicaciones Móviles",
+          "Inteligencia Artificial",
+          "Cloud Computing"
+        ],
+        "areaServed": "CO"
+      }
+    </script>
+    <link rel="manifest" href="site.webmanifest" />
+  </head>
+  <body>
+    <!-- Contenedor principal de la SPA React -->
+    <div id="root"></div>
+    <!-- Entrada principal de la aplicación React/Vite -->
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
+
+<!--
+  --- SUGERENCIAS DE MEJORA PROFESIONAL ---
+  1. Migrar la política CSP para eliminar 'unsafe-inline' y 'unsafe-eval' si es posible.
+  2. Añadir etiquetas meta para accesibilidad (ej: <meta name="color-scheme" content="dark light">).
+  3. Incluir etiquetas meta para PWA avanzada (display, orientation, etc.).
+  4. Validar que las imágenes referenciadas existan y estén optimizadas.
+  5. Añadir soporte multi-idioma (hreflang, alternate).
+  6. Incluir metaetiquetas para dispositivos Apple y Android adicionales.
+  7. Documentar en README la estructura y propósito de este archivo.
+  8. Automatizar la actualización de versiones en los recursos (favicon, imágenes) en el flujo CI/CD.
+  9. Añadir test de validación HTML en el pipeline de CI.
+  10. Revisar y actualizar periódicamente las mejores prácticas SEO y accesibilidad.
+-->
