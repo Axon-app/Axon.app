@@ -1,4 +1,4 @@
-import { UnifiedContactForm } from "../forms/UnifiedContactForm";
+import { UnifiedContactForm } from '../forms/UnifiedContactForm';
 
 // --- Modal de Contacto Unificado ---
 // Muestra un formulario de contacto general en un modal accesible y profesional.
@@ -28,11 +28,9 @@ export const ContactModal = ({ isOpen, onClose }) => {
                     d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
                   ></path>
                 </svg>
-              </div>{" "}
+              </div>{' '}
               <div>
-                <h2 className="text-xl font-bold text-white">
-                  Información y Contacto
-                </h2>
+                <h2 className="text-xl font-bold text-white">Información y Contacto</h2>
                 <p className="text-gray-400 text-sm">
                   ¿Tienes alguna pregunta? Estamos aquí para ayudarte
                 </p>
@@ -95,10 +93,8 @@ export const QuoteModal = ({ isOpen, onClose }) => {
                 </svg>
               </div>
               <div>
-                {" "}
-                <h2 className="text-xl font-bold text-white">
-                  Solicitar Propuesta
-                </h2>
+                {' '}
+                <h2 className="text-xl font-bold text-white">Solicitar Propuesta</h2>
                 <p className="text-gray-400 text-sm">
                   Describe tu proyecto y obtén una estimación personalizada
                 </p>
@@ -161,9 +157,7 @@ export const ConsultationModal = ({ isOpen, onClose }) => {
                 </svg>
               </div>
               <div>
-                <h2 className="text-xl font-bold text-white">
-                  Programar Consulta
-                </h2>
+                <h2 className="text-xl font-bold text-white">Programar Consulta</h2>
                 <p className="text-gray-400 text-sm">
                   Agenda una consulta gratuita con nuestros expertos
                 </p>

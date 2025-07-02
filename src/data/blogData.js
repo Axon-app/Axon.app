@@ -18,8 +18,9 @@
 export const blogPosts = [
   {
     id: 1,
-    title: "El Futuro del Desarrollo Web: Tendencias 2025",
-    excerpt: "Descubre las tecnologías y tendencias que están moldeando el futuro del desarrollo web en 2025.",
+    title: 'El Futuro del Desarrollo Web: Tendencias 2025',
+    excerpt:
+      'Descubre las tecnologías y tendencias que están moldeando el futuro del desarrollo web en 2025.',
     content: `
 # El Futuro del Desarrollo Web: Tendencias 2025
 
@@ -74,17 +75,17 @@ El futuro del desarrollo web es emocionante. En Axon.App, nos mantenemos a la va
 
 ¿Quieres saber cómo podemos ayudarte a implementar estas tecnologías en tu proyecto? ¡Contáctanos!
     `,
-    author: "Equipo Axon.App",
-    date: "2025-06-15",
-    readTime: "5 min",
-    tags: ["Desarrollo Web", "Tendencias", "Tecnología"],
-    image: "/blog-future-web.jpg",
-    featured: true
+    author: 'Equipo Axon.App',
+    date: '2025-06-15',
+    readTime: '5 min',
+    tags: ['Desarrollo Web', 'Tendencias', 'Tecnología'],
+    image: '/blog-future-web.jpg',
+    featured: true,
   },
   {
     id: 2,
-    title: "Optimización de Performance en React: Guía Completa",
-    excerpt: "Aprende técnicas avanzadas para optimizar el rendimiento de tus aplicaciones React.",
+    title: 'Optimización de Performance en React: Guía Completa',
+    excerpt: 'Aprende técnicas avanzadas para optimizar el rendimiento de tus aplicaciones React.',
     content: `
 # Optimización de Performance en React: Guía Completa
 
@@ -154,17 +155,17 @@ const MiLista = ({ items }) => (
 
 La optimización de performance es un proceso continuo. En Axon.App implementamos estas técnicas desde el inicio del desarrollo.
     `,
-    author: "Equipo Axon.App",
-    date: "2025-06-10",
-    readTime: "8 min",
-    tags: ["React", "Performance", "Optimización"],
-    image: "/blog-react-performance.jpg",
-    featured: false
+    author: 'Equipo Axon.App',
+    date: '2025-06-10',
+    readTime: '8 min',
+    tags: ['React', 'Performance', 'Optimización'],
+    image: '/blog-react-performance.jpg',
+    featured: false,
   },
   {
     id: 3,
-    title: "Introducción a la Inteligencia Artificial en Aplicaciones Web",
-    excerpt: "Cómo integrar IA en tus aplicaciones web para crear experiencias más inteligentes.",
+    title: 'Introducción a la Inteligencia Artificial en Aplicaciones Web',
+    excerpt: 'Cómo integrar IA en tus aplicaciones web para crear experiencias más inteligentes.',
     content: `
 # Introducción a la Inteligencia Artificial en Aplicaciones Web
 
@@ -230,17 +231,17 @@ const prediccion = modelo.predict(datos);
 
 En Axon.App, estamos especializados en integrar IA de manera efectiva y segura en aplicaciones web.
     `,
-    author: "Equipo Axon.App",
-    date: "2025-06-05",
-    readTime: "6 min",
-    tags: ["Inteligencia Artificial", "Machine Learning", "Innovación"],
-    image: "/blog-ai-web.jpg",
-    featured: true
+    author: 'Equipo Axon.App',
+    date: '2025-06-05',
+    readTime: '6 min',
+    tags: ['Inteligencia Artificial', 'Machine Learning', 'Innovación'],
+    image: '/blog-ai-web.jpg',
+    featured: true,
   },
   {
     id: 4,
-    title: "Seguridad en Aplicaciones Web: Mejores Prácticas 2025",
-    excerpt: "Protege tus aplicaciones web con las mejores prácticas de seguridad actualizadas.",
+    title: 'Seguridad en Aplicaciones Web: Mejores Prácticas 2025',
+    excerpt: 'Protege tus aplicaciones web con las mejores prácticas de seguridad actualizadas.',
     content: `
 # Seguridad en Aplicaciones Web: Mejores Prácticas 2025
 
@@ -336,13 +337,13 @@ const verifyToken = (token) => {
 
 En Axon.App, la seguridad es nuestra prioridad. Implementamos todas estas prácticas en cada proyecto.
     `,
-    author: "Equipo Axon.App",
-    date: "2025-06-01",
-    readTime: "10 min",
-    tags: ["Seguridad", "Ciberseguridad", "Desarrollo Web"],
-    image: "/blog-security.jpg",
-    featured: false
-  }
+    author: 'Equipo Axon.App',
+    date: '2025-06-01',
+    readTime: '10 min',
+    tags: ['Seguridad', 'Ciberseguridad', 'Desarrollo Web'],
+    image: '/blog-security.jpg',
+    featured: false,
+  },
 ];
 
 // --- Utilidades para acceder a los posts del blog ---
@@ -372,7 +373,7 @@ export const getRecentPosts = (limit = 3) => {
  * @param {number|string} id - ID del post
  * @returns {Object|undefined} Post encontrado o undefined
  */
-export const getPostById = (id) => {
+export const getPostById = id => {
   return blogPosts.find(post => post.id === parseInt(id));
 };
 
@@ -381,11 +382,9 @@ export const getPostById = (id) => {
  * @param {string} tag - Tag a buscar
  * @returns {Array} Array de posts que contienen el tag
  */
-export const getPostsByTag = (tag) => {
+export const getPostsByTag = tag => {
   return blogPosts.filter(post =>
-    post.tags.some(postTag =>
-      postTag.toLowerCase().includes(tag.toLowerCase())
-    )
+    post.tags.some(postTag => postTag.toLowerCase().includes(tag.toLowerCase()))
   );
 };
 
@@ -394,12 +393,13 @@ export const getPostsByTag = (tag) => {
  * @param {string} query - Texto de búsqueda
  * @returns {Array} Array de posts que coinciden con la búsqueda
  */
-export const searchPosts = (query) => {
+export const searchPosts = query => {
   const searchQuery = query.toLowerCase();
-  return blogPosts.filter(post =>
-    post.title.toLowerCase().includes(searchQuery) ||
-    post.excerpt.toLowerCase().includes(searchQuery) ||
-    post.tags.some(tag => tag.toLowerCase().includes(searchQuery))
+  return blogPosts.filter(
+    post =>
+      post.title.toLowerCase().includes(searchQuery) ||
+      post.excerpt.toLowerCase().includes(searchQuery) ||
+      post.tags.some(tag => tag.toLowerCase().includes(searchQuery))
   );
 };
 

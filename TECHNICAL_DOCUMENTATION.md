@@ -3,6 +3,7 @@
 <!-- Última actualización: 29/06/2025 -->
 
 # 🆕 REGISTRO DE CAMBIOS RECIENTES
+
 - [29/06/2025] Integración de GitHub Copilot y creación de `COPILOT_PROJECT_GUIDE.md` para registro de contexto y cambios.
 - [29/06/2025] Revisión y actualización de documentación técnica, mejores prácticas y flujos de trabajo.
 - [29/06/2025] Revisión profesional y optimización de todos los archivos fuente y de configuración principales del proyecto (componentes, hooks, datos, servicios, estilos, scripts y configuración).
@@ -15,21 +16,25 @@
 - [29/06/2025] Todas las acciones se realizaron mediante herramientas de edición automatizada, asegurando trazabilidad y registro de los cambios.
 
 # 🤖 INTEGRACIÓN DE GITHUB COPILOT
+
 - Copilot está instalado y activo en VS Code.
 - Se creó el archivo `COPILOT_PROJECT_GUIDE.md` en la raíz para registrar contexto, cambios y recomendaciones.
 - Se recomienda actualizar ese archivo con cada cambio relevante para mantener el contexto claro y evitar errores.
 
 # 🔄 FLUJO DE CI/CD
+
 - El proyecto utiliza GitHub Actions (`.github/workflows/deploy.yml`) para validación, build y despliegue automático a GitHub Pages en cada push a `main`.
 - El workflow incluye validación de lint, build, verificación de artefactos y despliegue seguro.
 
 # 🏆 MEJORES PRÁCTICAS Y RECOMENDACIONES
+
 - Ejecutar `npm run lint` y `npm run lint:fix` antes de cada commit.
 - Mantener la documentación y comentarios actualizados.
 - No exponer secretos ni variables sensibles en el código ni en archivos públicos.
 - Usar el archivo `COPILOT_PROJECT_GUIDE.md` como referencia para Copilot y el equipo.
 
 # 📅 FECHA DE ÚLTIMA ACTUALIZACIÓN
+
 - 29 de junio de 2025
 
 ---
@@ -49,9 +54,9 @@
 ```
 Axon/
 ├── 📁 public/                           # Archivos estáticos públicos
-│   ├── 🖼️ logo1.png                      # Logo principal
-│   ├── 🖼️ logo231.png                    # Logo alternativo
-│   ├── 🖼️ redes.png                      # Imagen para redes sociales
+│   ├── 🖼️ axon-logo-principal.png                      # Logo principal
+│   ├── 🖼️ axon-logo-secundario.png                    # Logo alternativo
+│   ├── 🖼️ banner-redes-sociales.png                      # Imagen para redes sociales
 │   ├── 📄 favicon.ico & favicon.png     # Favicons
 │   └── 📄 site.webmanifest              # Manifiesto PWA
 ├── 📁 src/                              # Código fuente
@@ -83,6 +88,7 @@ Axon/
 ## 🛠️ TECNOLOGÍAS Y DEPENDENCIAS
 
 ### 📦 Dependencias Principales
+
 ```json
 {
   "react": "^18.2.0",
@@ -91,6 +97,7 @@ Axon/
 ```
 
 ### 🔧 Dependencias de Desarrollo
+
 ```json
 {
   "@vitejs/plugin-react": "^4.4.1",
@@ -116,65 +123,73 @@ Axon/
 ## 📋 COMPONENTES PRINCIPALES
 
 ### 🏠 App.jsx - Componente Raíz
+
 **Ubicación:** `src/App.jsx`
 **Función:** Componente principal que maneja todo el estado global
 **Responsabilidades:**
+
 - ✅ Gestión de estados de modales
 - ✅ Navegación y secciones activas
 - ✅ Integración de todos los componentes
 - ✅ Manejo de eventos globales
 
 ### 🎯 Componentes de UI (src/components/ui/)
-| Componente | Función | Estado |
-|------------|---------|--------|
-| `BasicComponents.jsx` | Logo, botones básicos, fondos | ✅ Documentado |
-| `Cards.jsx` | Tarjetas de servicios y testimonios | ✅ Documentado |
-| `Interactive.jsx` | Contadores, carruseles, animaciones | ✅ Documentado |
-| `EmailLink.jsx` | Selector de cliente de email | ✅ Documentado |
-| `SuspenseLoader.jsx` | Loader para suspense | 🟡 Documentado, pendiente implementación |
-| `ClientCard.jsx` | Tarjeta de cliente | ✅ Documentado |
+
+| Componente            | Función                             | Estado                                   |
+| --------------------- | ----------------------------------- | ---------------------------------------- |
+| `BasicComponents.jsx` | Logo, botones básicos, fondos       | ✅ Documentado                           |
+| `Cards.jsx`           | Tarjetas de servicios y testimonios | ✅ Documentado                           |
+| `Interactive.jsx`     | Contadores, carruseles, animaciones | ✅ Documentado                           |
+| `EmailLink.jsx`       | Selector de cliente de email        | ✅ Documentado                           |
+| `SuspenseLoader.jsx`  | Loader para suspense                | 🟡 Documentado, pendiente implementación |
+| `ClientCard.jsx`      | Tarjeta de cliente                  | ✅ Documentado                           |
 
 ### 📝 Formularios (src/components/forms/)
-| Componente | Función | Estado |
-|------------|---------|--------|
+
+| Componente               | Función                              | Estado    |
+| ------------------------ | ------------------------------------ | --------- |
 | `UnifiedContactForm.jsx` | Formulario unificado multi-propósito | ✅ Activo |
 
 ### 🪟 Modales (src/components/modals/)
-| Modal | Función | Estado |
-|-------|---------|--------|
-| `UnifiedModals.jsx` | Modales de contacto, cotización, consulta | ✅ Activo |
-| `PrivacyModal.jsx` | Modal de política de privacidad | ✅ Activo |
-| `TermsModal.jsx` | Modal de términos y condiciones | ✅ Activo |
-| `CookiesModal.jsx` | Modal de políticas de cookies | ✅ Activo |
-| `ServiceModal.jsx` | Modal de detalles de servicios | ✅ Activo |
-| `BlogModal.jsx` | Modal para posts del blog | ✅ Activo |
-| `ConsultationModal.jsx` | Modal de consulta | ✅ Activo |
-| `QuoteModal.jsx` | Modal de cotización | ✅ Activo |
+
+| Modal                   | Función                                   | Estado    |
+| ----------------------- | ----------------------------------------- | --------- |
+| `UnifiedModals.jsx`     | Modales de contacto, cotización, consulta | ✅ Activo |
+| `PrivacyModal.jsx`      | Modal de política de privacidad           | ✅ Activo |
+| `TermsModal.jsx`        | Modal de términos y condiciones           | ✅ Activo |
+| `CookiesModal.jsx`      | Modal de políticas de cookies             | ✅ Activo |
+| `ServiceModal.jsx`      | Modal de detalles de servicios            | ✅ Activo |
+| `BlogModal.jsx`         | Modal para posts del blog                 | ✅ Activo |
+| `ConsultationModal.jsx` | Modal de consulta                         | ✅ Activo |
+| `QuoteModal.jsx`        | Modal de cotización                       | ✅ Activo |
 
 ---
 
 ## 🔗 HOOKS PERSONALIZADOS
 
 ### useModals.js
+
 **Ubicación:** `src/hooks/useModals.js`
 **Función:** Gestión centralizada de estados de modales
 **API:**
+
 ```javascript
 const {
-  contactModalOpen,           // boolean
-  quoteModalOpen,            // boolean
-  consultationModalOpen,     // boolean
-  openContactModal,          // function
-  openQuoteModal,           // function
-  openConsultationModal,    // function
-  closeContactModal,        // function
-  closeQuoteModal,          // function
-  closeConsultationModal,   // function
-  closeAllModals           // function
+  contactModalOpen, // boolean
+  quoteModalOpen, // boolean
+  consultationModalOpen, // boolean
+  openContactModal, // function
+  openQuoteModal, // function
+  openConsultationModal, // function
+  closeContactModal, // function
+  closeQuoteModal, // function
+  closeConsultationModal, // function
+  closeAllModals, // function
 } = useModals();
 ```
 
 ### useEmailSelector.js
+
 **Ubicación:** `src/hooks/useEmailSelector.js`
 **Función:** Manejo de selección de clientes de email
 **Estado:** ✅ Activo
@@ -184,16 +199,20 @@ const {
 ## 📊 DATOS Y CONFIGURACIÓN
 
 ### content.js
+
 **Ubicación:** `src/data/content.js`
 **Contenido:**
+
 - ✅ Array de tecnologías (55+ items)
 - ✅ Testimonios de clientes
 - ✅ Constantes de categorías y niveles
 - ✅ Índices optimizados para búsqueda
 
 ### servicesData.js
+
 **Ubicación:** `src/data/servicesData.js`
 **Contenido:**
+
 - ✅ Servicios completos con descripciones
 - ✅ Precios y características
 - ✅ Tecnologías por servicio
@@ -203,6 +222,7 @@ const {
 ## ⚙️ CONFIGURACIÓN
 
 ### Vite (vite.config.js)
+
 ```javascript
 // Características principales
 - Base path configurable por entorno
@@ -216,6 +236,7 @@ const {
 ```
 
 ### Tailwind (tailwind.config.js)
+
 ```javascript
 // Configuración personalizada
 - Fuentes custom (Orbitron, Rajdhani)
@@ -226,6 +247,7 @@ const {
 ```
 
 ### PostCSS (postcss.config.js)
+
 ```javascript
 // Plugins principales
 - Tailwind CSS
@@ -234,6 +256,7 @@ const {
 ```
 
 ### jsconfig.json
+
 ```jsonc
 // Configuración de paths y autocompletado
 - Alias para imports (@, @components, @hooks, etc.)
@@ -241,11 +264,10 @@ const {
 ```
 
 ### index.html
+
 ```html
-// Plantilla HTML principal
-- Metaetiquetas SEO, Open Graph, Twitter, WhatsApp
-- Política CSP documentada
-- Comentarios profesionales y sugerencias de mejora
+// Plantilla HTML principal - Metaetiquetas SEO, Open Graph, Twitter, WhatsApp - Política CSP
+documentada - Comentarios profesionales y sugerencias de mejora
 ```
 
 ---
@@ -254,14 +276,15 @@ const {
 
 ### ✅ Tests Realizados
 
-| Test | Resultado | Fecha |
-|------|-----------|-------|
-| ESLint (sin errores) | ✅ PASS | 29/06/2025 |
-| Build de producción | ✅ PASS | 29/06/2025 |
-| Carga de dependencias | ✅ PASS | 29/06/2025 |
-| Optimización de assets | ✅ PASS | 29/06/2025 |
+| Test                   | Resultado | Fecha      |
+| ---------------------- | --------- | ---------- |
+| ESLint (sin errores)   | ✅ PASS   | 29/06/2025 |
+| Build de producción    | ✅ PASS   | 29/06/2025 |
+| Carga de dependencias  | ✅ PASS   | 29/06/2025 |
+| Optimización de assets | ✅ PASS   | 29/06/2025 |
 
 ### 📈 Métricas de Build
+
 ```
 📦 Tamaño de archivos finales:
 - index.html: 5.85 kB (1.72 kB gzipped)
@@ -274,25 +297,26 @@ const {
 
 ## 🔧 SCRIPTS DISPONIBLES
 
-| Script | Comando | Función |
-|--------|---------|---------|
-| Desarrollo | `npm run dev` | Servidor de desarrollo |
-| Build | `npm run build` | Build de producción |
-| Preview | `npm run preview` | Preview del build |
-| Lint | `npm run lint` | Análisis de código |
-| Lint Fix | `npm run lint:fix` | Corrección automática de lint |
-| Clean | `npm run clean` | Limpiar directorio dist |
-| Clean Modules | `npm run clean:modules` | Limpiar node_modules |
-| Clean All | `npm run clean:all` | Limpieza total (dist, node_modules, lock) |
-| Clean Build | `npm run clean:build` | Limpia y recompila |
-| Analyze | `npm run analyze` | Visualización de bundle |
-| Deploy | `npm run deploy` | Despliegue a GitHub Pages |
+| Script        | Comando                 | Función                                   |
+| ------------- | ----------------------- | ----------------------------------------- |
+| Desarrollo    | `npm run dev`           | Servidor de desarrollo                    |
+| Build         | `npm run build`         | Build de producción                       |
+| Preview       | `npm run preview`       | Preview del build                         |
+| Lint          | `npm run lint`          | Análisis de código                        |
+| Lint Fix      | `npm run lint:fix`      | Corrección automática de lint             |
+| Clean         | `npm run clean`         | Limpiar directorio dist                   |
+| Clean Modules | `npm run clean:modules` | Limpiar node_modules                      |
+| Clean All     | `npm run clean:all`     | Limpieza total (dist, node_modules, lock) |
+| Clean Build   | `npm run clean:build`   | Limpia y recompila                        |
+| Analyze       | `npm run analyze`       | Visualización de bundle                   |
+| Deploy        | `npm run deploy`        | Despliegue a GitHub Pages                 |
 
 ---
 
 ## 📝 COMENTARIOS EN CÓDIGO
 
 ### ✅ Archivos Completamente Documentados:
+
 - [x] `src/App.jsx` - Componente principal con comentarios detallados
 - [x] `src/main.jsx` - Punto de entrada documentado
 - [x] `src/hooks/useModals.js` - Hook completamente documentado
@@ -307,6 +331,7 @@ const {
 - [x] `generate-whatsapp-preview.cjs` - Script documentado y optimizado
 
 ### 📋 Convenciones de Comentarios:
+
 ```javascript
 /**
  * TÍTULO DEL COMPONENTE/FUNCIÓN
@@ -326,6 +351,7 @@ const {
 ## 🚀 ESTADO ACTUAL DEL PROYECTO
 
 ### ✅ Completado:
+
 - [x] Limpieza completa de código
 - [x] Documentación técnica exhaustiva
 - [x] Comentarios en archivos principales
@@ -337,6 +363,7 @@ const {
 - [x] Confirmación de ausencia de código malicioso
 
 ### 🔄 Ready para Deploy:
+
 - [x] Build exitoso sin errores
 - [x] Linting sin warnings
 - [x] Código documentado y seguro
@@ -354,4 +381,4 @@ const {
 
 ---
 
-*Documentación generada y actualizada automáticamente por GitHub Copilot - Última actualización: 29/06/2025*
+_Documentación generada y actualizada automáticamente por GitHub Copilot - Última actualización: 29/06/2025_

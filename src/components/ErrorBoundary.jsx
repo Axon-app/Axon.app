@@ -4,7 +4,7 @@
 // Muestra un mensaje amigable y permite recuperación.
 // Autor: Axon.App Team | Última revisión: 29/06/2025
 
-import React from "react";
+import React from 'react';
 
 class ErrorBoundary extends React.Component {
   constructor(props) {
@@ -59,7 +59,10 @@ class ErrorBoundary extends React.Component {
           >
             {reloadLabel || 'Recargar página'}
           </button>
-          <details className="mt-4 text-left w-full max-w-xl mx-auto bg-white p-4 rounded shadow" style={{ whiteSpace: 'pre-wrap' }}>
+          <details
+            className="mt-4 text-left w-full max-w-xl mx-auto bg-white p-4 rounded shadow"
+            style={{ whiteSpace: 'pre-wrap' }}
+          >
             <summary className="cursor-pointer font-semibold">Detalles técnicos</summary>
             {this.state.error && this.state.error.toString()}
             <br />

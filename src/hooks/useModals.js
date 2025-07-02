@@ -23,7 +23,7 @@
  * @version 2.4.0
  */
 
-import { useState } from "react";
+import { useState } from 'react';
 
 /**
  * Hook para manejar los modales de formularios
@@ -32,8 +32,8 @@ import { useState } from "react";
  */
 export const useModals = () => {
   // --- Estados de los modales ---
-  const [contactModalOpen, setContactModalOpen] = useState(false);           // Modal de contacto
-  const [quoteModalOpen, setQuoteModalOpen] = useState(false);               // Modal de cotización
+  const [contactModalOpen, setContactModalOpen] = useState(false); // Modal de contacto
+  const [quoteModalOpen, setQuoteModalOpen] = useState(false); // Modal de cotización
   const [consultationModalOpen, setConsultationModalOpen] = useState(false); // Modal de consulta
 
   // --- Retorno: estados y funciones de control ---

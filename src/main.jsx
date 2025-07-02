@@ -35,7 +35,7 @@ createRoot(document.getElementById('root')).render(
         <App />
       </Suspense>
     </ErrorBoundary>
-  </StrictMode>,
+  </StrictMode>
 );
 
 // --- SUGERENCIAS DE MEJORA PROFESIONAL ---

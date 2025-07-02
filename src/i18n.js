@@ -7,26 +7,24 @@ const resources = {
   es: {
     translation: {
       welcome: '¡Bienvenido a Axon.App!',
-      loading: 'Cargando aplicación...'
-    }
+      loading: 'Cargando aplicación...',
+    },
   },
   en: {
     translation: {
       welcome: 'Welcome to Axon.App!',
-      loading: 'Loading application...'
-    }
-  }
+      loading: 'Loading application...',
+    },
+  },
 };
 
-i18n
-  .use(initReactI18next)
-  .init({
-    resources,
-    lng: 'es', // Idioma por defecto
-    fallbackLng: 'en',
-    interpolation: {
-      escapeValue: false
-    }
-  });
+i18n.use(initReactI18next).init({
+  resources,
+  lng: 'es', // Idioma por defecto
+  fallbackLng: 'en',
+  interpolation: {
+    escapeValue: false,
+  },
+});
 
 export default i18n;

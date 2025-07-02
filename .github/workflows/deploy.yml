@@ -10,26 +10,26 @@ on:
   push:
     branches: [main]
     paths-ignore:
-      - "**.md"
-      - ".vscode/**"
-      - ".github/*.md"
-      - "LICENSE"
-      - ".gitignore"
+      - '**.md'
+      - '.vscode/**'
+      - '.github/*.md'
+      - 'LICENSE'
+      - '.gitignore'
   pull_request:
     branches: [main]
     paths-ignore:
-      - "**.md"
-      - ".vscode/**"
-      - ".github/*.md"
-      - "LICENSE"
-      - ".gitignore"
+      - '**.md'
+      - '.vscode/**'
+      - '.github/*.md'
+      - 'LICENSE'
+      - '.gitignore'
   workflow_dispatch:
 
 # Variables de entorno globales
 env:
-  NODE_VERSION: "20"
-  HUSKY: "0"
-  CACHE_KEY_PREFIX: "v1" # Cambia este valor para invalidar la cache manualmente
+  NODE_VERSION: '20'
+  HUSKY: '0'
+  CACHE_KEY_PREFIX: 'v1' # Cambia este valor para invalidar la cache manualmente
 
 permissions:
   contents: read
@@ -42,7 +42,7 @@ concurrency:
 
 jobs:
   validate:
-    name: "Validar código y dependencias"
+    name: 'Validar código y dependencias'
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
@@ -75,7 +75,7 @@ jobs:
         run: npm run lint
 
   build:
-    name: "Build de producción"
+    name: 'Build de producción'
     needs: validate
     runs-on: ubuntu-latest
     timeout-minutes: 10
@@ -134,7 +134,7 @@ jobs:
           retention-days: 7
 
   deploy:
-    name: "Desplegar a GitHub Pages"
+    name: 'Desplegar a GitHub Pages'
     needs: build
     runs-on: ubuntu-latest
     timeout-minutes: 5

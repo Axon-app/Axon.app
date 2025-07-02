@@ -4,8 +4,9 @@
 // Incluye validaciones estrictas, sanitización y feedback visual.
 // Autor: Axon.App Team | Última revisión: 29/06/2025
 
-import React from "react";
-import { sendConsultationRequest } from "../../services/emailService";
+import React from 'react';
+import { sendConsultationRequest } from '../../services/emailService';
+import { SecurityValidators } from '../../utils/validators';
 
 // === UTILIDADES Y CONSTANTES ===
 /**
@@ -16,53 +17,13 @@ const generateTimeOptions = () => {
   const options = [];
   for (let hour = 9; hour <= 17; hour++) {
     for (let minute = 0; minute < 60; minute += 30) {
-      const time = `${hour.toString().padStart(2, "0")}:${minute
-        .toString()
-        .padStart(2, "0")}`;
+      const time = `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
       options.push(time);
     }
   }
   return options;
 };
 const TIME_OPTIONS = generateTimeOptions();
-
-/**
- * Sanitiza la entrada para prevenir XSS y SQL injection
- * @param {string} input
- * @returns {string} Entrada segura
- */
-const sanitizeInput = (input) => {
-  if (typeof input !== "string") return "";
-
-  return input
-    .trim()
-    .replace(/[<>]/g, "") // Eliminar caracteres HTML básicos
-    .replace(/['"]/g, "") // Eliminar comillas para prevenir SQL injection
-    .replace(/javascript:/gi, "") // Eliminar posibles scripts
-    .replace(/on\w+=/gi, "") // Eliminar event handlers
-    .substring(0, 1000); // Limitar longitud
-};
-
-/**
- * Valida formato de email
- * @param {string} email
- * @returns {boolean}
- */
-const isValidEmail = (email) => {
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  return emailRegex.test(email);
-};
-
-/**
- * Valida formato de teléfono colombiano
- * @param {string} phone
- * @returns {boolean}
- */
-const isValidPhone = (phone) => {
-  if (!phone) return true; // Campo opcional
-  const phoneRegex = /^(\+57|57)?[\s-]?[3][0-9]{9}$/;
-  return phoneRegex.test(phone.replace(/[\s-]/g, ""));
-};
 
 /**
  * ConsultationModal
@@ -75,87 +36,87 @@ const isValidPhone = (phone) => {
  */
 export const ConsultationModal = React.memo(({ isOpen, onClose }) => {
   const [formData, setFormData] = React.useState({
-    name: "",
-    email: "",
-    phone: "",
-    company: "",
-    clientType: "empresa", // empresa o persona-natural
-    city: "", // Campo obligatorio
-    consultationType: "", // Siempre inicia vacío
-    preferredDate: "",
-    preferredTime: "",
-    timezone: "",
-    topics: "",
-    questions: "",
-    meetingType: "video-call",
+    name: '',
+    email: '',
+    phone: '',
+    company: '',
+    clientType: 'empresa', // empresa o persona-natural
+    city: '', // Campo obligatorio
+    consultationType: '', // Siempre inicia vacío
+    preferredDate: '',
+    preferredTime: '',
+    timezone: '',
+    topics: '',
+    questions: '',
+    meetingType: 'video-call',
   });
 
   const [errors, setErrors] = React.useState({});
-  const [globalError, setGlobalError] = React.useState("");
+  const [globalError, setGlobalError] = React.useState('');
   const [isSubmitting, setIsSubmitting] = React.useState(false);
   const [submitStatus, setSubmitStatus] = React.useState(null);
 
   // Manejar escape key
   React.useEffect(() => {
-    const handleEscape = (event) => {
-      if (event.key === "Escape") {
+    const handleEscape = event => {
+      if (event.key === 'Escape') {
         onClose();
       }
     };
 
     if (isOpen) {
-      document.addEventListener("keydown", handleEscape);
-      document.body.style.overflow = "hidden";
+      document.addEventListener('keydown', handleEscape);
+      document.body.style.overflow = 'hidden';
     }
 
     return () => {
-      document.removeEventListener("keydown", handleEscape);
-      document.body.style.overflow = "unset";
+      document.removeEventListener('keydown', handleEscape);
+      document.body.style.overflow = 'unset';
     };
   }, [isOpen, onClose]); // Reset form cuando se abre/cierra
   React.useEffect(() => {
     if (isOpen) {
       // Resetear completamente el formulario
       setFormData({
-        name: "",
-        email: "",
-        phone: "",
-        company: "",
-        clientType: "empresa", // empresa o persona-natural
-        city: "", // Campo obligatorio
-        consultationType: "", // Siempre inicia vacío
-        preferredDate: "",
-        preferredTime: "",
-        timezone: "",
-        topics: "",
-        questions: "",
-        meetingType: "video-call",
+        name: '',
+        email: '',
+        phone: '',
+        company: '',
+        clientType: 'empresa', // empresa o persona-natural
+        city: '', // Campo obligatorio
+        consultationType: '', // Siempre inicia vacío
+        preferredDate: '',
+        preferredTime: '',
+        timezone: '',
+        topics: '',
+        questions: '',
+        meetingType: 'video-call',
       });
       setSubmitStatus(null);
       setErrors({});
-      setGlobalError("");
+      setGlobalError('');
     }
   }, [isOpen]);
 
   // Early return si no está abierto
   if (!isOpen) return null; // Manejar cambios en el formulario con sanitización simplificada
-  const handleInputChange = (e) => {
+  const handleInputChange = e => {
     const { name, value } = e.target;
 
     // Validación básica de longitud
     if (value.length > 1000) {
-      setGlobalError("El texto ingresado es demasiado largo.");
+      setGlobalError('El texto ingresado es demasiado largo.');
       return;
     }
 
-    setFormData((prev) => ({
+    setFormData(prev => ({
       ...prev,
       [name]: value,
     }));
 
     // Limpiar errores específicos del campo al modificarlo
     if (errors[name]) {
-      setErrors((prev) => {
+      setErrors(prev => {
         const newErrors = { ...prev };
         delete newErrors[name];
         return newErrors;
@@ -164,7 +125,7 @@ export const ConsultationModal = React.memo(({ isOpen, onClose }) => {
 
     // Limpiar error global si existe
     if (globalError) {
-      setGlobalError("");
+      setGlobalError('');
     }
   };
 
@@ -175,69 +136,66 @@ export const ConsultationModal = React.memo(({ isOpen, onClose }) => {
 
     // Campos obligatorios
     if (!formData.name.trim()) {
-      newErrors.name = "El nombre es obligatorio";
+      newErrors.name = 'El nombre es obligatorio';
       isValid = false;
     }
 
     if (!formData.email.trim()) {
-      newErrors.email = "El email es obligatorio";
+      newErrors.email = 'El email es obligatorio';
       isValid = false;
-    } else if (!isValidEmail(formData.email)) {
-      newErrors.email = "El email no tiene un formato válido";
+    } else if (!SecurityValidators.validateEmail(formData.email)) {
+      newErrors.email = 'El email no tiene un formato válido';
       isValid = false;
     }
 
     if (!formData.city.trim()) {
-      newErrors.city = "La ciudad es obligatoria";
+      newErrors.city = 'La ciudad es obligatoria';
       isValid = false;
     }
 
     if (!formData.consultationType.trim()) {
-      newErrors.consultationType = "Debe seleccionar un tipo de consulta";
+      newErrors.consultationType = 'Debe seleccionar un tipo de consulta';
       isValid = false;
     }
 
     if (!formData.preferredDate) {
-      newErrors.preferredDate = "La fecha es obligatoria";
+      newErrors.preferredDate = 'La fecha es obligatoria';
       isValid = false;
     }
 
     if (!formData.preferredTime) {
-      newErrors.preferredTime = "La hora es obligatoria";
+      newErrors.preferredTime = 'La hora es obligatoria';
       isValid = false;
     }
 
     if (!formData.timezone) {
-      newErrors.timezone = "La zona horaria es obligatoria";
+      newErrors.timezone = 'La zona horaria es obligatoria';
       isValid = false;
     }
 
     if (!formData.topics.trim()) {
-      newErrors.topics = "Debe describir los temas a tratar";
+      newErrors.topics = 'Debe describir los temas a tratar';
       isValid = false;
     }
 
     // Validación de teléfono si se proporciona
-    if (formData.phone && !isValidPhone(formData.phone)) {
-      newErrors.phone =
-        "El formato del teléfono no es válido (ej: +57 300 123 4567)";
+    if (formData.phone && !SecurityValidators.validatePhone(formData.phone)) {
+      newErrors.phone = 'El formato del teléfono no es válido (ej: +57 300 123 4567)';
       isValid = false;
     } // La validación se hace en el envío
 
     setErrors(newErrors);
     return isValid;
   }; // Manejar envío del formulario
-  const handleSubmit = async (e) => {
+  const handleSubmit = async e => {
     e.preventDefault();
 
     // Limpiar errores previos
-    setGlobalError("");
+    setGlobalError('');
 
     // Validar formulario primero
     if (!validateForm()) {
-      setGlobalError(
-        "Por favor complete todos los campos obligatorios correctamente."
-      );
+      setGlobalError('Por favor complete todos los campos obligatorios correctamente.');
       return;
     }
     setIsSubmitting(true);
@@ -245,18 +203,18 @@ export const ConsultationModal = React.memo(({ isOpen, onClose }) => {
     try {
       // 2. Preparar datos sanitizados para el envío
       const SANITIZED_DATA = {
-        name: sanitizeInput(formData.name),
-        email: sanitizeInput(formData.email),
-        phone: sanitizeInput(formData.phone),
-        company: sanitizeInput(formData.company),
+        name: SecurityValidators.sanitizeInput(formData.name),
+        email: SecurityValidators.sanitizeInput(formData.email),
+        phone: SecurityValidators.sanitizeInput(formData.phone),
+        company: SecurityValidators.sanitizeInput(formData.company),
         clientType: formData.clientType,
-        city: sanitizeInput(formData.city),
-        consultationType: sanitizeInput(formData.consultationType),
+        city: SecurityValidators.sanitizeInput(formData.city),
+        consultationType: SecurityValidators.sanitizeInput(formData.consultationType),
         preferredDate: formData.preferredDate,
         preferredTime: formData.preferredTime,
         timezone: formData.timezone,
-        topics: sanitizeInput(formData.topics),
-        questions: sanitizeInput(formData.questions),
+        topics: SecurityValidators.sanitizeInput(formData.topics),
+        questions: SecurityValidators.sanitizeInput(formData.questions),
         meetingType: formData.meetingType,
         timestamp: new Date().toISOString(),
       }; // Aquí se procesan los datos del formulario
@@ -265,25 +223,23 @@ export const ConsultationModal = React.memo(({ isOpen, onClose }) => {
       const emailResult = await sendConsultationRequest(SANITIZED_DATA);
 
       if (!emailResult.success) {
-        throw new Error(emailResult.error || "Error al programar la consulta");
+        throw new Error(emailResult.error || 'Error al programar la consulta');
       }
 
-      setSubmitStatus("success");
+      setSubmitStatus('success');
       setTimeout(() => {
         onClose();
       }, 2000);
     } catch {
       // Error al enviar consulta
-      setGlobalError(
-        "Ocurrió un error al programar la consulta. Por favor intente nuevamente."
-      );
-      setSubmitStatus("error");
+      setGlobalError('Ocurrió un error al programar la consulta. Por favor intente nuevamente.');
+      setSubmitStatus('error');
     } finally {
       setIsSubmitting(false);
     }
   };
   // Manejar click en backdrop
-  const handleBackdropClick = (e) => {
+  const handleBackdropClick = e => {
     if (e.target === e.currentTarget) {
       onClose();
     }
@@ -296,7 +252,7 @@ export const ConsultationModal = React.memo(({ isOpen, onClose }) => {
       aria-modal="true"
       aria-labelledby="consultation-modal-title"
     >
-      {" "}
+      {' '}
       <div className="bg-slate-800 rounded-xl max-w-2xl w-full max-h-[80vh] overflow-y-auto shadow-2xl border border-blue-500/30 z-[10000] relative modal-content">
         {/* Header */}
         <div className="sticky top-0 bg-slate-800 border-b border-gray-700 p-4 sm:p-6 flex items-center justify-between z-[10001]">
@@ -323,14 +279,10 @@ export const ConsultationModal = React.memo(({ isOpen, onClose }) => {
 
         {/* Content */}
         <div className="p-4 sm:p-6">
-          {submitStatus === "success" ? (
+          {submitStatus === 'success' ? (
             <div className="text-center py-8">
               <div className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
-                <svg
-                  className="w-8 h-8 text-white"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                >
+                <svg className="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
                   <path
                     fillRule="evenodd"
                     d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
@@ -338,16 +290,12 @@ export const ConsultationModal = React.memo(({ isOpen, onClose }) => {
                   />
                 </svg>
               </div>
-              <h3 className="text-xl font-semibold text-green-400 mb-2">
-                ¡Consulta Programada!
-              </h3>
-              <p className="text-gray-300">
-                Te enviaremos los detalles de la reunión por email.
-              </p>
+              <h3 className="text-xl font-semibold text-green-400 mb-2">¡Consulta Programada!</h3>
+              <p className="text-gray-300">Te enviaremos los detalles de la reunión por email.</p>
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-4">
-              {" "}
+              {' '}
               {/* Información personal */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
@@ -367,14 +315,12 @@ export const ConsultationModal = React.memo(({ isOpen, onClose }) => {
                     autoComplete="name"
                     className={`w-full p-3 bg-white border rounded-lg focus:ring-2 focus:ring-blue-500/20 text-gray-900 transition-all ${
                       errors.name
-                        ? "border-red-500 focus:border-red-500"
-                        : "border-slate-300 focus:border-blue-500"
+                        ? 'border-red-500 focus:border-red-500'
+                        : 'border-slate-300 focus:border-blue-500'
                     }`}
                     placeholder="Tu nombre completo"
                   />
-                  {errors.name && (
-                    <p className="text-red-400 text-xs mt-1">{errors.name}</p>
-                  )}
+                  {errors.name && <p className="text-red-400 text-xs mt-1">{errors.name}</p>}
                 </div>
                 <div>
                   <label
@@ -393,14 +339,12 @@ export const ConsultationModal = React.memo(({ isOpen, onClose }) => {
                     autoComplete="email"
                     className={`w-full p-3 bg-white border rounded-lg focus:ring-2 focus:ring-blue-500/20 text-gray-900 transition-all ${
                       errors.email
-                        ? "border-red-500 focus:border-red-500"
-                        : "border-slate-300 focus:border-blue-500"
+                        ? 'border-red-500 focus:border-red-500'
+                        : 'border-slate-300 focus:border-blue-500'
                     }`}
                     placeholder="tu@email.com"
                   />
-                  {errors.email && (
-                    <p className="text-red-400 text-xs mt-1">{errors.email}</p>
-                  )}
+                  {errors.email && <p className="text-red-400 text-xs mt-1">{errors.email}</p>}
                 </div>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -420,14 +364,12 @@ export const ConsultationModal = React.memo(({ isOpen, onClose }) => {
                     autoComplete="tel"
                     className={`w-full p-3 bg-white border rounded-lg focus:ring-2 focus:ring-blue-500/20 text-gray-900 transition-all ${
                       errors.phone
-                        ? "border-red-500 focus:border-red-500"
-                        : "border-slate-300 focus:border-blue-500"
+                        ? 'border-red-500 focus:border-red-500'
+                        : 'border-slate-300 focus:border-blue-500'
                     }`}
                     placeholder="+57 300 123 4567"
                   />
-                  {errors.phone && (
-                    <p className="text-red-400 text-xs mt-1">{errors.phone}</p>
-                  )}
+                  {errors.phone && <p className="text-red-400 text-xs mt-1">{errors.phone}</p>}
                 </div>
                 <div>
                   <label
@@ -453,7 +395,7 @@ export const ConsultationModal = React.memo(({ isOpen, onClose }) => {
                 <div>
                   <label className="text-blue-300 text-sm font-medium mb-2 block">
                     Tipo de Cliente
-                  </label>{" "}
+                  </label>{' '}
                   <select
                     name="clientType"
                     value={formData.clientType}
@@ -461,7 +403,7 @@ export const ConsultationModal = React.memo(({ isOpen, onClose }) => {
                     className="w-full p-3 bg-white border border-slate-300 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 text-gray-900 transition-all cursor-pointer"
                     style={{
                       zIndex: 1000,
-                      position: "relative",
+                      position: 'relative',
                     }}
                   >
                     <option value="empresa">Empresa</option>
@@ -484,21 +426,19 @@ export const ConsultationModal = React.memo(({ isOpen, onClose }) => {
                     required
                     className={`w-full p-3 bg-white border rounded-lg focus:ring-2 focus:ring-blue-500/20 text-gray-900 transition-all ${
                       errors.city
-                        ? "border-red-500 focus:border-red-500"
-                        : "border-slate-300 focus:border-blue-500"
+                        ? 'border-red-500 focus:border-red-500'
+                        : 'border-slate-300 focus:border-blue-500'
                     }`}
                     placeholder="Tu ciudad"
                   />
-                  {errors.city && (
-                    <p className="text-red-400 text-xs mt-1">{errors.city}</p>
-                  )}
+                  {errors.city && <p className="text-red-400 text-xs mt-1">{errors.city}</p>}
                 </div>
-              </div>{" "}
+              </div>{' '}
               {/* Tipo de consulta */}
               <div>
                 <label className="text-blue-300 text-sm font-medium mb-2 block">
                   Tipo de Consulta <span className="text-red-400">*</span>
-                </label>{" "}
+                </label>{' '}
                 <select
                   name="consultationType"
                   value={formData.consultationType}
@@ -506,80 +446,47 @@ export const ConsultationModal = React.memo(({ isOpen, onClose }) => {
                   required
                   className={`w-full p-3 bg-white border rounded-lg focus:ring-2 focus:ring-blue-500/20 text-gray-900 transition-all cursor-pointer ${
                     errors.consultationType
-                      ? "border-red-500 focus:border-red-500"
-                      : "border-slate-300 focus:border-blue-500"
+                      ? 'border-red-500 focus:border-red-500'
+                      : 'border-slate-300 focus:border-blue-500'
                   }`}
                   style={{
                     zIndex: 1000,
-                    position: "relative",
+                    position: 'relative',
                   }}
                 >
-                  <option
-                    value=""
-                    disabled
-                    className="bg-white text-gray-400"
-                  >
+                  <option value="" disabled className="bg-white text-gray-400">
                     Selecciona un tipo de consulta
                   </option>
-                  <option
-                    value="Consulta General"
-                    className="bg-white text-gray-900"
-                  >
+                  <option value="Consulta General" className="bg-white text-gray-900">
                     Consulta General
                   </option>
-                  <option
-                    value="Revisión de Proyecto"
-                    className="bg-white text-gray-900"
-                  >
+                  <option value="Revisión de Proyecto" className="bg-white text-gray-900">
                     Revisión de Proyecto
                   </option>
-                  <option
-                    value="Estrategia Tecnológica"
-                    className="bg-white text-gray-900"
-                  >
+                  <option value="Estrategia Tecnológica" className="bg-white text-gray-900">
                     Estrategia Tecnológica
                   </option>
-                  <option
-                    value="Auditoría de Código"
-                    className="bg-white text-gray-900"
-                  >
+                  <option value="Auditoría de Código" className="bg-white text-gray-900">
                     Auditoría de Código
                   </option>
-                  <option
-                    value="Optimización de Performance"
-                    className="bg-white text-gray-900"
-                  >
+                  <option value="Optimización de Performance" className="bg-white text-gray-900">
                     Optimización de Performance
                   </option>
-                  <option
-                    value="Desarrollo Web"
-                    className="bg-white text-gray-900"
-                  >
+                  <option value="Desarrollo Web" className="bg-white text-gray-900">
                     Desarrollo Web
                   </option>
-                  <option
-                    value="Aplicaciones Móviles"
-                    className="bg-white text-gray-900"
-                  >
+                  <option value="Aplicaciones Móviles" className="bg-white text-gray-900">
                     Aplicaciones Móviles
                   </option>
-                  <option
-                    value="Inteligencia Artificial"
-                    className="bg-white text-gray-900"
-                  >
+                  <option value="Inteligencia Artificial" className="bg-white text-gray-900">
                     Inteligencia Artificial
                   </option>
-                  <option
-                    value="Cloud Computing"
-                    className="bg-white text-gray-900"
-                  >
+                  <option value="Cloud Computing" className="bg-white text-gray-900">
                     Cloud Computing
                   </option>
                 </select>
                 {errors.consultationType && (
-                  <p className="text-red-400 text-xs mt-1">
-                    {errors.consultationType}
-                  </p>
+                  <p className="text-red-400 text-xs mt-1">{errors.consultationType}</p>
                 )}
               </div>
               {/* Modalidad de reunión */}
@@ -593,7 +500,7 @@ export const ConsultationModal = React.memo(({ isOpen, onClose }) => {
                       type="radio"
                       name="meetingType"
                       value="video-call"
-                      checked={formData.meetingType === "video-call"}
+                      checked={formData.meetingType === 'video-call'}
                       onChange={handleInputChange}
                       className="mr-3 text-blue-500"
                     />
@@ -607,7 +514,7 @@ export const ConsultationModal = React.memo(({ isOpen, onClose }) => {
                       type="radio"
                       name="meetingType"
                       value="phone-call"
-                      checked={formData.meetingType === "phone-call"}
+                      checked={formData.meetingType === 'phone-call'}
                       onChange={handleInputChange}
                       className="mr-3 text-blue-500"
                     />
@@ -621,7 +528,7 @@ export const ConsultationModal = React.memo(({ isOpen, onClose }) => {
                       type="radio"
                       name="meetingType"
                       value="in-person"
-                      checked={formData.meetingType === "in-person"}
+                      checked={formData.meetingType === 'in-person'}
                       onChange={handleInputChange}
                       className="mr-3 text-blue-500"
                     />
@@ -631,7 +538,7 @@ export const ConsultationModal = React.memo(({ isOpen, onClose }) => {
                     </div>
                   </label>
                 </div>
-              </div>{" "}
+              </div>{' '}
               {/* Fecha y hora preferida */}
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div>
@@ -648,17 +555,15 @@ export const ConsultationModal = React.memo(({ isOpen, onClose }) => {
                     value={formData.preferredDate}
                     onChange={handleInputChange}
                     required
-                    min={new Date().toISOString().split("T")[0]}
+                    min={new Date().toISOString().split('T')[0]}
                     className={`w-full p-3 bg-white border rounded-lg focus:ring-2 focus:ring-blue-500/20 text-gray-900 transition-all ${
                       errors.preferredDate
-                        ? "border-red-500 focus:border-red-500"
-                        : "border-slate-300 focus:border-blue-500"
+                        ? 'border-red-500 focus:border-red-500'
+                        : 'border-slate-300 focus:border-blue-500'
                     }`}
                   />
                   {errors.preferredDate && (
-                    <p className="text-red-400 text-xs mt-1">
-                      {errors.preferredDate}
-                    </p>
+                    <p className="text-red-400 text-xs mt-1">{errors.preferredDate}</p>
                   )}
                 </div>
                 <div>
@@ -667,7 +572,7 @@ export const ConsultationModal = React.memo(({ isOpen, onClose }) => {
                     className="text-blue-300 text-sm font-medium mb-2 block"
                   >
                     Hora Preferida <span className="text-red-400">*</span>
-                  </label>{" "}
+                  </label>{' '}
                   <select
                     id="consultation-time"
                     name="preferredTime"
@@ -676,120 +581,80 @@ export const ConsultationModal = React.memo(({ isOpen, onClose }) => {
                     required
                     className={`w-full p-3 bg-white border rounded-lg focus:ring-2 focus:ring-blue-500/20 text-gray-900 transition-all cursor-pointer ${
                       errors.preferredTime
-                        ? "border-red-500 focus:border-red-500"
-                        : "border-slate-300 focus:border-blue-500"
+                        ? 'border-red-500 focus:border-red-500'
+                        : 'border-slate-300 focus:border-blue-500'
                     }`}
                     style={{
                       zIndex: 1000,
-                      position: "relative",
+                      position: 'relative',
                     }}
                   >
-                    <option
-                      value=""
-                      disabled
-                      className="bg-white text-gray-400"
-                    >
+                    <option value="" disabled className="bg-white text-gray-400">
                       Selecciona hora preferida
                     </option>
-                    {TIME_OPTIONS.map((time) => (
-                      <option
-                        key={time}
-                        value={time}
-                        className="bg-white text-gray-900"
-                      >
+                    {TIME_OPTIONS.map(time => (
+                      <option key={time} value={time} className="bg-white text-gray-900">
                         {time}
                       </option>
                     ))}
                   </select>
                   {errors.preferredTime && (
-                    <p className="text-red-400 text-xs mt-1">
-                      {errors.preferredTime}
-                    </p>
+                    <p className="text-red-400 text-xs mt-1">{errors.preferredTime}</p>
                   )}
                 </div>
                 <div>
                   <label className="text-blue-300 text-sm font-medium mb-2 block">
                     Zona Horaria <span className="text-red-400">*</span>
-                  </label>{" "}
+                  </label>{' '}
                   <select
                     name="timezone"
                     value={formData.timezone}
                     onChange={handleInputChange}
                     required
                     style={{
-                      WebkitAppearance: "menulist",
-                      MozAppearance: "menulist",
-                      appearance: "menulist",
+                      WebkitAppearance: 'menulist',
+                      MozAppearance: 'menulist',
+                      appearance: 'menulist',
                     }}
                     className={`w-full p-3 bg-white border rounded-lg focus:ring-2 focus:ring-blue-500/20 text-gray-900 transition-all ${
                       errors.timezone
-                        ? "border-red-500 focus:border-red-500"
-                        : "border-slate-300 focus:border-blue-500"
+                        ? 'border-red-500 focus:border-red-500'
+                        : 'border-slate-300 focus:border-blue-500'
                     }`}
                   >
-                    <option
-                      value=""
-                      disabled
-                      className="bg-white text-gray-400"
-                    >
+                    <option value="" disabled className="bg-white text-gray-400">
                       Selecciona zona horaria
                     </option>
-                    <option
-                      value="America/New_York"
-                      className="bg-white text-gray-900"
-                    >
+                    <option value="America/New_York" className="bg-white text-gray-900">
                       EST (UTC-5)
                     </option>
-                    <option
-                      value="America/Chicago"
-                      className="bg-white text-gray-900"
-                    >
+                    <option value="America/Chicago" className="bg-white text-gray-900">
                       CST (UTC-6)
                     </option>
-                    <option
-                      value="America/Denver"
-                      className="bg-white text-gray-900"
-                    >
+                    <option value="America/Denver" className="bg-white text-gray-900">
                       MST (UTC-7)
                     </option>
-                    <option
-                      value="America/Los_Angeles"
-                      className="bg-white text-gray-900"
-                    >
+                    <option value="America/Los_Angeles" className="bg-white text-gray-900">
                       PST (UTC-8)
                     </option>
-                    <option
-                      value="America/Mexico_City"
-                      className="bg-white text-gray-900"
-                    >
+                    <option value="America/Mexico_City" className="bg-white text-gray-900">
                       México (UTC-6)
                     </option>
-                    <option
-                      value="America/Bogota"
-                      className="bg-white text-gray-900"
-                    >
+                    <option value="America/Bogota" className="bg-white text-gray-900">
                       Colombia (UTC-5)
                     </option>
-                    <option
-                      value="America/Lima"
-                      className="bg-white text-gray-900"
-                    >
+                    <option value="America/Lima" className="bg-white text-gray-900">
                       Perú (UTC-5)
                     </option>
-                    <option
-                      value="America/Santiago"
-                      className="bg-white text-gray-900"
-                    >
+                    <option value="America/Santiago" className="bg-white text-gray-900">
                       Chile (UTC-3)
                     </option>
                   </select>
                   {errors.timezone && (
-                    <p className="text-red-400 text-xs mt-1">
-                      {errors.timezone}
-                    </p>
+                    <p className="text-red-400 text-xs mt-1">{errors.timezone}</p>
                   )}
                 </div>
-              </div>{" "}
+              </div>{' '}
               {/* Temas a tratar */}
               <div>
                 <label className="text-blue-300 text-sm font-medium mb-2 block">
@@ -803,14 +668,12 @@ export const ConsultationModal = React.memo(({ isOpen, onClose }) => {
                   rows="3"
                   className={`w-full p-3 bg-white border rounded-lg focus:ring-2 focus:ring-blue-500/20 text-gray-900 transition-all resize-none ${
                     errors.topics
-                      ? "border-red-500 focus:border-red-500"
-                      : "border-slate-300 focus:border-blue-500"
+                      ? 'border-red-500 focus:border-red-500'
+                      : 'border-slate-300 focus:border-blue-500'
                   }`}
                   placeholder="Describe los temas principales que te gustaría discutir en la consulta..."
                 />
-                {errors.topics && (
-                  <p className="text-red-400 text-xs mt-1">{errors.topics}</p>
-                )}
+                {errors.topics && <p className="text-red-400 text-xs mt-1">{errors.topics}</p>}
               </div>
               {/* Preguntas específicas */}
               <div>
@@ -824,8 +687,8 @@ export const ConsultationModal = React.memo(({ isOpen, onClose }) => {
                   rows="3"
                   className="w-full p-3 bg-white border border-slate-300 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 text-gray-900 transition-all resize-none"
                   placeholder="¿Hay algo específico que te gustaría preguntar? (opcional)"
-                />{" "}
-              </div>{" "}
+                />{' '}
+              </div>{' '}
               {/* Sistema de seguridad integrado */}
               <div className="flex flex-col items-center">
                 {/* Verificación automática habilitada */}
@@ -846,18 +709,14 @@ export const ConsultationModal = React.memo(({ isOpen, onClose }) => {
                       />
                     </svg>
                     <div>
-                      <h4 className="text-red-400 font-semibold">
-                        Error en el formulario
-                      </h4>
+                      <h4 className="text-red-400 font-semibold">Error en el formulario</h4>
                       <p className="text-red-300 text-sm mt-1">{globalError}</p>
                     </div>
                   </div>
                 </div>
-              )}{" "}
+              )}{' '}
               <div className="bg-blue-500/10 border border-blue-500/30 rounded-lg p-4">
-                <h4 className="text-blue-300 font-semibold mb-2">
-                  📅 Información de Consultas
-                </h4>
+                <h4 className="text-blue-300 font-semibold mb-2">📅 Información de Consultas</h4>
                 <ul className="text-sm text-gray-300 space-y-1">
                   <li>• Duración: 30-60 minutos según el tema</li>
                   <li>• Primera consulta: Gratuita (hasta 30 min)</li>
@@ -872,14 +731,14 @@ export const ConsultationModal = React.memo(({ isOpen, onClose }) => {
                   className="px-6 py-3 bg-white hover:bg-slate-600 text-white rounded-lg transition-all duration-300 font-semibold border border-slate-300"
                 >
                   Cancelar
-                </button>{" "}
+                </button>{' '}
                 <button
                   type="submit"
                   disabled={isSubmitting}
                   className={`flex-1 px-6 py-3 rounded-lg transition-all duration-300 font-semibold flex items-center justify-center ${
                     isSubmitting
-                      ? "bg-gray-600 cursor-not-allowed text-gray-300"
-                      : "bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white transform hover:scale-105"
+                      ? 'bg-gray-600 cursor-not-allowed text-gray-300'
+                      : 'bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white transform hover:scale-105'
                   }`}
                 >
                   {isSubmitting ? (
@@ -907,7 +766,7 @@ export const ConsultationModal = React.memo(({ isOpen, onClose }) => {
                       Programando...
                     </>
                   ) : (
-                    "Programar Consulta"
+                    'Programar Consulta'
                   )}
                 </button>
               </div>
@@ -919,4 +778,4 @@ export const ConsultationModal = React.memo(({ isOpen, onClose }) => {
   );
 });
 
-ConsultationModal.displayName = "ConsultationModal";
+ConsultationModal.displayName = 'ConsultationModal';

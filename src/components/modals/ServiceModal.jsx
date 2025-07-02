@@ -1,60 +1,29 @@
-import React from "react";
+import React from 'react';
+import { BaseModal } from './BaseModal';
 
 // --- Modal de Detalle de Servicio ---
 // Muestra información detallada de un servicio, con opciones para solicitar propuesta o consulta.
 // Accesible, seguro y optimizado para experiencia de usuario profesional.
 export const ServiceDetailModal = React.memo(
   ({ isOpen, onClose, service, onOpenQuote, onOpenConsultation }) => {
-    // Cierra el modal con la tecla Escape y bloquea el scroll de fondo
-    React.useEffect(() => {
-      const handleEscape = (event) => {
-        if (event.key === "Escape") {
-          onClose();
-        }
-      };
-      if (isOpen) {
-        document.addEventListener("keydown", handleEscape);
-        document.body.style.overflow = "hidden";
-      }
-      return () => {
-        document.removeEventListener("keydown", handleEscape);
-        document.body.style.overflow = "unset";
-      };
-    }, [isOpen, onClose]);
-
-    // Early return: no renderiza si el modal no está abierto o no hay servicio seleccionado
-    if (!isOpen || !service) return null;
-
-    // Cierra el modal al hacer click en el backdrop (fuera del contenido)
-    const handleBackdropClick = (e) => {
-      if (e.target === e.currentTarget) {
-        onClose();
-      }
-    };
+    // Early return: no renderiza si no hay servicio seleccionado
+    if (!service) return null;
 
     // --- Renderizado principal del modal ---
     return (
-      <div
-        className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4"
-        onClick={handleBackdropClick}
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="service-modal-title"
-      >
+      <BaseModal isOpen={isOpen} onClose={onClose}>
         <div className="bg-gradient-to-br from-gray-900 via-black to-gray-900 rounded-xl max-w-4xl w-full max-h-[80vh] overflow-y-auto shadow-2xl border border-gray-700/50">
           {/* Header con título e ícono del servicio */}
           <div className="sticky top-0 bg-gray-900/95 backdrop-blur-md border-b border-gray-700 p-4 sm:p-6 flex items-center justify-between">
             <div className="flex items-center">
-              <div className="text-3xl sm:text-4xl mr-4 text-blue-400">
-                {service.icon}
-              </div>
+              <div className="text-3xl sm:text-4xl mr-4 text-blue-400">{service.icon}</div>
               <h2
                 id="service-modal-title"
                 className="text-2xl sm:text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400"
               >
                 {service.title}
               </h2>
-            </div>{" "}
+            </div>{' '}
             <button
               onClick={onClose}
               className="text-gray-400 hover:text-white transition-colors p-2 hover:bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -69,15 +38,13 @@ export const ServiceDetailModal = React.memo(
                 />
               </svg>
             </button>
-          </div>{" "}
+          </div>{' '}
           {/* Contenido principal: descripción, características, tecnologías, proceso, cards */}
           <div className="p-4 sm:p-6 space-y-6 text-gray-300">
             <div className="prose prose-invert prose-blue max-w-none">
               {/* Descripción principal */}
               <section>
-                <p className="text-lg leading-relaxed text-gray-200 mb-4">
-                  {service.description}
-                </p>
+                <p className="text-lg leading-relaxed text-gray-200 mb-4">{service.description}</p>
               </section>
               {/* Descripción detallada (opcional) */}
               {service.detailedDescription && (
@@ -85,9 +52,7 @@ export const ServiceDetailModal = React.memo(
                   <h3 className="text-xl font-semibold text-blue-300 mb-3">
                     📋 Descripción Detallada
                   </h3>
-                  <p className="leading-relaxed">
-                    {service.detailedDescription}
-                  </p>
+                  <p className="leading-relaxed">{service.detailedDescription}</p>
                 </section>
               )}
               {/* Características principales (opcional) */}
@@ -103,9 +68,7 @@ export const ServiceDetailModal = React.memo(
                         className="flex items-start p-3 bg-slate-700/50 rounded-lg border border-blue-500/20"
                       >
                         <div className="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></div>
-                        <span className="leading-relaxed text-sm">
-                          {feature}
-                        </span>
+                        <span className="leading-relaxed text-sm">{feature}</span>
                       </div>
                     ))}
                   </div>
@@ -142,9 +105,7 @@ export const ServiceDetailModal = React.memo(
                           {index + 1}
                         </div>
                         <div className="flex-1">
-                          <h4 className="font-semibold text-blue-200 mb-2">
-                            {step.title}
-                          </h4>
+                          <h4 className="font-semibold text-blue-200 mb-2">{step.title}</h4>
                           <p className="text-gray-300 text-sm leading-relaxed">
                             {step.description}
                           </p>
@@ -167,9 +128,7 @@ export const ServiceDetailModal = React.memo(
                         {service.estimatedTime}
                       </span>
                       {service.timeNote && (
-                        <span className="text-gray-400 text-sm block mt-1">
-                          {service.timeNote}
-                        </span>
+                        <span className="text-gray-400 text-sm block mt-1">{service.timeNote}</span>
                       )}
                     </p>
                   </div>
@@ -193,7 +152,7 @@ export const ServiceDetailModal = React.memo(
                   </div>
                 )}
               </div>
-            </div>{" "}
+            </div>{' '}
             {/* Panel informativo sobre los siguientes pasos */}
             <div className="bg-blue-500/10 border border-blue-500/30 rounded-lg p-4">
               <h4 className="text-blue-300 font-semibold mb-2 flex items-center">
@@ -204,18 +163,16 @@ export const ServiceDetailModal = React.memo(
               </p>
               <ul className="text-xs text-gray-400 space-y-1">
                 <li>
-                  • <strong>Propuesta:</strong> Recibe una propuesta detallada y
-                  personalizada
+                  • <strong>Propuesta:</strong> Recibe una propuesta detallada y personalizada
                 </li>
                 <li>
-                  • <strong>Consulta:</strong> Conversa con nuestro equipo sobre
-                  tus necesidades
+                  • <strong>Consulta:</strong> Conversa con nuestro equipo sobre tus necesidades
                 </li>
               </ul>
             </div>
             {/* Botones de acción: solicitar propuesta o consulta */}
             <div className="flex flex-col sm:flex-row gap-3 pt-4 border-t border-gray-700">
-              {" "}
+              {' '}
               <button
                 onClick={() => {
                   onClose(); // Cierra el modal actual
@@ -224,12 +181,7 @@ export const ServiceDetailModal = React.memo(
                 className="flex-1 px-6 py-3 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white rounded-lg transition-all duration-300 transform hover:scale-105 font-semibold shadow-lg flex items-center justify-center"
                 aria-label={`Solicitar propuesta para ${service.title}`}
               >
-                <svg
-                  className="w-5 h-5 mr-2"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
+                <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
@@ -238,7 +190,7 @@ export const ServiceDetailModal = React.memo(
                   />
                 </svg>
                 Solicitar Propuesta
-              </button>{" "}
+              </button>{' '}
               <button
                 onClick={() => {
                   onClose(); // Cierra el modal actual
@@ -247,12 +199,7 @@ export const ServiceDetailModal = React.memo(
                 className="flex-1 px-6 py-3 bg-slate-700 hover:bg-slate-600 text-white rounded-lg transition-all duration-300 font-semibold border border-gray-600 hover:border-gray-500 flex items-center justify-center"
                 aria-label={`Programar consulta para ${service.title}`}
               >
-                <svg
-                  className="w-5 h-5 mr-2"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
+                <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
@@ -265,12 +212,12 @@ export const ServiceDetailModal = React.memo(
             </div>
           </div>
         </div>
-      </div>
+      </BaseModal>
     );
   }
 );
 
-ServiceDetailModal.displayName = "ServiceDetailModal";
+ServiceDetailModal.displayName = 'ServiceDetailModal';
 
 // --- SUGERENCIAS DE MEJORA ---
 // 1. Modularizar secciones internas si el archivo crece (cards, features, proceso).

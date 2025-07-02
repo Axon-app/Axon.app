@@ -3,7 +3,7 @@
 // Modal profesional para mostrar artículos del blog con sanitización y renderizado seguro.
 // Autor: Axon.App Team | Última revisión: 29/06/2025
 
-import React from "react";
+import React from 'react';
 
 /**
  * BlogModal
@@ -19,20 +19,20 @@ import React from "react";
 export const BlogModal = ({ isOpen, onClose, post }) => {
   // Efecto: Cierra el modal con Escape y bloquea scroll de fondo
   React.useEffect(() => {
-    const handleEscape = (event) => {
-      if (event.key === "Escape") {
+    const handleEscape = event => {
+      if (event.key === 'Escape') {
         onClose();
       }
     };
 
     if (isOpen) {
-      document.addEventListener("keydown", handleEscape);
-      document.body.style.overflow = "hidden";
+      document.addEventListener('keydown', handleEscape);
+      document.body.style.overflow = 'hidden';
     }
 
     return () => {
-      document.removeEventListener("keydown", handleEscape);
-      document.body.style.overflow = "unset";
+      document.removeEventListener('keydown', handleEscape);
+      document.body.style.overflow = 'unset';
     };
   }, [isOpen, onClose]);
 
@@ -44,7 +44,7 @@ export const BlogModal = ({ isOpen, onClose, post }) => {
    * @param {string} content - Contenido markdown/raw.
    * @returns {string} HTML seguro para renderizar.
    */
-  const renderContent = (content) => {
+  const renderContent = content => {
     if (!content) return '';
 
     // Sanitización básica contra XSS y atributos peligrosos
@@ -61,8 +61,14 @@ export const BlogModal = ({ isOpen, onClose, post }) => {
       .replace(/### (.*)/g, '<h3 class="text-xl font-semibold mb-3 text-blue-500 mt-6">$3</h3>')
       .replace(/\*\*(.*?)\*\*/g, '<strong class="font-semibold text-white">$1</strong>')
       .replace(/\*(.*?)\*/g, '<em class="italic text-gray-300">$1</em>')
-      .replace(/```(\w+)?\n([\s\S]*?)```/g, '<pre class="bg-gray-900 border border-gray-700 rounded-lg p-4 my-4 overflow-x-auto"><code class="text-green-400 text-sm">$2</code></pre>')
-      .replace(/`(.*?)`/g, '<code class="bg-gray-800 text-cyan-400 px-2 py-1 rounded text-sm">$1</code>')
+      .replace(
+        /```(\w+)?\n([\s\S]*?)```/g,
+        '<pre class="bg-gray-900 border border-gray-700 rounded-lg p-4 my-4 overflow-x-auto"><code class="text-green-400 text-sm">$2</code></pre>'
+      )
+      .replace(
+        /`(.*?)`/g,
+        '<code class="bg-gray-800 text-cyan-400 px-2 py-1 rounded text-sm">$1</code>'
+      )
       .replace(/^- (.*)/gm, '<li class="ml-4 mb-2 text-gray-300">• $1</li>')
       .replace(/\n\n/g, '</p><p class="mb-4 leading-relaxed text-gray-300">')
       .replace(/^\n/, '<p class="mb-4 leading-relaxed text-gray-300">')
@@ -78,14 +84,16 @@ export const BlogModal = ({ isOpen, onClose, post }) => {
           <div className="flex justify-between items-start">
             <div className="flex-1 pr-4">
               <div className="flex flex-wrap gap-2 mb-3">
-                {post.tags && post.tags.length > 0 && post.tags.map((tag, index) => (
-                  <span
-                    key={index}
-                    className="bg-blue-600/20 text-blue-300 px-3 py-1 rounded-full text-sm"
-                  >
-                    {tag}
-                  </span>
-                ))}
+                {post.tags &&
+                  post.tags.length > 0 &&
+                  post.tags.map((tag, index) => (
+                    <span
+                      key={index}
+                      className="bg-blue-600/20 text-blue-300 px-3 py-1 rounded-full text-sm"
+                    >
+                      {tag}
+                    </span>
+                  ))}
               </div>
 
               <h1 className="text-2xl md:text-3xl font-bold text-white mb-3">
@@ -105,7 +113,7 @@ export const BlogModal = ({ isOpen, onClose, post }) => {
                     {new Date(post.date).toLocaleDateString('es-ES', {
                       year: 'numeric',
                       month: 'long',
-                      day: 'numeric'
+                      day: 'numeric',
                     })}
                   </span>
                 )}
@@ -144,9 +152,7 @@ export const BlogModal = ({ isOpen, onClose, post }) => {
 
           {post.excerpt && (
             <div className="bg-blue-600/10 border-l-4 border-blue-500 p-4 mb-8 rounded-r-lg">
-              <p className="text-lg text-blue-200 italic">
-                {post.excerpt}
-              </p>
+              <p className="text-lg text-blue-200 italic">{post.excerpt}</p>
             </div>
           )}
 
@@ -154,18 +160,16 @@ export const BlogModal = ({ isOpen, onClose, post }) => {
             <div
               className="prose prose-invert prose-blue max-w-none"
               dangerouslySetInnerHTML={{
-                __html: renderContent(post.content)
+                __html: renderContent(post.content),
               }}
             />
           )}
 
           <div className="mt-12 p-6 bg-gradient-to-r from-blue-600/20 to-purple-600/20 rounded-xl border border-blue-500/30">
-            <h3 className="text-xl font-bold mb-3 text-white">
-              ¿Te gustó este artículo?
-            </h3>
+            <h3 className="text-xl font-bold mb-3 text-white">¿Te gustó este artículo?</h3>
             <p className="text-gray-300 mb-4">
-              En Axon.App estamos siempre explorando las últimas tecnologías.
-              ¿Quieres implementar estas soluciones en tu proyecto?
+              En Axon.App estamos siempre explorando las últimas tecnologías. ¿Quieres implementar
+              estas soluciones en tu proyecto?
             </p>
             <div className="flex flex-wrap gap-3">
               <button

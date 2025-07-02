@@ -1,89 +1,79 @@
 {
-    // ===== Asociaciones de archivos para un reconocimiento correcto de sintaxis =====
-    "files.associations": {
-        "*.jsx": "javascriptreact",
-        "*.js": "javascript",
-        "*.ts": "typescript",
-        "*.tsx": "typescriptreact"
-    },
-    // ===== Configuración general del editor =====
-    "editor.formatOnSave": true, // Formatea automáticamente al guardar
-    "editor.formatOnPaste": true, // Formatea al pegar código
-    "editor.formatOnType": true,  // Formatea mientras escribes
-    "editor.defaultFormatter": "dbaeumer.vscode-eslint", // Usa ESLint como formateador principal
-    "editor.tabSize": 2, // Indentación de 2 espacios
-    "editor.insertSpaces": true, // Usa espacios en vez de tabs
-    "editor.detectIndentation": true, // Detecta indentación automáticamente
-    // ===== Autoguardado y limpieza de archivos =====
-    "files.autoSave": "onFocusChange", // Guarda automáticamente al cambiar de ventana
-    "files.trimTrailingWhitespace": true, // Elimina espacios al final de línea
-    "files.insertFinalNewline": true, // Añade salto de línea al final de archivo
-    "files.trimFinalNewlines": true, // Elimina saltos de línea extra al final
-    // ===== Configuración para React y JavaScript =====
-    "emmet.includeLanguages": {
-        "javascriptreact": "html",
-        "typescript": "html",
-        "typescriptreact": "html"
-    },
-    "emmet.triggerExpansionOnTab": true, // Expande Emmet con Tab
-    // ===== ESLint =====
-    "eslint.validate": [
-        "javascript",
-        "javascriptreact",
-        "typescript",
-        "typescriptreact"
-    ],
-    "editor.codeActionsOnSave": {
-        "source.fixAll.eslint": "explicit", // Corrige errores ESLint al guardar
-        "source.organizeImports": "explicit" // Organiza imports al guardar
-    },
-    // ===== Preferencias de comillas y actualización de imports =====
-    "javascript.preferences.quoteStyle": "double",
-    "typescript.preferences.quoteStyle": "double",
-    "javascript.updateImportsOnFileMove.enabled": "always",
-    "typescript.updateImportsOnFileMove.enabled": "always",
-    // ===== GitHub Copilot =====
-    "github.copilot.enable": {
-        "*": true, // Habilita Copilot en todos los lenguajes
-        "plaintext": false, // Deshabilita en texto plano
-        "markdown": true // Habilita en Markdown
-    },
-    "github.copilot.advanced": {
-        "length": 500, // Longitud máxima de sugerencia
-        "temperature": 0.5, // Creatividad de las sugerencias
-        "indentationMode": "automatic" // Indentación automática
-    },
-    "github.copilot.chat": {
-        "localeOverride": "es" // Copilot Chat en español
-    },
-    // ===== Tailwind CSS =====
-    "tailwindCSS.includeLanguages": {
-        "html": "html",
-        "javascript": "javascript",
-        "javascriptreact": "javascriptreact",
-        "typescript": "typescript",
-        "typescriptreact": "typescriptreact"
-    },
-    "tailwindCSS.experimental.classRegex": [
-        [
-            "clsx\\(([^)]*)\\)",
-            "(?:'|\"|`)([^']*)(?:'|\"|`)"
-        ],
-        [
-            "className\\s*:\\s*['\"`]([^'\"`]*)['\"`]"
-        ]
-    ],
-    // ===== Configuración específica de lenguaje =====
-    "[javascript]": {
-        "editor.defaultFormatter": "dbaeumer.vscode-eslint"
-    },
-    "[javascriptreact]": {
-        "editor.defaultFormatter": "dbaeumer.vscode-eslint"
-    },
-    "[typescript]": {
-        "editor.defaultFormatter": "dbaeumer.vscode-eslint"
-    },
-    "[typescriptreact]": {
-        "editor.defaultFormatter": "dbaeumer.vscode-eslint"
-    }
+  // ===== Asociaciones de archivos para un reconocimiento correcto de sintaxis =====
+  "files.associations": {
+    "*.jsx": "javascriptreact",
+    "*.js": "javascript",
+    "*.ts": "typescript",
+    "*.tsx": "typescriptreact"
+  },
+  // ===== Configuración general del editor =====
+  "editor.formatOnSave": true, // Formatea automáticamente al guardar
+  "editor.formatOnPaste": true, // Formatea al pegar código
+  "editor.formatOnType": true, // Formatea mientras escribes
+  "editor.defaultFormatter": "dbaeumer.vscode-eslint", // Usa ESLint como formateador principal
+  "editor.tabSize": 2, // Indentación de 2 espacios
+  "editor.insertSpaces": true, // Usa espacios en vez de tabs
+  "editor.detectIndentation": true, // Detecta indentación automáticamente
+  // ===== Autoguardado y limpieza de archivos =====
+  "files.autoSave": "onFocusChange", // Guarda automáticamente al cambiar de ventana
+  "files.trimTrailingWhitespace": true, // Elimina espacios al final de línea
+  "files.insertFinalNewline": true, // Añade salto de línea al final de archivo
+  "files.trimFinalNewlines": true, // Elimina saltos de línea extra al final
+  // ===== Configuración para React y JavaScript =====
+  "emmet.includeLanguages": {
+    "javascriptreact": "html",
+    "typescript": "html",
+    "typescriptreact": "html"
+  },
+  "emmet.triggerExpansionOnTab": true, // Expande Emmet con Tab
+  // ===== ESLint =====
+  "eslint.validate": ["javascript", "javascriptreact", "typescript", "typescriptreact"],
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit", // Corrige errores ESLint al guardar
+    "source.organizeImports": "explicit" // Organiza imports al guardar
+  },
+  // ===== Preferencias de comillas y actualización de imports =====
+  "javascript.preferences.quoteStyle": "double",
+  "typescript.preferences.quoteStyle": "double",
+  "javascript.updateImportsOnFileMove.enabled": "always",
+  "typescript.updateImportsOnFileMove.enabled": "always",
+  // ===== GitHub Copilot =====
+  "github.copilot.enable": {
+    "*": true, // Habilita Copilot en todos los lenguajes
+    "plaintext": false, // Deshabilita en texto plano
+    "markdown": true // Habilita en Markdown
+  },
+  "github.copilot.advanced": {
+    "length": 500, // Longitud máxima de sugerencia
+    "temperature": 0.5, // Creatividad de las sugerencias
+    "indentationMode": "automatic" // Indentación automática
+  },
+  "github.copilot.chat": {
+    "localeOverride": "es" // Copilot Chat en español
+  },
+  // ===== Tailwind CSS =====
+  "tailwindCSS.includeLanguages": {
+    "html": "html",
+    "javascript": "javascript",
+    "javascriptreact": "javascriptreact",
+    "typescript": "typescript",
+    "typescriptreact": "typescriptreact"
+  },
+  "tailwindCSS.experimental.classRegex": [
+    ["clsx\\(([^)]*)\\)", "(?:'|\"|`)([^']*)(?:'|\"|`)"],
+    ["className\\s*:\\s*['\"`]([^'\"`]*)['\"`]"]
+  ],
+  // ===== Configuración específica de lenguaje =====
+  "[javascript]": {
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+  },
+  "[javascriptreact]": {
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+  }
 }

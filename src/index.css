@@ -11,12 +11,22 @@
  * 5. Sugerencias de mejora profesional al final
  */
 
-@import "tailwindcss";
+@import 'tailwindcss';
 
 /* Configuración de fuentes base y renderizado */
 :root {
-  font-family: 'Rajdhani', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+  font-family:
+    'Rajdhani',
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    'Roboto',
+    'Oxygen',
+    'Ubuntu',
+    'Cantarell',
+    'Fira Sans',
+    'Droid Sans',
+    'Helvetica Neue',
     sans-serif;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -421,7 +431,8 @@ body {
     box-shadow: 0 0 5px rgba(59, 130, 246, 0.3);
   }
   50% {
-    box-shadow: 0 0 20px rgba(59, 130, 246, 0.6),
+    box-shadow:
+      0 0 20px rgba(59, 130, 246, 0.6),
       0 0 40px rgba(59, 130, 246, 0.3);
   }
 }
@@ -510,9 +521,8 @@ body {
       drop-shadow(0 0 15px rgba(255, 255, 255, 0.5));
   }
   50% {
-    filter: brightness(1.8) drop-shadow(0 0 20px rgba(255, 255, 255, 1.0))
-      drop-shadow(0 0 30px rgba(255, 255, 255, 0.8))
-      drop-shadow(0 0 40px rgba(0, 195, 255, 0.5));
+    filter: brightness(1.8) drop-shadow(0 0 20px rgba(255, 255, 255, 1))
+      drop-shadow(0 0 30px rgba(255, 255, 255, 0.8)) drop-shadow(0 0 40px rgba(0, 195, 255, 0.5));
   }
   75% {
     filter: brightness(1.5) drop-shadow(0 0 10px rgba(255, 255, 255, 0.7))
@@ -525,13 +535,15 @@ body {
 
 /* Clases para los logos animados */
 .logo-rotate-1 {
-  animation: rotateHorizontal 12s ease-in-out infinite,
+  animation:
+    rotateHorizontal 12s ease-in-out infinite,
     lightReflection 5s ease-in-out infinite;
   transform-style: preserve-3d;
 }
 
 .logo-rotate-2 {
-  animation: rotateHorizontalReverse 15s ease-in-out infinite,
+  animation:
+    rotateHorizontalReverse 15s ease-in-out infinite,
     lightReflection 4s ease-in-out infinite 1.5s;
   transform-style: preserve-3d;
 }
@@ -748,16 +760,21 @@ select option:checked {
 @keyframes clientCardHover {
   0% {
     transform: translateY(0) scale(1);
-    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    box-shadow:
+      0 10px 25px -5px rgba(0, 0, 0, 0.1),
+      0 10px 10px -5px rgba(0, 0, 0, 0.04);
   }
   100% {
     transform: translateY(-8px) scale(1.02);
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.05);
+    box-shadow:
+      0 25px 50px -12px rgba(0, 0, 0, 0.25),
+      0 0 0 1px rgba(255, 255, 255, 0.05);
   }
 }
 
 @keyframes logoFloat {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0px) rotate(0deg);
   }
   50% {
@@ -843,7 +860,8 @@ select option:checked {
 
 /* Animación de gradiente para texto del hero */
 @keyframes gradient-x {
-  0%, 100% {
+  0%,
+  100% {
     background-size: 200% 200%;
     background-position: left center;
   }
@@ -859,7 +877,8 @@ select option:checked {
 
 /* Animación de pulso mejorada */
 @keyframes pulse-glow {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 1;
     transform: scale(1);
     box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
@@ -890,19 +909,15 @@ select option:checked {
     8px 8px 0 rgba(0, 0, 0, 0.55),
     9px 9px 0 rgba(0, 0, 0, 0.5),
     10px 10px 0 rgba(0, 0, 0, 0.45),
-    /* Sombras difusas atmosféricas */
-    12px 12px 20px rgba(0, 0, 0, 0.8),
+    /* Sombras difusas atmosféricas */ 12px 12px 20px rgba(0, 0, 0, 0.8),
     18px 18px 30px rgba(0, 0, 0, 0.6),
     25px 25px 40px rgba(0, 0, 0, 0.4),
-    /* Efectos de glow corporativo */
-    0 0 30px rgba(59, 130, 246, 0.5),
+    /* Efectos de glow corporativo */ 0 0 30px rgba(59, 130, 246, 0.5),
     0 0 60px rgba(6, 182, 212, 0.3),
     0 0 90px rgba(147, 51, 234, 0.2);
 
   /* Filtros avanzados */
-  filter:
-    drop-shadow(0 0 25px rgba(59, 130, 246, 0.4))
-    drop-shadow(0 0 50px rgba(6, 182, 212, 0.2));
+  filter: drop-shadow(0 0 25px rgba(59, 130, 246, 0.4)) drop-shadow(0 0 50px rgba(6, 182, 212, 0.2));
 }
 
 /* Gradiente Corporativo Animado Premium */
@@ -926,7 +941,8 @@ select option:checked {
 }
 
 @keyframes gradientShiftPro {
-  0%, 100% {
+  0%,
+  100% {
     background-position: 0% 50%;
   }
   25% {
@@ -959,7 +975,8 @@ select option:checked {
 }
 
 @keyframes futureGradient {
-  0%, 100% {
+  0%,
+  100% {
     background-position: 0% 50%;
   }
   33% {
@@ -972,12 +989,7 @@ select option:checked {
 
 /* Efectos de Hover 3D Profesional */
 .text-hover-3d:hover {
-  transform:
-    perspective(1000px)
-    rotateX(5deg)
-    rotateY(-5deg)
-    translateZ(10px)
-    scale(1.02);
+  transform: perspective(1000px) rotateX(5deg) rotateY(-5deg) translateZ(10px) scale(1.02);
   transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
 }
 
@@ -991,14 +1003,24 @@ select option:checked {
 }
 
 @keyframes backgroundShift {
-  0%, 100% {
-    background-position: 0% 0%, 100% 100%, 50% 50%;
+  0%,
+  100% {
+    background-position:
+      0% 0%,
+      100% 100%,
+      50% 50%;
   }
   33% {
-    background-position: 30% 30%, 70% 70%, 80% 20%;
+    background-position:
+      30% 30%,
+      70% 70%,
+      80% 20%;
   }
   66% {
-    background-position: 70% 10%, 30% 90%, 20% 80%;
+    background-position:
+      70% 10%,
+      30% 90%,
+      20% 80%;
   }
 }
 
@@ -1088,7 +1110,8 @@ select option:checked {
 }
 
 @keyframes glowPulse {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 0;
     transform: scale(0.8);
   }
@@ -1104,7 +1127,8 @@ select option:checked {
 }
 
 @keyframes professionalPulse {
-  0%, 100% {
+  0%,
+  100% {
     transform: scale(1);
     opacity: 0.8;
   }
@@ -1151,7 +1175,8 @@ select option:checked {
 
 /* Animación para la línea expandible del banner */
 @keyframes expandWidth {
-  0%, 100% {
+  0%,
+  100% {
     width: 0;
   }
   50% {
@@ -1258,14 +1283,12 @@ select option:checked {
     0 7px 0 #0f172a,
     0 8px 0 #020617,
     0 9px 0 #000000,
-    /* Sombras suaves para profundidad */
-    0 10px 2px rgba(0, 0, 0, 0.2),
+    /* Sombras suaves para profundidad */ 0 10px 2px rgba(0, 0, 0, 0.2),
     0 12px 4px rgba(0, 0, 0, 0.15),
     0 15px 8px rgba(0, 0, 0, 0.1),
     0 20px 16px rgba(0, 0, 0, 0.08),
     0 25px 25px rgba(0, 0, 0, 0.05),
-    /* Efectos de luz */
-    0 0 20px rgba(59, 130, 246, 0.2),
+    /* Efectos de luz */ 0 0 20px rgba(59, 130, 246, 0.2),
     0 0 40px rgba(59, 130, 246, 0.1);
   position: relative;
   filter: drop-shadow(0 0 30px rgba(59, 130, 246, 0.3));
@@ -1279,12 +1302,14 @@ select option:checked {
   top: 0;
   left: 0;
   z-index: -1;
-  background: linear-gradient(135deg,
+  background: linear-gradient(
+    135deg,
     #1e293b 0%,
     #334155 25%,
     #475569 50%,
     #64748b 75%,
-    #94a3b8 100%);
+    #94a3b8 100%
+  );
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -1339,7 +1364,8 @@ select option:checked {
 
 /* Floating Elements */
 @keyframes floatGentle {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0px) rotate(0deg);
   }
   50% {
@@ -1354,22 +1380,21 @@ select option:checked {
 /* Reflejo blanco para el logo del banner principal */
 .logo-banner-white-reflection {
   filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.9))
-          drop-shadow(0 0 40px rgba(255, 255, 255, 0.6))
-          drop-shadow(0 0 60px rgba(255, 255, 255, 0.4))
-          brightness(1.3);
+    drop-shadow(0 0 40px rgba(255, 255, 255, 0.6)) drop-shadow(0 0 60px rgba(255, 255, 255, 0.4))
+    brightness(1.3);
   transition: filter 0.3s ease;
 }
 
 .logo-banner-white-reflection:hover {
-  filter: drop-shadow(0 0 25px rgba(255, 255, 255, 1.0))
-          drop-shadow(0 0 50px rgba(255, 255, 255, 0.8))
-          drop-shadow(0 0 75px rgba(255, 255, 255, 0.5))
-          brightness(1.5);
+  filter: drop-shadow(0 0 25px rgba(255, 255, 255, 1))
+    drop-shadow(0 0 50px rgba(255, 255, 255, 0.8)) drop-shadow(0 0 75px rgba(255, 255, 255, 0.5))
+    brightness(1.5);
 }
 
 /* Animaciones personalizadas para tarjetas del blog */
 @keyframes bounce-slow {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(-2px);
   }
   50% {

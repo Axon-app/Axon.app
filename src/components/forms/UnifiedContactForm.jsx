@@ -1,73 +1,69 @@
+// @ts-nocheck
 // UnifiedContactForm.jsx
 // =====================================================
 // Formulario unificado para contacto, cotización y consulta.
 // Incluye validaciones estrictas, UX profesional y feedback visual.
 // Autor: Axon.App Team | Última revisión: 29/06/2025
 
-import React, { useCallback, useMemo, useState } from "react";
-import { sendUnifiedEmail } from "../../services/emailService";
+import PropTypes from 'prop-types';
+import React, { useCallback, useMemo, useState } from 'react';
+import { sendUnifiedEmail } from '../../services/emailService';
 
 // === CONSTANTES DE OPCIONES DE FORMULARIO ===
 // Tipos de proyecto disponibles para cotización
 const PROJECT_TYPES = [
-  { value: "Desarrollo Web", label: "Desarrollo Web" },
-  { value: "Aplicación Móvil", label: "Aplicación Móvil" },
-  { value: "E-commerce", label: "E-commerce" },
-  { value: "Sistema de Gestión", label: "Sistema de Gestión" },
-  { value: "Consultoría Técnica", label: "Consultoría Técnica" },
-  { value: "Mantenimiento Web", label: "Mantenimiento Web" },
-  { value: "Otro", label: "Otro" },
+  { value: 'Desarrollo Web', label: 'Desarrollo Web' },
+  { value: 'Aplicación Móvil', label: 'Aplicación Móvil' },
+  { value: 'E-commerce', label: 'E-commerce' },
+  { value: 'Sistema de Gestión', label: 'Sistema de Gestión' },
+  { value: 'Consultoría Técnica', label: 'Consultoría Técnica' },
+  { value: 'Mantenimiento Web', label: 'Mantenimiento Web' },
+  { value: 'Otro', label: 'Otro' },
 ];
 // Tipos de cliente
 const CLIENT_TYPES = [
-  { value: "Empresa", label: "Empresa" },
-  { value: "Emprendedor", label: "Emprendedor" },
-  { value: "Freelancer", label: "Freelancer" },
+  { value: 'Empresa', label: 'Empresa' },
+  { value: 'Emprendedor', label: 'Emprendedor' },
+  { value: 'Freelancer', label: 'Freelancer' },
   {
-    value: "Organización sin fines de lucro",
-    label: "Organización sin fines de lucro",
+    value: 'Organización sin fines de lucro',
+    label: 'Organización sin fines de lucro',
   },
-  { value: "Gobierno", label: "Gobierno" },
-  { value: "Estudiante", label: "Estudiante" },
-  { value: "Otro", label: "Otro" },
+  { value: 'Gobierno', label: 'Gobierno' },
+  { value: 'Estudiante', label: 'Estudiante' },
+  { value: 'Otro', label: 'Otro' },
 ];
 // Tipos de consulta
 const CONSULTATION_TYPES = [
-  { value: "Consulta General", label: "Consulta General" },
-  { value: "Consulta Técnica", label: "Consulta Técnica" },
-  { value: "Estrategia Digital", label: "Estrategia Digital" },
-  { value: "Revisión de Proyecto", label: "Revisión de Proyecto" },
-  { value: "Asesoría de Desarrollo", label: "Asesoría de Desarrollo" },
-  { value: "Otro", label: "Otro" },
+  { value: 'Consulta General', label: 'Consulta General' },
+  { value: 'Consulta Técnica', label: 'Consulta Técnica' },
+  { value: 'Estrategia Digital', label: 'Estrategia Digital' },
+  { value: 'Revisión de Proyecto', label: 'Revisión de Proyecto' },
+  { value: 'Asesoría de Desarrollo', label: 'Asesoría de Desarrollo' },
+  { value: 'Otro', label: 'Otro' },
 ];
 // Tipos de reunión para consultas
 const MEETING_TYPES = [
-  { value: "video-call", label: "Videollamada", icon: "🎥" },
-  { value: "phone-call", label: "Llamada telefónica", icon: "📞" },
-  { value: "in-person", label: "Presencial", icon: "🤝" },
+  { value: 'video-call', label: 'Videollamada', icon: '🎥' },
+  { value: 'phone-call', label: 'Llamada telefónica', icon: '📞' },
+  { value: 'in-person', label: 'Presencial', icon: '🤝' },
 ];
 
 // Títulos y mensajes para los diferentes modos y modales
-const FORM_TITLES = {
-  contact: "Formulario de información y contacto",
-  quote: "Detalles del Proyecto",
-  consultation: "Agenda tu Consulta",
-};
 const MODAL_TITLES = {
-  contact: "¡Mensaje Enviado Exitosamente!",
-  quote: "¡Solicitud de Propuesta Recibida!",
-  consultation: "¡Consulta Programada Correctamente!",
+  contact: '¡Mensaje Enviado Exitosamente!',
+  quote: '¡Solicitud de Propuesta Recibida!',
+  consultation: '¡Consulta Programada Correctamente!',
 };
 const MODAL_MESSAGES = {
   contact:
-    "Hemos recibido tu mensaje exitosamente. Nuestro equipo lo revisará y te contactaremos dentro de las próximas 24 horas.",
+    'Hemos recibido tu mensaje exitosamente. Nuestro equipo lo revisará y te contactaremos dentro de las próximas 24 horas.',
   quote:
-    "Hemos recibido tu solicitud de propuesta. Nuestro equipo analizará los detalles de tu proyecto y te enviaremos una estimación detallada dentro de las próximas 24 horas.",
+    'Hemos recibido tu solicitud de propuesta. Nuestro equipo analizará los detalles de tu proyecto y te enviaremos una estimación detallada dentro de las próximas 24 horas.',
   consultation:
-    "Hemos recibido tu solicitud de consulta. Te contactaremos para confirmar la fecha, hora y modalidad de la reunión dentro de las próximas 24 horas.",
+    'Hemos recibido tu solicitud de consulta. Te contactaremos para confirmar la fecha, hora y modalidad de la reunión dentro de las próximas 24 horas.',
 };
 
-// === COMPONENTES DE MODAL PARA FEEDBACK ===
 /**
  * SuccessModal
  * Modal visual para mostrar éxito en el envío del formulario.
@@ -77,23 +73,11 @@ const SuccessModal = ({ type, onClose }) => (
     <div className="bg-gradient-to-br from-green-900 to-emerald-900 rounded-2xl p-6 sm:p-8 max-w-lg w-full border border-green-500/30 shadow-2xl animate-fade-in">
       <div className="text-center mb-6">
         <div className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4 animate-bounce">
-          <svg
-            className="w-8 h-8 text-white"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="3"
-              d="M5 13l4 4L19 7"
-            />
+          <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" />
           </svg>
         </div>
-        <h3 className="text-2xl font-bold text-white mb-3">
-          {MODAL_TITLES[type]}
-        </h3>
+        <h3 className="text-2xl font-bold text-white mb-3">{MODAL_TITLES[type]}</h3>
         <p className="text-green-100 leading-relaxed">{MODAL_MESSAGES[type]}</p>
       </div>
       <button
@@ -106,6 +90,11 @@ const SuccessModal = ({ type, onClose }) => (
   </div>
 );
 
+SuccessModal.propTypes = {
+  type: PropTypes.oneOf(['contact', 'quote', 'consultation']).isRequired,
+  onClose: PropTypes.func.isRequired,
+};
+
 /**
  * ErrorModal
  * Modal visual para mostrar errores en el envío del formulario.
@@ -115,12 +104,7 @@ const ErrorModal = ({ error, onClose }) => (
     <div className="bg-gradient-to-br from-red-900 to-red-800 rounded-2xl p-6 sm:p-8 max-w-md w-full border border-red-500/30 shadow-2xl">
       <div className="text-center">
         <div className="w-16 h-16 bg-red-500 rounded-full flex items-center justify-center mx-auto mb-4">
-          <svg
-            className="w-8 h-8 text-white"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
+          <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path
               strokeLinecap="round"
               strokeLinejoin="round"
@@ -129,9 +113,7 @@ const ErrorModal = ({ error, onClose }) => (
             />
           </svg>
         </div>
-        <h3 className="text-2xl font-bold text-white mb-3">
-          Error en el Envío
-        </h3>
+        <h3 className="text-2xl font-bold text-white mb-3">Error en el Envío</h3>
         <p className="text-red-200 mb-4">{error}</p>
         <button
           onClick={onClose}
@@ -144,6 +126,11 @@ const ErrorModal = ({ error, onClose }) => (
   </div>
 );
 
+ErrorModal.propTypes = {
+  error: PropTypes.string.isRequired,
+  onClose: PropTypes.func.isRequired,
+};
+
 // === COMPONENTE PRINCIPAL ===
 /**
  * UnifiedContactForm
@@ -151,215 +138,169 @@ const ErrorModal = ({ error, onClose }) => (
  * - Validación estricta de campos.
  * - Feedback visual y accesibilidad.
  * - Modularidad y personalización por modo.
- *
- * @param {string} mode - Modo del formulario: 'contact', 'quote', 'consultation'.
- * @param {string|null} section - Sección específica para modo contacto.
- * @param {function|null} onClose - Callback para cerrar el modal.
- * @param {string} className - Clases CSS adicionales.
  */
-export const UnifiedContactForm = React.memo(
-  ({ mode = "contact", section = null, onClose = null, className = "" }) => {
+
+/**
+ * Componente de formulario unificado
+ */
+const UnifiedFormComponent = ({ mode = 'contact', section = null, onClose = null, className = '' }) => {
     const [formData, setFormData] = useState({
       // Campos básicos (para todos los tipos)
-      name: "",
-      email: "",
-      phone: "",
-      company: "",
-      message: "",
+      name: '',
+      email: '',
+      phone: '',
+      company: '',
+      message: '',
 
       // Campos específicos para propuesta comercial
-      city: "",
-      clientType: "",
-      projectType: "",
-      projectDescription: "",
-      additionalRequirements: "",
+      city: '',
+      clientType: '',
+      projectType: '',
+      projectDescription: '',
+      additionalRequirements: '',
 
       // Campos específicos para consulta
-      consultationType: "",
-      preferredDate: "",
-      preferredTime: "",
-      topics: "",
-      meetingType: "video-call",
+      consultationType: '',
+      preferredDate: '',
+      preferredTime: '',
+      topics: '',
+      meetingType: 'video-call',
     });
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const [errors, setErrors] = useState({});
+    const [errors, setErrors] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    message: '',
+    projectType: '',
+    projectDescription: '',
+    consultationType: '',
+    topics: ''
+  });
     const [showSuccessModal, setShowSuccessModal] = useState(false);
     const [showErrorModal, setShowErrorModal] = useState(false);
-    const [errorMessage, setErrorMessage] = useState("");
+    const [errorMessage, setErrorMessage] = useState('');
     // Definir campos obligatorios por modo
     const getRequiredFields = useCallback(() => {
       const baseFields = [
-        { key: "name", label: "Nombre completo" },
-        { key: "email", label: "Correo electrónico" },
+        { key: 'name', label: 'Nombre completo' },
+        { key: 'email', label: 'Email' }
       ];
 
       switch (mode) {
-        case "contact":
-          return [...baseFields, { key: "message", label: "Mensaje" }];
-        case "quote":
+        case 'contact':
+          return [...baseFields, { key: 'message', label: 'Mensaje' }];
+        case 'quote':
           return [
             ...baseFields,
-            { key: "projectType", label: "Tipo de proyecto" },
-            { key: "projectDescription", label: "Descripción del proyecto" },
+            { key: 'projectType', label: 'Tipo de proyecto' },
+            { key: 'projectDescription', label: 'Descripción del proyecto' }
           ];
-        case "consultation":
+        case 'consultation':
           return [
             ...baseFields,
-            { key: "consultationType", label: "Tipo de consulta" },
-            { key: "topics", label: "Temas a tratar" },
+            { key: 'consultationType', label: 'Tipo de consulta' },
+            { key: 'topics', label: 'Temas a tratar' }
           ];
         default:
           return baseFields;
       }
     }, [mode]);
 
-    // Verificar campos completados
-    const getCompletedFields = useMemo(() => {
-      const requiredFields = getRequiredFields();
-      return requiredFields.filter((field) => {
-        const value = formData[field.key];
-        return value && value.toString().trim() !== "";
-      });
-    }, [formData, getRequiredFields]);
+    const getCompletedFields = useMemo(() =>
+      getRequiredFields().filter(field => formData[field.key]?.trim()),
+    [formData, getRequiredFields]);
 
-    // Verificar campos pendientes
-    const getPendingFields = useMemo(() => {
-      const requiredFields = getRequiredFields();
-      return requiredFields.filter((field) => {
-        const value = formData[field.key];
-        return !value || value.toString().trim() === "";
-      });
-    }, [formData, getRequiredFields]);
+    const getPendingFields = useMemo(() =>
+      getRequiredFields().filter(field => !formData[field.key]?.trim()),
+    [formData, getRequiredFields]);
 
-    // Verificar si el formulario está completo
-    const isFormComplete = useMemo(() => {
-      return getPendingFields.length === 0;
-    }, [getPendingFields]); // Validación estricta con reglas específicas
+    const isFormComplete = useMemo(() =>
+      getPendingFields.length === 0,
+    [getPendingFields]);    // Validación estricta con reglas específicas
     const validateForm = useCallback(() => {
       const newErrors = {};
 
       // Validación de nombre - solo letras, espacios, acentos y caracteres especiales del español
       if (!formData.name.trim()) {
-        newErrors.name = "El nombre es requerido";
+        newErrors.name = 'El nombre es requerido';
       } else if (formData.name.trim().length < 2) {
-        newErrors.name = "El nombre debe tener al menos 2 caracteres";
+        newErrors.name = 'El nombre debe tener al menos 2 caracteres';
       } else if (!/^[a-zA-ZÀ-ÿ\u00f1\u00d1\s'-]+$/.test(formData.name.trim())) {
-        newErrors.name =
-          "El nombre solo puede contener letras, espacios y caracteres válidos";
+        newErrors.name = 'El nombre solo puede contener letras, espacios y caracteres válidos';
       } else if (/\d/.test(formData.name.trim())) {
-        newErrors.name = "El nombre no puede contener números";
+        newErrors.name = 'El nombre no puede contener números';
       } else if (formData.name.trim().length > 50) {
-        newErrors.name = "El nombre no puede exceder los 50 caracteres";
+        newErrors.name = 'El nombre no puede exceder los 50 caracteres';
       }
 
       // Validación de email - más estricta
       if (!formData.email.trim()) {
-        newErrors.email = "El email es requerido";
+        newErrors.email = 'El email es requerido';
       } else {
         const emailRegex =
           /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
         if (!emailRegex.test(formData.email.trim())) {
-          newErrors.email =
-            "Ingrese un email válido (ejemplo: usuario@dominio.com)";
+          newErrors.email = 'Ingrese un email válido (ejemplo: usuario@dominio.com)';
         } else if (formData.email.trim().length > 254) {
-          newErrors.email = "El email es demasiado largo";
+          newErrors.email = 'El email es demasiado largo';
         }
       } // Validación de teléfono - solo números y formatos válidos
       if (formData.phone && formData.phone.trim()) {
-        const phoneClean = formData.phone.replace(/[\s\-()+ ]/g, "");
+        const phoneClean = formData.phone.replace(/[\s\-()+ ]/g, '');
         if (!/^\d+$/.test(phoneClean)) {
-          newErrors.phone = "El teléfono solo puede contener números";
+          newErrors.phone = 'El teléfono solo puede contener números';
         } else if (phoneClean.length < 10) {
-          newErrors.phone = "El teléfono debe tener al menos 10 dígitos";
+          newErrors.phone = 'El teléfono debe tener al menos 10 dígitos';
         } else if (phoneClean.length > 15) {
-          newErrors.phone = "El teléfono no puede tener más de 15 dígitos";
+          newErrors.phone = 'El teléfono no puede tener más de 15 dígitos';
         } else if (!/^[0-9\s\-()+ ]+$/.test(formData.phone.trim())) {
-          newErrors.phone = "Formato de teléfono inválido";
+          newErrors.phone = 'Formato de teléfono inválido';
         }
       }
 
-      if (mode === "contact" && !formData.message.trim()) {
-        newErrors.message = "El mensaje es requerido";
+      if (mode === 'contact' && !formData.message.trim()) {
+        newErrors.message = 'El mensaje es requerido';
       }
 
-      if (mode === "quote") {
+      if (mode === 'quote') {
         if (!formData.projectType) {
-          newErrors.projectType = "El tipo de proyecto es requerido";
+          newErrors.projectType = 'El tipo de proyecto es requerido';
         }
         if (!formData.projectDescription.trim()) {
-          newErrors.projectDescription =
-            "La descripción del proyecto es requerida";
+          newErrors.projectDescription = 'La descripción del proyecto es requerida';
         }
       }
 
-      if (mode === "consultation") {
+      if (mode === 'consultation') {
         if (!formData.consultationType) {
-          newErrors.consultationType = "El tipo de consulta es requerido";
+          newErrors.consultationType = 'El tipo de consulta es requerido';
         }
         if (!formData.topics.trim()) {
-          newErrors.topics = "Los temas a tratar son requeridos";
+          newErrors.topics = 'Los temas a tratar son requeridos';
         }
       }
 
       setErrors(newErrors);
       return Object.keys(newErrors).length === 0;
-    }, [formData, mode]); // Manejar cambios en el formulario con validación en tiempo real
-    const handleChange = useCallback(
-      (e) => {
-        const { name, value } = e.target;
-        let processedValue = value;
+    }, [formData, mode]);    // Manejar cambios en el formulario con validación en tiempo real
+    /** @type {React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>} */
+    const handleChange = useCallback((e) => {
+      const { name, value } = e.target;
+      setFormData(prev => ({
+        ...prev,
+        [name]: value
+      }));
 
-        // Procesamiento específico por campo
-        switch (name) {
-          case "name":
-            // Solo permitir letras, espacios y caracteres especiales del español
-            processedValue = value.replace(/[^a-zA-ZÀ-ÿ\u00f1\u00d1\s'-]/g, "");
-            // Limitar longitud
-            if (processedValue.length > 50) {
-              processedValue = processedValue.substring(0, 50);
-            }
-            break;
-
-          case "phone":
-            // Solo permitir números, espacios, guiones, paréntesis y signo +
-            processedValue = value.replace(/[^0-9\s\-()+ ]/g, "");
-            // Limitar longitud (15 dígitos + formateo)
-            if (processedValue.replace(/[^0-9]/g, "").length > 15) {
-              const digitsOnly = processedValue.replace(/[^0-9]/g, "");
-              processedValue = digitsOnly.substring(0, 15);
-            }
-            break;
-
-          case "email":
-            // Convertir a minúsculas y eliminar espacios
-            processedValue = value.toLowerCase().trim();
-            // Limitar longitud
-            if (processedValue.length > 254) {
-              processedValue = processedValue.substring(0, 254);
-            }
-            break;
-
-          default:
-            processedValue = value;
-        }
-
-        setFormData((prev) => ({
+      if (errors[name]) {
+        setErrors(prev => ({
           ...prev,
-          [name]: processedValue,
+          [name]: ''
         }));
+      }
+    }, [errors]);
 
-        // Limpiar error del campo cuando el usuario empiece a escribir
-        if (errors[name]) {
-          setErrors((prev) => ({
-            ...prev,
-            [name]: "",
-          }));
-        }
-      },
-      [errors]
-    );
-
-    // Enviar formulario
+    /** @type {React.FormEventHandler<HTMLFormElement>} */
     const handleSubmit = async (e) => {
       e.preventDefault();
       if (!validateForm()) {
@@ -367,65 +308,61 @@ export const UnifiedContactForm = React.memo(
       }
       setIsSubmitting(true);
       try {
-        const result = await sendUnifiedEmail(mode, formData);
-
-        if (result.success) {
+        const result = await sendUnifiedEmail(formData, mode);
+        if (result && result.success) {
           setShowSuccessModal(true);
-
-          // Resetear formulario
           setFormData({
-            name: "",
-            email: "",
-            phone: "",
-            company: "",
-            message: "",
-            city: "",
-            clientType: "",
-            projectType: "",
-            projectDescription: "",
-            additionalRequirements: "",
-            consultationType: "",
-            preferredDate: "",
-            preferredTime: "",
-            topics: "",
-            meetingType: "video-call",
+            name: '',
+            email: '',
+            phone: '',
+            company: '',
+            message: '',
+            city: '',
+            clientType: '',
+            projectType: '',
+            projectDescription: '',
+            additionalRequirements: '',
+            consultationType: '',
+            preferredDate: '',
+            preferredTime: '',
+            topics: '',
+            meetingType: 'video-call',
           });
 
-          // Cerrar modal si existe
-          if (onClose) {
-            setTimeout(() => onClose(), 1500);
+          if (onClose && typeof onClose === 'function') {
+            setTimeout(onClose, 1500);
           }
         } else {
-          const errorMsg = result.error || "Ocurrió un error inesperado";
+          const errorMsg = (result && result.error) || 'Ocurrió un error inesperado';
           setErrorMessage(errorMsg);
           setShowErrorModal(true);
         }
-      } catch {
-        setErrorMessage("Error de conexión. Por favor, intenta nuevamente.");
+      } catch (error) {
+        setErrorMessage('Error de conexión. Por favor, intenta nuevamente.');
         setShowErrorModal(true);
       } finally {
         setIsSubmitting(false);
       }
-    }; // Renderizar campo con diseño profesional mejorado y validaciones estrictas
+    };    // Renderizar campo con diseño profesional mejorado y validaciones estrictas
     const renderField = useCallback(
-      (
-        name,
-        label,
-        type = "text",
-        required = false,
-        options = [],
-        maxLength
-      ) => {
+      /**
+       * @param {string} name
+       * @param {string} label
+       * @param {'text' | 'email' | 'tel' | 'textarea' | 'select' | 'date' | 'time'} [type='text']
+       * @param {boolean} [required=false]
+       * @param {Array} [options=[]]
+       * @param {number} [maxLength]
+       */
+      (name, label, type = 'text', required = false, options = [], maxLength) => {
         const fieldId = `field-${name}-${type}`;
-        const hasError = errors[name];
-        const getValue = () => formData[name] || "";
+        // @ts-ignore
+        const hasError = name in errors && errors[name];
+        // @ts-ignore
+        const getValue = () => formData[name] || '';
 
         return (
           <div className="mb-4 relative">
-            <label
-              htmlFor={fieldId}
-              className="block text-sm font-medium text-gray-300 mb-1"
-            >
+            <label htmlFor={fieldId} className="block text-sm font-medium text-gray-300 mb-1">
               {label}
               {required && (
                 <span className="text-red-500 ml-1" aria-label="required">
@@ -434,40 +371,36 @@ export const UnifiedContactForm = React.memo(
               )}
             </label>
             <div className="relative">
-              {type === "textarea" ? (
+              {type === 'textarea' ? (
                 <textarea
                   id={fieldId}
                   name={name}
                   value={getValue()}
                   onChange={handleChange}
                   className={`w-full px-3 py-2 bg-gray-800 border ${
-                    hasError
-                      ? "border-red-500"
-                      : "border-gray-600 focus:border-blue-500"
+                    hasError ? 'border-red-500' : 'border-gray-600 focus:border-blue-500'
                   } rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-colors`}
                   rows={4}
                   maxLength={maxLength || 1000}
-                  aria-invalid={hasError ? "true" : "false"}
+                  aria-invalid={hasError ? 'true' : 'false'}
                   aria-describedby={hasError ? `${fieldId}-error` : undefined}
                 />
-              ) : type === "select" ? (
+              ) : type === 'select' ? (
                 <select
                   id={fieldId}
                   name={name}
                   value={getValue()}
                   onChange={handleChange}
                   className={`w-full px-3 py-2 bg-gray-800 border ${
-                    hasError
-                      ? "border-red-500"
-                      : "border-gray-600 focus:border-blue-500"
+                    hasError ? 'border-red-500' : 'border-gray-600 focus:border-blue-500'
                   } rounded-lg text-white appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-colors`}
-                  aria-invalid={hasError ? "true" : "false"}
+                  aria-invalid={hasError ? 'true' : 'false'}
                   aria-describedby={hasError ? `${fieldId}-error` : undefined}
                 >
                   <option value="" disabled>
                     Selecciona una opción
                   </option>
-                  {options.map((option) => (
+                  {options.map(option => (
                     <option key={option.value} value={option.value}>
                       {option.label}
                     </option>
@@ -481,12 +414,10 @@ export const UnifiedContactForm = React.memo(
                   value={getValue()}
                   onChange={handleChange}
                   className={`w-full px-3 py-2 bg-gray-800 border ${
-                    hasError
-                      ? "border-red-500"
-                      : "border-gray-600 focus:border-blue-500"
+                    hasError ? 'border-red-500' : 'border-gray-600 focus:border-blue-500'
                   } rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-colors`}
                   maxLength={maxLength}
-                  aria-invalid={hasError ? "true" : "false"}
+                  aria-invalid={hasError ? 'true' : 'false'}
                   aria-describedby={hasError ? `${fieldId}-error` : undefined}
                 />
               )}
@@ -495,6 +426,7 @@ export const UnifiedContactForm = React.memo(
                   id={`${fieldId}-error`}
                   className="absolute left-0 -bottom-5 text-xs text-red-500"
                 >
+                  {/* @ts-ignore */}
                   {errors[name]}
                 </div>
               )}
@@ -505,24 +437,18 @@ export const UnifiedContactForm = React.memo(
       [formData, errors, handleChange]
     );
     const titles = {
-      contact: "Formulario de información y contacto",
-      quote: "Detalles del Proyecto",
-      consultation: "Agenda tu Consulta",
+      contact: 'Formulario de información y contacto',
+      quote: 'Detalles del Proyecto',
+      consultation: 'Agenda tu Consulta',
     };
     return (
       <div className={`relative ${className}`}>
         {/* Modales */}
         {showSuccessModal && (
-          <SuccessModal
-            type={mode}
-            onClose={() => setShowSuccessModal(false)}
-          />
+          <SuccessModal type={mode} onClose={() => setShowSuccessModal(false)} />
         )}
         {showErrorModal && (
-          <ErrorModal
-            error={errorMessage}
-            onClose={() => setShowErrorModal(false)}
-          />
+          <ErrorModal error={errorMessage} onClose={() => setShowErrorModal(false)} />
         )}
 
         {/* ...existing code... */}
@@ -530,7 +456,7 @@ export const UnifiedContactForm = React.memo(
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center space-x-3">
               <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
-                {mode === "contact" && (
+                {mode === 'contact' && (
                   <svg
                     className="w-6 h-6 text-white"
                     fill="none"
@@ -545,7 +471,7 @@ export const UnifiedContactForm = React.memo(
                     ></path>
                   </svg>
                 )}
-                {mode === "quote" && (
+                {mode === 'quote' && (
                   <svg
                     className="w-6 h-6 text-white"
                     fill="none"
@@ -560,7 +486,7 @@ export const UnifiedContactForm = React.memo(
                     ></path>
                   </svg>
                 )}
-                {mode === "consultation" && (
+                {mode === 'consultation' && (
                   <svg
                     className="w-6 h-6 text-white"
                     fill="none"
@@ -577,16 +503,14 @@ export const UnifiedContactForm = React.memo(
                 )}
               </div>
               <div>
-                <h2 className="text-2xl font-bold text-white">
-                  {titles[mode]}
-                </h2>{" "}
+                {/* @ts-ignore */}
+                <h2 className="text-2xl font-bold text-white">{titles[mode]}</h2>
                 <p className="text-gray-400 text-sm">
-                  {mode === "contact" &&
-                    "Completa el formulario y te responderemos pronto"}
-                  {mode === "quote" &&
-                    "Proporciona detalles de tu proyecto para una propuesta personalizada"}
-                  {mode === "consultation" &&
-                    "Programa una consulta gratuita con nuestros expertos"}
+                  {mode === 'contact' && 'Completa el formulario y te responderemos pronto'}
+                  {mode === 'quote' &&
+                    'Proporciona detalles de tu proyecto para una propuesta personalizada'}
+                  {mode === 'consultation' &&
+                    'Programa una consulta gratuita con nuestros expertos'}
                 </p>
               </div>
             </div>
@@ -594,12 +518,12 @@ export const UnifiedContactForm = React.memo(
             {/* Badge de modo */}
             <div className="px-3 py-1 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-full border border-blue-500/30">
               <span className="text-blue-400 text-xs font-semibold uppercase tracking-wider">
-                {mode === "contact" && "Contacto"}
-                {mode === "quote" && "Propuesta"}
-                {mode === "consultation" && "Consulta"}
+                {mode === 'contact' && 'Contacto'}
+                {mode === 'quote' && 'Propuesta'}
+                {mode === 'consultation' && 'Consulta'}
               </span>
             </div>
-          </div>{" "}
+          </div>{' '}
           {/* Barra de progreso visual */}
           <div className="w-full h-1 bg-gray-700 rounded-full overflow-hidden">
             <div className="h-full bg-gradient-to-r from-blue-500 to-purple-600 rounded-full animate-pulse"></div>
@@ -625,25 +549,21 @@ export const UnifiedContactForm = React.memo(
                   ></path>
                 </svg>
               </div>
-              <h3 className="text-lg font-semibold text-white">
-                Estado del Formulario
-              </h3>
+              <h3 className="text-lg font-semibold text-white">Estado del Formulario</h3>
             </div>
 
             <div className="flex items-center space-x-2">
               <div
                 className={`w-3 h-3 rounded-full ${
-                  isFormComplete
-                    ? "bg-green-500 animate-pulse"
-                    : "bg-orange-500"
+                  isFormComplete ? 'bg-green-500 animate-pulse' : 'bg-orange-500'
                 }`}
               ></div>
               <span
                 className={`text-sm font-medium ${
-                  isFormComplete ? "text-green-400" : "text-orange-400"
+                  isFormComplete ? 'text-green-400' : 'text-orange-400'
                 }`}
               >
-                {isFormComplete ? "Listo para enviar" : "Campos pendientes"}
+                {isFormComplete ? 'Listo para enviar' : 'Campos pendientes'}
               </span>
             </div>
           </div>
@@ -660,10 +580,7 @@ export const UnifiedContactForm = React.memo(
               <div
                 className="h-full bg-gradient-to-r from-blue-500 to-green-500 rounded-full transition-all duration-500 ease-out"
                 style={{
-                  width: `${
-                    (getCompletedFields.length / getRequiredFields().length) *
-                    100
-                  }%`,
+                  width: `${(getCompletedFields.length / getRequiredFields().length) * 100}%`,
                 }}
               ></div>
             </div>
@@ -673,12 +590,7 @@ export const UnifiedContactForm = React.memo(
           {getPendingFields.length > 0 && (
             <div className="space-y-2">
               <h4 className="text-sm font-medium text-orange-400 flex items-center">
-                <svg
-                  className="w-4 h-4 mr-2"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
+                <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
@@ -689,15 +601,13 @@ export const UnifiedContactForm = React.memo(
                 Campos obligatorios pendientes:
               </h4>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                {getPendingFields.map((field) => (
+                {getPendingFields.map(field => (
                   <div
                     key={field.key}
                     className="flex items-center space-x-2 p-2 bg-orange-500/10 border border-orange-500/20 rounded-lg"
                   >
                     <div className="w-2 h-2 bg-orange-500 rounded-full"></div>
-                    <span className="text-sm text-orange-300">
-                      {field.label}
-                    </span>
+                    <span className="text-sm text-orange-300">{field.label}</span>
                   </div>
                 ))}
               </div>
@@ -723,9 +633,7 @@ export const UnifiedContactForm = React.memo(
                 </svg>
               </div>
               <div>
-                <p className="text-sm font-medium text-green-400">
-                  ¡Formulario completado!
-                </p>
+                <p className="text-sm font-medium text-green-400">¡Formulario completado!</p>
                 <p className="text-xs text-green-300">
                   Todos los campos obligatorios han sido llenados correctamente.
                 </p>
@@ -736,34 +644,33 @@ export const UnifiedContactForm = React.memo(
 
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Para el modo contact, renderizar según la sección */}
-          {mode === "contact" && section === "basic" && (
+          {mode === 'contact' && section === 'basic' && (
             <div className="space-y-4">
-              {/* Información personal básica */}
               <div className="space-y-4">
-                {renderField("name", "Nombre completo", "text", true, [], 50)}
-                {renderField("email", "Email", "email", true, [], 254)}
-                {renderField("phone", "Teléfono", "tel", false, [], 20)}
-                {renderField("company", "Empresa/Organización", "text", false, [], 100)}
+                {renderField('name', 'Nombre completo', 'text', true, [], 50)}
+                {renderField('email', 'Email', 'email', true, [], 254)}
+                {renderField('phone', 'Teléfono', 'tel', false, [], 20)}
+                {renderField('company', 'Empresa/Organización', 'text', false, [], 100)}
               </div>
             </div>
           )}
 
-          {mode === "contact" && section === "details" && (
+          {mode === 'contact' && section === 'details' && (
             <div className="space-y-4">
               {/* Detalles del proyecto */}
               <div className="space-y-4">
-                {renderField("projectType", "Tipo de proyecto", "select", true, PROJECT_TYPES)}
-                {renderField("message", "Describe tu proyecto", "textarea", true, [], 1000)}
+                {renderField('projectType', 'Tipo de proyecto', 'select', true, PROJECT_TYPES)}
+                {renderField('message', 'Describe tu proyecto', 'textarea', true, [], 1000)}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {renderField("city", "Ciudad", "text", false, [], 50)}
-                  {renderField("clientType", "Tipo de cliente", "select", false, CLIENT_TYPES)}
+                  {renderField('city', 'Ciudad', 'text', false, [], 50)}
+                  {renderField('clientType', 'Tipo de cliente', 'select', false, CLIENT_TYPES)}
                 </div>
               </div>
             </div>
           )}
 
           {/* Para el modo contact sin sección (formulario completo original) */}
-          {mode === "contact" && !section && (
+          {mode === 'contact' && !section && (
             <div className="space-y-6">
               {/* Sección de información personal */}
               <div className="bg-gradient-to-br from-gray-900/80 to-gray-800/80 backdrop-blur-sm p-6 rounded-2xl border border-gray-700/50 shadow-xl">
@@ -784,12 +691,12 @@ export const UnifiedContactForm = React.memo(
                   Información Personal
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {renderField("name", "Nombre completo", "text", true, [], 50)}
-                  {renderField("email", "Email", "email", true, [], 254)}
+                  {renderField('name', 'Nombre completo', 'text', true, [], 50)}
+                  {renderField('email', 'Email', 'email', true, [], 254)}
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {renderField("phone", "Teléfono", "tel", false, [], 20)}
-                  {renderField("company", "Empresa/Organización", "text", false, [], 100)}
+                  {renderField('phone', 'Teléfono', 'tel', false, [], 20)}
+                  {renderField('company', 'Empresa/Organización', 'text', false, [], 100)}
                 </div>
               </div>
 
@@ -811,12 +718,12 @@ export const UnifiedContactForm = React.memo(
                   </svg>
                   Tu Mensaje
                 </h3>
-                {renderField("message", "Mensaje", "textarea", true, [], 1000)}
+                {renderField('message', 'Mensaje', 'textarea', true, [], 1000)}
               </div>
             </div>
           )}
 
-          {mode === "quote" && (
+          {mode === 'quote' && (
             <div className="space-y-6">
               {/* Sección de información personal */}
               <div className="bg-gradient-to-br from-gray-900/80 to-gray-800/80 backdrop-blur-sm p-6 rounded-2xl border border-gray-700/50 shadow-xl">
@@ -837,12 +744,12 @@ export const UnifiedContactForm = React.memo(
                   Información Personal
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {renderField("name", "Nombre completo", "text", true, [], 50)}
-                  {renderField("email", "Email", "email", true, [], 254)}
+                  {renderField('name', 'Nombre completo', 'text', true, [], 50)}
+                  {renderField('email', 'Email', 'email', true, [], 254)}
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {renderField("phone", "Teléfono", "tel", false, [], 20)}
-                  {renderField("company", "Empresa/Organización", "text", false, [], 100)}
+                  {renderField('phone', 'Teléfono', 'tel', false, [], 20)}
+                  {renderField('company', 'Empresa/Organización', 'text', false, [], 100)}
                 </div>
               </div>
 
@@ -865,17 +772,31 @@ export const UnifiedContactForm = React.memo(
                   Detalles del Proyecto
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {renderField("city", "Ciudad", "text", false, [], 50)}
-                  {renderField("clientType", "Tipo de cliente", "select", false, CLIENT_TYPES)}
+                  {renderField('city', 'Ciudad', 'text', false, [], 50)}
+                  {renderField('clientType', 'Tipo de cliente', 'select', false, CLIENT_TYPES)}
                 </div>
-                {renderField("projectType", "Tipo de proyecto", "select", true, PROJECT_TYPES)}
-                {renderField("projectDescription", "Descripción del proyecto", "textarea", true, [], 1000)}
-                {renderField("additionalRequirements", "Requisitos adicionales", "textarea", false, [], 1000)}
+                {renderField('projectType', 'Tipo de proyecto', 'select', true, PROJECT_TYPES)}
+                {renderField(
+                  'projectDescription',
+                  'Descripción del proyecto',
+                  'textarea',
+                  true,
+                  [],
+                  1000
+                )}
+                {renderField(
+                  'additionalRequirements',
+                  'Requisitos adicionales',
+                  'textarea',
+                  false,
+                  [],
+                  1000
+                )}
               </div>
             </div>
           )}
 
-          {mode === "consultation" && (
+          {mode === 'consultation' && (
             <div className="space-y-6">
               {/* Sección de información personal */}
               <div className="bg-gradient-to-br from-gray-900/80 to-gray-800/80 backdrop-blur-sm p-6 rounded-2xl border border-gray-700/50 shadow-xl">
@@ -896,12 +817,12 @@ export const UnifiedContactForm = React.memo(
                   Información Personal
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {renderField("name", "Nombre completo", "text", true, [], 50)}
-                  {renderField("email", "Email", "email", true, [], 254)}
+                  {renderField('name', 'Nombre completo', 'text', true, [], 50)}
+                  {renderField('email', 'Email', 'email', true, [], 254)}
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {renderField("phone", "Teléfono", "tel", false, [], 20)}
-                  {renderField("company", "Empresa/Organización", "text", false, [], 100)}
+                  {renderField('phone', 'Teléfono', 'tel', false, [], 20)}
+                  {renderField('company', 'Empresa/Organización', 'text', false, [], 100)}
                 </div>
               </div>
 
@@ -924,14 +845,20 @@ export const UnifiedContactForm = React.memo(
                   Detalles de la Consulta
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {renderField("city", "Ciudad", "text", false, [], 50)}
-                  {renderField("clientType", "Tipo de cliente", "select", false, CLIENT_TYPES)}
+                  {renderField('city', 'Ciudad', 'text', false, [], 50)}
+                  {renderField('clientType', 'Tipo de cliente', 'select', false, CLIENT_TYPES)}
                 </div>
-                {renderField("consultationType", "Tipo de consulta", "select", true, CONSULTATION_TYPES)}
-                {renderField("topics", "Temas a tratar", "textarea", true, [], 1000)}
+                {renderField(
+                  'consultationType',
+                  'Tipo de consulta',
+                  'select',
+                  true,
+                  CONSULTATION_TYPES
+                )}
+                {renderField('topics', 'Temas a tratar', 'textarea', true, [], 1000)}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {renderField("preferredDate", "Fecha preferida", "date", false, [])}
-                  {renderField("preferredTime", "Hora preferida", "time", false, [])}
+                  {renderField('preferredDate', 'Fecha preferida', 'date', false, [])}
+                  {renderField('preferredTime', 'Hora preferida', 'time', false, [])}
                 </div>
 
                 {/* Tipo de reunión con diseño mejorado */}
@@ -953,7 +880,7 @@ export const UnifiedContactForm = React.memo(
                     Tipo de reunión
                   </label>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    {MEETING_TYPES.map((option) => (
+                    {MEETING_TYPES.map(option => (
                       <label
                         key={option.value}
                         className="relative flex items-center cursor-pointer"
@@ -969,8 +896,8 @@ export const UnifiedContactForm = React.memo(
                         <div
                           className={`w-full p-4 rounded-xl border-2 transition-all duration-300 ${
                             formData.meetingType === option.value
-                              ? "border-blue-500 bg-blue-500/10 shadow-lg shadow-blue-500/20"
-                              : "border-gray-600 bg-gray-800/50 hover:border-gray-500 hover:bg-gray-700/50"
+                              ? 'border-blue-500 bg-blue-500/10 shadow-lg shadow-blue-500/20'
+                              : 'border-gray-600 bg-gray-800/50 hover:border-gray-500 hover:bg-gray-700/50'
                           }`}
                         >
                           <div className="flex items-center justify-center flex-col space-y-2">
@@ -978,8 +905,8 @@ export const UnifiedContactForm = React.memo(
                             <span
                               className={`text-sm font-medium ${
                                 formData.meetingType === option.value
-                                  ? "text-blue-400"
-                                  : "text-gray-300"
+                                  ? 'text-blue-400'
+                                  : 'text-gray-300'
                               }`}
                             >
                               {option.label}
@@ -1012,127 +939,136 @@ export const UnifiedContactForm = React.memo(
                     />
                   </svg>
                 </div>
-                <h3 className="text-lg font-semibold text-white">
-                  Verificación de Seguridad
-                </h3>{" "}
+                <h3 className="text-lg font-semibold text-white">Verificación de Seguridad</h3>
               </div>
             </div>
 
             {/* Botón de envío mejorado con estado dinámico */}
-            <div className="bg-gradient-to-br from-gray-900/80 to-gray-800/80 backdrop-blur-sm p-6 rounded-2xl border border-gray-700/50 shadow-xl">
-              {/* Indicador de estado antes del botón */}
-              {!isFormComplete && (
-                <div className="flex items-center space-x-2 mb-4">
-                  <div className="w-4 h-4 bg-orange-500 rounded-full animate-pulse"></div>
-                  <span className="text-sm text-orange-300">
-                    Completa los campos obligatorios para continuar
-                  </span>
-                </div>
-              )}
-
-              <button
-                type="submit"
-                disabled={isSubmitting || !isFormComplete}
-                className={`w-full relative overflow-hidden group py-4 px-8 rounded-2xl font-bold text-white transition-all duration-500 transform ${
-                  isSubmitting
-                    ? "bg-gray-600 cursor-not-allowed scale-95"
-                    : !isFormComplete
-                    ? "bg-gray-700 cursor-not-allowed opacity-50"
-                    : "bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800 hover:from-blue-700 hover:via-purple-700 hover:to-blue-900 hover:scale-105 hover:shadow-2xl hover:shadow-blue-500/25"
-                }`}
-              >
-                {/* Efecto de brillo animado solo cuando está habilitado */}
-                {!isSubmitting && isFormComplete && (
-                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
-                )}
-
-                <div className="relative flex items-center justify-center">
-                  {isSubmitting ? (
-                    <>
-                      <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-white mr-3"></div>
-                      <span>Enviando...</span>
-                    </>
-                  ) : !isFormComplete ? (
-                    <>
-                      <svg
-                        className="w-5 h-5 mr-3 opacity-50"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2"
-                          d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"
-                        ></path>
-                      </svg>
-                      <span>Completar campos obligatorios</span>
-                    </>
-                  ) : (
-                    <>
-                      <svg
-                        className="w-5 h-5 mr-3 transform group-hover:translate-x-1 transition-transform duration-300"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2"
-                          d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
-                        ></path>
-                      </svg>
-                      <span>
-                        {mode === "contact" && "Enviar Mensaje"}
-                        {mode === "quote" && "Solicitar Propuesta"}
-                        {mode === "consultation" && "Programar Consulta"}
-                      </span>
-                    </>
-                  )}
-                </div>
-              </button>
-
-              {/* Información adicional */}
-              <div className="mt-4 p-4 bg-gradient-to-r from-blue-500/10 to-purple-500/10 rounded-xl border border-blue-500/20">
-                <div className="flex items-center text-sm text-gray-300">
-                  <svg
-                    className="w-4 h-4 mr-2 text-green-400 flex-shrink-0"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                    ></path>
-                  </svg>
-                  <span>
-                    Respuesta garantizada en 24 horas • Consulta inicial
-                    gratuita • Datos 100% seguros
-                  </span>
-                </div>
+            {/* Indicador de estado antes del botón */}
+            {!isFormComplete && (
+              <div className="flex items-center space-x-2 mb-4">
+                <div className="w-4 h-4 bg-orange-500 rounded-full animate-pulse"></div>
+                <span className="text-sm text-orange-300">
+                  Completa los campos obligatorios para continuar
+                </span>
               </div>
+            )}
 
-              {/* Botón de cerrar si es modal */}
-              {onClose && (
-                <button
-                  type="button"
-                  onClick={onClose}
-                  className="w-full mt-4 py-3 px-4 text-gray-400 hover:text-white transition-colors rounded-xl border border-gray-600 hover:border-gray-500 hover:bg-gray-800/50"
-                >
-                  Cancelar
-                </button>
+            <button
+              type="submit"
+              disabled={isSubmitting || !isFormComplete}
+              className={`w-full relative overflow-hidden group py-4 px-8 rounded-2xl font-bold text-white transition-all duration-500 transform ${
+                isSubmitting
+                  ? 'bg-gray-600 cursor-not-allowed scale-95'
+                  : !isFormComplete
+                    ? 'bg-gray-700 cursor-not-allowed opacity-50'
+                    : 'bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800 hover:from-blue-700 hover:via-purple-700 hover:to-blue-900 hover:scale-105 hover:shadow-2xl hover:shadow-blue-500/25'
+              }`}
+            >
+              {/* Efecto de brillo animado solo cuando está habilitado */}
+              {!isSubmitting && isFormComplete && (
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
               )}
+
+              <div className="relative flex items-center justify-center">
+                {isSubmitting ? (
+                  <>
+                    <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-white mr-3"></div>
+                    <span>Enviando...</span>
+                  </>
+                ) : !isFormComplete ? (
+                  <>
+                    <svg
+                      className="w-5 h-5 mr-3 opacity-50"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"
+                      ></path>
+                    </svg>
+                    <span>Completar campos obligatorios</span>
+                  </>
+                ) : (
+                  <>
+                    <svg
+                      className="w-5 h-5 mr-3 transform group-hover:translate-x-1 transition-transform duration-300"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
+                      ></path>
+                    </svg>
+                    <span>
+                      {mode === 'contact' && 'Enviar Mensaje'}
+                      {mode === 'quote' && 'Solicitar Propuesta'}
+                      {mode === 'consultation' && 'Programar Consulta'}
+                    </span>
+                  </>
+                )}
+              </div>
+            </button>
+
+            {/* Información adicional */}
+            <div className="mt-4 p-4 bg-gradient-to-r from-blue-500/10 to-purple-500/10 rounded-xl border border-blue-500/20">
+              <div className="flex items-center text-sm text-gray-300">
+                <svg
+                  className="w-4 h-4 mr-2 text-green-400 flex-shrink-0"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                  ></path>
+                </svg>
+                <span>
+                  Respuesta garantizada en 24 horas • Consulta inicial gratuita • Datos 100%
+                  seguros
+                </span>
+              </div>
             </div>
+
+            {/* Botón de cerrar si es modal */}
+            {onClose && (
+              <button
+                type="button"
+                onClick={onClose}
+                className="w-full mt-4 py-3 px-4 text-gray-400 hover:text-white transition-colors rounded-xl border border-gray-600 hover:border-gray-500 hover:bg-gray-800/50"
+              >
+                Cancelar
+              </button>
+            )}
           </div>
         </form>
       </div>
     );
-  }
-);
+  };
 
-UnifiedContactForm.displayName = "UnifiedContactForm";
+UnifiedFormComponent.propTypes = {
+  mode: PropTypes.oneOf(['contact', 'quote', 'consultation']),
+  section: PropTypes.string,
+  onClose: PropTypes.func,
+  className: PropTypes.string
+};
+
+UnifiedFormComponent.defaultProps = {
+  mode: 'contact',
+  section: null,
+  onClose: null,
+  className: ''
+};
+
+export default UnifiedFormComponent;

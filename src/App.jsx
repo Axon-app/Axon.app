@@ -19,7 +19,7 @@
  * 5. Renderizado del JSX
  */
 
-import React, { useState } from "react";
+import React, { useState } from 'react';
 
 // === IMPORTACIONES DE COMPONENTES ===
 // Formularios de contacto unificados
@@ -34,33 +34,33 @@ import {
   EnhancedTermsModal, // Modal mejorado de términos
   FloatingBlogButton, // Tarjeta individual de servicio
   ServiceDetailModal, // Modal con detalles de servicios
-  TestimonialsBanner
-} from "./components/index";
+  TestimonialsBanner,
+} from './components/index';
 
 // Modales unificados para formularios
 import {
   ConsultationModal, // Modal para solicitar consulta
   ContactModal, // Modal de contacto general
   QuoteModal, // Modal para solicitar cotización
-} from "./components/modals/UnifiedModals";
+} from './components/modals/UnifiedModals';
 
 // Secciones específicas de la aplicación
-import { ClientsSection } from "./components/sections/ClientsSection";
+import { ClientsSection } from './components/sections/ClientsSection';
 
 // Componentes de UI específicos
-import { EmailLink } from "./components/ui/EmailLink";
+import { EmailLink } from './components/ui/EmailLink';
 
 // === IMPORTACIONES DE DATOS Y HOOKS ===
 // Datos estáticos de la aplicación
-import { testimonials } from "./data/content";
+import { testimonials } from './data/content';
 
 // Hooks personalizados
-import { useModals } from "./hooks/useModals";
+import { useModals } from './hooks/useModals';
 
 // === IMPORTACIONES DE ASSETS ===
 // Logos de la aplicación
-import logo1 from "/logo1.png"; // Logo principal
-import logo231 from "/logo231.png"; // Logo alternativo
+import logo1 from '/logo1.png'; // Logo principal
+import logo231 from '/logo231.png'; // Logo alternativo
 
 /**
  * COMPONENTE PRINCIPAL APP
@@ -75,21 +75,21 @@ const App = () => {
   // ===================================================================
 
   // --- Estados de navegación y UI ---
-  const [showMenu, setShowMenu] = useState(false);           // Control del menú móvil
-  const [activeSection, setActiveSection] = useState("hero"); // Sección activa en el scroll
-  const [logoError, setLogoError] = useState(false);         // Estado de error del logo
+  const [showMenu, setShowMenu] = useState(false); // Control del menú móvil
+  const [activeSection, setActiveSection] = useState('hero'); // Sección activa en el scroll
+  const [logoError, setLogoError] = useState(false); // Estado de error del logo
 
   // --- Estados para modales del sistema ---
-  const [showPrivacyModal, setShowPrivacyModal] = useState(false);     // Modal de privacidad
-  const [showTermsModal, setShowTermsModal] = useState(false);         // Modal de términos
-  const [showCookiesModal, setShowCookiesModal] = useState(false);     // Modal de cookies
-  const [showCookieBanner, setShowCookieBanner] = useState(false);     // Banner de cookies
-  const [showServiceModal, setShowServiceModal] = useState(false);     // Modal de servicios
-  const [selectedService, setSelectedService] = useState(null);        // Servicio seleccionado
+  const [showPrivacyModal, setShowPrivacyModal] = useState(false); // Modal de privacidad
+  const [showTermsModal, setShowTermsModal] = useState(false); // Modal de términos
+  const [showCookiesModal, setShowCookiesModal] = useState(false); // Modal de cookies
+  const [showCookieBanner, setShowCookieBanner] = useState(false); // Banner de cookies
+  const [showServiceModal, setShowServiceModal] = useState(false); // Modal de servicios
+  const [selectedService, setSelectedService] = useState(null); // Servicio seleccionado
 
   // --- Estados para funcionalidad del blog ---
-  const [showBlogModal, setShowBlogModal] = useState(false);           // Modal del blog
-  const [selectedBlogPost, setSelectedBlogPost] = useState(null);      // Post seleccionado
+  const [showBlogModal, setShowBlogModal] = useState(false); // Modal del blog
+  const [selectedBlogPost, setSelectedBlogPost] = useState(null); // Post seleccionado
 
   // ===================================================================
   // HOOK PERSONALIZADO PARA MODALES UNIFICADOS
@@ -100,13 +100,13 @@ const App = () => {
    * Proporciona estados y funciones para abrir/cerrar modales de forma unificada
    */
   const {
-    contactModalOpen,        // Estado del modal de contacto
-    quoteModalOpen,          // Estado del modal de cotización
-    consultationModalOpen,   // Estado del modal de consulta
-    openContactModal,        // Función para abrir modal de contacto
-    openQuoteModal,          // Función para abrir modal de cotización
-    openConsultationModal,   // Función para abrir modal de consulta
-    closeContactModal,       // Función para cerrar modal de contacto
+    contactModalOpen, // Estado del modal de contacto
+    quoteModalOpen, // Estado del modal de cotización
+    consultationModalOpen, // Estado del modal de consulta
+    openContactModal, // Función para abrir modal de contacto
+    openQuoteModal, // Función para abrir modal de cotización
+    openConsultationModal, // Función para abrir modal de consulta
+    closeContactModal, // Función para cerrar modal de contacto
     closeQuoteModal,
     closeConsultationModal,
   } = useModals();
@@ -116,13 +116,13 @@ const App = () => {
 
     const handleScroll = () => {
       const sections = [
-        "hero",
-        "about",
-        "services",
-        "technologies",
-        "testimonials",
-        "blog",
-        "contact",
+        'hero',
+        'about',
+        'services',
+        'technologies',
+        'testimonials',
+        'blog',
+        'contact',
       ];
       const scrollPosition = window.scrollY + 100;
 
@@ -132,10 +132,7 @@ const App = () => {
             const element = document.getElementById(section);
             if (element) {
               const { offsetTop, offsetHeight } = element;
-              if (
-                scrollPosition >= offsetTop &&
-                scrollPosition < offsetTop + offsetHeight
-              ) {
+              if (scrollPosition >= offsetTop && scrollPosition < offsetTop + offsetHeight) {
                 setActiveSection(section);
                 break;
               }
@@ -147,13 +144,13 @@ const App = () => {
       }
     };
 
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   // Efecto para mostrar el banner de cookies
   React.useEffect(() => {
-    const cookiesAccepted = localStorage.getItem("axon-cookies-accepted");
+    const cookiesAccepted = localStorage.getItem('axon-cookies-accepted');
     if (!cookiesAccepted) {
       // Mostrar el banner después de 2 segundos para no ser intrusivo
       const timer = setTimeout(() => {
@@ -179,7 +176,7 @@ const App = () => {
   };
 
   // Funciones para el blog
-  const handleOpenBlogModal = (post) => {
+  const handleOpenBlogModal = post => {
     setSelectedBlogPost(post);
     setShowBlogModal(true);
   };
@@ -194,7 +191,7 @@ const App = () => {
   };
 
   // Función para navegación suave a las secciones
-  const scrollToSection = (sectionId) => {
+  const scrollToSection = sectionId => {
     const element = document.getElementById(sectionId);
     if (element) {
       const offset = 80; // Offset para el navbar fijo
@@ -203,7 +200,7 @@ const App = () => {
 
       window.scrollTo({
         top: offsetPosition,
-        behavior: "smooth",
+        behavior: 'smooth',
       });
     }
   };
@@ -214,7 +211,9 @@ const App = () => {
       className={`bg-gradient-to-r from-blue-400 via-cyan-400 to-green-400 rounded-lg flex items-center justify-center text-white font-bold ${className}`}
     >
       <span className="text-2xl">⚡</span>
-    </div>  );  return (
+    </div>
+  );
+  return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 text-white font-sans overflow-x-hidden">
       {/* Professional Navbar */}
       <nav className="fixed w-full z-50 glass-effect navbar-blur shadow-2xl border-b border-gray-800/50 nav-slide-in">
@@ -222,7 +221,7 @@ const App = () => {
           <div className="flex justify-between items-center py-4">
             {/* Logo Section */}
             <button
-              onClick={() => scrollToSection("hero")}
+              onClick={() => scrollToSection('hero')}
               className="flex items-center group transition-transform duration-300 hover:scale-105 cursor-pointer"
             >
               <div className="flex items-center space-x-4">
@@ -231,10 +230,10 @@ const App = () => {
                   alt="Axon Logo Original"
                   className="h-16 w-16 object-contain logo-rotate-1 rounded-lg transition-all duration-300 group-hover:shadow-lg group-hover:shadow-blue-500/40 backdrop-blur-sm"
                   style={{
-                    filter: "drop-shadow(0 0 8px rgba(255, 255, 255, 0.6))",
+                    filter: 'drop-shadow(0 0 8px rgba(255, 255, 255, 0.6))',
                   }}
-                  onError={(e) => {
-                    e.target.style.display = "none";
+                  onError={e => {
+                    e.target.style.display = 'none';
                   }}
                 />
                 <img
@@ -242,27 +241,23 @@ const App = () => {
                   alt="Axon.App Logo 3D"
                   className="h-20 w-auto object-contain logo-rotate-2 rounded-lg transition-all duration-300 group-hover:shadow-lg group-hover:shadow-cyan-500/40 backdrop-blur-sm"
                   style={{
-                    filter: "drop-shadow(0 0 10px rgba(255, 255, 255, 0.7))",
+                    filter: 'drop-shadow(0 0 10px rgba(255, 255, 255, 0.7))',
                   }}
-                  onError={(e) => {
-                    e.target.style.display = "none";
+                  onError={e => {
+                    e.target.style.display = 'none';
                   }}
                 />
               </div>
-            </button>{" "}
+            </button>{' '}
             {/* Desktop Navigation */}
             <div className="hidden lg:flex items-center space-x-8">
               <NavLink
                 href="#hero"
-                isActive={activeSection === "hero"}
+                isActive={activeSection === 'hero'}
                 scrollToSection={scrollToSection}
               >
                 <span className="flex items-center space-x-2">
-                  <svg
-                    className="w-4 h-4 flex-shrink-0"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
+                  <svg className="w-4 h-4 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                     <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
                   </svg>
                   <span>Inicio</span>
@@ -270,15 +265,11 @@ const App = () => {
               </NavLink>
               <NavLink
                 href="#about"
-                isActive={activeSection === "about"}
+                isActive={activeSection === 'about'}
                 scrollToSection={scrollToSection}
               >
                 <span className="flex items-center space-x-2">
-                  <svg
-                    className="w-4 h-4 flex-shrink-0"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
+                  <svg className="w-4 h-4 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                     <path
                       fillRule="evenodd"
                       d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-6-3a2 2 0 11-4 0 2 2 0 014 0zm-2 4a5 5 0 00-4.546 2.916A5.986 5.986 0 0010 16a5.986 5.986 0 004.546-2.084A5 5 0 0010 11z"
@@ -290,15 +281,11 @@ const App = () => {
               </NavLink>
               <NavLink
                 href="#services"
-                isActive={activeSection === "services"}
+                isActive={activeSection === 'services'}
                 scrollToSection={scrollToSection}
               >
                 <span className="flex items-center space-x-2">
-                  <svg
-                    className="w-4 h-4 flex-shrink-0"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
+                  <svg className="w-4 h-4 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                     <path
                       fillRule="evenodd"
                       d="M3 4a1 1 0 011-1h4a1 1 0 010 2H6.414l2.293 2.293a1 1 0 01-1.414 1.414L5 6.414V8a1 1 0 01-2 0V4zm9 1a1 1 0 010-2h4a1 1 0 011 1v4a1 1 0 01-2 0V6.414l-2.293 2.293a1 1 0 11-1.414-1.414L13.586 5H12zm-9 7a1 1 0 012 0v1.586l2.293-2.293a1 1 0 111.414 1.414L6.414 15H8a1 1 0 010 2H4a1 1 0 01-1-1v-4zm13-1a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 010-2h1.586l-2.293-2.293a1 1 0 111.414-1.414L15 13.586V12a1 1 0 011-1z"
@@ -310,15 +297,11 @@ const App = () => {
               </NavLink>
               <NavLink
                 href="#technologies"
-                isActive={activeSection === "technologies"}
+                isActive={activeSection === 'technologies'}
                 scrollToSection={scrollToSection}
               >
                 <span className="flex items-center space-x-2">
-                  <svg
-                    className="w-4 h-4 flex-shrink-0"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
+                  <svg className="w-4 h-4 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                     <path
                       fillRule="evenodd"
                       d="M12.316 3.051a1 1 0 01.633 1.265l-4 12a1 1 0 11-1.898-.632l4-12a1 1 0 011.265-.633zM5.707 6.293a1 1 0 010 1.414L3.414 10l2.293 2.293a1 1 0 11-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0zm8.586 0a1 1 0 011.414 0l3 3a1 1 0 010 1.414l-3 3a1 1 0 11-1.414-1.414L16.586 10l-2.293-2.293a1 1 0 010-1.414z"
@@ -330,34 +313,27 @@ const App = () => {
               </NavLink>
               <NavLink
                 href="#testimonials"
-                isActive={activeSection === "testimonials"}
+                isActive={activeSection === 'testimonials'}
                 scrollToSection={scrollToSection}
               >
                 <span className="flex items-center space-x-2">
-                  <svg
-                    className="w-4 h-4 flex-shrink-0"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
+                  <svg className="w-4 h-4 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                     <path
                       fillRule="evenodd"
                       d="M18 13V5a2 2 0 00-2-2H4a2 2 0 00-2 2v8a2 2 0 002 2h3l3 3 3-3h3a2 2 0 002-2zM5 7a1 1 0 011-1h8a1 1 0 110 2H6a1 1 0 01-1-1zm1 3a1 1 0 100 2h3a1 1 0 100-2H6z"
                       clipRule="evenodd"
-                    />                  </svg>
+                    />{' '}
+                  </svg>
                   <span>Testimonios</span>
                 </span>
               </NavLink>
               <NavLink
                 href="#blog"
-                isActive={activeSection === "blog"}
+                isActive={activeSection === 'blog'}
                 scrollToSection={scrollToSection}
               >
                 <span className="flex items-center space-x-2">
-                  <svg
-                    className="w-4 h-4 flex-shrink-0"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
+                  <svg className="w-4 h-4 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                     <path
                       fillRule="evenodd"
                       d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z"
@@ -369,15 +345,11 @@ const App = () => {
               </NavLink>
               <NavLink
                 href="#contact"
-                isActive={activeSection === "contact"}
+                isActive={activeSection === 'contact'}
                 scrollToSection={scrollToSection}
               >
                 <span className="flex items-center space-x-2">
-                  <svg
-                    className="w-4 h-4 flex-shrink-0"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
+                  <svg className="w-4 h-4 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                     <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
                     <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
                   </svg>
@@ -393,12 +365,7 @@ const App = () => {
                 className="hidden md:block bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white font-semibold px-6 py-2.5 rounded-full transition-all duration-300 transform hover:scale-105 hover:shadow-lg hover:shadow-blue-500/25 border border-blue-500/20"
               >
                 <span className="flex items-center space-x-2">
-                  <svg
-                    className="w-4 h-4"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path
                       strokeLinecap="round"
                       strokeLinejoin="round"
@@ -418,7 +385,7 @@ const App = () => {
               >
                 <svg
                   className={`w-6 h-6 transition-transform duration-300 ${
-                    showMenu ? "rotate-90" : ""
+                    showMenu ? 'rotate-90' : ''
                   }`}
                   fill="none"
                   stroke="currentColor"
@@ -440,9 +407,7 @@ const App = () => {
                     />
                   )}
                 </svg>
-                <span className="text-sm font-medium">
-                  {showMenu ? "Cerrar" : "Menú"}
-                </span>
+                <span className="text-sm font-medium">{showMenu ? 'Cerrar' : 'Menú'}</span>
               </button>
             </div>
           </div>
@@ -450,7 +415,7 @@ const App = () => {
           {/* Enhanced Mobile Menu */}
           <div
             className={`lg:hidden transition-all duration-300 ease-in-out ${
-              showMenu ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
+              showMenu ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
             } overflow-hidden`}
           >
             <div className="py-4 space-y-2 border-t border-gray-800/50 menu-slide">
@@ -458,15 +423,11 @@ const App = () => {
                 href="#hero"
                 mobile
                 onClick={() => setShowMenu(false)}
-                isActive={activeSection === "hero"}
+                isActive={activeSection === 'hero'}
                 scrollToSection={scrollToSection}
               >
                 <span className="flex items-center space-x-3">
-                  <svg
-                    className="w-5 h-5 text-blue-400"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
+                  <svg className="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
                     <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
                   </svg>
                   <span>Inicio</span>
@@ -476,15 +437,11 @@ const App = () => {
                 href="#about"
                 mobile
                 onClick={() => setShowMenu(false)}
-                isActive={activeSection === "about"}
+                isActive={activeSection === 'about'}
                 scrollToSection={scrollToSection}
               >
                 <span className="flex items-center space-x-3">
-                  <svg
-                    className="w-5 h-5 text-blue-400"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
+                  <svg className="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
                     <path
                       fillRule="evenodd"
                       d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-6-3a2 2 0 11-4 0 2 2 0 014 0zm-2 4a5 5 0 00-4.546 2.916A5.986 5.986 0 0010 16a5.986 5.986 0 004.546-2.084A5 5 0 0010 11z"
@@ -498,15 +455,11 @@ const App = () => {
                 href="#services"
                 mobile
                 onClick={() => setShowMenu(false)}
-                isActive={activeSection === "services"}
+                isActive={activeSection === 'services'}
                 scrollToSection={scrollToSection}
               >
                 <span className="flex items-center space-x-3">
-                  <svg
-                    className="w-5 h-5 text-blue-400"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
+                  <svg className="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
                     <path
                       fillRule="evenodd"
                       d="M3 4a1 1 0 011-1h4a1 1 0 010 2H6.414l2.293 2.293a1 1 0 01-1.414 1.414L5 6.414V8a1 1 0 01-2 0V4zm9 1a1 1 0 010-2h4a1 1 0 011 1v4a1 1 0 01-2 0V6.414l-2.293 2.293a1 1 0 11-1.414-1.414L13.586 5H12zm-9 7a1 1 0 012 0v1.586l2.293-2.293a1 1 0 111.414 1.414L6.414 15H8a1 1 0 010 2H4a1 1 0 01-1-1v-4zm13-1a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 010-2h1.586l-2.293-2.293a1 1 0 111.414-1.414L15 13.586V12a1 1 0 011-1z"
@@ -520,15 +473,11 @@ const App = () => {
                 href="#technologies"
                 mobile
                 onClick={() => setShowMenu(false)}
-                isActive={activeSection === "technologies"}
+                isActive={activeSection === 'technologies'}
                 scrollToSection={scrollToSection}
               >
                 <span className="flex items-center space-x-3">
-                  <svg
-                    className="w-5 h-5 text-blue-400"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
+                  <svg className="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
                     <path
                       fillRule="evenodd"
                       d="M12.316 3.051a1 1 0 01.633 1.265l-4 12a1 1 0 11-1.898-.632l4-12a1 1 0 011.265-.633zM5.707 6.293a1 1 0 010 1.414L3.414 10l2.293 2.293a1 1 0 11-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0zm8.586 0a1 1 0 011.414 0l3 3a1 1 0 010 1.414l-3 3a1 1 0 11-1.414-1.414L16.586 10l-2.293-2.293a1 1 0 010-1.414z"
@@ -542,20 +491,17 @@ const App = () => {
                 href="#testimonials"
                 mobile
                 onClick={() => setShowMenu(false)}
-                isActive={activeSection === "testimonials"}
+                isActive={activeSection === 'testimonials'}
                 scrollToSection={scrollToSection}
               >
                 <span className="flex items-center space-x-3">
-                  <svg
-                    className="w-5 h-5 text-blue-400"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
+                  <svg className="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
                     <path
                       fillRule="evenodd"
                       d="M18 13V5a2 2 0 00-2-2H4a2 2 0 00-2 2v8a2 2 0 002 2h3l3 3 3-3h3a2 2 0 002-2zM5 7a1 1 0 011-1h8a1 1 0 110 2H6a1 1 0 01-1-1zm1 3a1 1 0 100 2h3a1 1 0 100-2H6z"
                       clipRule="evenodd"
-                    />                  </svg>
+                    />{' '}
+                  </svg>
                   <span>Testimonios</span>
                 </span>
               </NavLink>
@@ -563,15 +509,11 @@ const App = () => {
                 href="#blog"
                 mobile
                 onClick={() => setShowMenu(false)}
-                isActive={activeSection === "blog"}
+                isActive={activeSection === 'blog'}
                 scrollToSection={scrollToSection}
               >
                 <span className="flex items-center space-x-3">
-                  <svg
-                    className="w-5 h-5 text-blue-400"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
+                  <svg className="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
                     <path
                       fillRule="evenodd"
                       d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z"
@@ -585,15 +527,11 @@ const App = () => {
                 href="#contact"
                 mobile
                 onClick={() => setShowMenu(false)}
-                isActive={activeSection === "contact"}
+                isActive={activeSection === 'contact'}
                 scrollToSection={scrollToSection}
               >
                 <span className="flex items-center space-x-3">
-                  <svg
-                    className="w-5 h-5 text-blue-400"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
+                  <svg className="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
                     <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
                     <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
                   </svg>
@@ -609,12 +547,7 @@ const App = () => {
                 className="hidden md:block bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white font-semibold px-6 py-2.5 rounded-full transition-all duration-300 transform hover:scale-105 hover:shadow-lg hover:shadow-blue-500/25 border border-blue-500/20"
               >
                 <span className="flex items-center space-x-2">
-                  <svg
-                    className="w-4 h-4"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path
                       strokeLinecap="round"
                       strokeLinejoin="round"
@@ -634,7 +567,7 @@ const App = () => {
               >
                 <svg
                   className={`w-6 h-6 transition-transform duration-300 ${
-                    showMenu ? "rotate-90" : ""
+                    showMenu ? 'rotate-90' : ''
                   }`}
                   fill="none"
                   stroke="currentColor"
@@ -656,9 +589,7 @@ const App = () => {
                     />
                   )}
                 </svg>
-                <span className="text-sm font-medium">
-                  {showMenu ? "Cerrar" : "Menú"}
-                </span>
+                <span className="text-sm font-medium">{showMenu ? 'Cerrar' : 'Menú'}</span>
               </button>
             </div>
           </div>
@@ -666,7 +597,7 @@ const App = () => {
           {/* Enhanced Mobile Menu */}
           <div
             className={`lg:hidden transition-all duration-300 ease-in-out ${
-              showMenu ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
+              showMenu ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
             } overflow-hidden`}
           >
             <div className="py-4 space-y-2 border-t border-gray-800/50 menu-slide">
@@ -674,15 +605,11 @@ const App = () => {
                 href="#hero"
                 mobile
                 onClick={() => setShowMenu(false)}
-                isActive={activeSection === "hero"}
+                isActive={activeSection === 'hero'}
                 scrollToSection={scrollToSection}
               >
                 <span className="flex items-center space-x-3">
-                  <svg
-                    className="w-5 h-5 text-blue-400"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
+                  <svg className="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
                     <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
                   </svg>
                   <span>Inicio</span>
@@ -692,15 +619,11 @@ const App = () => {
                 href="#about"
                 mobile
                 onClick={() => setShowMenu(false)}
-                isActive={activeSection === "about"}
+                isActive={activeSection === 'about'}
                 scrollToSection={scrollToSection}
               >
                 <span className="flex items-center space-x-3">
-                  <svg
-                    className="w-5 h-5 text-blue-400"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
+                  <svg className="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
                     <path
                       fillRule="evenodd"
                       d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-6-3a2 2 0 11-4 0 2 2 0 014 0zm-2 4a5 5 0 00-4.546 2.916A5.986 5.986 0 0010 16a5.986 5.986 0 004.546-2.084A5 5 0 0010 11z"
@@ -714,15 +637,11 @@ const App = () => {
                 href="#services"
                 mobile
                 onClick={() => setShowMenu(false)}
-                isActive={activeSection === "services"}
+                isActive={activeSection === 'services'}
                 scrollToSection={scrollToSection}
               >
                 <span className="flex items-center space-x-3">
-                  <svg
-                    className="w-5 h-5 text-blue-400"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
+                  <svg className="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
                     <path
                       fillRule="evenodd"
                       d="M3 4a1 1 0 011-1h4a1 1 0 010 2H6.414l2.293 2.293a1 1 0 01-1.414 1.414L5 6.414V8a1 1 0 01-2 0V4zm9 1a1 1 0 010-2h4a1 1 0 011 1v4a1 1 0 01-2 0V6.414l-2.293 2.293a1 1 0 11-1.414-1.414L13.586 5H12zm-9 7a1 1 0 012 0v1.586l2.293-2.293a1 1 0 111.414 1.414L6.414 15H8a1 1 0 010 2H4a1 1 0 01-1-1v-4zm13-1a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 010-2h1.586l-2.293-2.293a1 1 0 111.414-1.414L15 13.586V12a1 1 0 011-1z"
@@ -736,15 +655,11 @@ const App = () => {
                 href="#technologies"
                 mobile
                 onClick={() => setShowMenu(false)}
-                isActive={activeSection === "technologies"}
+                isActive={activeSection === 'technologies'}
                 scrollToSection={scrollToSection}
               >
                 <span className="flex items-center space-x-3">
-                  <svg
-                    className="w-5 h-5 text-blue-400"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
+                  <svg className="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
                     <path
                       fillRule="evenodd"
                       d="M12.316 3.051a1 1 0 01.633 1.265l-4 12a1 1 0 11-1.898-.632l4-12a1 1 0 011.265-.633zM5.707 6.293a1 1 0 010 1.414L3.414 10l2.293 2.293a1 1 0 11-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0zm8.586 0a1 1 0 011.414 0l3 3a1 1 0 010 1.414l-3 3a1 1 0 11-1.414-1.414L16.586 10l-2.293-2.293a1 1 0 010-1.414z"
@@ -758,20 +673,17 @@ const App = () => {
                 href="#testimonials"
                 mobile
                 onClick={() => setShowMenu(false)}
-                isActive={activeSection === "testimonials"}
+                isActive={activeSection === 'testimonials'}
                 scrollToSection={scrollToSection}
               >
                 <span className="flex items-center space-x-3">
-                  <svg
-                    className="w-5 h-5 text-blue-400"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
+                  <svg className="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
                     <path
                       fillRule="evenodd"
                       d="M18 13V5a2 2 0 00-2-2H4a2 2 0 00-2 2v8a2 2 0 002 2h3l3 3 3-3h3a2 2 0 002-2zM5 7a1 1 0 011-1h8a1 1 0 110 2H6a1 1 0 01-1-1zm1 3a1 1 0 100 2h3a1 1 0 100-2H6z"
                       clipRule="evenodd"
-                    />                  </svg>
+                    />{' '}
+                  </svg>
                   <span>Testimonios</span>
                 </span>
               </NavLink>
@@ -779,15 +691,11 @@ const App = () => {
                 href="#blog"
                 mobile
                 onClick={() => setShowMenu(false)}
-                isActive={activeSection === "blog"}
+                isActive={activeSection === 'blog'}
                 scrollToSection={scrollToSection}
               >
                 <span className="flex items-center space-x-3">
-                  <svg
-                    className="w-5 h-5 text-blue-400"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
+                  <svg className="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
                     <path
                       fillRule="evenodd"
                       d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z"
@@ -801,15 +709,11 @@ const App = () => {
                 href="#contact"
                 mobile
                 onClick={() => setShowMenu(false)}
-                isActive={activeSection === "contact"}
+                isActive={activeSection === 'contact'}
                 scrollToSection={scrollToSection}
               >
                 <span className="flex items-center space-x-3">
-                  <svg
-                    className="w-5 h-5 text-blue-400"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
+                  <svg className="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
                     <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
                     <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
                   </svg>
@@ -825,12 +729,7 @@ const App = () => {
                 className="hidden md:block bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white font-semibold px-6 py-2.5 rounded-full transition-all duration-300 transform hover:scale-105 hover:shadow-lg hover:shadow-blue-500/25 border border-blue-500/20"
               >
                 <span className="flex items-center space-x-2">
-                  <svg
-                    className="w-4 h-4"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path
                       strokeLinecap="round"
                       strokeLinejoin="round"
@@ -850,7 +749,7 @@ const App = () => {
               >
                 <svg
                   className={`w-6 h-6 transition-transform duration-300 ${
-                    showMenu ? "rotate-90" : ""
+                    showMenu ? 'rotate-90' : ''
                   }`}
                   fill="none"
                   stroke="currentColor"
@@ -872,9 +771,7 @@ const App = () => {
                     />
                   )}
                 </svg>
-                <span className="text-sm font-medium">
-                  {showMenu ? "Cerrar" : "Menú"}
-                </span>
+                <span className="text-sm font-medium">{showMenu ? 'Cerrar' : 'Menú'}</span>
               </button>
             </div>
           </div>
@@ -882,7 +779,7 @@ const App = () => {
           {/* Enhanced Mobile Menu */}
           <div
             className={`lg:hidden transition-all duration-300 ease-in-out ${
-              showMenu ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
+              showMenu ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
             } overflow-hidden`}
           >
             <div className="py-4 space-y-2 border-t border-gray-800/50 menu-slide">
@@ -890,15 +787,11 @@ const App = () => {
                 href="#hero"
                 mobile
                 onClick={() => setShowMenu(false)}
-                isActive={activeSection === "hero"}
+                isActive={activeSection === 'hero'}
                 scrollToSection={scrollToSection}
               >
                 <span className="flex items-center space-x-3">
-                  <svg
-                    className="w-5 h-5 text-blue-400"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
+                  <svg className="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
                     <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
                   </svg>
                   <span>Inicio</span>
@@ -908,15 +801,11 @@ const App = () => {
                 href="#about"
                 mobile
                 onClick={() => setShowMenu(false)}
-                isActive={activeSection === "about"}
+                isActive={activeSection === 'about'}
                 scrollToSection={scrollToSection}
               >
                 <span className="flex items-center space-x-3">
-                  <svg
-                    className="w-5 h-5 text-blue-400"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
+                  <svg className="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
                     <path
                       fillRule="evenodd"
                       d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-6-3a2 2 0 11-4 0 2 2 0 014 0zm-2 4a5 5 0 00-4.546 2.916A5.986 5.986 0 0010 16a5.986 5.986 0 004.546-2.084A5 5 0 0010 11z"
@@ -930,15 +819,11 @@ const App = () => {
                 href="#services"
                 mobile
                 onClick={() => setShowMenu(false)}
-                isActive={activeSection === "services"}
+                isActive={activeSection === 'services'}
                 scrollToSection={scrollToSection}
               >
                 <span className="flex items-center space-x-3">
-                  <svg
-                    className="w-5 h-5 text-blue-400"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
+                  <svg className="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
                     <path
                       fillRule="evenodd"
                       d="M3 4a1 1 0 011-1h4a1 1 0 010 2H6.414l2.293 2.293a1 1 0 01-1.414 1.414L5 6.414V8a1 1 0 01-2 0V4zm9 1a1 1 0 010-2h4a1 1 0 011 1v4a1 1 0 01-2 0V6.414l-2.293 2.293a1 1 0 11-1.414-1.414L13.586 5H12zm-9 7a1 1 0 012 0v1.586l2.293-2.293a1 1 0 111.414 1.414L6.414 15H8a1 1 0 010 2H4a1 1 0 01-1-1v-4zm13-1a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 010-2h1.586l-2.293-2.293a1 1 0 111.414-1.414L15 13.586V12a1 1 0 011-1z"
@@ -952,15 +837,11 @@ const App = () => {
                 href="#technologies"
                 mobile
                 onClick={() => setShowMenu(false)}
-                isActive={activeSection === "technologies"}
+                isActive={activeSection === 'technologies'}
                 scrollToSection={scrollToSection}
               >
                 <span className="flex items-center space-x-3">
-                  <svg
-                    className="w-5 h-5 text-blue-400"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
+                  <svg className="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
                     <path
                       fillRule="evenodd"
                       d="M12.316 3.051a1 1 0 01.633 1.265l-4 12a1 1 0 11-1.898-.632l4-12a1 1 0 011.265-.633zM5.707 6.293a1 1 0 010 1.414L3.414 10l2.293 2.293a1 1 0 11-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0zm8.586 0a1 1 0 011.414 0l3 3a1 1 0 010 1.414l-3 3a1 1 0 11-1.414-1.414L16.586 10l-2.293-2.293a1 1 0 010-1.414z"
@@ -974,20 +855,17 @@ const App = () => {
                 href="#testimonials"
                 mobile
                 onClick={() => setShowMenu(false)}
-                isActive={activeSection === "testimonials"}
+                isActive={activeSection === 'testimonials'}
                 scrollToSection={scrollToSection}
               >
                 <span className="flex items-center space-x-3">
-                  <svg
-                    className="w-5 h-5 text-blue-400"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
+                  <svg className="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
                     <path
                       fillRule="evenodd"
                       d="M18 13V5a2 2 0 00-2-2H4a2 2 0 00-2 2v8a2 2 0 002 2h3l3 3 3-3h3a2 2 0 002-2zM5 7a1 1 0 011-1h8a1 1 0 110 2H6a1 1 0 01-1-1zm1 3a1 1 0 100 2h3a1 1 0 100-2H6z"
                       clipRule="evenodd"
-                    />                  </svg>
+                    />{' '}
+                  </svg>
                   <span>Testimonios</span>
                 </span>
               </NavLink>
@@ -995,15 +873,11 @@ const App = () => {
                 href="#blog"
                 mobile
                 onClick={() => setShowMenu(false)}
-                isActive={activeSection === "blog"}
+                isActive={activeSection === 'blog'}
                 scrollToSection={scrollToSection}
               >
                 <span className="flex items-center space-x-3">
-                  <svg
-                    className="w-5 h-5 text-blue-400"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
+                  <svg className="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
                     <path
                       fillRule="evenodd"
                       d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z"
@@ -1017,15 +891,11 @@ const App = () => {
                 href="#contact"
                 mobile
                 onClick={() => setShowMenu(false)}
-                isActive={activeSection === "contact"}
+                isActive={activeSection === 'contact'}
                 scrollToSection={scrollToSection}
               >
                 <span className="flex items-center space-x-3">
-                  <svg
-                    className="w-5 h-5 text-blue-400"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
+                  <svg className="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
                     <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
                     <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
                   </svg>
@@ -1041,12 +911,7 @@ const App = () => {
                 className="hidden md:block bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white font-semibold px-6 py-2.5 rounded-full transition-all duration-300 transform hover:scale-105 hover:shadow-lg hover:shadow-blue-500/25 border border-blue-500/20"
               >
                 <span className="flex items-center space-x-2">
-                  <svg
-                    className="w-4 h-4"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path
                       strokeLinecap="round"
                       strokeLinejoin="round"
@@ -1066,7 +931,7 @@ const App = () => {
               >
                 <svg
                   className={`w-6 h-6 transition-transform duration-300 ${
-                    showMenu ? "rotate-90" : ""
+                    showMenu ? 'rotate-90' : ''
                   }`}
                   fill="none"
                   stroke="currentColor"
@@ -1088,9 +953,7 @@ const App = () => {
                     />
                   )}
                 </svg>
-                <span className="text-sm font-medium">
-                  {showMenu ? "Cerrar" : "Menú"}
-                </span>
+                <span className="text-sm font-medium">{showMenu ? 'Cerrar' : 'Menú'}</span>
               </button>
             </div>
           </div>
@@ -1098,7 +961,7 @@ const App = () => {
           {/* Enhanced Mobile Menu */}
           <div
             className={`lg:hidden transition-all duration-300 ease-in-out ${
-              showMenu ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
+              showMenu ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
             } overflow-hidden`}
           >
             <div className="py-4 space-y-2 border-t border-gray-800/50 menu-slide">
@@ -1106,15 +969,11 @@ const App = () => {
                 href="#hero"
                 mobile
                 onClick={() => setShowMenu(false)}
-                isActive={activeSection === "hero"}
+                isActive={activeSection === 'hero'}
                 scrollToSection={scrollToSection}
               >
                 <span className="flex items-center space-x-3">
-                  <svg
-                    className="w-5 h-5 text-blue-400"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
+                  <svg className="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
                     <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
                   </svg>
                   <span>Inicio</span>
@@ -1124,15 +983,11 @@ const App = () => {
                 href="#about"
                 mobile
                 onClick={() => setShowMenu(false)}
-                isActive={activeSection === "about"}
+                isActive={activeSection === 'about'}
                 scrollToSection={scrollToSection}
               >
                 <span className="flex items-center space-x-3">
-                  <svg
-                    className="w-5 h-5 text-blue-400"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
+                  <svg className="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
                     <path
                       fillRule="evenodd"
                       d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-6-3a2 2 0 11-4 0 2 2 0 014 0zm-2 4a5 5 0 00-4.546 2.916A5.986 5.986 0 0010 16a5.986 5.986 0 004.546-2.084A5 5 0 0010 11z"
@@ -1146,15 +1001,11 @@ const App = () => {
                 href="#services"
                 mobile
                 onClick={() => setShowMenu(false)}
-                isActive={activeSection === "services"}
+                isActive={activeSection === 'services'}
                 scrollToSection={scrollToSection}
               >
                 <span className="flex items-center space-x-3">
-                  <svg
-                    className="w-5 h-5 text-blue-400"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
+                  <svg className="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
                     <path
                       fillRule="evenodd"
                       d="M3 4a1 1 0 011-1h4a1 1 0 010 2H6.414l2.293 2.293a1 1 0 01-1.414 1.414L5 6.414V8a1 1 0 01-2 0V4zm9 1a1 1 0 010-2h4a1 1 0 011 1v4a1 1 0 01-2 0V6.414l-2.293 2.293a1 1 0 11-1.414-1.414L13.586 5H12zm-9 7a1 1 0 012 0v1.586l2.293-2.293a1 1 0 111.414 1.414L6.414 15H8a1 1 0 010 2H4a1 1 0 01-1-1v-4zm13-1a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 010-2h1.586l-2.293-2.293a1 1 0 111.414-1.414L15 13.586V12a1 1 0 011-1z"
@@ -1168,15 +1019,11 @@ const App = () => {
                 href="#technologies"
                 mobile
                 onClick={() => setShowMenu(false)}
-                isActive={activeSection === "technologies"}
+                isActive={activeSection === 'technologies'}
                 scrollToSection={scrollToSection}
               >
                 <span className="flex items-center space-x-3">
-                  <svg
-                    className="w-5 h-5 text-blue-400"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
+                  <svg className="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
                     <path
                       fillRule="evenodd"
                       d="M12.316 3.051a1 1 0 01.633 1.265l-4 12a1 1 0 11-1.898-.632l4-12a1 1 0 011.265-.633zM5.707 6.293a1 1 0 010 1.414L3.414 10l2.293 2.293a1 1 0 11-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0zm8.586 0a1 1 0 011.414 0l3 3a1 1 0 010 1.414l-3 3a1 1 0 11-1.414-1.414L16.586 10l-2.293-2.293a1 1 0 010-1.414z"
@@ -1190,20 +1037,17 @@ const App = () => {
                 href="#testimonials"
                 mobile
                 onClick={() => setShowMenu(false)}
-                isActive={activeSection === "testimonials"}
+                isActive={activeSection === 'testimonials'}
                 scrollToSection={scrollToSection}
               >
                 <span className="flex items-center space-x-3">
-                  <svg
-                    className="w-5 h-5 text-blue-400"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
+                  <svg className="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
                     <path
                       fillRule="evenodd"
                       d="M18 13V5a2 2 0 00-2-2H4a2 2 0 00-2 2v8a2 2 0 002 2h3l3 3 3-3h3a2 2 0 002-2zM5 7a1 1 0 011-1h8a1 1 0 110 2H6a1 1 0 01-1-1zm1 3a1 1 0 100 2h3a1 1 0 100-2H6z"
                       clipRule="evenodd"
-                    />                  </svg>
+                    />{' '}
+                  </svg>
                   <span>Testimonios</span>
                 </span>
               </NavLink>
@@ -1211,15 +1055,11 @@ const App = () => {
                 href="#blog"
                 mobile
                 onClick={() => setShowMenu(false)}
-                isActive={activeSection === "blog"}
+                isActive={activeSection === 'blog'}
                 scrollToSection={scrollToSection}
               >
                 <span className="flex items-center space-x-3">
-                  <svg
-                    className="w-5 h-5 text-blue-400"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
+                  <svg className="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
                     <path
                       fillRule="evenodd"
                       d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z"
@@ -1233,15 +1073,11 @@ const App = () => {
                 href="#contact"
                 mobile
                 onClick={() => setShowMenu(false)}
-                isActive={activeSection === "contact"}
+                isActive={activeSection === 'contact'}
                 scrollToSection={scrollToSection}
               >
                 <span className="flex items-center space-x-3">
-                  <svg
-                    className="w-5 h-5 text-blue-400"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
+                  <svg className="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
                     <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
                     <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
                   </svg>
@@ -1257,12 +1093,7 @@ const App = () => {
                 className="hidden md:block bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white font-semibold px-6 py-2.5 rounded-full transition-all duration-300 transform hover:scale-105 hover:shadow-lg hover:shadow-blue-500/25 border border-blue-500/20"
               >
                 <span className="flex items-center space-x-2">
-                  <svg
-                    className="w-4 h-4"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path
                       strokeLinecap="round"
                       strokeLinejoin="round"
@@ -1282,7 +1113,7 @@ const App = () => {
               >
                 <svg
                   className={`w-6 h-6 transition-transform duration-300 ${
-                    showMenu ? "rotate-90" : ""
+                    showMenu ? 'rotate-90' : ''
                   }`}
                   fill="none"
                   stroke="currentColor"
@@ -1304,9 +1135,7 @@ const App = () => {
                     />
                   )}
                 </svg>
-                <span className="text-sm font-medium">
-                  {showMenu ? "Cerrar" : "Menú"}
-                </span>
+                <span className="text-sm font-medium">{showMenu ? 'Cerrar' : 'Menú'}</span>
               </button>
             </div>
           </div>
@@ -1314,7 +1143,7 @@ const App = () => {
           {/* Enhanced Mobile Menu */}
           <div
             className={`lg:hidden transition-all duration-300 ease-in-out ${
-              showMenu ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
+              showMenu ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
             } overflow-hidden`}
           >
             <div className="py-4 space-y-2 border-t border-gray-800/50 menu-slide">
@@ -1322,15 +1151,11 @@ const App = () => {
                 href="#hero"
                 mobile
                 onClick={() => setShowMenu(false)}
-                isActive={activeSection === "hero"}
+                isActive={activeSection === 'hero'}
                 scrollToSection={scrollToSection}
               >
                 <span className="flex items-center space-x-3">
-                  <svg
-                    className="w-5 h-5 text-blue-400"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
+                  <svg className="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
                     <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
                   </svg>
                   <span>Inicio</span>
@@ -1340,15 +1165,11 @@ const App = () => {
                 href="#about"
                 mobile
                 onClick={() => setShowMenu(false)}
-                isActive={activeSection === "about"}
+                isActive={activeSection === 'about'}
                 scrollToSection={scrollToSection}
               >
                 <span className="flex items-center space-x-3">
-                  <svg
-                    className="w-5 h-5 text-blue-400"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
+                  <svg className="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
                     <path
                       fillRule="evenodd"
                       d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-6-3a2 2 0 11-4 0 2 2 0 014 0zm-2 4a5 5 0 00-4.546 2.916A5.986 5.986 0 0010 16a5.986 5.986 0 004.546-2.084A5 5 0 0010 11z"
@@ -1362,15 +1183,11 @@ const App = () => {
                 href="#services"
                 mobile
                 onClick={() => setShowMenu(false)}
-                isActive={activeSection === "services"}
+                isActive={activeSection === 'services'}
                 scrollToSection={scrollToSection}
               >
                 <span className="flex items-center space-x-3">
-                  <svg
-                    className="w-5 h-5 text-blue-400"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
+                  <svg className="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
                     <path
                       fillRule="evenodd"
                       d="M3 4a1 1 0 011-1h4a1 1 0 010 2H6.414l2.293 2.293a1 1 0 01-1.414 1.414L5 6.414V8a1 1 0 01-2 0V4zm9 1a1 1 0 010-2h4a1 1 0 011 1v4a1 1 0 01-2 0V6.414l-2.293 2.293a1 1 0 11-1.414-1.414L13.586 5H12zm-9 7a1 1 0 012 0v1.586l2.293-2.293a1 1 0 111.414 1.414L6.414 15H8a1 1 0 010 2H4a1 1 0 01-1-1v-4zm13-1a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 010-2h1.586l-2.293-2.293a1 1 0 111.414-1.414L15 13.586V12a1 1 0 011-1z"
@@ -1384,15 +1201,11 @@ const App = () => {
                 href="#technologies"
                 mobile
                 onClick={() => setShowMenu(false)}
-                isActive={activeSection === "technologies"}
+                isActive={activeSection === 'technologies'}
                 scrollToSection={scrollToSection}
               >
                 <span className="flex items-center space-x-3">
-                  <svg
-                    className="w-5 h-5 text-blue-400"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
+                  <svg className="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
                     <path
                       fillRule="evenodd"
                       d="M12.316 3.051a1 1 0 01.633 1.265l-4 12a1 1 0 11-1.898-.632l4-12a1 1 0 011.265-.633zM5.707 6.293a1 1 0 010 1.414L3.414 10l2.293 2.293a1 1 0 11-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0zm8.586 0a1 1 0 011.414 0l3 3a1 1 0 010 1.414l-3 3a1 1 0 11-1.414-1.414L16.586 10l-2.293-2.293a1 1 0 010-1.414z"
@@ -1406,20 +1219,17 @@ const App = () => {
                 href="#testimonials"
                 mobile
                 onClick={() => setShowMenu(false)}
-                isActive={activeSection === "testimonials"}
+                isActive={activeSection === 'testimonials'}
                 scrollToSection={scrollToSection}
               >
                 <span className="flex items-center space-x-3">
-                  <svg
-                    className="w-5 h-5 text-blue-400"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
+                  <svg className="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
                     <path
                       fillRule="evenodd"
                       d="M18 13V5a2 2 0 00-2-2H4a2 2 0 00-2 2v8a2 2 0 002 2h3l3 3 3-3h3a2 2 0 002-2zM5 7a1 1 0 011-1h8a1 1 0 110 2H6a1 1 0 01-1-1zm1 3a1 1 0 100 2h3a1 1 0 100-2H6z"
                       clipRule="evenodd"
-                    />                  </svg>
+                    />{' '}
+                  </svg>
                   <span>Testimonios</span>
                 </span>
               </NavLink>
@@ -1427,15 +1237,11 @@ const App = () => {
                 href="#blog"
                 mobile
                 onClick={() => setShowMenu(false)}
-                isActive={activeSection === "blog"}
+                isActive={activeSection === 'blog'}
                 scrollToSection={scrollToSection}
               >
                 <span className="flex items-center space-x-3">
-                  <svg
-                    className="w-5 h-5 text-blue-400"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
+                  <svg className="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
                     <path
                       fillRule="evenodd"
                       d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z"
@@ -1449,15 +1255,11 @@ const App = () => {
                 href="#contact"
                 mobile
                 onClick={() => setShowMenu(false)}
-                isActive={activeSection === "contact"}
+                isActive={activeSection === 'contact'}
                 scrollToSection={scrollToSection}
               >
                 <span className="flex items-center space-x-3">
-                  <svg
-                    className="w-5 h-5 text-blue-400"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
+                  <svg className="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
                     <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
                     <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
                   </svg>
@@ -1473,12 +1275,7 @@ const App = () => {
                 className="hidden md:block bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white font-semibold px-6 py-2.5 rounded-full transition-all duration-300 transform hover:scale-105 hover:shadow-lg hover:shadow-blue-500/25 border border-blue-500/20"
               >
                 <span className="flex items-center space-x-2">
-                  <svg
-                    className="w-4 h-4"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path
                       strokeLinecap="round"
                       strokeLinejoin="round"
@@ -1498,7 +1295,7 @@ const App = () => {
               >
                 <svg
                   className={`w-6 h-6 transition-transform duration-300 ${
-                    showMenu ? "rotate-90" : ""
+                    showMenu ? 'rotate-90' : ''
                   }`}
                   fill="none"
                   stroke="currentColor"
@@ -1520,9 +1317,7 @@ const App = () => {
                     />
                   )}
                 </svg>
-                <span className="text-sm font-medium">
-                  {showMenu ? "Cerrar" : "Menú"}
-                </span>
+                <span className="text-sm font-medium">{showMenu ? 'Cerrar' : 'Menú'}</span>
               </button>
             </div>
           </div>
@@ -1530,7 +1325,7 @@ const App = () => {
           {/* Enhanced Mobile Menu */}
           <div
             className={`lg:hidden transition-all duration-300 ease-in-out ${
-              showMenu ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
+              showMenu ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
             } overflow-hidden`}
           >
             <div className="py-4 space-y-2 border-t border-gray-800/50 menu-slide">
@@ -1538,15 +1333,11 @@ const App = () => {
                 href="#hero"
                 mobile
                 onClick={() => setShowMenu(false)}
-                isActive={activeSection === "hero"}
+                isActive={activeSection === 'hero'}
                 scrollToSection={scrollToSection}
               >
                 <span className="flex items-center space-x-3">
-                  <svg
-                    className="w-5 h-5 text-blue-400"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
+                  <svg className="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
                     <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
                   </svg>
                   <span>Inicio</span>
@@ -1556,15 +1347,11 @@ const App = () => {
                 href="#about"
                 mobile
                 onClick={() => setShowMenu(false)}
-                isActive={activeSection === "about"}
+                isActive={activeSection === 'about'}
                 scrollToSection={scrollToSection}
               >
                 <span className="flex items-center space-x-3">
-                  <svg
-                    className="w-5 h-5 text-blue-400"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
+                  <svg className="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
                     <path
                       fillRule="evenodd"
                       d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-6-3a2 2 0 11-4 0 2 2 0 014 0zm-2 4a5 5 0 00-4.546 2.916A5.986 5.986 0 0010 16a5.986 5.986 0 004.546-2.084A5 5 0 0010 11z"
@@ -1578,15 +1365,11 @@ const App = () => {
                 href="#services"
                 mobile
                 onClick={() => setShowMenu(false)}
-                isActive={activeSection === "services"}
+                isActive={activeSection === 'services'}
                 scrollToSection={scrollToSection}
               >
                 <span className="flex items-center space-x-3">
-                  <svg
-                    className="w-5 h-5 text-blue-400"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
+                  <svg className="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
                     <path
                       fillRule="evenodd"
                       d="M3 4a1 1 0 011-1h4a1 1 0 010 2H6.414l2.293 2.293a1 1 0 01-1.414 1.414L5 6.414V8a1 1 0 01-2 0V4zm9 1a1 1 0 010-2h4a1 1 0 011 1v4a1 1 0 01-2 0V6.414l-2.293 2.293a1 1 0 11-1.414-1.414L13.586 5H12zm-9 7a1 1 0 012 0v1.586l2.293-2.293a1 1 0 111.414 1.414L6.414 15H8a1 1 0 010 2H4a1 1 0 01-1-1v-4zm13-1a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 010-2h1.586l-2.293-2.293a1 1 0 111.414-1.414L15 13.586V12a1 1 0 011-1z"
@@ -1600,15 +1383,11 @@ const App = () => {
                 href="#technologies"
                 mobile
                 onClick={() => setShowMenu(false)}
-                isActive={activeSection === "technologies"}
+                isActive={activeSection === 'technologies'}
                 scrollToSection={scrollToSection}
               >
                 <span className="flex items-center space-x-3">
-                  <svg
-                    className="w-5 h-5 text-blue-400"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
+                  <svg className="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
                     <path
                       fillRule="evenodd"
                       d="M12.316 3.051a1 1 0 01.633 1.265l-4 12a1 1 0 11-1.898-.632l4-12a1 1 0 011.265-.633zM5.707 6.293a1 1 0 010 1.414L3.414 10l2.293 2.293a1 1 0 11-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0zm8.586 0a1 1 0 011.414 0l3 3a1 1 0 010 1.414l-3 3a1 1 0 11-1.414-1.414L16.586 10l-2.293-2.293a1 1 0 010-1.414z"
@@ -1622,20 +1401,17 @@ const App = () => {
                 href="#testimonials"
                 mobile
                 onClick={() => setShowMenu(false)}
-                isActive={activeSection === "testimonials"}
+                isActive={activeSection === 'testimonials'}
                 scrollToSection={scrollToSection}
               >
                 <span className="flex items-center space-x-3">
-                  <svg
-                    className="w-5 h-5 text-blue-400"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
+                  <svg className="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
                     <path
                       fillRule="evenodd"
                       d="M18 13V5a2 2 0 00-2-2H4a2 2 0 00-2 2v8a2 2 0 002 2h3l3 3 3-3h3a2 2 0 002-2zM5 7a1 1 0 011-1h8a1 1 0 110 2H6a1 1 0 01-1-1zm1 3a1 1 0 100 2h3a1 1 0 100-2H6z"
                       clipRule="evenodd"
-                    />                  </svg>
+                    />{' '}
+                  </svg>
                   <span>Testimonios</span>
                 </span>
               </NavLink>
@@ -1643,15 +1419,11 @@ const App = () => {
                 href="#blog"
                 mobile
                 onClick={() => setShowMenu(false)}
-                isActive={activeSection === "blog"}
+                isActive={activeSection === 'blog'}
                 scrollToSection={scrollToSection}
               >
                 <span className="flex items-center space-x-3">
-                  <svg
-                    className="w-5 h-5 text-blue-400"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
+                  <svg className="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
                     <path
                       fillRule="evenodd"
                       d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z"
@@ -1665,15 +1437,11 @@ const App = () => {
                 href="#contact"
                 mobile
                 onClick={() => setShowMenu(false)}
-                isActive={activeSection === "contact"}
+                isActive={activeSection === 'contact'}
                 scrollToSection={scrollToSection}
               >
                 <span className="flex items-center space-x-3">
-                  <svg
-                    className="w-5 h-5 text-blue-400"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
+                  <svg className="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
                     <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
                     <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
                   </svg>
@@ -1693,26 +1461,47 @@ const App = () => {
         <div className="absolute inset-0 z-0">
           {/* Animated Rotating Squares */}
           <div className="absolute top-1/4 left-1/6 w-20 h-20 bg-gradient-to-br from-blue-500/20 to-cyan-500/20 backdrop-blur-sm border border-blue-400/30 animate-rotateSquare"></div>
-          <div className="absolute top-1/3 right-1/5 w-16 h-16 bg-gradient-to-br from-purple-500/20 to-pink-500/20 backdrop-blur-sm border border-purple-400/30 animate-rotateSquareReverse" style={{ animationDelay: '1s' }}></div>
-          <div className="absolute bottom-1/4 left-1/3 w-24 h-24 bg-gradient-to-br from-cyan-500/20 to-teal-500/20 backdrop-blur-sm border border-cyan-400/30 animate-rotateSquare" style={{ animationDelay: '2s' }}></div>
-          <div className="absolute top-1/2 right-1/3 w-18 h-18 bg-gradient-to-br from-indigo-500/20 to-blue-500/20 backdrop-blur-sm border border-indigo-400/30 animate-rotateSquareReverse" style={{ animationDelay: '3s' }}></div>
-          <div className="absolute bottom-1/3 right-1/6 w-14 h-14 bg-gradient-to-br from-emerald-500/20 to-green-500/20 backdrop-blur-sm border border-emerald-400/30 animate-rotateSquare" style={{ animationDelay: '4s' }}></div>
+          <div
+            className="absolute top-1/3 right-1/5 w-16 h-16 bg-gradient-to-br from-purple-500/20 to-pink-500/20 backdrop-blur-sm border border-purple-400/30 animate-rotateSquareReverse"
+            style={{ animationDelay: '1s' }}
+          ></div>
+          <div
+            className="absolute bottom-1/4 left-1/3 w-24 h-24 bg-gradient-to-br from-cyan-500/20 to-teal-500/20 backdrop-blur-sm border border-cyan-400/30 animate-rotateSquare"
+            style={{ animationDelay: '2s' }}
+          ></div>
+          <div
+            className="absolute top-1/2 right-1/3 w-18 h-18 bg-gradient-to-br from-indigo-500/20 to-blue-500/20 backdrop-blur-sm border border-indigo-400/30 animate-rotateSquareReverse"
+            style={{ animationDelay: '3s' }}
+          ></div>
+          <div
+            className="absolute bottom-1/3 right-1/6 w-14 h-14 bg-gradient-to-br from-emerald-500/20 to-green-500/20 backdrop-blur-sm border border-emerald-400/30 animate-rotateSquare"
+            style={{ animationDelay: '4s' }}
+          ></div>
 
           {/* Floating Grid Pattern */}
           <div className="absolute inset-0 opacity-10">
             <svg className="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
               <defs>
                 <pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse">
-                  <path d="M 10 0 L 0 0 0 10" fill="none" stroke="currentColor" strokeWidth="0.5" opacity="0.3"/>
+                  <path
+                    d="M 10 0 L 0 0 0 10"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="0.5"
+                    opacity="0.3"
+                  />
                 </pattern>
               </defs>
-              <rect width="100%" height="100%" fill="url(#grid)" className="text-blue-400/20"/>
+              <rect width="100%" height="100%" fill="url(#grid)" className="text-blue-400/20" />
             </svg>
           </div>
 
           {/* Ambient Glow Effects */}
           <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl animate-pulse"></div>
-          <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-purple-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }}></div>
+          <div
+            className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-purple-500/10 rounded-full blur-3xl animate-pulse"
+            style={{ animationDelay: '2s' }}
+          ></div>
         </div>
 
         <div className="relative z-10 flex flex-col items-center max-w-5xl mx-auto">
@@ -1733,27 +1522,45 @@ const App = () => {
           {/* 3D Professional Title */}
           <h1 className="professional-3d-title text-5xl md:text-7xl lg:text-8xl font-black mb-8 leading-tight animate-fadeInUp relative z-20">
             <span className="block mb-2 text-white">Desarrollamos el</span>
-            <span className="block text-white">
-              Futuro Digital
-            </span>
+            <span className="block text-white">Futuro Digital</span>
           </h1>
 
           {/* Elegant Subtitle */}
-          <p className="text-xl md:text-2xl text-gray-300 mb-12 animate-fadeInUp max-w-4xl leading-relaxed font-light" style={{ animationDelay: '0.3s' }}>
-            <span className="block mb-2">Soluciones de software innovadoras y aplicaciones de vanguardia</span>
-            <span className="text-gray-400">que transforman ideas ambiciosas en realidades digitales exitosas.</span>
+          <p
+            className="text-xl md:text-2xl text-gray-300 mb-12 animate-fadeInUp max-w-4xl leading-relaxed font-light"
+            style={{ animationDelay: '0.3s' }}
+          >
+            <span className="block mb-2">
+              Soluciones de software innovadoras y aplicaciones de vanguardia
+            </span>
+            <span className="text-gray-400">
+              que transforman ideas ambiciosas en realidades digitales exitosas.
+            </span>
           </p>
 
           {/* Professional CTA Section */}
-          <div className="flex flex-col sm:flex-row gap-6 animate-fadeInUp" style={{ animationDelay: '0.6s' }}>
+          <div
+            className="flex flex-col sm:flex-row gap-6 animate-fadeInUp"
+            style={{ animationDelay: '0.6s' }}
+          >
             <a
               href="#services"
               className="group relative bg-gradient-to-r from-blue-600 via-blue-700 to-cyan-600 hover:from-blue-700 hover:via-blue-800 hover:to-cyan-700 text-white font-semibold py-4 px-10 rounded-2xl shadow-2xl transition-all duration-500 transform hover:scale-105 hover:shadow-blue-500/25 overflow-hidden"
             >
               <span className="relative z-10 flex items-center justify-center space-x-3">
                 <span>Explorar Servicios</span>
-                <svg className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                <svg
+                  className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M17 8l4 4m0 0l-4 4m4-4H3"
+                  />
                 </svg>
               </span>
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000"></div>
@@ -1765,7 +1572,12 @@ const App = () => {
             >
               <span className="flex items-center justify-center space-x-3">
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
+                  />
                 </svg>
                 <span>Consulta Gratuita</span>
               </span>
@@ -1781,8 +1593,14 @@ const App = () => {
         {/* Efectos de fondo animados */}
         <div className="absolute inset-0">
           <div className="absolute top-1/4 left-1/4 w-72 h-72 bg-blue-500/10 rounded-full blur-3xl animate-blob"></div>
-          <div className="absolute bottom-1/4 right-1/4 w-72 h-72 bg-purple-500/10 rounded-full blur-3xl animate-blob" style={{ animationDelay: '2s' }}></div>
-          <div className="absolute top-1/2 left-1/2 w-64 h-64 bg-cyan-500/10 rounded-full blur-3xl animate-blob" style={{ animationDelay: '4s' }}></div>
+          <div
+            className="absolute bottom-1/4 right-1/4 w-72 h-72 bg-purple-500/10 rounded-full blur-3xl animate-blob"
+            style={{ animationDelay: '2s' }}
+          ></div>
+          <div
+            className="absolute top-1/2 left-1/2 w-64 h-64 bg-cyan-500/10 rounded-full blur-3xl animate-blob"
+            style={{ animationDelay: '4s' }}
+          ></div>
         </div>
 
         <div className="container mx-auto px-4 relative z-10">
@@ -1790,13 +1608,16 @@ const App = () => {
           <div className="text-center mb-20">
             <div className="inline-flex items-center bg-blue-500/10 border border-blue-500/30 rounded-full px-6 py-3 mb-6">
               <div className="w-2 h-2 bg-blue-400 rounded-full animate-pulse mr-3"></div>
-              <span className="text-blue-300 text-sm font-medium uppercase tracking-wider">Quiénes Somos</span>
+              <span className="text-blue-300 text-sm font-medium uppercase tracking-wider">
+                Quiénes Somos
+              </span>
             </div>
             <h2 className="text-4xl md:text-6xl font-bold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-purple-400 to-cyan-400">
               Nuestra Esencia
             </h2>
             <p className="text-xl md:text-2xl text-gray-300 max-w-4xl mx-auto leading-relaxed">
-              Transformamos ideas en soluciones digitales de clase mundial, impulsando el crecimiento y éxito de nuestros clientes
+              Transformamos ideas en soluciones digitales de clase mundial, impulsando el
+              crecimiento y éxito de nuestros clientes
             </p>
           </div>
 
@@ -1813,7 +1634,10 @@ const App = () => {
                 </h3>
               </div>
               <p className="text-gray-300 text-lg leading-relaxed group-hover:text-gray-200 transition-colors">
-                Democratizar la tecnología de vanguardia, creando soluciones digitales accesibles e innovadoras que impulsen el crecimiento exponencial de nuestros clientes. Nos comprometemos a entregar productos de software excepcionales que transformen ideas ambiciosas en realidades digitales exitosas.
+                Democratizar la tecnología de vanguardia, creando soluciones digitales accesibles e
+                innovadoras que impulsen el crecimiento exponencial de nuestros clientes. Nos
+                comprometemos a entregar productos de software excepcionales que transformen ideas
+                ambiciosas en realidades digitales exitosas.
               </p>
             </div>
 
@@ -1828,7 +1652,10 @@ const App = () => {
                 </h3>
               </div>
               <p className="text-gray-300 text-lg leading-relaxed group-hover:text-gray-200 transition-colors">
-                Ser la empresa líder en desarrollo de software personalizado en Latinoamérica, reconocida mundialmente por nuestra excelencia técnica, innovación disruptiva y capacidad excepcional de anticipar y moldear las necesidades del mercado digital global.
+                Ser la empresa líder en desarrollo de software personalizado en Latinoamérica,
+                reconocida mundialmente por nuestra excelencia técnica, innovación disruptiva y
+                capacidad excepcional de anticipar y moldear las necesidades del mercado digital
+                global.
               </p>
             </div>
           </div>
@@ -1851,9 +1678,7 @@ const App = () => {
                   <div className="w-14 h-14 bg-gradient-to-r from-green-500 to-emerald-500 rounded-2xl flex items-center justify-center mr-5">
                     <span className="text-xl">⚡</span>
                   </div>
-                  <h4 className="text-2xl font-bold text-green-300">
-                    Excelencia Inmediata
-                  </h4>
+                  <h4 className="text-2xl font-bold text-green-300">Excelencia Inmediata</h4>
                 </div>
                 <div className="space-y-4">
                   <div className="flex items-start group">
@@ -1889,9 +1714,7 @@ const App = () => {
                   <div className="w-14 h-14 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-2xl flex items-center justify-center mr-5">
                     <span className="text-xl">�</span>
                   </div>
-                  <h4 className="text-2xl font-bold text-cyan-300">
-                    Innovación Continua
-                  </h4>
+                  <h4 className="text-2xl font-bold text-cyan-300">Innovación Continua</h4>
                 </div>
                 <div className="space-y-4">
                   <div className="flex items-start group">
@@ -1928,27 +1751,21 @@ const App = () => {
               <div className="flex items-center space-x-8 mb-6 md:mb-0">
                 <div className="text-center">
                   <div className="text-2xl font-bold text-blue-400">20+</div>
-                  <div className="text-xs text-gray-500 uppercase tracking-wide">
-                    Tecnologías
-                  </div>
+                  <div className="text-xs text-gray-500 uppercase tracking-wide">Tecnologías</div>
                 </div>
                 <div className="text-center">
                   <div className="text-2xl font-bold text-emerald-400">5+</div>
-                  <div className="text-xs text-gray-500 uppercase tracking-wide">
-                    Años Exp
-                  </div>
+                  <div className="text-xs text-gray-500 uppercase tracking-wide">Años Exp</div>
                 </div>
                 <div className="text-center">
                   <div className="text-2xl font-bold text-purple-400">100%</div>
-                  <div className="text-xs text-gray-500 uppercase tracking-wide">
-                    Actualizados
-                  </div>
+                  <div className="text-xs text-gray-500 uppercase tracking-wide">Actualizados</div>
                 </div>
               </div>
 
               {/* CTA compacto */}
               <div className="flex space-x-3">
-                {" "}
+                {' '}
                 <button
                   onClick={() => openQuoteModal()}
                   className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-medium py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 text-sm"
@@ -1971,8 +1788,14 @@ const App = () => {
         {/* Efectos de fondo */}
         <div className="absolute inset-0">
           <div className="absolute top-1/4 left-1/4 w-72 h-72 bg-blue-500/10 rounded-full blur-3xl animate-blob"></div>
-          <div className="absolute bottom-1/4 right-1/4 w-72 h-72 bg-purple-500/10 rounded-full blur-3xl animate-blob" style={{ animationDelay: '2s' }}></div>
-          <div className="absolute top-1/2 left-1/2 w-64 h-64 bg-cyan-500/10 rounded-full blur-3xl animate-blob" style={{ animationDelay: '4s' }}></div>
+          <div
+            className="absolute bottom-1/4 right-1/4 w-72 h-72 bg-purple-500/10 rounded-full blur-3xl animate-blob"
+            style={{ animationDelay: '2s' }}
+          ></div>
+          <div
+            className="absolute top-1/2 left-1/2 w-64 h-64 bg-cyan-500/10 rounded-full blur-3xl animate-blob"
+            style={{ animationDelay: '4s' }}
+          ></div>
         </div>
 
         <div className="container mx-auto px-4 relative z-10">
@@ -1980,22 +1803,20 @@ const App = () => {
           <div className="text-center mb-12">
             <div className="inline-flex items-center bg-gray-700/30 backdrop-blur-sm rounded-full px-4 py-2 mb-4 border border-gray-600/30">
               <div className="w-2 h-2 bg-emerald-400 rounded-full mr-2 animate-pulse"></div>
-              <span className="text-gray-300 text-sm font-medium">
-                Nuestros Logros
-              </span>
+              <span className="text-gray-300 text-sm font-medium">Nuestros Logros</span>
             </div>
 
             <h2 className="text-3xl md:text-4xl font-bold mb-4 text-white">
               Proyectos que
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-blue-400">
-                {" "}
+                {' '}
                 Transforman
               </span>
             </h2>
 
             <p className="text-gray-400 max-w-2xl mx-auto">
-              Cada número representa la confianza de nuestros clientes y nuestro
-              compromiso con la excelencia
+              Cada número representa la confianza de nuestros clientes y nuestro compromiso con la
+              excelencia
             </p>
           </div>
 
@@ -2071,9 +1892,7 @@ const App = () => {
                   </svg>
                 </div>
                 <div>
-                  <div className="text-lg font-bold text-white">
-                    Respuesta &lt; 24h
-                  </div>
+                  <div className="text-lg font-bold text-white">Respuesta &lt; 24h</div>
                   <div className="text-sm text-gray-400">Garantizada</div>
                 </div>
               </div>
@@ -2095,9 +1914,7 @@ const App = () => {
                   </svg>
                 </div>
                 <div>
-                  <div className="text-lg font-bold text-white">
-                    100% Seguro
-                  </div>
+                  <div className="text-lg font-bold text-white">100% Seguro</div>
                   <div className="text-sm text-gray-400">SSL & Cifrado</div>
                 </div>
               </div>
@@ -2119,24 +1936,30 @@ const App = () => {
                   </svg>
                 </div>
                 <div>
-                  <div className="text-lg font-bold text-white">
-                    Soporte 24/7
-                  </div>
+                  <div className="text-lg font-bold text-white">Soporte 24/7</div>
                   <div className="text-sm text-gray-400">Técnico Dedicado</div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </section>      {/* Testimonials Section */}      <section
+      </section>{' '}
+      {/* Testimonials Section */}{' '}
+      <section
         id="testimonials"
         className="py-16 md:py-24 bg-gradient-to-br from-gray-900 via-black to-gray-900 relative overflow-hidden"
       >
         {/* Efectos de fondo animados */}
         <div className="absolute inset-0">
           <div className="absolute top-1/4 left-1/4 w-72 h-72 bg-blue-500/10 rounded-full blur-3xl animate-blob"></div>
-          <div className="absolute bottom-1/4 right-1/4 w-72 h-72 bg-purple-500/10 rounded-full blur-3xl animate-blob" style={{ animationDelay: '2s' }}></div>
-          <div className="absolute top-1/2 left-1/2 w-64 h-64 bg-cyan-500/10 rounded-full blur-3xl animate-blob" style={{ animationDelay: '4s' }}></div>
+          <div
+            className="absolute bottom-1/4 right-1/4 w-72 h-72 bg-purple-500/10 rounded-full blur-3xl animate-blob"
+            style={{ animationDelay: '2s' }}
+          ></div>
+          <div
+            className="absolute top-1/2 left-1/2 w-64 h-64 bg-cyan-500/10 rounded-full blur-3xl animate-blob"
+            style={{ animationDelay: '4s' }}
+          ></div>
         </div>
 
         <div className="container mx-auto px-4 relative z-10">
@@ -2155,27 +1978,23 @@ const App = () => {
             </h2>
 
             <p className="text-lg text-gray-400 max-w-3xl mx-auto leading-relaxed">
-              La satisfacción de nuestros clientes es nuestra mejor carta de
-              presentación. Descubre cómo hemos transformado sus negocios con
-              soluciones tecnológicas innovadoras.
+              La satisfacción de nuestros clientes es nuestra mejor carta de presentación. Descubre
+              cómo hemos transformado sus negocios con soluciones tecnológicas innovadoras.
             </p>
-          </div>          {/* Testimonials Banner */}
-          <TestimonialsBanner testimonials={testimonials} />          {/* Clients Section */}
+          </div>{' '}
+          {/* Testimonials Banner */}
+          <TestimonialsBanner testimonials={testimonials} /> {/* Clients Section */}
           <div className="mt-20">
             <ClientsSection />
           </div>
-
           {/* Blog Section */}
           <div className="mt-20">
             <BlogSection onOpenBlogModal={handleOpenBlogModal} />
           </div>
-
           {/* Stats Row */}
           <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
             <div className="text-center">
-              <div className="text-3xl font-bold text-yellow-400 mb-2">
-                4.9/5
-              </div>
+              <div className="text-3xl font-bold text-yellow-400 mb-2">4.9/5</div>
               <div className="text-gray-400">Calificación Promedio</div>
               <div className="flex justify-center mt-2">
                 {[...Array(5)].map((_, i) => (
@@ -2192,24 +2011,17 @@ const App = () => {
             </div>
 
             <div className="text-center">
-              <div className="text-3xl font-bold text-emerald-400 mb-2">
-                100%
-              </div>
+              <div className="text-3xl font-bold text-emerald-400 mb-2">100%</div>
               <div className="text-gray-400">Proyectos Exitosos</div>
-              <div className="text-sm text-emerald-300 mt-1">
-                Sin fallos en entrega
-              </div>
+              <div className="text-sm text-emerald-300 mt-1">Sin fallos en entrega</div>
             </div>
 
             <div className="text-center">
               <div className="text-3xl font-bold text-blue-400 mb-2">98%</div>
               <div className="text-gray-400">Clientes Recurrentes</div>
-              <div className="text-sm text-blue-300 mt-1">
-                Confían en nosotros
-              </div>
+              <div className="text-sm text-blue-300 mt-1">Confían en nosotros</div>
             </div>
           </div>
-
           {/* CTA */}
           <div className="text-center mt-12">
             <p className="text-gray-400 mb-6 text-lg">
@@ -2233,12 +2045,21 @@ const App = () => {
         </div>
       </section>
       {/* Contact Section */}
-      <section id="contact" className="py-20 md:py-32 bg-gradient-to-br from-gray-900 via-black to-gray-900 relative overflow-hidden">
+      <section
+        id="contact"
+        className="py-20 md:py-32 bg-gradient-to-br from-gray-900 via-black to-gray-900 relative overflow-hidden"
+      >
         {/* Efectos de fondo animados */}
         <div className="absolute inset-0">
           <div className="absolute top-1/4 left-1/4 w-72 h-72 bg-blue-500/10 rounded-full blur-3xl animate-blob"></div>
-          <div className="absolute bottom-1/4 right-1/4 w-72 h-72 bg-purple-500/10 rounded-full blur-3xl animate-blob" style={{ animationDelay: '2s' }}></div>
-          <div className="absolute top-1/2 left-1/2 w-64 h-64 bg-cyan-500/10 rounded-full blur-3xl animate-blob" style={{ animationDelay: '4s' }}></div>
+          <div
+            className="absolute bottom-1/4 right-1/4 w-72 h-72 bg-purple-500/10 rounded-full blur-3xl animate-blob"
+            style={{ animationDelay: '2s' }}
+          ></div>
+          <div
+            className="absolute top-1/2 left-1/2 w-64 h-64 bg-cyan-500/10 rounded-full blur-3xl animate-blob"
+            style={{ animationDelay: '4s' }}
+          ></div>
         </div>
 
         <div className="container mx-auto px-4 relative z-10">
@@ -2247,8 +2068,7 @@ const App = () => {
               Contáctanos
             </h2>
             <p className="text-xl text-gray-300 max-w-2xl mx-auto">
-              ¿Listo para transformar tu idea en una solución tecnológica
-              exitosa?
+              ¿Listo para transformar tu idea en una solución tecnológica exitosa?
             </p>
           </div>
 
@@ -2303,8 +2123,16 @@ const App = () => {
               <div className="bg-gradient-to-br from-gray-800/80 to-gray-900/80 backdrop-blur-md p-4 rounded-xl border border-gray-700/50">
                 <div className="flex items-center space-x-3">
                   <div className="bg-purple-500/20 p-2 rounded-lg">
-                    <svg className="w-5 h-5 text-purple-400" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd"></path>
+                    <svg
+                      className="w-5 h-5 text-purple-400"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z"
+                        clipRule="evenodd"
+                      ></path>
                     </svg>
                   </div>
                   <div>
@@ -2318,8 +2146,16 @@ const App = () => {
               <div className="bg-gradient-to-br from-gray-800/80 to-gray-900/80 backdrop-blur-md p-4 rounded-xl border border-gray-700/50">
                 <div className="flex items-center space-x-3">
                   <div className="bg-yellow-500/20 p-2 rounded-lg">
-                    <svg className="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd"></path>
+                    <svg
+                      className="w-5 h-5 text-yellow-400"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"
+                        clipRule="evenodd"
+                      ></path>
                     </svg>
                   </div>
                   <div>
@@ -2330,16 +2166,31 @@ const App = () => {
               </div>
 
               {/* Formulario como botón */}
-              <div className="bg-gradient-to-br from-gray-800/80 to-gray-900/80 backdrop-blur-md p-4 rounded-xl border border-gray-700/50 hover:border-blue-500/50 transition-all duration-300 cursor-pointer group" onClick={openContactModal}>
+              <div
+                className="bg-gradient-to-br from-gray-800/80 to-gray-900/80 backdrop-blur-md p-4 rounded-xl border border-gray-700/50 hover:border-blue-500/50 transition-all duration-300 cursor-pointer group"
+                onClick={openContactModal}
+              >
                 <div className="flex items-center space-x-3">
                   <div className="bg-blue-500/20 p-2 rounded-lg group-hover:bg-blue-500/30 transition-all duration-300">
-                    <svg className="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+                    <svg
+                      className="w-5 h-5 text-blue-400"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
+                      ></path>
                     </svg>
                   </div>
                   <div>
                     <h4 className="text-white font-semibold text-sm">Formulario</h4>
-                    <p className="text-blue-400 text-sm group-hover:text-blue-300 transition-colors">Enviar mensaje</p>
+                    <p className="text-blue-400 text-sm group-hover:text-blue-300 transition-colors">
+                      Enviar mensaje
+                    </p>
                   </div>
                 </div>
               </div>
@@ -2373,7 +2224,10 @@ const App = () => {
         {/* Efectos de fondo animados sutiles */}
         <div className="absolute inset-0">
           <div className="absolute top-1/4 left-1/4 w-72 h-72 bg-blue-500/5 rounded-full blur-3xl animate-blob"></div>
-          <div className="absolute bottom-1/4 right-1/4 w-72 h-72 bg-purple-500/5 rounded-full blur-3xl animate-blob" style={{ animationDelay: '2s' }}></div>
+          <div
+            className="absolute bottom-1/4 right-1/4 w-72 h-72 bg-purple-500/5 rounded-full blur-3xl animate-blob"
+            style={{ animationDelay: '2s' }}
+          ></div>
         </div>
 
         <div className="container mx-auto px-4 py-16 relative z-10">
@@ -2386,30 +2240,25 @@ const App = () => {
                   src={logo1}
                   alt="Axon Logo Original"
                   className="h-16 w-16 object-contain logo-rotate-1 rounded-lg"
-                  onError={(e) => {
-                    e.target.style.display = "none";
+                  onError={e => {
+                    e.target.style.display = 'none';
                   }}
                 />
                 <img
                   src={logo231}
                   alt="Axon.App Logo 3D"
                   className="h-20 w-auto object-contain logo-rotate-2 rounded-lg"
-                  onError={(e) => {
-                    e.target.style.display = "none";
+                  onError={e => {
+                    e.target.style.display = 'none';
                   }}
                 />
               </div>
               <p className="text-gray-300 text-sm leading-relaxed text-center">
-                Transformamos ideas en soluciones digitales innovadoras.
-                Desarrollo web, aplicaciones móviles, inteligencia artificial y
-                más.
+                Transformamos ideas en soluciones digitales innovadoras. Desarrollo web,
+                aplicaciones móviles, inteligencia artificial y más.
               </p>
               <div className="flex items-center justify-center space-x-2 text-sm text-gray-400">
-                <svg
-                  className="w-4 h-4 text-purple-400"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                >
+                <svg className="w-4 h-4 text-purple-400" fill="currentColor" viewBox="0 0 20 20">
                   <path
                     fillRule="evenodd"
                     d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z"
@@ -2428,7 +2277,7 @@ const App = () => {
               <ul className="space-y-3 text-sm">
                 <li>
                   <button
-                    onClick={() => scrollToSection("services")}
+                    onClick={() => scrollToSection('services')}
                     className="text-gray-300 hover:text-green-400 transition-colors duration-200 flex items-center space-x-2 cursor-pointer"
                   >
                     <span className="text-green-400">▶</span>
@@ -2437,16 +2286,16 @@ const App = () => {
                 </li>
                 <li>
                   <button
-                    onClick={() => scrollToSection("services")}
+                    onClick={() => scrollToSection('services')}
                     className="text-gray-300 hover:text-green-400 transition-colors duration-200 flex items-center space-x-2 cursor-pointer"
                   >
                     <span className="text-green-400">▶</span>
                     <span>Aplicaciones Móviles</span>
                   </button>
-                </li>{" "}
+                </li>{' '}
                 <li>
                   <button
-                    onClick={() => scrollToSection("services")}
+                    onClick={() => scrollToSection('services')}
                     className="text-gray-300 hover:text-green-400 transition-colors duration-200 flex items-center space-x-2 cursor-pointer"
                   >
                     <span className="text-green-400">▶</span>
@@ -2455,7 +2304,7 @@ const App = () => {
                 </li>
                 <li>
                   <button
-                    onClick={() => scrollToSection("services")}
+                    onClick={() => scrollToSection('services')}
                     className="text-gray-300 hover:text-green-400 transition-colors duration-200 flex items-center space-x-2 cursor-pointer"
                   >
                     <span className="text-green-400">▶</span>
@@ -2464,16 +2313,16 @@ const App = () => {
                 </li>
                 <li>
                   <button
-                    onClick={() => scrollToSection("services")}
+                    onClick={() => scrollToSection('services')}
                     className="text-gray-300 hover:text-green-400 transition-colors duration-200 flex items-center space-x-2 cursor-pointer"
                   >
                     <span className="text-green-400">▶</span>
                     <span>E-commerce</span>
                   </button>
-                </li>{" "}
+                </li>{' '}
                 <li>
                   <button
-                    onClick={() => scrollToSection("services")}
+                    onClick={() => scrollToSection('services')}
                     className="text-gray-300 hover:text-green-400 transition-colors duration-200 flex items-center space-x-2 cursor-pointer"
                   >
                     <span className="text-green-400">▶</span>
@@ -2485,17 +2334,11 @@ const App = () => {
 
             {/* Columna 3: Contacto */}
             <div className="space-y-6">
-              <h4 className="text-xl font-semibold text-white font-rajdhani">
-                📞 Contacto
-              </h4>
+              <h4 className="text-xl font-semibold text-white font-rajdhani">📞 Contacto</h4>
               <div className="space-y-4 text-sm">
                 <div className="flex items-center space-x-3">
                   <div className="w-10 h-10 bg-gradient-to-r from-green-500 to-green-600 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <svg
-                      className="w-5 h-5 text-white"
-                      fill="currentColor"
-                      viewBox="0 0 24 24"
-                    >
+                    <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
                       <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
                       <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
                     </svg>
@@ -2513,11 +2356,7 @@ const App = () => {
 
                 <div className="flex items-center space-x-3">
                   <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <svg
-                      className="w-5 h-5 text-white"
-                      fill="currentColor"
-                      viewBox="0 0 24 24"
-                    >
+                    <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
                       <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
                     </svg>
                   </div>
@@ -2534,11 +2373,7 @@ const App = () => {
 
                 <div className="flex items-center space-x-3">
                   <div className="w-10 h-10 bg-gradient-to-r from-purple-500 to-purple-600 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <svg
-                      className="w-5 h-5 text-white"
-                      fill="currentColor"
-                      viewBox="0 0 24 24"
-                    >
+                    <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
                       <path
                         fillRule="evenodd"
                         d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"
@@ -2557,13 +2392,11 @@ const App = () => {
 
             {/* Columna 4: Enlaces Rápidos */}
             <div className="space-y-6">
-              <h4 className="text-xl font-semibold text-white font-rajdhani">
-                🔗 Enlaces Rápidos
-              </h4>
+              <h4 className="text-xl font-semibold text-white font-rajdhani">🔗 Enlaces Rápidos</h4>
               <ul className="space-y-3 text-sm">
                 <li>
                   <button
-                    onClick={() => scrollToSection("hero")}
+                    onClick={() => scrollToSection('hero')}
                     className="text-gray-300 hover:text-green-400 transition-colors duration-200 flex items-center space-x-2 cursor-pointer"
                   >
                     <span className="text-green-400">▶</span>
@@ -2572,7 +2405,7 @@ const App = () => {
                 </li>
                 <li>
                   <button
-                    onClick={() => scrollToSection("about")}
+                    onClick={() => scrollToSection('about')}
                     className="text-gray-300 hover:text-green-400 transition-colors duration-200 flex items-center space-x-2 cursor-pointer"
                   >
                     <span className="text-green-400">▶</span>
@@ -2581,7 +2414,7 @@ const App = () => {
                 </li>
                 <li>
                   <button
-                    onClick={() => scrollToSection("services")}
+                    onClick={() => scrollToSection('services')}
                     className="text-gray-300 hover:text-green-400 transition-colors duration-200 flex items-center space-x-2 cursor-pointer"
                   >
                     <span className="text-green-400">▶</span>
@@ -2590,7 +2423,7 @@ const App = () => {
                 </li>
                 <li>
                   <button
-                    onClick={() => scrollToSection("technologies")}
+                    onClick={() => scrollToSection('technologies')}
                     className="text-gray-300 hover:text-green-400 transition-colors duration-200 flex items-center space-x-2 cursor-pointer"
                   >
                     <span className="text-green-400">▶</span>
@@ -2599,7 +2432,7 @@ const App = () => {
                 </li>
                 <li>
                   <button
-                    onClick={() => scrollToSection("testimonials")}
+                    onClick={() => scrollToSection('testimonials')}
                     className="text-gray-300 hover:text-green-400 transition-colors duration-200 flex items-center space-x-2 cursor-pointer"
                   >
                     <span className="text-green-400">▶</span>
@@ -2608,7 +2441,7 @@ const App = () => {
                 </li>
                 <li>
                   <button
-                    onClick={() => scrollToSection("contact")}
+                    onClick={() => scrollToSection('contact')}
                     className="text-gray-300 hover:text-green-400 transition-colors duration-200 flex items-center space-x-2 cursor-pointer"
                   >
                     <span className="text-green-400">▶</span>
@@ -2635,11 +2468,7 @@ const App = () => {
                   className="group relative"
                 >
                   <div className="w-12 h-12 bg-gradient-to-r from-blue-600 to-blue-700 rounded-full flex items-center justify-center transform transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6 shadow-lg">
-                    <svg
-                      className="w-6 h-6 text-white"
-                      fill="currentColor"
-                      viewBox="0 0 24 24"
-                    >
+                    <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
                       <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
                     </svg>
                   </div>
@@ -2656,11 +2485,7 @@ const App = () => {
                   className="group relative"
                 >
                   <div className="w-12 h-12 bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500 rounded-full flex items-center justify-center transform transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6 shadow-lg">
-                    <svg
-                      className="w-6 h-6 text-white"
-                      fill="currentColor"
-                      viewBox="0 0 24 24"
-                    >
+                    <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
                       <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
                     </svg>
                   </div>
@@ -2677,11 +2502,7 @@ const App = () => {
                   className="group relative"
                 >
                   <div className="w-12 h-12 bg-gradient-to-r from-gray-800 to-black rounded-full flex items-center justify-center transform transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6 shadow-lg">
-                    <svg
-                      className="w-6 h-6 text-white"
-                      fill="currentColor"
-                      viewBox="0 0 24 24"
-                    >
+                    <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
                       <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
                     </svg>
                   </div>
@@ -2698,11 +2519,7 @@ const App = () => {
                   className="group relative"
                 >
                   <div className="w-12 h-12 bg-gradient-to-r from-blue-700 to-blue-800 rounded-full flex items-center justify-center transform transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6 shadow-lg">
-                    <svg
-                      className="w-6 h-6 text-white"
-                      fill="currentColor"
-                      viewBox="0 0 24 24"
-                    >
+                    <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
                       <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
                     </svg>
                   </div>
@@ -2719,11 +2536,7 @@ const App = () => {
                   className="group relative"
                 >
                   <div className="w-12 h-12 bg-gradient-to-r from-red-600 to-red-700 rounded-full flex items-center justify-center transform transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6 shadow-lg">
-                    <svg
-                      className="w-6 h-6 text-white"
-                      fill="currentColor"
-                      viewBox="0 0 24 24"
-                    >
+                    <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
                       <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
                     </svg>
                   </div>
@@ -2740,11 +2553,7 @@ const App = () => {
                   className="group relative"
                 >
                   <div className="w-12 h-12 bg-gradient-to-r from-green-500 to-green-600 rounded-full flex items-center justify-center transform transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6 shadow-lg">
-                    <svg
-                      className="w-6 h-6 text-white"
-                      fill="currentColor"
-                      viewBox="0 0 24 24"
-                    >
+                    <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
                       <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.885 3.488" />
                     </svg>
                   </div>
@@ -2754,18 +2563,9 @@ const App = () => {
                 </a>
 
                 {/* LinkedIn */}
-                <a
-                  href="#"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group relative"
-                >
+                <a href="#" target="_blank" rel="noopener noreferrer" className="group relative">
                   <div className="w-12 h-12 bg-gradient-to-r from-blue-600 to-blue-700 rounded-full flex items-center justify-center transform transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6 shadow-lg">
-                    <svg
-                      className="w-6 h-6 text-white"
-                      fill="currentColor"
-                      viewBox="0 0 24 24"
-                    >
+                    <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
                       <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
                     </svg>
                   </div>
@@ -2780,16 +2580,14 @@ const App = () => {
             <div className="flex flex-col md:flex-row justify-between items-center pt-6 border-t border-gray-800">
               <div className="text-center md:text-left mb-4 md:mb-0">
                 <p className="text-gray-400 text-sm">
-                  &copy; {new Date().getFullYear()}{" "}
+                  &copy; {new Date().getFullYear()}{' '}
                   <span className="font-semibold">
                     <span className="text-cyan-300">Axon</span>
                     <span className="text-emerald-400">.App</span>
                   </span>
                   . Todos los derechos reservados.
                 </p>
-                <p className="text-gray-500 text-xs mt-1">
-                  Desarrollado con ❤️ en Colombia 🇨🇴
-                </p>
+                <p className="text-gray-500 text-xs mt-1">Desarrollado con ❤️ en Colombia 🇨🇴</p>
               </div>
 
               <div className="flex flex-wrap justify-center space-x-6 text-sm">
@@ -2823,10 +2621,7 @@ const App = () => {
         </div>
 
         {/* Floating Action Button - WhatsApp */}
-        <div
-          className="fixed right-4 sm:right-8 z-50"
-          style={{ top: 'calc(50% - 2.5rem)' }}
-        >
+        <div className="fixed right-4 sm:right-8 z-50" style={{ top: 'calc(50% - 2.5rem)' }}>
           <a
             href="https://wa.me/573233932071?text=Hola%2C%20me%20interesa%20conocer%20más%20sobre%20sus%20servicios%20de%20desarrollo%20web"
             target="_blank"
@@ -2834,11 +2629,7 @@ const App = () => {
             className="group block"
           >
             <div className="w-14 h-14 bg-gradient-to-r from-green-500 to-green-600 rounded-full flex items-center justify-center shadow-lg transform transition-all duration-300 group-hover:scale-110 group-hover:shadow-xl animate-pulse">
-              <svg
-                className="w-8 h-8 text-white"
-                fill="currentColor"
-                viewBox="0 0 24 24"
-              >
+              <svg className="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.885 3.488" />
               </svg>
             </div>
@@ -2852,27 +2643,24 @@ const App = () => {
             </div>
           </a>
         </div>
-      </footer>      {/* Cookie Banner */}
+      </footer>{' '}
+      {/* Cookie Banner */}
       {showCookieBanner && (
         <div className="fixed bottom-0 left-0 right-0 bg-gray-900 border-t border-gray-700 shadow-2xl z-40 p-4">
           <div className="container mx-auto max-w-6xl">
             <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
-              {" "}
+              {' '}
               <div className="flex items-start gap-3 flex-1">
                 <div className="flex-shrink-0">
-                  <img
-                    src="logo1.png"
-                    alt="Axon Logo"
-                    className="w-8 h-8 rounded-lg"
-                  />
+                  <img src="logo1.png" alt="Axon Logo" className="w-8 h-8 rounded-lg" />
                 </div>
                 <div className="text-sm text-gray-300">
                   <p className="font-semibold text-white mb-1">
                     Utilizamos cookies para mejorar tu experiencia
                   </p>
                   <p>
-                    Usamos cookies esenciales y opcionales para personalizar
-                    contenido, analizar el tráfico y mejorar nuestros servicios.{" "}
+                    Usamos cookies esenciales y opcionales para personalizar contenido, analizar el
+                    tráfico y mejorar nuestros servicios.{' '}
                     <button
                       onClick={() => setShowCookiesModal(true)}
                       className="text-blue-400 hover:text-blue-300 underline"
@@ -2892,11 +2680,8 @@ const App = () => {
                       marketing: false,
                       preferences: false,
                     };
-                    localStorage.setItem(
-                      "axon-cookie-preferences",
-                      JSON.stringify(onlyNecessary)
-                    );
-                    localStorage.setItem("axon-cookies-accepted", "true");
+                    localStorage.setItem('axon-cookie-preferences', JSON.stringify(onlyNecessary));
+                    localStorage.setItem('axon-cookies-accepted', 'true');
                     setShowCookieBanner(false);
                   }}
                   className="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition-colors text-sm"
@@ -2912,11 +2697,8 @@ const App = () => {
                       marketing: true,
                       preferences: true,
                     };
-                    localStorage.setItem(
-                      "axon-cookie-preferences",
-                      JSON.stringify(allAccepted)
-                    );
-                    localStorage.setItem("axon-cookies-accepted", "true");
+                    localStorage.setItem('axon-cookie-preferences', JSON.stringify(allAccepted));
+                    localStorage.setItem('axon-cookies-accepted', 'true');
                     setShowCookieBanner(false);
                   }}
                   className="px-4 py-2 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white rounded-lg transition-colors text-sm font-semibold"
@@ -2935,18 +2717,9 @@ const App = () => {
         </div>
       )}
       {/* Modals mejorados de Privacidad y Términos */}
-      <EnhancedPrivacyModal
-        isOpen={showPrivacyModal}
-        onClose={() => setShowPrivacyModal(false)}
-      />
-      <EnhancedTermsModal
-        isOpen={showTermsModal}
-        onClose={() => setShowTermsModal(false)}
-      />
-      <EnhancedCookiesModal
-        isOpen={showCookiesModal}
-        onClose={() => setShowCookiesModal(false)}
-      />
+      <EnhancedPrivacyModal isOpen={showPrivacyModal} onClose={() => setShowPrivacyModal(false)} />
+      <EnhancedTermsModal isOpen={showTermsModal} onClose={() => setShowTermsModal(false)} />
+      <EnhancedCookiesModal isOpen={showCookiesModal} onClose={() => setShowCookiesModal(false)} />
       {/* ServiceDetailModal temporalmente comentado para debug */}
       {selectedService && showServiceModal && (
         <ServiceDetailModal
@@ -2955,72 +2728,52 @@ const App = () => {
           onClose={handleCloseServiceModal}
           onOpenQuote={handleOpenQuoteModal}
           onOpenConsultation={handleOpenConsultationModal}
-        />      )}{" "}
+        />
+      )}{' '}
       {/* Modales Unificados */}
       <ContactModal isOpen={contactModalOpen} onClose={closeContactModal} />
       <QuoteModal isOpen={quoteModalOpen} onClose={closeQuoteModal} />
-      <ConsultationModal
-        isOpen={consultationModalOpen}
-        onClose={closeConsultationModal}
-      />
-
+      <ConsultationModal isOpen={consultationModalOpen} onClose={closeConsultationModal} />
       {/* Modal del Blog */}
-      <BlogModal
-        isOpen={showBlogModal}
-        onClose={handleCloseBlogModal}
-        post={selectedBlogPost}
-      />
-
+      <BlogModal isOpen={showBlogModal} onClose={handleCloseBlogModal} post={selectedBlogPost} />
       {/* Botón flotante del blog */}
-      <FloatingBlogButton
-        onClick={scrollToBlog}
-        isVisible={true}
-      />
+      <FloatingBlogButton onClick={scrollToBlog} isVisible={true} />
     </div>
   );
 };
 
 // Componente para enlaces de navegación
-const NavLink = ({
-  href,
-  children,
-  mobile,
-  onClick,
-  isActive,
-  scrollToSection,
-}) => {
+const NavLink = ({ href, children, mobile, onClick, isActive, scrollToSection }) => {
   const baseClasses = mobile
     ? `block px-4 py-3 rounded-lg text-base font-medium transition-all duration-300 transform hover:translate-x-2 border-l-2 cursor-pointer ${
         isActive
-          ? "text-blue-400 bg-gradient-to-r from-blue-600/20 to-cyan-600/20 border-blue-400"
-          : "text-gray-300 hover:text-white hover:bg-gradient-to-r hover:from-blue-600/20 hover:to-cyan-600/20 border-transparent hover:border-blue-400"
+          ? 'text-blue-400 bg-gradient-to-r from-blue-600/20 to-cyan-600/20 border-blue-400'
+          : 'text-gray-300 hover:text-white hover:bg-gradient-to-r hover:from-blue-600/20 hover:to-cyan-600/20 border-transparent hover:border-blue-400'
       }`
     : `relative text-sm font-semibold transition-all duration-300 group px-3 py-2 rounded-lg cursor-pointer ${
-        isActive
-          ? "text-blue-400 bg-white/10"
-          : "text-gray-300 hover:text-white hover:bg-white/5"
+        isActive ? 'text-blue-400 bg-white/10' : 'text-gray-300 hover:text-white hover:bg-white/5'
       }`;
 
   const desktopEffect = !mobile ? (
     <>
       <div
         className={`absolute bottom-0 left-0 h-0.5 bg-gradient-to-r from-blue-400 to-cyan-400 transition-all duration-300 rounded-full ${
-          isActive ? "w-full" : "w-0 group-hover:w-full"
+          isActive ? 'w-full' : 'w-0 group-hover:w-full'
         }`}
       ></div>
       <div
         className={`absolute inset-0 bg-gradient-to-r rounded-lg transition-all duration-300 ${
           isActive
-            ? "from-blue-600/20 to-cyan-600/20"
-            : "from-blue-600/0 to-cyan-600/0 group-hover:from-blue-600/10 group-hover:to-cyan-600/10"
+            ? 'from-blue-600/20 to-cyan-600/20'
+            : 'from-blue-600/0 to-cyan-600/0 group-hover:from-blue-600/10 group-hover:to-cyan-600/10'
         }`}
       ></div>
     </>
   ) : null;
 
-  const handleClick = (e) => {
+  const handleClick = e => {
     e.preventDefault();
-    const sectionId = href.replace("#", "");
+    const sectionId = href.replace('#', '');
     if (scrollToSection) {
       scrollToSection(sectionId);
     }
@@ -3037,9 +2790,7 @@ const NavLink = ({
         <div className="relative">
           <span
             className={`relative z-10 transition-all duration-300 ${
-              isActive
-                ? "text-blue-400 font-semibold"
-                : "text-gray-300 group-hover:text-white"
+              isActive ? 'text-blue-400 font-semibold' : 'text-gray-300 group-hover:text-white'
             }`}
           >
             {children}

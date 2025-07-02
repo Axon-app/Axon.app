@@ -1,5 +1,5 @@
-import React from "react";
-import { blogPosts, getFeaturedPosts } from "../../data/blogData";
+import React from 'react';
+import { blogPosts, getFeaturedPosts } from '../../data/blogData';
 
 // --- Sección principal del Blog ---
 // Muestra posts destacados y recientes con efectos visuales y tarjetas interactivas.
@@ -9,12 +9,21 @@ export const BlogSection = ({ onOpenBlogModal }) => {
   const recentPosts = blogPosts.slice(0, 3);
 
   return (
-    <section id="blog" className="py-20 bg-gradient-to-br from-gray-900 via-black to-gray-900 relative overflow-hidden">
+    <section
+      id="blog"
+      className="py-20 bg-gradient-to-br from-gray-900 via-black to-gray-900 relative overflow-hidden"
+    >
       {/* Efectos de fondo animados decorativos */}
       <div className="absolute inset-0">
         <div className="absolute top-1/4 left-1/4 w-72 h-72 bg-blue-500/10 rounded-full blur-3xl animate-blob"></div>
-        <div className="absolute bottom-1/4 right-1/4 w-72 h-72 bg-purple-500/10 rounded-full blur-3xl animate-blob" style={{ animationDelay: '2s' }}></div>
-        <div className="absolute top-1/2 left-1/2 w-64 h-64 bg-cyan-500/10 rounded-full blur-3xl animate-blob" style={{ animationDelay: '4s' }}></div>
+        <div
+          className="absolute bottom-1/4 right-1/4 w-72 h-72 bg-purple-500/10 rounded-full blur-3xl animate-blob"
+          style={{ animationDelay: '2s' }}
+        ></div>
+        <div
+          className="absolute top-1/2 left-1/2 w-64 h-64 bg-cyan-500/10 rounded-full blur-3xl animate-blob"
+          style={{ animationDelay: '4s' }}
+        ></div>
       </div>
 
       <div className="container mx-auto px-4 lg:px-6 xl:px-8 relative z-10 max-w-7xl">
@@ -24,7 +33,8 @@ export const BlogSection = ({ onOpenBlogModal }) => {
             Blog & Insights
           </h2>
           <p className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
-            Mantente al día con las últimas tendencias en tecnología, desarrollo web y mejores prácticas de la industria
+            Mantente al día con las últimas tendencias en tecnología, desarrollo web y mejores
+            prácticas de la industria
           </p>
         </div>
 
@@ -35,13 +45,8 @@ export const BlogSection = ({ onOpenBlogModal }) => {
               📌 Posts Destacados
             </h3>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
-              {featuredPosts.map((post) => (
-                <BlogCard
-                  key={post.id}
-                  post={post}
-                  onOpenModal={onOpenBlogModal}
-                  featured={true}
-                />
+              {featuredPosts.map(post => (
+                <BlogCard key={post.id} post={post} onOpenModal={onOpenBlogModal} featured={true} />
               ))}
             </div>
           </div>
@@ -53,13 +58,8 @@ export const BlogSection = ({ onOpenBlogModal }) => {
             🕒 Últimas Publicaciones
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-            {recentPosts.map((post) => (
-              <BlogCard
-                key={post.id}
-                post={post}
-                onOpenModal={onOpenBlogModal}
-                featured={false}
-              />
+            {recentPosts.map(post => (
+              <BlogCard key={post.id} post={post} onOpenModal={onOpenBlogModal} featured={false} />
             ))}
           </div>
         </div>
@@ -93,16 +93,36 @@ const BlogCard = React.memo(({ post, onOpenModal, featured }) => {
         {/* Icono de categoría dinámico */}
         <div className="absolute top-4 right-4 group-hover:scale-110 transition-transform duration-300">
           <div className="w-12 h-12 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center border border-white/20 shadow-lg">
-            <svg className="w-6 h-6 text-white animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+            <svg
+              className="w-6 h-6 text-white animate-pulse"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"
+              />
             </svg>
           </div>
         </div>
         {/* Indicador de nueva tecnología */}
         <div className="absolute top-4 left-4 group-hover:rotate-12 transition-transform duration-300">
           <div className="w-10 h-10 bg-gradient-to-r from-cyan-400 to-blue-500 rounded-lg flex items-center justify-center shadow-lg animate-pulse">
-            <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+            <svg
+              className="w-5 h-5 text-white"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M13 10V3L4 14h7v7l9-11h-7z"
+              />
             </svg>
           </div>
         </div>
@@ -139,9 +159,7 @@ const BlogCard = React.memo(({ post, onOpenModal, featured }) => {
           {post.title}
         </h3>
         {/* Extracto */}
-        <p className="text-gray-300 mb-4 leading-relaxed text-sm">
-          {post.excerpt}
-        </p>
+        <p className="text-gray-300 mb-4 leading-relaxed text-sm">{post.excerpt}</p>
         {/* Footer: autor, fecha y botón */}
         <div className="flex justify-between items-center">
           <div className="text-sm text-gray-400">
@@ -161,7 +179,7 @@ const BlogCard = React.memo(({ post, onOpenModal, featured }) => {
   );
 });
 
-BlogCard.displayName = "BlogCard";
+BlogCard.displayName = 'BlogCard';
 
 // --- SUGERENCIAS DE MEJORA ---
 // 1. Modularizar los efectos de fondo animados si se reutilizan en otras secciones.

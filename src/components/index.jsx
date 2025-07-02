@@ -31,8 +31,8 @@
 export {
   AnimatedBackground, // Fondo animado con efectos visuales
   AxonLogo, // Componente del logo de Axon
-  ScrollToTopButton
-} from "./ui/BasicComponents";
+  ScrollToTopButton,
+} from './ui/BasicComponents';
 
 // ===================================================================
 // TARJETAS Y ELEMENTOS DE CONTENIDO
@@ -43,8 +43,8 @@ export {
  */
 export {
   ServiceCard, // Tarjeta individual de servicio
-  TestimonialCard // Tarjeta de testimonio de cliente
-} from "./ui/Cards";
+  TestimonialCard, // Tarjeta de testimonio de cliente
+} from './ui/Cards';
 
 // ===================================================================
 // COMPONENTES INTERACTIVOS Y ANIMADOS
@@ -58,8 +58,8 @@ export {
   AnimatedCounterWithProgress, // Contador con barra de progreso
   TechCarousel, // Carrusel de tecnologías
   TechItem, // Elemento individual de tecnología
-  TestimonialsBanner
-} from "./ui/Interactive";
+  TestimonialsBanner,
+} from './ui/Interactive';
 
 // ===================================================================
 // COMPONENTES DE UI ADICIONALES
@@ -67,7 +67,7 @@ export {
 /**
  * Componentes específicos de funcionalidades adicionales.
  */
-export { FloatingBlogButton } from "./ui/FloatingBlogButton"; // Botón flotante del blog
+export { FloatingBlogButton } from './ui/FloatingBlogButton'; // Botón flotante del blog
 
 // ===================================================================
 // SECCIONES DE LA APLICACIÓN
@@ -75,7 +75,8 @@ export { FloatingBlogButton } from "./ui/FloatingBlogButton"; // Botón flotante
 /**
  * Secciones completas de la página web.
  */
-export { BlogSection } from "./sections/BlogSection"; // Sección completa del blog
+export const BlogSection = lazy(() => import('./sections/BlogSection')); // Sección completa del blog
+export const ClientsSection = lazy(() => import('./sections/ClientsSection')); // Sección de clientes
 
 // ===================================================================
 // MODALES DEL SISTEMA
@@ -84,13 +85,13 @@ export { BlogSection } from "./sections/BlogSection"; // Sección completa del b
  * Modales para diferentes funcionalidades del sistema.
  * Incluye modales de información, servicios y blog.
  */
-export { BlogModal } from "./modals/BlogModal"; // Modal del blog
-export { ConsultationModal } from "./modals/ConsultationModal"; // Modal de consulta
-export { EnhancedCookiesModal } from "./modals/CookiesModal"; // Modal de cookies mejorado
-export { EnhancedPrivacyModal } from "./modals/PrivacyModal"; // Modal de privacidad mejorado
-export { QuoteRequestModal } from "./modals/QuoteModal"; // Modal de solicitud de cotización
-export { ServiceDetailModal } from "./modals/ServiceModal"; // Modal de detalles de servicio
-export { EnhancedTermsModal } from "./modals/TermsModal"; // Modal de términos mejorado
+export { BlogModal } from './modals/BlogModal'; // Modal del blog
+export { ConsultationModal } from './modals/ConsultationModal'; // Modal de consulta
+export { EnhancedCookiesModal } from './modals/CookiesModal'; // Modal de cookies mejorado
+export { EnhancedPrivacyModal } from './modals/PrivacyModal'; // Modal de privacidad mejorado
+export { QuoteRequestModal } from './modals/QuoteModal'; // Modal de solicitud de cotización
+export { ServiceDetailModal } from './modals/ServiceModal'; // Modal de detalles de servicio
+export { EnhancedTermsModal } from './modals/TermsModal'; // Modal de términos mejorado
 
 // ===================================================================
 // SUGERENCIAS DE MEJORA PROFESIONAL

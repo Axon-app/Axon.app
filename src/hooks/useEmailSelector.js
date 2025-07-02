@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useState } from 'react';
 
 /**
  * useEmailSelector - Hook personalizado para manejar la selección de cliente de correo
@@ -19,7 +19,7 @@ export const useEmailSelector = () => {
    * Abre el selector de correo con los datos proporcionados
    * @param {Object} data - {to, subject, body}
    */
-  const openEmailSelector = useCallback((data) => {
+  const openEmailSelector = useCallback(data => {
     setEmailData(data);
     setIsEmailSelectorOpen(true);
   }, []);
@@ -38,7 +38,7 @@ export const useEmailSelector = () => {
    * @param {string} mailtoUrl - URL mailto completa
    */
   const openEmailSelectorFromMailto = useCallback(
-    (mailtoUrl) => {
+    mailtoUrl => {
       try {
         // Extraer componentes del mailto URL
         const url = new URL(mailtoUrl);
@@ -46,8 +46,8 @@ export const useEmailSelector = () => {
         const params = new URLSearchParams(url.search);
         const emailData = {
           to,
-          subject: params.get("subject") || "",
-          body: params.get("body") || "",
+          subject: params.get('subject') || '',
+          body: params.get('body') || '',
         };
         openEmailSelector(emailData);
       } catch {

@@ -4,7 +4,7 @@
 export default {
   plugins: {
     // Plugin de Tailwind CSS (debe ir antes que autoprefixer)
-    "@tailwindcss/postcss": {},
+    '@tailwindcss/postcss': {},
     // Autoprefixer añade prefijos para compatibilidad con navegadores
     autoprefixer: {},
   },

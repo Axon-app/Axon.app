@@ -11,11 +11,11 @@
 // --- Configuración de contacto de la empresa ---
 const CONTACT_CONFIG = {
   EMAILS: {
-    PRIMARY: "axonapp.info@gmail.com",
-    SECONDARY: "axonapp@outlook.es",
+    PRIMARY: 'axonapp.info@gmail.com',
+    SECONDARY: 'axonapp@outlook.es',
   },
-  COMPANY_NAME: "Axon.app",
-  RESPONSE_TIME: "24 horas",
+  COMPANY_NAME: 'Axon.app',
+  RESPONSE_TIME: '24 horas',
 };
 
 /**
@@ -23,15 +23,15 @@ const CONTACT_CONFIG = {
  * @param {Object} formData - Datos del formulario
  * @returns {Object} - { isValid: boolean, errors: Array<string> }
  */
-const validateFormData = (formData) => {
+const validateFormData = formData => {
   const errors = [];
   if (!formData.name?.trim()) {
-    errors.push("El nombre es requerido");
+    errors.push('El nombre es requerido');
   }
   if (!formData.email?.trim()) {
-    errors.push("El email es requerido");
+    errors.push('El email es requerido');
   } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-    errors.push("El formato del email no es válido");
+    errors.push('El formato del email no es válido');
   }
   return {
     isValid: errors.length === 0,
@@ -52,14 +52,14 @@ export const sendUnifiedEmail = async (type, formData) => {
     return { success: false, errors: validation.errors };
   }
   // Simular procesamiento
-  return new Promise((resolve) => {
+  return new Promise(resolve => {
     setTimeout(() => {
-      const timestamp = new Date().toLocaleString("es-ES", {
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-        hour: "2-digit",
-        minute: "2-digit",
+      const timestamp = new Date().toLocaleString('es-ES', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
       });
       resolve({
         success: true,
@@ -71,8 +71,7 @@ export const sendUnifiedEmail = async (type, formData) => {
           contactEmail: CONTACT_CONFIG.EMAILS.PRIMARY,
         },
         timestamp,
-        message:
-          "Formulario procesado correctamente. En producción se enviaría por email.",
+        message: 'Formulario procesado correctamente. En producción se enviaría por email.',
       });
     }, 1200);
   });
@@ -83,8 +82,8 @@ export const sendUnifiedEmail = async (type, formData) => {
  * @param {Object} formData - Datos del formulario de contacto
  * @returns {Promise<Object>} - Resultado del envío
  */
-export const sendContactEmail = async (formData) => {
-  return await sendUnifiedEmail("contact", formData);
+export const sendContactEmail = async formData => {
+  return await sendUnifiedEmail('contact', formData);
 };
 
 /**
@@ -92,8 +91,8 @@ export const sendContactEmail = async (formData) => {
  * @param {Object} formData - Datos del formulario de propuesta
  * @returns {Promise<Object>} - Resultado del envío
  */
-export const sendQuoteRequest = async (formData) => {
-  return await sendUnifiedEmail("quote", formData);
+export const sendQuoteRequest = async formData => {
+  return await sendUnifiedEmail('quote', formData);
 };
 
 /**
@@ -101,8 +100,8 @@ export const sendQuoteRequest = async (formData) => {
  * @param {Object} formData - Datos del formulario de consulta
  * @returns {Promise<Object>} - Resultado del envío
  */
-export const sendConsultationRequest = async (formData) => {
-  return await sendUnifiedEmail("consultation", formData);
+export const sendConsultationRequest = async formData => {
+  return await sendUnifiedEmail('consultation', formData);
 };
 
 /**
@@ -112,16 +111,12 @@ export const sendConsultationRequest = async (formData) => {
  * @param {string} _serviceName - Nombre del servicio
  * @returns {Promise<Object>} - Resultado del envío
  */
-export const sendClientConfirmation = async (
-  _clientEmail,
-  _type,
-  _serviceName = ""
-) => {
+export const sendClientConfirmation = async (_clientEmail, _type, _serviceName = '') => {
   // Simulación de confirmación
   return {
     success: true,
     demo: true,
-    message: "Confirmación enviada (modo demo)",
+    message: 'Confirmación enviada (modo demo)',
   };
 };
 

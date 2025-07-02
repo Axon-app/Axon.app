@@ -4,12 +4,12 @@
 // Utiliza la librería 'canvas' para crear una imagen cuadrada con fondo degradado, logo y textos
 // Guarda la imagen generada en 'public/whatsapp-image.png'
 
-const fs = require("fs").promises;
-const path = require("path");
+const fs = require('fs').promises;
+const path = require('path');
 
 /**
  * Genera una imagen de previsualización para WhatsApp (400x400 px)
- * - Carga el logo desde 'public/logo1.png'
+ * - Carga el logo desde 'public/axon-logo-principal.png'
  * - Crea fondo degradado verde-azul moderno
  * - Añade patrón sutil para profundidad visual
  * - Centra el logo con sombra
@@ -17,34 +17,34 @@ const path = require("path");
  * - Guarda la imagen en formato PNG
  */
 async function generateWhatsAppPreview() {
-  console.log("📱 Generating WhatsApp sharing preview...");
+  console.log('📱 Generating WhatsApp sharing preview...');
 
   // Importa dinámicamente canvas para evitar errores si no está instalado
-  const { createCanvas, loadImage } = require("canvas");
+  const { createCanvas, loadImage } = require('canvas');
 
   try {
     // Definición de rutas
-    const logoPath = path.join(__dirname, "public", "logo1.png");
-    const outputPath = path.join(__dirname, "public", "whatsapp-image.png");
+    const logoPath = path.join(__dirname, 'public', 'axon-logo-principal.png');
+    const outputPath = path.join(__dirname, 'public', 'whatsapp-image.png');
 
     // Carga el logo principal
     const logo = await loadImage(logoPath);
 
     // Crea el canvas cuadrado para WhatsApp
     const canvas = createCanvas(400, 400);
-    const ctx = canvas.getContext("2d");
+    const ctx = canvas.getContext('2d');
 
     // Fondo degradado verde-azul moderno
     const gradient = ctx.createLinearGradient(0, 0, 400, 400);
-    gradient.addColorStop(0, "#00ff94"); // Verde brillante arriba
-    gradient.addColorStop(0.3, "#00e6aa");
-    gradient.addColorStop(0.6, "#00cccc");
-    gradient.addColorStop(1, "#00b3e6"); // Azul-verde abajo
+    gradient.addColorStop(0, '#00ff94'); // Verde brillante arriba
+    gradient.addColorStop(0.3, '#00e6aa');
+    gradient.addColorStop(0.6, '#00cccc');
+    gradient.addColorStop(1, '#00b3e6'); // Azul-verde abajo
     ctx.fillStyle = gradient;
     ctx.fillRect(0, 0, 400, 400);
 
     // Patrón sutil para profundidad visual
-    ctx.fillStyle = "rgba(255, 255, 255, 0.03)";
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.03)';
     for (let i = 0; i < 400; i += 30) {
       for (let j = 0; j < 400; j += 30) {
         ctx.fillRect(i, j, 15, 15);
@@ -55,39 +55,37 @@ async function generateWhatsAppPreview() {
     const logoSize = 120;
     const logoX = (400 - logoSize) / 2;
     const logoY = (400 - logoSize) / 2 - 25;
-    ctx.shadowColor = "rgba(0, 0, 0, 0.2)";
+    ctx.shadowColor = 'rgba(0, 0, 0, 0.2)';
     ctx.shadowBlur = 10;
     ctx.shadowOffsetY = 3;
     ctx.drawImage(logo, logoX, logoY, logoSize, logoSize);
-    ctx.shadowColor = "transparent";
+    ctx.shadowColor = 'transparent';
     ctx.shadowBlur = 0;
     ctx.shadowOffsetY = 0;
 
     // Título principal con contraste óptimo
-    ctx.fillStyle = "#ffffff";
-    ctx.font = "bold 28px Arial, sans-serif";
-    ctx.textAlign = "center";
-    ctx.fillText("AXON.APP", 200, logoY + logoSize + 40);
+    ctx.fillStyle = '#ffffff';
+    ctx.font = 'bold 28px Arial, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('AXON.APP', 200, logoY + logoSize + 40);
 
     // Subtítulo con ligera transparencia
-    ctx.fillStyle = "rgba(255, 255, 255, 0.95)";
-    ctx.font = "400 14px Arial, sans-serif";
-    ctx.fillText("Professional Web Development", 200, logoY + logoSize + 65);
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.95)';
+    ctx.font = '400 14px Arial, sans-serif';
+    ctx.fillText('Professional Web Development', 200, logoY + logoSize + 65);
 
     // Guarda la imagen generada
-    const buffer = canvas.toBuffer("image/png");
+    const buffer = canvas.toBuffer('image/png');
     await fs.writeFile(outputPath, buffer);
 
     // Mensaje final de éxito
-    console.log("✅ WhatsApp sharing image created successfully!");
+    console.log('✅ WhatsApp sharing image created successfully!');
     console.log(`📍 Saved to: ${outputPath}`);
-    console.log("📱 Optimized for WhatsApp link previews");
+    console.log('📱 Optimized for WhatsApp link previews');
   } catch (error) {
     // Manejo profesional de errores
-    console.error("❌ Error generating WhatsApp preview:", error.message);
-    console.error(
-      "💡 Make sure canvas package is installed: npm install canvas"
-    );
+    console.error('❌ Error generating WhatsApp preview:', error.message);
+    console.error('💡 Make sure canvas package is installed: npm install canvas');
     // Sugerencia: aquí se podría enviar un log a un sistema externo si es necesario
   }
 }

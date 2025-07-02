@@ -101,7 +101,7 @@ npm run deploy              # Despliegue a GitHub Pages
 ```
 Axon/
 ├── 📁 public/                      # Archivos públicos
-│   ├── 🖼️ logo1.png               # Logo principal
+│   ├── 🖼️ axon-logo-principal.png               # Logo principal
 │   ├── 📄 favicon.ico             # Favicon
 │   ├── 📄 og-image.png            # Imagen social
 │   ├── 📄 twitter-image.png       # Imagen Twitter
@@ -190,4 +190,5 @@ Axon/
 _Construido con ❤️ usando React + Vite + Tailwind CSS_
 
 # Deploy - 2025-06-29
+
 # Última revisión y optimización profesional: 29/06/2025

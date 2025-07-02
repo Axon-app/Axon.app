@@ -3,11 +3,13 @@
 ## Proyecto: Axon.App - Sitio Web Corporativo
 
 ### Propósito
+
 Este archivo documenta el contexto, estado actual, integraciones clave y recomendaciones para el uso de GitHub Copilot en el desarrollo de este proyecto. Sirve como referencia para mantener la calidad, evitar errores y facilitar futuras mejoras.
 
 ---
 
 ## Estado Actual del Proyecto
+
 - **Framework:** React 18 + Vite
 - **Estilos:** Tailwind CSS
 - **Linting:** ESLint con reglas modernas y plugins para React
@@ -20,6 +22,7 @@ Este archivo documenta el contexto, estado actual, integraciones clave y recomen
 ---
 
 ## Integraciones Clave
+
 - **GitHub Copilot:** Extensión instalada y activa en VS Code
 - **ESLint:** Configuración estricta para mantener calidad de código
 - **Tailwind:** Personalización de theme y animaciones
@@ -29,6 +32,7 @@ Este archivo documenta el contexto, estado actual, integraciones clave y recomen
 ---
 
 ## Buenas Prácticas y Recomendaciones
+
 - Utilizar Copilot para sugerencias, pero siempre revisar y validar el código generado
 - Ejecutar `npm run lint` y `npm run lint:fix` antes de cada commit
 - Mantener este archivo actualizado con cada cambio relevante
@@ -39,6 +43,7 @@ Este archivo documenta el contexto, estado actual, integraciones clave y recomen
 ---
 
 ## Cambios y Mejoras Realizadas
+
 - [29/06/2025] Revisión y optimización profesional de todos los archivos fuente y de configuración del proyecto
 - [29/06/2025] Mejora y profesionalización de comentarios en todos los archivos revisados, explicando lógica, props, estructura, accesibilidad y funcionamiento
 - [29/06/2025] Inclusión de bloques de sugerencias de mejora profesional al final de cada archivo revisado
@@ -53,6 +58,7 @@ Este archivo documenta el contexto, estado actual, integraciones clave y recomen
 ---
 
 ## Notas para Copilot
+
 - Este archivo sirve como fuente de contexto para sugerencias y generación de código
 - Priorizar la calidad, seguridad y mantenibilidad en todas las sugerencias
 - Consultar este archivo y la documentación técnica antes de realizar cambios estructurales o integraciones nuevas

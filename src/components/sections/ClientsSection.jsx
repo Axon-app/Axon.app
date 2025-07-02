@@ -1,31 +1,48 @@
-import { useState } from "react";
-import { clientsData, clientsStats } from "../../data/clientsData";
-import { ClientCard } from "../ui/ClientCard";
+import React, { useMemo, useState } from 'react';
+import { clientsData, clientsStats } from '../../data/clientsData';
+import { ClientCard } from '../ui/ClientCard';
 
 /**
  * Sección de clientes con estadísticas, filtros y vista grid/lista.
  * Muestra casos de éxito y testimoniales de clientes de forma profesional.
  */
-export const ClientsSection = () => {
+export const ClientsSection = React.memo(() => {
+  // Constantes
+  const ALL_INDUSTRIES = 'Todos';
+  const NO_RESULTS_MESSAGE = 'No se encontraron clientes en esta categoría.';
+
   // Estado para filtro de industria y modo de vista
-  const [selectedIndustry, setSelectedIndustry] = useState("Todos");
-  const [viewMode, setViewMode] = useState("grid"); // grid o list
+  const [selectedIndustry, setSelectedIndustry] = useState(ALL_INDUSTRIES);
+  const [viewMode, setViewMode] = useState('grid'); // grid o list
 
-  // Obtiene industrias únicas para los filtros
-  const industries = ["Todos", ...new Set(clientsData.map(client => client.industry))];
+  // Cálculo memoizado de industrias únicas
+  const industries = useMemo(
+    () => [ALL_INDUSTRIES, ...new Set(clientsData.map(client => client.industry))],
+    [] // Solo se calcula una vez ya que clientsData es estático
+  );
 
-  // Filtra clientes según la industria seleccionada
-  const filteredClients = selectedIndustry === "Todos"
-    ? clientsData
-    : clientsData.filter(client => client.industry === selectedIndustry);
+  // Filtrado memoizado de clientes
+  const filteredClients = useMemo(
+    () =>
+      selectedIndustry === ALL_INDUSTRIES
+        ? clientsData
+        : clientsData.filter(client => client.industry === selectedIndustry),
+    [selectedIndustry]
+  );
 
   return (
     <section className="py-20 bg-gradient-to-br from-gray-900 via-black to-gray-900 relative overflow-hidden">
       {/* Efectos de fondo animados decorativos */}
       <div className="absolute inset-0">
         <div className="absolute top-1/4 left-1/4 w-72 h-72 bg-blue-500/10 rounded-full blur-3xl animate-blob"></div>
-        <div className="absolute bottom-1/4 right-1/4 w-72 h-72 bg-purple-500/10 rounded-full blur-3xl animate-blob" style={{ animationDelay: '2s' }}></div>
-        <div className="absolute top-1/2 left-1/2 w-64 h-64 bg-cyan-500/10 rounded-full blur-3xl animate-blob" style={{ animationDelay: '4s' }}></div>
+        <div
+          className="absolute bottom-1/4 right-1/4 w-72 h-72 bg-purple-500/10 rounded-full blur-3xl animate-blob"
+          style={{ animationDelay: '2s' }}
+        ></div>
+        <div
+          className="absolute top-1/2 left-1/2 w-64 h-64 bg-cyan-500/10 rounded-full blur-3xl animate-blob"
+          style={{ animationDelay: '4s' }}
+        ></div>
       </div>
 
       <div className="container mx-auto px-4 relative z-10">
@@ -36,7 +53,10 @@ export const ClientsSection = () => {
             <span className="text-blue-300 text-sm font-medium">Casos de Éxito</span>
           </div>
           <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
-            Nuestros <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">Clientes</span>
+            Nuestros{' '}
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">
+              Clientes
+            </span>
           </h2>
           <p className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
             Transformamos ideas en soluciones digitales exitosas. Conoce algunos de los proyectos
@@ -46,27 +66,54 @@ export const ClientsSection = () => {
         {/* Estadísticas destacadas */}
         <div className="grid grid-cols-2 md:grid-cols-6 gap-4 mb-12">
           <div className="glass-card rounded-xl p-4 text-center group hover:scale-105 transition-all duration-300">
-            <div className="text-2xl font-bold text-blue-300 animate-stats-counter group-hover:scale-110 transition-transform duration-300">{clientsStats.totalClients}+</div>
+            <div className="text-2xl font-bold text-blue-300 animate-stats-counter group-hover:scale-110 transition-transform duration-300">
+              {clientsStats.totalClients}+
+            </div>
             <div className="text-sm text-gray-400">Clientes</div>
           </div>
           <div className="glass-card rounded-xl p-4 text-center group hover:scale-105 transition-all duration-300">
-            <div className="text-2xl font-bold text-green-300 animate-stats-counter group-hover:scale-110 transition-transform duration-300" style={{ animationDelay: '0.1s' }}>{clientsStats.projectsCompleted}+</div>
+            <div
+              className="text-2xl font-bold text-green-300 animate-stats-counter group-hover:scale-110 transition-transform duration-300"
+              style={{ animationDelay: '0.1s' }}
+            >
+              {clientsStats.projectsCompleted}+
+            </div>
             <div className="text-sm text-gray-400">Proyectos</div>
           </div>
           <div className="glass-card rounded-xl p-4 text-center group hover:scale-105 transition-all duration-300">
-            <div className="text-2xl font-bold text-purple-300 animate-stats-counter group-hover:scale-110 transition-transform duration-300" style={{ animationDelay: '0.2s' }}>{clientsStats.industriesCovered}+</div>
+            <div
+              className="text-2xl font-bold text-purple-300 animate-stats-counter group-hover:scale-110 transition-transform duration-300"
+              style={{ animationDelay: '0.2s' }}
+            >
+              {clientsStats.industriesCovered}+
+            </div>
             <div className="text-sm text-gray-400">Industrias</div>
           </div>
           <div className="glass-card rounded-xl p-4 text-center group hover:scale-105 transition-all duration-300">
-            <div className="text-2xl font-bold text-yellow-300 animate-stats-counter group-hover:scale-110 transition-transform duration-300" style={{ animationDelay: '0.3s' }}>{clientsStats.satisfactionRate}%</div>
+            <div
+              className="text-2xl font-bold text-yellow-300 animate-stats-counter group-hover:scale-110 transition-transform duration-300"
+              style={{ animationDelay: '0.3s' }}
+            >
+              {clientsStats.satisfactionRate}%
+            </div>
             <div className="text-sm text-gray-400">Satisfacción</div>
           </div>
           <div className="glass-card rounded-xl p-4 text-center group hover:scale-105 transition-all duration-300">
-            <div className="text-2xl font-bold text-red-300 animate-stats-counter group-hover:scale-110 transition-transform duration-300" style={{ animationDelay: '0.4s' }}>{clientsStats.averageProjectDuration}</div>
+            <div
+              className="text-2xl font-bold text-red-300 animate-stats-counter group-hover:scale-110 transition-transform duration-300"
+              style={{ animationDelay: '0.4s' }}
+            >
+              {clientsStats.averageProjectDuration}
+            </div>
             <div className="text-sm text-gray-400">Duración Promedio</div>
           </div>
           <div className="glass-card rounded-xl p-4 text-center group hover:scale-105 transition-all duration-300">
-            <div className="text-2xl font-bold text-teal-300 animate-stats-counter group-hover:scale-110 transition-transform duration-300" style={{ animationDelay: '0.5s' }}>{clientsStats.technologiesUsed}+</div>
+            <div
+              className="text-2xl font-bold text-teal-300 animate-stats-counter group-hover:scale-110 transition-transform duration-300"
+              style={{ animationDelay: '0.5s' }}
+            >
+              {clientsStats.technologiesUsed}+
+            </div>
             <div className="text-sm text-gray-400">Tecnologías</div>
           </div>
         </div>
@@ -74,14 +121,14 @@ export const ClientsSection = () => {
         <div className="flex flex-col md:flex-row items-center justify-between mb-8 space-y-4 md:space-y-0">
           {/* Filtros por industria */}
           <div className="flex flex-wrap gap-2">
-            {industries.map((industry) => (
+            {industries.map(industry => (
               <button
                 key={industry}
                 onClick={() => setSelectedIndustry(industry)}
                 className={`px-4 py-2 rounded-lg font-medium transition-all duration-300 ${
                   selectedIndustry === industry
-                    ? "bg-blue-500 text-white shadow-lg shadow-blue-500/25"
-                    : "bg-gray-700/50 text-gray-300 hover:bg-gray-600/50 hover:text-white"
+                    ? 'bg-blue-500 text-white shadow-lg shadow-blue-500/25'
+                    : 'bg-gray-700/50 text-gray-300 hover:bg-gray-600/50 hover:text-white'
                 }`}
               >
                 {industry}
@@ -91,50 +138,52 @@ export const ClientsSection = () => {
           {/* Selector de vista grid/lista */}
           <div className="flex items-center space-x-2 bg-gray-800/50 rounded-lg p-1">
             <button
-              onClick={() => setViewMode("grid")}
+              onClick={() => setViewMode('grid')}
               className={`p-2 rounded-md transition-all duration-300 ${
-                viewMode === "grid"
-                  ? "bg-blue-500 text-white"
-                  : "text-gray-400 hover:text-white"
+                viewMode === 'grid' ? 'bg-blue-500 text-white' : 'text-gray-400 hover:text-white'
               }`}
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"
+                />
               </svg>
             </button>
             <button
-              onClick={() => setViewMode("list")}
+              onClick={() => setViewMode('list')}
               className={`p-2 rounded-md transition-all duration-300 ${
-                viewMode === "list"
-                  ? "bg-blue-500 text-white"
-                  : "text-gray-400 hover:text-white"
+                viewMode === 'list' ? 'bg-blue-500 text-white' : 'text-gray-400 hover:text-white'
               }`}
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 10h16M4 14h16M4 18h16" />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M4 6h16M4 10h16M4 14h16M4 18h16"
+                />
               </svg>
             </button>
           </div>
         </div>
         {/* Grid de clientes (o lista) */}
-        <div className={`grid gap-6 ${
-          viewMode === "grid"
-            ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
-            : "grid-cols-1"
-        }`}>
+        <div
+          className={`grid gap-6 ${
+            viewMode === 'grid' ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3' : 'grid-cols-1'
+          }`}
+        >
           {filteredClients.map((client, index) => (
-            <ClientCard
-              key={client.id}
-              client={client}
-              index={index}
-            />
+            <ClientCard key={client.id} client={client} index={index} />
           ))}
         </div>
         {/* Mensaje si no hay resultados */}
         {filteredClients.length === 0 && (
           <div className="text-center py-12">
             <div className="text-6xl mb-4">🔍</div>
-            <h3 className="text-xl font-bold text-white mb-2">No hay clientes en esta industria</h3>
+            <h3 className="text-xl font-bold text-white mb-2">{NO_RESULTS_MESSAGE}</h3>
             <p className="text-gray-400">Intenta seleccionar otra categoría o "Todos"</p>
           </div>
         )}
@@ -145,7 +194,8 @@ export const ClientsSection = () => {
               ¿Listo para ser nuestro próximo caso de éxito?
             </h3>
             <p className="text-gray-300 mb-6 leading-relaxed">
-              Únete a más de {clientsStats.totalClients} empresas que han transformado sus negocios con nuestras soluciones digitales.
+              Únete a más de {clientsStats.totalClients} empresas que han transformado sus negocios
+              con nuestras soluciones digitales.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <button className="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-8 py-3 rounded-xl font-semibold hover:shadow-lg hover:shadow-blue-500/25 transition-all duration-300 hover:scale-105">
@@ -160,7 +210,7 @@ export const ClientsSection = () => {
       </div>
     </section>
   );
-};
+});
 
 // --- SUGERENCIAS DE MEJORA ---
 // 1. Modularizar los efectos de fondo animados si se reutilizan en otras secciones.

@@ -1,5 +1,5 @@
-import { useEmailSelector } from "../../hooks/useEmailSelector";
-import { EmailClientSelector } from "./EmailClientSelector";
+import { useEmailSelector } from '../../hooks/useEmailSelector';
+import { EmailClientSelector } from './EmailClientSelector';
 
 /**
  * Componente de enlace de correo que abre un selector de cliente de correo.
@@ -15,10 +15,10 @@ import { EmailClientSelector } from "./EmailClientSelector";
  */
 export const EmailLink = ({
   to,
-  subject = "",
-  body = "",
+  subject = '',
+  body = '',
   children,
-  className = "",
+  className = '',
   mailtoUrl,
   ...props
 }) => {
@@ -32,7 +32,7 @@ export const EmailLink = ({
   } = useEmailSelector();
 
   // Maneja el click en el enlace para abrir el selector
-  const handleClick = (e) => {
+  const handleClick = e => {
     e.preventDefault();
     if (mailtoUrl) {
       openEmailSelectorFromMailto(mailtoUrl);

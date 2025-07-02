@@ -1,113 +1,32 @@
-import React from "react";
-import { sendQuoteRequest } from "../../services/emailService";
-
-// --- Validadores y utilidades de seguridad para el formulario de cotización ---
-// Considera extraer este bloque a un archivo utilitario si se reutiliza en otros formularios
-const SecurityValidators = {
-  /**
-   * Sanitiza la entrada para prevenir XSS y otros ataques de inyección de scripts.
-   * Elimina etiquetas <script>, HTML y atributos peligrosos.
-   */
-  sanitizeInput: (input) => {
-    if (typeof input !== "string") return "";
-    return input
-      .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, "")
-      .replace(/<[^>]*>/g, "")
-      .replace(/javascript:/gi, "")
-      .replace(/on\w+\s*=/gi, "");
-    // .trim() removido para permitir espacios normales
-  },
-
-  /**
-   * Valida emails con una expresión regular robusta y longitud máxima estándar.
-   */
-  validateEmail: (email) => {
-    const emailRegex =
-      /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
-    return emailRegex.test(email) && email.length <= 254;
-  },
-
-  /**
-   * Valida teléfonos internacionales (opcional).
-   */
-  validatePhone: (phone) => {
-    if (!phone) return true; // Campo opcional
-    const phoneRegex = /^[+]?[0-9\s()-]{7,20}$/;
-    return phoneRegex.test(phone);
-  },
-
-  /**
-   * Valida nombres (letras, espacios, acentos, longitud razonable).
-   */
-  validateName: (name) => {
-    const nameRegex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]{2,50}$/;
-    return nameRegex.test(name);
-  },
-
-  /**
-   * Valida ciudades (letras, espacios, signos básicos, longitud razonable).
-   */
-  validateCity: (city) => {
-    const cityRegex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s,.-]{2,100}$/;
-    return cityRegex.test(city);
-  },
-
-  /**
-   * Detecta patrones básicos de inyección SQL (defensa en profundidad, poco común en frontend).
-   */
-  detectSQLInjection: (input) => {
-    const sqlPatterns = [
-      /(\b(SELECT|INSERT|UPDATE|DELETE|DROP|CREATE|ALTER|EXEC|UNION|SCRIPT)\b)/gi,
-      /((%27)|('))((%6F)|o|(%4F))((%72)|r|(%52))/gi,
-      /(((%3D)|(=))[^\n]*((%27)|(')|((%3B)|(;))))/gi,
-      /((%27)|('))((%4F)|o|(%6F))((%52)|r|(%72))/gi,
-    ];
-    return sqlPatterns.some((pattern) => pattern.test(input));
-  },
-
-  /**
-   * Valida la longitud de un campo entre un mínimo y máximo.
-   */
-  validateLength: (value, min = 0, max = 1000) => {
-    return value.length >= min && value.length <= max;
-  },
-};
+import React from 'react';
+import { sendQuoteRequest } from '../../services/emailService';
+import { SecurityValidators } from '../../utils/validators';
 
 // --- Modal de Solicitud de Cotización ---
 // Componente principal, profesional y seguro para solicitar propuestas
 export const QuoteRequestModal = React.memo(({ isOpen, onClose, _service }) => {
   // Estado del formulario y control de errores
   const [formData, setFormData] = React.useState({
-    name: "",
-    email: "",
-    phone: "",
-    clientType: "",
-    company: "",
-    city: "",
-    projectType: "", // Siempre inicia vacío
-    description: "",
-    additionalRequirements: "",
+    name: '',
+    email: '',
+    phone: '',
+    clientType: '',
+    company: '',
+    city: '',
+    projectType: '', // Siempre inicia vacío
+    description: '',
+    additionalRequirements: '',
   });
   const [isSubmitting, setIsSubmitting] = React.useState(false);
   const [submitStatus, setSubmitStatus] = React.useState(null);
   const [validationErrors, setValidationErrors] = React.useState({});
-  const [securityError, setSecurityError] = React.useState("");
+  const [securityError, setSecurityError] = React.useState('');
 
   // Calcula si el formulario está completo y sin errores
   const isFormComplete = React.useMemo(() => {
-    const requiredFields = [
-      "name",
-      "email",
-      "clientType",
-      "city",
-      "projectType",
-      "description",
-    ];
-    const hasRequiredFields = requiredFields.every((field) =>
-      formData[field].trim()
-    );
-    const hasNoErrors =
-      Object.keys(validationErrors).length === 0 && !securityError;
+    const requiredFields = ['name', 'email', 'clientType', 'city', 'projectType', 'description'];
+    const hasRequiredFields = requiredFields.every(field => formData[field].trim());
+    const hasNoErrors = Object.keys(validationErrors).length === 0 && !securityError;
     return hasRequiredFields && hasNoErrors;
   }, [formData, validationErrors, securityError]);
 
@@ -116,12 +35,12 @@ export const QuoteRequestModal = React.memo(({ isOpen, onClose, _service }) => {
     const missing = [];
     const errors = [];
     // Verifica campos requeridos
-    if (!formData.name.trim()) missing.push("Nombre");
-    if (!formData.email.trim()) missing.push("Email");
-    if (!formData.clientType.trim()) missing.push("Tipo de Cliente");
-    if (!formData.city.trim()) missing.push("Ciudad");
-    if (!formData.projectType.trim()) missing.push("Tipo de Proyecto");
-    if (!formData.description.trim()) missing.push("Descripción del Proyecto");
+    if (!formData.name.trim()) missing.push('Nombre');
+    if (!formData.email.trim()) missing.push('Email');
+    if (!formData.clientType.trim()) missing.push('Tipo de Cliente');
+    if (!formData.city.trim()) missing.push('Ciudad');
+    if (!formData.projectType.trim()) missing.push('Tipo de Proyecto');
+    if (!formData.description.trim()) missing.push('Descripción del Proyecto');
     // Agrega errores de validación
     Object.entries(validationErrors).forEach(([, error]) => {
       if (error) errors.push(error);
@@ -135,18 +54,18 @@ export const QuoteRequestModal = React.memo(({ isOpen, onClose, _service }) => {
 
   // Cierra modal con Escape y bloquea scroll de fondo
   React.useEffect(() => {
-    const handleEscape = (event) => {
-      if (event.key === "Escape") {
+    const handleEscape = event => {
+      if (event.key === 'Escape') {
         onClose();
       }
     };
     if (isOpen) {
-      document.addEventListener("keydown", handleEscape);
-      document.body.style.overflow = "hidden";
+      document.addEventListener('keydown', handleEscape);
+      document.body.style.overflow = 'hidden';
     }
     return () => {
-      document.removeEventListener("keydown", handleEscape);
-      document.body.style.overflow = "unset";
+      document.removeEventListener('keydown', handleEscape);
+      document.body.style.overflow = 'unset';
     };
   }, [isOpen, onClose]);
 
@@ -154,19 +73,19 @@ export const QuoteRequestModal = React.memo(({ isOpen, onClose, _service }) => {
   React.useEffect(() => {
     if (isOpen) {
       setFormData({
-        name: "",
-        email: "",
-        phone: "",
-        clientType: "",
-        company: "",
-        city: "",
-        projectType: "",
-        description: "",
-        additionalRequirements: "",
+        name: '',
+        email: '',
+        phone: '',
+        clientType: '',
+        company: '',
+        city: '',
+        projectType: '',
+        description: '',
+        additionalRequirements: '',
       });
       setSubmitStatus(null);
       setValidationErrors({});
-      setSecurityError("");
+      setSecurityError('');
     }
   }, [isOpen]);
 
@@ -174,37 +93,33 @@ export const QuoteRequestModal = React.memo(({ isOpen, onClose, _service }) => {
   if (!isOpen) return null;
 
   // Maneja cambios en los campos del formulario
-  const handleInputChange = (e) => {
+  const handleInputChange = e => {
     const { name, value } = e.target;
     // Eliminado console.log de debug para producción
-    setFormData((prev) => {
+    setFormData(prev => {
       const newData = { ...prev, [name]: value };
       return newData;
     });
     // Limpia errores globales al cambiar cualquier campo
-    setSecurityError("");
+    setSecurityError('');
     setValidationErrors({});
   };
 
   // Maneja el envío del formulario de cotización
-  const handleSubmit = async (e) => {
+  const handleSubmit = async e => {
     e.preventDefault();
     setIsSubmitting(true);
-    setSecurityError("");
+    setSecurityError('');
     try {
       // Validación de campos requeridos y errores
       const missing = getMissingFields;
       if (missing.missing.length > 0 || missing.errors.length > 0) {
-        let errorMessage = "⚠️ Por favor completa la información faltante:\n\n";
+        let errorMessage = '⚠️ Por favor completa la información faltante:\n\n';
         if (missing.missing.length > 0) {
-          errorMessage += `📝 Campos requeridos:\n• ${missing.missing.join(
-            "\n• "
-          )}\n\n`;
+          errorMessage += `📝 Campos requeridos:\n• ${missing.missing.join('\n• ')}\n\n`;
         }
         if (missing.errors.length > 0) {
-          errorMessage += `❌ Errores a corregir:\n• ${missing.errors.join(
-            "\n• "
-          )}\n\n`;
+          errorMessage += `❌ Errores a corregir:\n• ${missing.errors.join('\n• ')}\n\n`;
         }
         setSecurityError(errorMessage);
         return;
@@ -216,7 +131,7 @@ export const QuoteRequestModal = React.memo(({ isOpen, onClose, _service }) => {
         !SecurityValidators.validateLength(formData.description, 10, 2000)
       ) {
         setSecurityError(
-          "Algunos campos tienen una longitud inválida. Por favor, revisa la información."
+          'Algunos campos tienen una longitud inválida. Por favor, revisa la información.'
         );
         return;
       }
@@ -225,59 +140,50 @@ export const QuoteRequestModal = React.memo(({ isOpen, onClose, _service }) => {
         name: SecurityValidators.sanitizeInput(formData.name.trim()),
         email: SecurityValidators.sanitizeInput(formData.email.trim()),
         phone: SecurityValidators.sanitizeInput(formData.phone.trim()),
-        clientType: SecurityValidators.sanitizeInput(
-          formData.clientType.trim()
-        ),
+        clientType: SecurityValidators.sanitizeInput(formData.clientType.trim()),
         company: SecurityValidators.sanitizeInput(formData.company.trim()),
         city: SecurityValidators.sanitizeInput(formData.city.trim()),
-        projectType: SecurityValidators.sanitizeInput(
-          formData.projectType.trim()
-        ),
-        description: SecurityValidators.sanitizeInput(
-          formData.description.trim()
-        ),
+        projectType: SecurityValidators.sanitizeInput(formData.projectType.trim()),
+        description: SecurityValidators.sanitizeInput(formData.description.trim()),
         additionalRequirements: SecurityValidators.sanitizeInput(
           formData.additionalRequirements.trim()
         ),
         timestamp: new Date().toISOString(),
-        formType: "quote-request",
+        formType: 'quote-request',
       };
       // Validación final de seguridad (SQLi)
       for (const [key, value] of Object.entries(sanitizedData)) {
-        if (
-          typeof value === "string" &&
-          SecurityValidators.detectSQLInjection(value)
-        ) {
+        if (typeof value === 'string' && SecurityValidators.detectSQLInjection(value)) {
           throw new Error(`Entrada inválida detectada en campo ${key}`);
         }
       }
       // Envía el formulario de cotización
       const emailResult = await sendQuoteRequest(sanitizedData);
       if (!emailResult.success) {
-        throw new Error(emailResult.error || "Error al enviar la propuesta");
+        throw new Error(emailResult.error || 'Error al enviar la propuesta');
       }
-      setSubmitStatus("success");
+      setSubmitStatus('success');
       setTimeout(() => {
         onClose();
         setFormData({
-          name: "",
-          email: "",
-          phone: "",
-          clientType: "",
-          company: "",
-          city: "",
-          projectType: "",
-          description: "",
-          additionalRequirements: "",
+          name: '',
+          email: '',
+          phone: '',
+          clientType: '',
+          company: '',
+          city: '',
+          projectType: '',
+          description: '',
+          additionalRequirements: '',
         });
         setValidationErrors({});
       }, 2000);
     } catch {
       // Error al enviar propuesta
       setSecurityError(
-        "Error al enviar la propuesta. Por favor, intenta nuevamente o contáctanos directamente."
+        'Error al enviar la propuesta. Por favor, intenta nuevamente o contáctanos directamente.'
       );
-      setSubmitStatus("error");
+      setSubmitStatus('error');
     } finally {
       setIsSubmitting(false);
     }
@@ -298,7 +204,7 @@ export const QuoteRequestModal = React.memo(({ isOpen, onClose, _service }) => {
             className="text-2xl sm:text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400"
           >
             Solicitar Propuesta
-          </h2>{" "}
+          </h2>{' '}
           <button
             onClick={onClose}
             className="text-gray-400 hover:text-white transition-colors p-2 hover:bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -312,7 +218,7 @@ export const QuoteRequestModal = React.memo(({ isOpen, onClose, _service }) => {
                 clipRule="evenodd"
               />
             </svg>
-          </button>{" "}
+          </button>{' '}
         </div>
 
         {/* Mensajes de Error de Seguridad */}
@@ -339,14 +245,10 @@ export const QuoteRequestModal = React.memo(({ isOpen, onClose, _service }) => {
 
         {/* Content */}
         <div className="p-4 sm:p-6">
-          {submitStatus === "success" ? (
+          {submitStatus === 'success' ? (
             <div className="text-center py-8">
               <div className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
-                <svg
-                  className="w-8 h-8 text-white"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                >
+                <svg className="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
                   <path
                     fillRule="evenodd"
                     d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
@@ -358,9 +260,8 @@ export const QuoteRequestModal = React.memo(({ isOpen, onClose, _service }) => {
                 ¡Propuesta Enviada con Éxito!
               </h3>
               <p className="text-gray-300 mb-3">
-                Hemos recibido tu solicitud de propuesta. Nuestro equipo la
-                revisará y te contactará dentro de{" "}
-                <strong>24 horas hábiles</strong> con una propuesta detallada.
+                Hemos recibido tu solicitud de propuesta. Nuestro equipo la revisará y te contactará
+                dentro de <strong>24 horas hábiles</strong> con una propuesta detallada.
               </p>
               <p className="text-sm text-gray-400">
                 Revisa tu email (incluyendo spam) para la confirmación.
@@ -370,15 +271,15 @@ export const QuoteRequestModal = React.memo(({ isOpen, onClose, _service }) => {
             <form onSubmit={handleSubmit} className="space-y-4">
               {/* Información personal */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {" "}
+                {' '}
                 <div>
-                  {" "}
+                  {' '}
                   <label
                     htmlFor="quote-name"
                     className="text-blue-300 text-sm font-medium mb-2 block"
                   >
                     Nombre <span className="text-red-500">*</span>
-                  </label>{" "}
+                  </label>{' '}
                   <input
                     id="quote-name"
                     type="text"
@@ -391,18 +292,16 @@ export const QuoteRequestModal = React.memo(({ isOpen, onClose, _service }) => {
                     placeholder="Tu nombre completo"
                     style={{
                       zIndex: 9999,
-                      position: "relative",
-                      pointerEvents: "auto",
+                      position: 'relative',
+                      pointerEvents: 'auto',
                     }}
                   />
                   {validationErrors.name && (
-                    <p className="text-red-400 text-xs mt-1">
-                      {validationErrors.name}
-                    </p>
+                    <p className="text-red-400 text-xs mt-1">{validationErrors.name}</p>
                   )}
                 </div>
                 <div>
-                  {" "}
+                  {' '}
                   <label
                     htmlFor="quote-email"
                     className="text-blue-300 text-sm font-medium mb-2 block"
@@ -419,18 +318,16 @@ export const QuoteRequestModal = React.memo(({ isOpen, onClose, _service }) => {
                     autoComplete="email"
                     className={`w-full p-3 bg-white border rounded-lg focus:ring-2 focus:ring-blue-500/20 text-gray-900 transition-all ${
                       validationErrors.email
-                        ? "border-red-500 focus:border-red-500"
-                        : "border-gray-600 focus:border-blue-500"
+                        ? 'border-red-500 focus:border-red-500'
+                        : 'border-gray-600 focus:border-blue-500'
                     }`}
                     placeholder="tu@email.com"
                   />
                   {validationErrors.email && (
-                    <p className="text-red-400 text-xs mt-1">
-                      {validationErrors.email}
-                    </p>
+                    <p className="text-red-400 text-xs mt-1">{validationErrors.email}</p>
                   )}
                 </div>
-              </div>{" "}
+              </div>{' '}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label
@@ -448,15 +345,13 @@ export const QuoteRequestModal = React.memo(({ isOpen, onClose, _service }) => {
                     autoComplete="tel"
                     className={`w-full p-3 bg-white border rounded-lg focus:ring-2 focus:ring-blue-500/20 text-gray-900 transition-all ${
                       validationErrors.phone
-                        ? "border-red-500 focus:border-red-500"
-                        : "border-gray-600 focus:border-blue-500"
+                        ? 'border-red-500 focus:border-red-500'
+                        : 'border-gray-600 focus:border-blue-500'
                     }`}
                     placeholder="+57 300 123 4567"
                   />
                   {validationErrors.phone && (
-                    <p className="text-red-400 text-xs mt-1">
-                      {validationErrors.phone}
-                    </p>
+                    <p className="text-red-400 text-xs mt-1">{validationErrors.phone}</p>
                   )}
                 </div>
                 <div>
@@ -465,7 +360,7 @@ export const QuoteRequestModal = React.memo(({ isOpen, onClose, _service }) => {
                     className="text-blue-300 text-sm font-medium mb-2 block"
                   >
                     Tipo de Cliente <span className="text-red-500">*</span>
-                  </label>{" "}
+                  </label>{' '}
                   <select
                     id="quote-clientType"
                     name="clientType"
@@ -474,35 +369,26 @@ export const QuoteRequestModal = React.memo(({ isOpen, onClose, _service }) => {
                     required
                     className={`w-full p-3 bg-white border rounded-lg focus:ring-2 focus:ring-blue-500/20 text-gray-900 transition-all cursor-pointer ${
                       validationErrors.clientType
-                        ? "border-red-500 focus:border-red-500"
-                        : "border-gray-600 focus:border-blue-500"
+                        ? 'border-red-500 focus:border-red-500'
+                        : 'border-gray-600 focus:border-blue-500'
                     }`}
                     style={{
                       zIndex: 1000,
-                      position: "relative",
+                      position: 'relative',
                     }}
                   >
-                    <option
-                      value=""
-                      disabled
-                      className="bg-white text-gray-400"
-                    >
+                    <option value="" disabled className="bg-white text-gray-400">
                       Selecciona tipo de cliente
                     </option>
                     <option value="empresa" className="bg-white text-gray-900">
                       Empresa
                     </option>
-                    <option
-                      value="persona-natural"
-                      className="bg-white text-gray-900"
-                    >
+                    <option value="persona-natural" className="bg-white text-gray-900">
                       Persona Natural
                     </option>
                   </select>
                   {validationErrors.clientType && (
-                    <p className="text-red-400 text-xs mt-1">
-                      {validationErrors.clientType}
-                    </p>
+                    <p className="text-red-400 text-xs mt-1">{validationErrors.clientType}</p>
                   )}
                 </div>
               </div>
@@ -512,9 +398,9 @@ export const QuoteRequestModal = React.memo(({ isOpen, onClose, _service }) => {
                     htmlFor="quote-company"
                     className="text-blue-300 text-sm font-medium mb-2 block"
                   >
-                    {formData.clientType === "empresa"
-                      ? "Nombre de la Empresa"
-                      : "Nombre/Razón Social"}
+                    {formData.clientType === 'empresa'
+                      ? 'Nombre de la Empresa'
+                      : 'Nombre/Razón Social'}
                   </label>
                   <input
                     id="quote-company"
@@ -525,9 +411,9 @@ export const QuoteRequestModal = React.memo(({ isOpen, onClose, _service }) => {
                     autoComplete="organization"
                     className="w-full p-3 bg-white border border-gray-600 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 text-gray-900 transition-all"
                     placeholder={
-                      formData.clientType === "empresa"
-                        ? "Nombre de tu empresa"
-                        : "Tu nombre o razón social"
+                      formData.clientType === 'empresa'
+                        ? 'Nombre de tu empresa'
+                        : 'Tu nombre o razón social'
                     }
                   />
                 </div>
@@ -547,22 +433,20 @@ export const QuoteRequestModal = React.memo(({ isOpen, onClose, _service }) => {
                     required
                     className={`w-full p-3 bg-white border rounded-lg focus:ring-2 focus:ring-blue-500/20 text-gray-900 transition-all ${
                       validationErrors.city
-                        ? "border-red-500 focus:border-red-500"
-                        : "border-gray-600 focus:border-blue-500"
+                        ? 'border-red-500 focus:border-red-500'
+                        : 'border-gray-600 focus:border-blue-500'
                     }`}
                     placeholder="Bogotá, Medellín, Cali..."
                   />
                   {validationErrors.city && (
-                    <p className="text-red-400 text-xs mt-1">
-                      {validationErrors.city}
-                    </p>
+                    <p className="text-red-400 text-xs mt-1">{validationErrors.city}</p>
                   )}
                 </div>
-              </div>{" "}
+              </div>{' '}
               <div>
                 <label className="text-blue-300 text-sm font-medium mb-2 block">
                   Tipo de Proyecto <span className="text-red-500">*</span>
-                </label>{" "}
+                </label>{' '}
                 <select
                   name="projectType"
                   value={formData.projectType}
@@ -571,81 +455,44 @@ export const QuoteRequestModal = React.memo(({ isOpen, onClose, _service }) => {
                   className="w-full p-3 bg-white border border-gray-600 rounded-lg text-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
                   style={{
                     zIndex: 9999,
-                    position: "relative",
-                    pointerEvents: "auto",
+                    position: 'relative',
+                    pointerEvents: 'auto',
                   }}
                 >
-                  <option
-                    value=""
-                    disabled
-                    className="bg-white text-gray-400"
-                  >
+                  <option value="" disabled className="bg-white text-gray-400">
                     Selecciona un tipo de proyecto
                   </option>
-                  <option
-                    value="Desarrollo Web Full-Stack"
-                    className="bg-white text-gray-900"
-                  >
+                  <option value="Desarrollo Web Full-Stack" className="bg-white text-gray-900">
                     Desarrollo Web Full-Stack
                   </option>
-                  <option
-                    value="Aplicaciones Móviles"
-                    className="bg-white text-gray-900"
-                  >
+                  <option value="Aplicaciones Móviles" className="bg-white text-gray-900">
                     Aplicaciones Móviles
                   </option>
-                  <option
-                    value="Sistemas de Gestión"
-                    className="bg-white text-gray-900"
-                  >
+                  <option value="Sistemas de Gestión" className="bg-white text-gray-900">
                     Sistemas de Gestión
                   </option>
-                  <option
-                    value="E-commerce"
-                    className="bg-white text-gray-900"
-                  >
+                  <option value="E-commerce" className="bg-white text-gray-900">
                     E-commerce
                   </option>
-                  <option
-                    value="APIs y Microservicios"
-                    className="bg-white text-gray-900"
-                  >
+                  <option value="APIs y Microservicios" className="bg-white text-gray-900">
                     APIs y Microservicios
-                  </option>{" "}
-                  <option
-                    value="Marketing Digital"
-                    className="bg-white text-gray-900"
-                  >
+                  </option>{' '}
+                  <option value="Marketing Digital" className="bg-white text-gray-900">
                     Marketing Digital
                   </option>
-                  <option
-                    value="Soporte Hardware y Software"
-                    className="bg-white text-gray-900"
-                  >
+                  <option value="Soporte Hardware y Software" className="bg-white text-gray-900">
                     Soporte Hardware y Software
                   </option>
-                  <option
-                    value="Migración de Sistemas"
-                    className="bg-white text-gray-900"
-                  >
+                  <option value="Migración de Sistemas" className="bg-white text-gray-900">
                     Migración de Sistemas
                   </option>
-                  <option
-                    value="Integración de Sistemas"
-                    className="bg-white text-gray-900"
-                  >
+                  <option value="Integración de Sistemas" className="bg-white text-gray-900">
                     Integración de Sistemas
                   </option>
-                  <option
-                    value="Automatización de Procesos"
-                    className="bg-white text-gray-900"
-                  >
+                  <option value="Automatización de Procesos" className="bg-white text-gray-900">
                     Automatización de Procesos
                   </option>
-                  <option
-                    value="Análisis de Datos"
-                    className="bg-white text-gray-900"
-                  >
+                  <option value="Análisis de Datos" className="bg-white text-gray-900">
                     Análisis de Datos
                   </option>
                   <option value="Otro" className="bg-white text-gray-900">
@@ -653,15 +500,12 @@ export const QuoteRequestModal = React.memo(({ isOpen, onClose, _service }) => {
                   </option>
                 </select>
                 {validationErrors.projectType && (
-                  <p className="text-red-400 text-xs mt-1">
-                    {validationErrors.projectType}
-                  </p>
+                  <p className="text-red-400 text-xs mt-1">{validationErrors.projectType}</p>
                 )}
               </div>
               <div>
                 <label className="text-blue-300 text-sm font-medium mb-2 block">
-                  Descripción del Proyecto{" "}
-                  <span className="text-red-500">*</span>
+                  Descripción del Proyecto <span className="text-red-500">*</span>
                 </label>
                 <textarea
                   name="description"
@@ -671,15 +515,13 @@ export const QuoteRequestModal = React.memo(({ isOpen, onClose, _service }) => {
                   rows="4"
                   className={`w-full p-3 bg-white border rounded-lg focus:ring-2 focus:ring-blue-500/20 text-gray-900 transition-all resize-none ${
                     validationErrors.description
-                      ? "border-red-500 focus:border-red-500"
-                      : "border-gray-600 focus:border-blue-500"
+                      ? 'border-red-500 focus:border-red-500'
+                      : 'border-gray-600 focus:border-blue-500'
                   }`}
                   placeholder="Describe detalladamente tu proyecto, objetivos y requisitos específicos..."
                 />
                 {validationErrors.description && (
-                  <p className="text-red-400 text-xs mt-1">
-                    {validationErrors.description}
-                  </p>
+                  <p className="text-red-400 text-xs mt-1">{validationErrors.description}</p>
                 )}
               </div>
               <div>
@@ -693,8 +535,8 @@ export const QuoteRequestModal = React.memo(({ isOpen, onClose, _service }) => {
                   rows="3"
                   className={`w-full p-3 bg-white border rounded-lg focus:ring-2 focus:ring-blue-500/20 text-gray-900 transition-all resize-none ${
                     validationErrors.additionalRequirements
-                      ? "border-red-500 focus:border-red-500"
-                      : "border-gray-600 focus:border-blue-500"
+                      ? 'border-red-500 focus:border-red-500'
+                      : 'border-gray-600 focus:border-blue-500'
                   }`}
                   placeholder="Integraciones específicas, funcionalidades especiales, restricciones técnicas, etc."
                 />
@@ -703,13 +545,12 @@ export const QuoteRequestModal = React.memo(({ isOpen, onClose, _service }) => {
                     {validationErrors.additionalRequirements}
                   </p>
                 )}
-              </div>{" "}
-              {submitStatus === "error" && (
+              </div>{' '}
+              {submitStatus === 'error' && (
                 <div className="p-4 bg-red-500/20 border border-red-500/50 rounded-lg">
                   <p className="text-red-400 text-sm">
-                    <strong>Error:</strong> Por favor verifica que todos los
-                    campos requeridos estén completos y sean válidos. Si el
-                    problema persiste, contáctanos directamente.
+                    <strong>Error:</strong> Por favor verifica que todos los campos requeridos estén
+                    completos y sean válidos. Si el problema persiste, contáctanos directamente.
                   </p>
                 </div>
               )}
@@ -788,7 +629,7 @@ export const QuoteRequestModal = React.memo(({ isOpen, onClose, _service }) => {
                     </div>
                   </div>
                 </div>
-              )}{" "}
+              )}{' '}
               <div className="border-t border-gray-700 pt-4">
                 {/* Sistema de seguridad integrado */}
               </div>
@@ -810,14 +651,14 @@ export const QuoteRequestModal = React.memo(({ isOpen, onClose, _service }) => {
                   className="px-6 py-3 bg-white hover:bg-slate-600 text-white rounded-lg transition-all duration-300 font-semibold border border-gray-600"
                 >
                   Cancelar
-                </button>{" "}
+                </button>{' '}
                 <button
                   type="submit"
                   disabled={isSubmitting || !isFormComplete}
                   className={`flex-1 px-6 py-3 rounded-lg font-medium transition-all focus:outline-none focus:ring-2 focus:ring-blue-500 ${
                     isSubmitting || !isFormComplete
-                      ? "bg-gray-600 text-gray-400 cursor-not-allowed"
-                      : "bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-white shadow-lg hover:shadow-xl"
+                      ? 'bg-gray-600 text-gray-400 cursor-not-allowed'
+                      : 'bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-white shadow-lg hover:shadow-xl'
                   }`}
                 >
                   {isSubmitting ? (
@@ -845,7 +686,7 @@ export const QuoteRequestModal = React.memo(({ isOpen, onClose, _service }) => {
                       Enviando...
                     </span>
                   ) : (
-                    "Solicitar Propuesta"
+                    'Solicitar Propuesta'
                   )}
                 </button>
               </div>
@@ -857,7 +698,7 @@ export const QuoteRequestModal = React.memo(({ isOpen, onClose, _service }) => {
   );
 });
 
-QuoteRequestModal.displayName = "QuoteRequestModal";
+QuoteRequestModal.displayName = 'QuoteRequestModal';
 
 // --- SUGERENCIAS DE MEJORA ---
 // 1. Implementar validación en tiempo real por campo y mostrar errores específicos.
