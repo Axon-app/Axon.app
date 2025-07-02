@@ -50,6 +50,9 @@ export default defineConfig(({ mode }) => ({
   // === CONFIGURACIÓN BASE ===
   // Ruta base para el deploy en GitHub Pages o raíz local
   base: mode === 'production' ? '/Axon.app/' : '/',
+  
+  // Configuración específica para GitHub Pages
+  assetsInclude: ['**/*.png', '**/*.jpg', '**/*.jpeg', '**/*.svg', '**/*.webp'],
 
   // === CONFIGURACIÓN DEL SERVIDOR DE DESARROLLO ===
   server: {
