@@ -1,16 +1,44 @@
 import { useState } from 'react';
 
 /**
+ * @typedef {Object} ClientProject
+ * @property {string} title - Título del proyecto
+ * @property {string} description - Descripción del proyecto
+ * @property {string} duration - Duración del proyecto
+ * @property {string} type - Tipo de proyecto
+ * @property {string} year - Año del proyecto
+ * @property {string[]} technologies - Tecnologías utilizadas
+ */
+
+/**
+ * @typedef {Object} Client
+ * @property {string} name - Nombre del cliente
+ * @property {string} industry - Industria del cliente
+ * @property {string} logo - Logo del cliente
+ * @property {string} logoColor - Color del logo
+ * @property {string} testimonial - Testimonial del cliente
+ * @property {string[]} results - Resultados obtenidos
+ * @property {ClientProject} project - Información del proyecto
+ */
+
+/**
  * Componente de tarjeta individual para mostrar información del cliente.
  * Incluye animaciones, hover effects y modal de detalles.
- * Props:
- *   - client: objeto con datos del cliente
- *   - index: número de orden para animación escalonada
+ * @param {Object} props - Props del componente
+ * @param {Client} props.client - Objeto con datos del cliente
+ * @param {number} props.index - Número de orden para animación escalonada
  */
 export const ClientCard = ({ client, index }) => {
   const [showDetails, setShowDetails] = useState(false);
   // Calcula el delay de animación para efecto escalonado
   const animationDelay = `${index * 0.1}s`;
+
+  const handleCardClick = () => setShowDetails(true);
+  const handleKeyDown = (/** @type {React.KeyboardEvent} */ event) => {
+    if (event.key === 'Enter' || event.key === ' ') {
+      setShowDetails(true);
+    }
+  };
 
   return (
     <>
@@ -20,7 +48,11 @@ export const ClientCard = ({ client, index }) => {
           'group relative glass-card rounded-2xl p-6 transition-all duration-500 hover:scale-105 animate-fade-in-up cursor-pointer transform-gpu hover:animate-client-card-hover'
         }
         style={{ animationDelay }}
-        onClick={() => setShowDetails(true)}
+        onClick={handleCardClick}
+        onKeyDown={handleKeyDown}
+        role="button"
+        tabIndex={0}
+        aria-label={`Ver detalles de ${client.name}`}
       >
         {/* Efecto de brillo en hover */}
         <div
@@ -67,15 +99,16 @@ export const ClientCard = ({ client, index }) => {
         {/* Tecnologías utilizadas (máx. 3 visibles) */}
         <div className="mb-4">
           <div className="flex flex-wrap gap-2">
-            {client.project.technologies.slice(0, 3).map((tech, techIndex) => (
-              <span
-                key={techIndex}
-                className="bg-gray-700/50 text-gray-300 px-2 py-1 rounded-md text-xs\n                  group-hover:bg-blue-500/20 group-hover:text-blue-300 \
-                  transition-all duration-300"
-              >
-                {tech}
-              </span>
-            ))}
+            {client.project.technologies
+              .slice(0, 3)
+              .map((/** @type {string} */ tech, /** @type {number} */ techIndex) => (
+                <span
+                  key={techIndex}
+                  className="bg-gray-700/50 text-gray-300 px-2 py-1 rounded-md text-xs group-hover:bg-blue-500/20 group-hover:text-blue-300 transition-all duration-300"
+                >
+                  {tech}
+                </span>
+              ))}
             {client.project.technologies.length > 3 && (
               <span className="bg-gray-700/50 text-gray-400 px-2 py-1 rounded-md text-xs">
                 +{client.project.technologies.length - 3}
@@ -139,9 +172,9 @@ export const ClientCard = ({ client, index }) => {
 
 /**
  * Modal con información detallada del cliente y proyecto.
- * Props:
- *   - client: objeto con datos del cliente
- *   - onClose: función para cerrar el modal
+ * @param {Object} props - Props del componente
+ * @param {Client} props.client - Objeto con datos del cliente
+ * @param {() => void} props.onClose - Función para cerrar el modal
  */
 const ClientDetailModal = ({ client, onClose }) => {
   return (
@@ -200,14 +233,16 @@ const ClientDetailModal = ({ client, onClose }) => {
           <div>
             <h4 className="text-white font-semibold mb-3">Tecnologías Utilizadas</h4>
             <div className="flex flex-wrap gap-2">
-              {client.project.technologies.map((tech, index) => (
-                <span
-                  key={index}
-                  className="bg-gray-700 text-gray-300 px-3 py-1 rounded-lg text-sm"
-                >
-                  {tech}
-                </span>
-              ))}
+              {client.project.technologies.map(
+                (/** @type {string} */ tech, /** @type {number} */ index) => (
+                  <span
+                    key={index}
+                    className="bg-gray-700 text-gray-300 px-3 py-1 rounded-lg text-sm"
+                  >
+                    {tech}
+                  </span>
+                )
+              )}
             </div>
           </div>
 
@@ -215,7 +250,7 @@ const ClientDetailModal = ({ client, onClose }) => {
           <div>
             <h4 className="text-white font-semibold mb-3">Resultados Obtenidos</h4>
             <div className="space-y-3">
-              {client.results.map((result, index) => (
+              {client.results.map((/** @type {string} */ result, /** @type {number} */ index) => (
                 <div
                   key={index}
                   className="bg-green-500/10 border border-green-500/30 rounded-lg p-3"

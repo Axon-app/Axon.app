@@ -165,7 +165,7 @@ export const measurePerformance = (func, label = 'Function') => {
     const start = performance.now();
     const result = await func.apply(this, args);
     const end = performance.now();
-    console.log(`${label} executed in ${(end - start).toFixed(2)} milliseconds`);
+    console.warn(`${label} executed in ${(end - start).toFixed(2)} milliseconds`);
     return result;
   };
 };
@@ -190,8 +190,8 @@ export const preloadResources = urls => {
  */
 export const lazyLoadImages = (selector = 'img[data-src]') => {
   if ('IntersectionObserver' in window) {
-    const imageObserver = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
+    const imageObserver = new IntersectionObserver(_entries => {
+      _entries.forEach(entry => {
         if (entry.isIntersecting) {
           const img = entry.target;
           img.src = img.dataset.src;

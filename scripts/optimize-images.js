@@ -40,7 +40,7 @@ async function optimizeImage(inputPath) {
         .toFile(outputPath);
     }
 
-    console.log(`✅ Optimized: ${path.basename(inputPath)}`);
+    console.warn(`✅ Optimized: ${path.basename(inputPath)}`);
   } catch (error) {
     console.error(`❌ Error optimizing ${inputPath}:`, error);
   }
@@ -68,7 +68,7 @@ async function processDirectory(directory) {
   }
 }
 
-console.log('🖼️ Starting image optimization...');
+console.warn('🖼️ Starting image optimization...');
 processDirectory(PUBLIC_DIR)
-  .then(() => console.log('✨ Image optimization complete!'))
+  .then(() => console.warn('✨ Image optimization complete!'))
   .catch(console.error);

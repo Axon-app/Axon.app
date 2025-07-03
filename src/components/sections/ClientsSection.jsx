@@ -3,6 +3,10 @@ import { clientsData, clientsStats } from '../../data/clientsData';
 import { ClientCard } from '../ui/ClientCard';
 
 /**
+ * @typedef {import('../ui/ClientCard').Client} Client
+ */
+
+/**
  * Sección de clientes con estadísticas, filtros y vista grid/lista.
  * Muestra casos de éxito y testimoniales de clientes de forma profesional.
  */

@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
+// Hook de estado global para la aplicación (actualmente no usado, preparado para futuras funcionalidades)
 const _useAppState = create(
   persist(
     (set, get) => ({
@@ -11,9 +12,10 @@ const _useAppState = create(
       user: null,
 
       // Acciones
-      setTheme: theme => set({ theme }),
-      setLanguage: language => set({ language }),
-      setAuth: (isAuthenticated, user = null) => set({ isAuthenticated, user }),
+      setTheme: (/** @type {string} */ theme) => set({ theme }),
+      setLanguage: (/** @type {string} */ language) => set({ language }),
+      setAuth: (/** @type {boolean} */ isAuthenticated, /** @type {any} */ user = null) =>
+        set({ isAuthenticated, user }),
 
       // Selectores
       getTheme: () => get().theme,
@@ -35,3 +37,5 @@ const _useAppState = create(
     }
   )
 );
+
+export default _useAppState;

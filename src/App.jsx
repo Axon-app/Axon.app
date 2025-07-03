@@ -2170,6 +2170,10 @@ const App = () => {
               <div
                 className="bg-gradient-to-br from-gray-800/80 to-gray-900/80 backdrop-blur-md p-4 rounded-xl border border-gray-700/50 hover:border-blue-500/50 transition-all duration-300 cursor-pointer group"
                 onClick={openContactModal}
+                onKeyDown={e => e.key === 'Enter' && openContactModal()}
+                role="button"
+                tabIndex={0}
+                aria-label="Abrir formulario de contacto"
               >
                 <div className="flex items-center space-x-3">
                   <div className="bg-blue-500/20 p-2 rounded-lg group-hover:bg-blue-500/30 transition-all duration-300">
@@ -2784,7 +2788,13 @@ const NavLink = ({ href, children, mobile, onClick, isActive, scrollToSection })
   };
 
   return (
-    <div onClick={handleClick} className={baseClasses}>
+    <div
+      onClick={handleClick}
+      onKeyDown={e => e.key === 'Enter' && handleClick()}
+      role="button"
+      tabIndex={0}
+      className={baseClasses}
+    >
       {mobile ? (
         children
       ) : (

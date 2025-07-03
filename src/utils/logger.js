@@ -8,29 +8,54 @@
 const isDevelopment = process.env.NODE_ENV === 'development';
 
 class Logger {
+  /**
+   * Registra un mensaje informativo
+   * @param {string} message - El mensaje a registrar
+   * @param {...any} args - Argumentos adicionales
+   */
   static info(message, ...args) {
     if (isDevelopment) {
-      console.log(`ℹ️ [INFO] ${message}`, ...args);
+      console.warn(`ℹ️ [INFO] ${message}`, ...args);
     }
   }
 
+  /**
+   * Registra un mensaje de éxito
+   * @param {string} message - El mensaje a registrar
+   * @param {...any} args - Argumentos adicionales
+   */
   static success(message, ...args) {
     if (isDevelopment) {
-      console.log(`✅ [SUCCESS] ${message}`, ...args);
+      console.warn(`✅ [SUCCESS] ${message}`, ...args);
     }
   }
 
+  /**
+   * Registra un mensaje de advertencia
+   * @param {string} message - El mensaje a registrar
+   * @param {...any} args - Argumentos adicionales
+   */
   static warn(message, ...args) {
     console.warn(`⚠️ [WARNING] ${message}`, ...args);
   }
 
+  /**
+   * Registra un mensaje de error
+   * @param {string} message - El mensaje a registrar
+   * @param {...any} args - Argumentos adicionales
+   */
   static error(message, ...args) {
     console.error(`❌ [ERROR] ${message}`, ...args);
   }
 
+  /**
+   * Registra un mensaje de debug
+   * @param {string} message - El mensaje a registrar
+   * @param {...any} args - Argumentos adicionales
+   */
   static debug(message, ...args) {
     if (isDevelopment) {
-      console.debug(`🔍 [DEBUG] ${message}`, ...args);
+      console.warn(`🔍 [DEBUG] ${message}`, ...args);
     }
   }
 }

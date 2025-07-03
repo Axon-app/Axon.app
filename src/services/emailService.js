@@ -19,9 +19,24 @@ const CONTACT_CONFIG = {
 };
 
 /**
+ * @typedef {Object} FormData
+ * @property {string} [name] - Nombre del usuario
+ * @property {string} [email] - Email del usuario
+ * @property {string} [phone] - Teléfono del usuario
+ * @property {string} [company] - Empresa del usuario
+ * @property {string} [message] - Mensaje del usuario
+ */
+
+/**
+ * @typedef {Object} ValidationResult
+ * @property {boolean} isValid - Si la validación es exitosa
+ * @property {string[]} errors - Lista de errores de validación
+ */
+
+/**
  * Valida los datos básicos de un formulario
- * @param {Object} formData - Datos del formulario
- * @returns {Object} - { isValid: boolean, errors: Array<string> }
+ * @param {FormData} formData - Datos del formulario
+ * @returns {ValidationResult} - { isValid: boolean, errors: Array<string> }
  */
 const validateFormData = formData => {
   const errors = [];
@@ -40,16 +55,27 @@ const validateFormData = formData => {
 };
 
 /**
+ * @typedef {Object} EmailResult
+ * @property {boolean} success - Si el envío fue exitoso
+ * @property {boolean} [demo] - Si es modo demo
+ * @property {string} [type] - Tipo de formulario
+ * @property {Object} [data] - Datos del envío
+ * @property {string} [timestamp] - Timestamp del envío
+ * @property {string} [message] - Mensaje de resultado
+ * @property {string[]} [errors] - Errores de validación
+ */
+
+/**
  * Simula el procesamiento de formularios para demo
  * @param {string} type - Tipo: 'contact', 'quote', 'consultation'
- * @param {Object} formData - Datos del formulario
- * @returns {Promise<Object>} - Resultado simulado del envío
+ * @param {FormData} formData - Datos del formulario
+ * @returns {Promise<EmailResult>} - Resultado simulado del envío
  */
 export const sendUnifiedEmail = (type, formData) => {
   // Validar datos básicos
   const validation = validateFormData(formData);
   if (!validation.isValid) {
-    return { success: false, errors: validation.errors };
+    return Promise.resolve({ success: false, errors: validation.errors });
   }
   // Simular procesamiento
   return new Promise(resolve => {
@@ -79,8 +105,8 @@ export const sendUnifiedEmail = (type, formData) => {
 
 /**
  * Envía email de contacto general
- * @param {Object} formData - Datos del formulario de contacto
- * @returns {Promise<Object>} - Resultado del envío
+ * @param {FormData} formData - Datos del formulario de contacto
+ * @returns {Promise<EmailResult>} - Resultado del envío
  */
 export const sendContactEmail = formData => {
   return sendUnifiedEmail('contact', formData);
@@ -88,8 +114,8 @@ export const sendContactEmail = formData => {
 
 /**
  * Envía solicitud de propuesta/cotización
- * @param {Object} formData - Datos del formulario de propuesta
- * @returns {Promise<Object>} - Resultado del envío
+ * @param {FormData} formData - Datos del formulario de propuesta
+ * @returns {Promise<EmailResult>} - Resultado del envío
  */
 export const sendQuoteRequest = formData => {
   return sendUnifiedEmail('quote', formData);
@@ -97,8 +123,8 @@ export const sendQuoteRequest = formData => {
 
 /**
  * Envía solicitud de consulta
- * @param {Object} formData - Datos del formulario de consulta
- * @returns {Promise<Object>} - Resultado del envío
+ * @param {FormData} formData - Datos del formulario de consulta
+ * @returns {Promise<EmailResult>} - Resultado del envío
  */
 export const sendConsultationRequest = formData => {
   return sendUnifiedEmail('consultation', formData);
@@ -109,7 +135,7 @@ export const sendConsultationRequest = formData => {
  * @param {string} _clientEmail - Email del cliente
  * @param {string} _type - Tipo de confirmación
  * @param {string} _serviceName - Nombre del servicio
- * @returns {Promise<Object>} - Resultado del envío
+ * @returns {EmailResult} - Resultado del envío
  */
 export const sendClientConfirmation = (_clientEmail, _type, _serviceName = '') => {
   // Simulación de confirmación
