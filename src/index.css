@@ -1,3 +1,7 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
 /* index.css - Estilos globales y animaciones personalizadas Axon.App
  * ================================================================
  * Incluye configuración base, animaciones, utilidades y mejoras visuales.
@@ -8,10 +12,7 @@
  * 2. Animaciones personalizadas (keyframes)
  * 3. Clases utilitarias para animaciones y efectos
  * 4. Mejoras de accesibilidad y usabilidad
- * 5. Sugerencias de mejora profesional al final
  */
-
-@import 'tailwindcss';
 
 /* Configuración de fuentes base y renderizado */
 :root {

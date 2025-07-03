@@ -8,7 +8,7 @@
  */
 export default {
   // Archivos a escanear para generar las clases CSS necesarias
-  content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
+  content: ['./index.html', './src/**/*.{js,jsx}'],
   theme: {
     extend: {
       // Fuentes personalizadas para branding
