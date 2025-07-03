@@ -21,6 +21,8 @@
  * @version 2.4.0
  */
 
+import { lazy } from 'react';
+
 // ===================================================================
 // COMPONENTES BÁSICOS DE UI
 // ===================================================================
@@ -31,7 +33,7 @@
 export {
   AnimatedBackground, // Fondo animado con efectos visuales
   AxonLogo, // Componente del logo de Axon
-  ScrollToTopButton,
+  ScrollToTopButton
 } from './ui/BasicComponents';
 
 // ===================================================================
@@ -43,7 +45,7 @@ export {
  */
 export {
   ServiceCard, // Tarjeta individual de servicio
-  TestimonialCard, // Tarjeta de testimonio de cliente
+  TestimonialCard
 } from './ui/Cards';
 
 // ===================================================================
@@ -58,7 +60,7 @@ export {
   AnimatedCounterWithProgress, // Contador con barra de progreso
   TechCarousel, // Carrusel de tecnologías
   TechItem, // Elemento individual de tecnología
-  TestimonialsBanner,
+  TestimonialsBanner
 } from './ui/Interactive';
 
 // ===================================================================

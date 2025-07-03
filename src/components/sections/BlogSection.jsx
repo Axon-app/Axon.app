@@ -1,9 +1,10 @@
+// @ts-nocheck
 import React from 'react';
 import { blogPosts, getFeaturedPosts } from '../../data/blogData';
 
 // --- Sección principal del Blog ---
 // Muestra posts destacados y recientes con efectos visuales y tarjetas interactivas.
-export const BlogSection = ({ onOpenBlogModal }) => {
+const BlogSection = ({ onOpenBlogModal }) => {
   // Obtiene posts destacados y los 3 más recientes
   const featuredPosts = getFeaturedPosts();
   const recentPosts = blogPosts.slice(0, 3);

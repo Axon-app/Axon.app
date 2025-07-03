@@ -1064,11 +1064,4 @@ UnifiedFormComponent.propTypes = {
   className: PropTypes.string
 };
 
-UnifiedFormComponent.defaultProps = {
-  mode: 'contact',
-  section: null,
-  onClose: null,
-  className: ''
-};
-
 export default UnifiedFormComponent;

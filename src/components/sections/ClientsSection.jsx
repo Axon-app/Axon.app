@@ -6,7 +6,7 @@ import { ClientCard } from '../ui/ClientCard';
  * Sección de clientes con estadísticas, filtros y vista grid/lista.
  * Muestra casos de éxito y testimoniales de clientes de forma profesional.
  */
-export const ClientsSection = React.memo(() => {
+const ClientsSection = React.memo(() => {
   // Constantes
   const ALL_INDUSTRIES = 'Todos';
   const NO_RESULTS_MESSAGE = 'No se encontraron clientes en esta categoría.';
@@ -219,3 +219,5 @@ export const ClientsSection = React.memo(() => {
 // 4. Considerar internacionalización si se requiere multilenguaje.
 // 5. Añadir tests unitarios para la lógica de filtrado y renderizado.
 // 6. Permitir que los botones de call-to-action reciban callbacks por props para mayor flexibilidad.
+
+export default ClientsSection;

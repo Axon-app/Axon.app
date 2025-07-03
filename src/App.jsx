@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * AXON.APP - COMPONENTE PRINCIPAL DE LA APLICACIÓN
  * ================================================
@@ -26,26 +27,26 @@ import React, { useState } from 'react';
 
 // Componentes principales exportados desde index.js
 import {
-  AnimatedCounterWithProgress, // Contador animado con barra de progreso
-  BlogModal, // Modal para mostrar posts del blog
-  BlogSection, // Sección completa del blog
-  EnhancedCookiesModal, // Modal mejorado de cookies
-  EnhancedPrivacyModal, // Modal mejorado de privacidad
-  EnhancedTermsModal, // Modal mejorado de términos
-  FloatingBlogButton, // Tarjeta individual de servicio
-  ServiceDetailModal, // Modal con detalles de servicios
-  TestimonialsBanner,
+    AnimatedCounterWithProgress, // Contador animado con barra de progreso
+    BlogModal, // Modal para mostrar posts del blog
+    BlogSection, // Sección completa del blog
+    EnhancedCookiesModal, // Modal mejorado de cookies
+    EnhancedPrivacyModal, // Modal mejorado de privacidad
+    EnhancedTermsModal, // Modal mejorado de términos
+    FloatingBlogButton, // Tarjeta individual de servicio
+    ServiceDetailModal, // Modal con detalles de servicios
+    TestimonialsBanner,
 } from './components/index';
 
 // Modales unificados para formularios
 import {
-  ConsultationModal, // Modal para solicitar consulta
-  ContactModal, // Modal de contacto general
-  QuoteModal, // Modal para solicitar cotización
+    ConsultationModal, // Modal para solicitar consulta
+    ContactModal, // Modal de contacto general
+    QuoteModal, // Modal para solicitar cotización
 } from './components/modals/UnifiedModals';
 
 // Secciones específicas de la aplicación
-import { ClientsSection } from './components/sections/ClientsSection';
+import ClientsSection from './components/sections/ClientsSection';
 
 // Componentes de UI específicos
 import { EmailLink } from './components/ui/EmailLink';
