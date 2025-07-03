@@ -1,10 +1,15 @@
-<!DOCTYPE html>
+<!doctype html>
 <!-- Axon.App - Version 2025062301 - Deploy Test -->
+<!--
+  Archivo principal HTML para la SPA de Axon.App
+  - Incluye configuración SEO, accesibilidad, seguridad y optimización de recursos.
+  - Cumple con buenas prácticas modernas para aplicaciones web profesionales.
+-->
 <html lang="es">
   <head>
     <meta charset="UTF-8" />
 
-    <!-- Google Fonts - Fuentes principales -->
+    <!-- Google Fonts - Fuentes principales para UI y branding -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -12,33 +17,23 @@
       rel="stylesheet"
     />
 
-    <!-- Favicon y Iconos -->
+    <!-- Favicon y Iconos para diferentes dispositivos y navegadores -->
     <link rel="icon" type="image/png" href="favicon.png?v=2025062301" />
     <link rel="icon" type="image/x-icon" href="favicon.ico?v=2025062301" />
     <link rel="shortcut icon" href="favicon.ico?v=2025062301" />
-    <link
-      rel="apple-touch-icon"
-      sizes="180x180"
-      href="favicon.png?v=2025061902"
-    />
-    <link
-      rel="icon"
-      type="image/png"
-      sizes="32x32"
-      href="favicon.png?v=2025061902"
-    />
-    <link
-      rel="icon"
-      type="image/png"
-      sizes="16x16"
-      href="favicon.png?v=2025061902"
-    />
+    <link rel="apple-touch-icon" sizes="180x180" href="favicon.png?v=2025061902" />
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon.png?v=2025061902" />
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon.png?v=2025061902" />
     <meta name="theme-color" content="#1f2937" />
 
-    <!-- Viewport y Configuración Básica -->
+    <!-- Viewport y Configuración Básica para responsive design -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <!-- Content Security Policy -->
+    <!-- Content Security Policy (CSP) -->
+    <!--
+      Nota: 'unsafe-inline' y 'unsafe-eval' solo deben usarse si es estrictamente necesario.
+      Para máxima seguridad, migrar scripts y estilos a archivos externos y eliminar estos valores.
+    -->
     <meta
       http-equiv="Content-Security-Policy"
       content="
@@ -56,10 +51,7 @@
     />
 
     <!-- Meta Tags SEO Básicos -->
-    <title>
-      Axon.App - Desarrollo Web Profesional | Soluciones Tecnológicas
-      Innovadoras
-    </title>
+    <title>Axon.App - Desarrollo Web Profesional | Soluciones Tecnológicas Innovadoras</title>
     <meta
       name="description"
       content="Axon.App ofrece desarrollo web profesional, aplicaciones móviles, inteligencia artificial y soluciones cloud. Transformamos ideas en realidad digital con tecnologías de vanguardia."
@@ -71,7 +63,7 @@
     <meta name="author" content="Axon.App" />
     <meta name="robots" content="index, follow" />
 
-    <!-- Open Graph / Facebook -->
+    <!-- Open Graph / Facebook para compartir en redes sociales -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content="/" />
     <meta property="og:title" content="Axon.App - Desarrollo Web Profesional" />
@@ -79,65 +71,44 @@
       property="og:description"
       content="Transformamos ideas en realidad digital. Desarrollo web, apps móviles, IA y soluciones cloud con tecnologías de vanguardia."
     />
-    <meta
-      property="og:image"
-      content="/og-image.png?v=2025061401"
-    />
-    <meta
-      property="og:image:alt"
-      content="Axon.App - Desarrollo Web Profesional"
-    />
+    <meta property="og:image" content="/og-image.png?v=2025061401" />
+    <meta property="og:image:alt" content="Axon.App - Desarrollo Web Profesional" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta property="og:site_name" content="Axon.App" />
     <meta property="og:locale" content="es_ES" />
 
-    <!-- Twitter Card -->
+    <!-- Twitter Card para previsualización en Twitter/X -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:url" content="/" />
-    <meta
-      name="twitter:title"
-      content="Axon.App - Desarrollo Web Profesional"
-    />
+    <meta name="twitter:title" content="Axon.App - Desarrollo Web Profesional" />
     <meta
       name="twitter:description"
       content="Transformamos ideas en realidad digital. Desarrollo web, apps móviles, IA y soluciones cloud."
     />
-    <meta
-      name="twitter:image"
-      content="/Axon.app/redes.png?v=2025061401"
-    />
-    <meta
-      name="twitter:image:alt"
-      content="Axon.App - Desarrollo Web Profesional"
-    />
+    <meta name="twitter:image" content="/Axon.app/redes.png?v=2025061401" />
+    <meta name="twitter:image:alt" content="Axon.App - Desarrollo Web Profesional" />
     <meta name="twitter:creator" content="@axonapp_co" />
     <meta name="twitter:site" content="@axonapp_co" />
 
-    <!-- LinkedIn -->
-    <meta
-      property="og:image:secure_url"
-      content="/Axon.app/redes.png?v=2025061401"
-    />
+    <!-- LinkedIn (usa Open Graph) -->
+    <meta property="og:image:secure_url" content="/Axon.app/redes.png?v=2025061401" />
 
-    <!-- WhatsApp Optimized -->
+    <!-- WhatsApp Optimized (imagen cuadrada) -->
     <meta property="og:image:type" content="image/png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta
-      name="whatsapp:image"
-      content="/whatsapp-image.png"
-    />
+    <meta name="whatsapp:image" content="/whatsapp-image.png" />
     <meta name="whatsapp:title" content="Axon.App - Desarrollo Web" />
     <meta
       name="whatsapp:description"
       content="Soluciones tecnológicas innovadoras con logo claro y profesional"
     />
 
-    <!-- Canonical URL -->
+    <!-- Canonical URL para SEO -->
     <link rel="canonical" href="/Axon.app/" />
 
-    <!-- Schema.org Structured Data -->
+    <!-- Schema.org Structured Data para SEO avanzado -->
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
@@ -171,11 +142,27 @@
       }
     </script>
     <link rel="manifest" href="site.webmanifest" />
-    <script type="module" crossorigin src="/Axon.app/assets/js/index-B9z2eAj1.js"></script>
-    <link rel="modulepreload" crossorigin href="/Axon.app/assets/js/react-vendor-CGQcvbyE.js">
-    <link rel="stylesheet" crossorigin href="/Axon.app/assets/index-CldB7hiP.css">
+    <script type="module" crossorigin src="/Axon.app/assets/js/index-DEck3lwV.js"></script>
+    <link rel="modulepreload" crossorigin href="/Axon.app/assets/js/react-vendor-CDBqYK37.js">
+    <link rel="stylesheet" crossorigin href="/Axon.app/assets/index-f8S7WDj1.css">
   </head>
   <body>
-    <div id="root"></div>
+    <!-- Contenedor principal de la SPA React -->
+    <div id="root"></div>
+    <!-- Entrada principal de la aplicación React/Vite -->
   </body>
 </html>
+
+<!--
+  --- SUGERENCIAS DE MEJORA PROFESIONAL ---
+  1. Migrar la política CSP para eliminar 'unsafe-inline' y 'unsafe-eval' si es posible.
+  2. Añadir etiquetas meta para accesibilidad (ej: <meta name="color-scheme" content="dark light">).
+  3. Incluir etiquetas meta para PWA avanzada (display, orientation, etc.).
+  4. Validar que las imágenes referenciadas existan y estén optimizadas.
+  5. Añadir soporte multi-idioma (hreflang, alternate).
+  6. Incluir metaetiquetas para dispositivos Apple y Android adicionales.
+  7. Documentar en README la estructura y propósito de este archivo.
+  8. Automatizar la actualización de versiones en los recursos (favicon, imágenes) en el flujo CI/CD.
+  9. Añadir test de validación HTML en el pipeline de CI.
+  10. Revisar y actualizar periódicamente las mejores prácticas SEO y accesibilidad.
+-->
