@@ -143,31 +143,36 @@ ErrorModal.propTypes = {
 /**
  * Componente de formulario unificado
  */
-const UnifiedFormComponent = ({ mode = 'contact', section = null, onClose = null, className = '' }) => {
-    const [formData, setFormData] = useState({
-      // Campos básicos (para todos los tipos)
-      name: '',
-      email: '',
-      phone: '',
-      company: '',
-      message: '',
+const UnifiedFormComponent = ({
+  mode = 'contact',
+  section = null,
+  onClose = null,
+  className = '',
+}) => {
+  const [formData, setFormData] = useState({
+    // Campos básicos (para todos los tipos)
+    name: '',
+    email: '',
+    phone: '',
+    company: '',
+    message: '',
 
-      // Campos específicos para propuesta comercial
-      city: '',
-      clientType: '',
-      projectType: '',
-      projectDescription: '',
-      additionalRequirements: '',
+    // Campos específicos para propuesta comercial
+    city: '',
+    clientType: '',
+    projectType: '',
+    projectDescription: '',
+    additionalRequirements: '',
 
-      // Campos específicos para consulta
-      consultationType: '',
-      preferredDate: '',
-      preferredTime: '',
-      topics: '',
-      meetingType: 'video-call',
-    });
-    const [isSubmitting, setIsSubmitting] = useState(false);
-    const [errors, setErrors] = useState({
+    // Campos específicos para consulta
+    consultationType: '',
+    preferredDate: '',
+    preferredTime: '',
+    topics: '',
+    meetingType: 'video-call',
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errors, setErrors] = useState({
     name: '',
     email: '',
     phone: '',
@@ -175,363 +180,750 @@ const UnifiedFormComponent = ({ mode = 'contact', section = null, onClose = null
     projectType: '',
     projectDescription: '',
     consultationType: '',
-    topics: ''
+    topics: '',
   });
-    const [showSuccessModal, setShowSuccessModal] = useState(false);
-    const [showErrorModal, setShowErrorModal] = useState(false);
-    const [errorMessage, setErrorMessage] = useState('');
-    // Definir campos obligatorios por modo
-    const getRequiredFields = useCallback(() => {
-      const baseFields = [
-        { key: 'name', label: 'Nombre completo' },
-        { key: 'email', label: 'Email' }
-      ];
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [showErrorModal, setShowErrorModal] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+  // Definir campos obligatorios por modo
+  const getRequiredFields = useCallback(() => {
+    const baseFields = [
+      { key: 'name', label: 'Nombre completo' },
+      { key: 'email', label: 'Email' },
+    ];
 
-      switch (mode) {
-        case 'contact':
-          return [...baseFields, { key: 'message', label: 'Mensaje' }];
-        case 'quote':
-          return [
-            ...baseFields,
-            { key: 'projectType', label: 'Tipo de proyecto' },
-            { key: 'projectDescription', label: 'Descripción del proyecto' }
-          ];
-        case 'consultation':
-          return [
-            ...baseFields,
-            { key: 'consultationType', label: 'Tipo de consulta' },
-            { key: 'topics', label: 'Temas a tratar' }
-          ];
-        default:
-          return baseFields;
+    switch (mode) {
+      case 'contact':
+        return [...baseFields, { key: 'message', label: 'Mensaje' }];
+      case 'quote':
+        return [
+          ...baseFields,
+          { key: 'projectType', label: 'Tipo de proyecto' },
+          { key: 'projectDescription', label: 'Descripción del proyecto' },
+        ];
+      case 'consultation':
+        return [
+          ...baseFields,
+          { key: 'consultationType', label: 'Tipo de consulta' },
+          { key: 'topics', label: 'Temas a tratar' },
+        ];
+      default:
+        return baseFields;
+    }
+  }, [mode]);
+
+  const getCompletedFields = useMemo(
+    () => getRequiredFields().filter(field => formData[field.key]?.trim()),
+    [formData, getRequiredFields]
+  );
+
+  const getPendingFields = useMemo(
+    () => getRequiredFields().filter(field => !formData[field.key]?.trim()),
+    [formData, getRequiredFields]
+  );
+
+  const isFormComplete = useMemo(() => getPendingFields.length === 0, [getPendingFields]); // Validación estricta con reglas específicas
+  const validateForm = useCallback(() => {
+    const newErrors = {};
+
+    // Validación de nombre - solo letras, espacios, acentos y caracteres especiales del español
+    if (!formData.name.trim()) {
+      newErrors.name = 'El nombre es requerido';
+    } else if (formData.name.trim().length < 2) {
+      newErrors.name = 'El nombre debe tener al menos 2 caracteres';
+    } else if (!/^[a-zA-ZÀ-ÿ\u00f1\u00d1\s'-]+$/.test(formData.name.trim())) {
+      newErrors.name = 'El nombre solo puede contener letras, espacios y caracteres válidos';
+    } else if (/\d/.test(formData.name.trim())) {
+      newErrors.name = 'El nombre no puede contener números';
+    } else if (formData.name.trim().length > 50) {
+      newErrors.name = 'El nombre no puede exceder los 50 caracteres';
+    }
+
+    // Validación de email - más estricta
+    if (!formData.email.trim()) {
+      newErrors.email = 'El email es requerido';
+    } else {
+      const emailRegex =
+        /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
+      if (!emailRegex.test(formData.email.trim())) {
+        newErrors.email = 'Ingrese un email válido (ejemplo: usuario@dominio.com)';
+      } else if (formData.email.trim().length > 254) {
+        newErrors.email = 'El email es demasiado largo';
       }
-    }, [mode]);
-
-    const getCompletedFields = useMemo(() =>
-      getRequiredFields().filter(field => formData[field.key]?.trim()),
-    [formData, getRequiredFields]);
-
-    const getPendingFields = useMemo(() =>
-      getRequiredFields().filter(field => !formData[field.key]?.trim()),
-    [formData, getRequiredFields]);
-
-    const isFormComplete = useMemo(() =>
-      getPendingFields.length === 0,
-    [getPendingFields]);    // Validación estricta con reglas específicas
-    const validateForm = useCallback(() => {
-      const newErrors = {};
-
-      // Validación de nombre - solo letras, espacios, acentos y caracteres especiales del español
-      if (!formData.name.trim()) {
-        newErrors.name = 'El nombre es requerido';
-      } else if (formData.name.trim().length < 2) {
-        newErrors.name = 'El nombre debe tener al menos 2 caracteres';
-      } else if (!/^[a-zA-ZÀ-ÿ\u00f1\u00d1\s'-]+$/.test(formData.name.trim())) {
-        newErrors.name = 'El nombre solo puede contener letras, espacios y caracteres válidos';
-      } else if (/\d/.test(formData.name.trim())) {
-        newErrors.name = 'El nombre no puede contener números';
-      } else if (formData.name.trim().length > 50) {
-        newErrors.name = 'El nombre no puede exceder los 50 caracteres';
+    } // Validación de teléfono - solo números y formatos válidos
+    if (formData.phone && formData.phone.trim()) {
+      const phoneClean = formData.phone.replace(/[\s\-()+ ]/g, '');
+      if (!/^\d+$/.test(phoneClean)) {
+        newErrors.phone = 'El teléfono solo puede contener números';
+      } else if (phoneClean.length < 10) {
+        newErrors.phone = 'El teléfono debe tener al menos 10 dígitos';
+      } else if (phoneClean.length > 15) {
+        newErrors.phone = 'El teléfono no puede tener más de 15 dígitos';
+      } else if (!/^[0-9\s\-()+ ]+$/.test(formData.phone.trim())) {
+        newErrors.phone = 'Formato de teléfono inválido';
       }
+    }
 
-      // Validación de email - más estricta
-      if (!formData.email.trim()) {
-        newErrors.email = 'El email es requerido';
-      } else {
-        const emailRegex =
-          /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
-        if (!emailRegex.test(formData.email.trim())) {
-          newErrors.email = 'Ingrese un email válido (ejemplo: usuario@dominio.com)';
-        } else if (formData.email.trim().length > 254) {
-          newErrors.email = 'El email es demasiado largo';
-        }
-      } // Validación de teléfono - solo números y formatos válidos
-      if (formData.phone && formData.phone.trim()) {
-        const phoneClean = formData.phone.replace(/[\s\-()+ ]/g, '');
-        if (!/^\d+$/.test(phoneClean)) {
-          newErrors.phone = 'El teléfono solo puede contener números';
-        } else if (phoneClean.length < 10) {
-          newErrors.phone = 'El teléfono debe tener al menos 10 dígitos';
-        } else if (phoneClean.length > 15) {
-          newErrors.phone = 'El teléfono no puede tener más de 15 dígitos';
-        } else if (!/^[0-9\s\-()+ ]+$/.test(formData.phone.trim())) {
-          newErrors.phone = 'Formato de teléfono inválido';
-        }
+    if (mode === 'contact' && !formData.message.trim()) {
+      newErrors.message = 'El mensaje es requerido';
+    }
+
+    if (mode === 'quote') {
+      if (!formData.projectType) {
+        newErrors.projectType = 'El tipo de proyecto es requerido';
       }
-
-      if (mode === 'contact' && !formData.message.trim()) {
-        newErrors.message = 'El mensaje es requerido';
+      if (!formData.projectDescription.trim()) {
+        newErrors.projectDescription = 'La descripción del proyecto es requerida';
       }
+    }
 
-      if (mode === 'quote') {
-        if (!formData.projectType) {
-          newErrors.projectType = 'El tipo de proyecto es requerido';
-        }
-        if (!formData.projectDescription.trim()) {
-          newErrors.projectDescription = 'La descripción del proyecto es requerida';
-        }
+    if (mode === 'consultation') {
+      if (!formData.consultationType) {
+        newErrors.consultationType = 'El tipo de consulta es requerido';
       }
-
-      if (mode === 'consultation') {
-        if (!formData.consultationType) {
-          newErrors.consultationType = 'El tipo de consulta es requerido';
-        }
-        if (!formData.topics.trim()) {
-          newErrors.topics = 'Los temas a tratar son requeridos';
-        }
+      if (!formData.topics.trim()) {
+        newErrors.topics = 'Los temas a tratar son requeridos';
       }
+    }
 
-      setErrors(newErrors);
-      return Object.keys(newErrors).length === 0;
-    }, [formData, mode]);    // Manejar cambios en el formulario con validación en tiempo real
-    /** @type {React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>} */
-    const handleChange = useCallback((e) => {
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  }, [formData, mode]); // Manejar cambios en el formulario con validación en tiempo real
+  /** @type {React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>} */
+  const handleChange = useCallback(
+    e => {
       const { name, value } = e.target;
       setFormData(prev => ({
         ...prev,
-        [name]: value
+        [name]: value,
       }));
 
       if (errors[name]) {
         setErrors(prev => ({
           ...prev,
-          [name]: ''
+          [name]: '',
         }));
       }
-    }, [errors]);
+    },
+    [errors]
+  );
 
-    /** @type {React.FormEventHandler<HTMLFormElement>} */
-    const handleSubmit = async (e) => {
-      e.preventDefault();
-      if (!validateForm()) {
-        return;
-      }
-      setIsSubmitting(true);
-      try {
-        const result = await sendUnifiedEmail(formData, mode);
-        if (result && result.success) {
-          setShowSuccessModal(true);
-          setFormData({
-            name: '',
-            email: '',
-            phone: '',
-            company: '',
-            message: '',
-            city: '',
-            clientType: '',
-            projectType: '',
-            projectDescription: '',
-            additionalRequirements: '',
-            consultationType: '',
-            preferredDate: '',
-            preferredTime: '',
-            topics: '',
-            meetingType: 'video-call',
-          });
+  /** @type {React.FormEventHandler<HTMLFormElement>} */
+  const handleSubmit = async e => {
+    e.preventDefault();
+    if (!validateForm()) {
+      return;
+    }
+    setIsSubmitting(true);
+    try {
+      const result = await sendUnifiedEmail(formData, mode);
+      if (result && result.success) {
+        setShowSuccessModal(true);
+        setFormData({
+          name: '',
+          email: '',
+          phone: '',
+          company: '',
+          message: '',
+          city: '',
+          clientType: '',
+          projectType: '',
+          projectDescription: '',
+          additionalRequirements: '',
+          consultationType: '',
+          preferredDate: '',
+          preferredTime: '',
+          topics: '',
+          meetingType: 'video-call',
+        });
 
-          if (onClose && typeof onClose === 'function') {
-            setTimeout(onClose, 1500);
-          }
-        } else {
-          const errorMsg = (result && result.error) || 'Ocurrió un error inesperado';
-          setErrorMessage(errorMsg);
-          setShowErrorModal(true);
+        if (onClose && typeof onClose === 'function') {
+          setTimeout(onClose, 1500);
         }
-      } catch (error) {
-        setErrorMessage('Error de conexión. Por favor, intenta nuevamente.');
+      } else {
+        const errorMsg = (result && result.error) || 'Ocurrió un error inesperado';
+        setErrorMessage(errorMsg);
         setShowErrorModal(true);
-      } finally {
-        setIsSubmitting(false);
       }
-    };    // Renderizar campo con diseño profesional mejorado y validaciones estrictas
-    const renderField = useCallback(
-      /**
-       * @param {string} name
-       * @param {string} label
-       * @param {'text' | 'email' | 'tel' | 'textarea' | 'select' | 'date' | 'time'} [type='text']
-       * @param {boolean} [required=false]
-       * @param {Array} [options=[]]
-       * @param {number} [maxLength]
-       */
-      (name, label, type = 'text', required = false, options = [], maxLength) => {
-        const fieldId = `field-${name}-${type}`;
-        // @ts-ignore
-        const hasError = name in errors && errors[name];
-        // @ts-ignore
-        const getValue = () => formData[name] || '';
+    } catch {
+      setErrorMessage('Error de conexión. Por favor, intenta nuevamente.');
+      setShowErrorModal(true);
+    } finally {
+      setIsSubmitting(false);
+    }
+  }; // Renderizar campo con diseño profesional mejorado y validaciones estrictas
+  const renderField = useCallback(
+    /**
+     * @param {string} name
+     * @param {string} label
+     * @param {'text' | 'email' | 'tel' | 'textarea' | 'select' | 'date' | 'time'} [type='text']
+     * @param {boolean} [required=false]
+     * @param {Array} [options=[]]
+     * @param {number} [maxLength]
+     */
+    (name, label, type = 'text', required = false, options = [], maxLength) => {
+      const fieldId = `field-${name}-${type}`;
+      // @ts-ignore
+      const hasError = name in errors && errors[name];
+      // @ts-ignore
+      const getValue = () => formData[name] || '';
 
-        return (
-          <div className="mb-4 relative">
-            <label htmlFor={fieldId} className="block text-sm font-medium text-gray-300 mb-1">
-              {label}
-              {required && (
-                <span className="text-red-500 ml-1" aria-label="required">
-                  *
-                </span>
-              )}
-            </label>
-            <div className="relative">
-              {type === 'textarea' ? (
-                <textarea
-                  id={fieldId}
-                  name={name}
-                  value={getValue()}
-                  onChange={handleChange}
-                  className={`w-full px-3 py-2 bg-gray-800 border ${
-                    hasError ? 'border-red-500' : 'border-gray-600 focus:border-blue-500'
-                  } rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-colors`}
-                  rows={4}
-                  maxLength={maxLength || 1000}
-                  aria-invalid={hasError ? 'true' : 'false'}
-                  aria-describedby={hasError ? `${fieldId}-error` : undefined}
-                />
-              ) : type === 'select' ? (
-                <select
-                  id={fieldId}
-                  name={name}
-                  value={getValue()}
-                  onChange={handleChange}
-                  className={`w-full px-3 py-2 bg-gray-800 border ${
-                    hasError ? 'border-red-500' : 'border-gray-600 focus:border-blue-500'
-                  } rounded-lg text-white appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-colors`}
-                  aria-invalid={hasError ? 'true' : 'false'}
-                  aria-describedby={hasError ? `${fieldId}-error` : undefined}
-                >
-                  <option value="" disabled>
-                    Selecciona una opción
+      return (
+        <div className="mb-4 relative">
+          <label htmlFor={fieldId} className="block text-sm font-medium text-gray-300 mb-1">
+            {label}
+            {required && (
+              <span className="text-red-500 ml-1" aria-label="required">
+                *
+              </span>
+            )}
+          </label>
+          <div className="relative">
+            {type === 'textarea' ? (
+              <textarea
+                id={fieldId}
+                name={name}
+                value={getValue()}
+                onChange={handleChange}
+                className={`w-full px-3 py-2 bg-gray-800 border ${
+                  hasError ? 'border-red-500' : 'border-gray-600 focus:border-blue-500'
+                } rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-colors`}
+                rows={4}
+                maxLength={maxLength || 1000}
+                aria-invalid={hasError ? 'true' : 'false'}
+                aria-describedby={hasError ? `${fieldId}-error` : undefined}
+              />
+            ) : type === 'select' ? (
+              <select
+                id={fieldId}
+                name={name}
+                value={getValue()}
+                onChange={handleChange}
+                className={`w-full px-3 py-2 bg-gray-800 border ${
+                  hasError ? 'border-red-500' : 'border-gray-600 focus:border-blue-500'
+                } rounded-lg text-white appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-colors`}
+                aria-invalid={hasError ? 'true' : 'false'}
+                aria-describedby={hasError ? `${fieldId}-error` : undefined}
+              >
+                <option value="" disabled>
+                  Selecciona una opción
+                </option>
+                {options.map(option => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
                   </option>
-                  {options.map(option => (
-                    <option key={option.value} value={option.value}>
-                      {option.label}
-                    </option>
-                  ))}
-                </select>
-              ) : (
-                <input
-                  id={fieldId}
-                  name={name}
-                  type={type}
-                  value={getValue()}
-                  onChange={handleChange}
-                  className={`w-full px-3 py-2 bg-gray-800 border ${
-                    hasError ? 'border-red-500' : 'border-gray-600 focus:border-blue-500'
-                  } rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-colors`}
-                  maxLength={maxLength}
-                  aria-invalid={hasError ? 'true' : 'false'}
-                  aria-describedby={hasError ? `${fieldId}-error` : undefined}
-                />
-              )}
-              {hasError && (
-                <div
-                  id={`${fieldId}-error`}
-                  className="absolute left-0 -bottom-5 text-xs text-red-500"
+                ))}
+              </select>
+            ) : (
+              <input
+                id={fieldId}
+                name={name}
+                type={type}
+                value={getValue()}
+                onChange={handleChange}
+                className={`w-full px-3 py-2 bg-gray-800 border ${
+                  hasError ? 'border-red-500' : 'border-gray-600 focus:border-blue-500'
+                } rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-colors`}
+                maxLength={maxLength}
+                aria-invalid={hasError ? 'true' : 'false'}
+                aria-describedby={hasError ? `${fieldId}-error` : undefined}
+              />
+            )}
+            {hasError && (
+              <div
+                id={`${fieldId}-error`}
+                className="absolute left-0 -bottom-5 text-xs text-red-500"
+              >
+                {/* @ts-ignore */}
+                {errors[name]}
+              </div>
+            )}
+          </div>
+        </div>
+      );
+    },
+    [formData, errors, handleChange]
+  );
+  const titles = {
+    contact: 'Formulario de información y contacto',
+    quote: 'Detalles del Proyecto',
+    consultation: 'Agenda tu Consulta',
+  };
+  return (
+    <div className={`relative ${className}`}>
+      {/* Modales */}
+      {showSuccessModal && <SuccessModal type={mode} onClose={() => setShowSuccessModal(false)} />}
+      {showErrorModal && (
+        <ErrorModal error={errorMessage} onClose={() => setShowErrorModal(false)} />
+      )}
+
+      {/* ...existing code... */}
+      <div className="mb-8">
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center space-x-3">
+            <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
+              {mode === 'contact' && (
+                <svg
+                  className="w-6 h-6 text-white"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
                 >
-                  {/* @ts-ignore */}
-                  {errors[name]}
-                </div>
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
+                  ></path>
+                </svg>
               )}
+              {mode === 'quote' && (
+                <svg
+                  className="w-6 h-6 text-white"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                  ></path>
+                </svg>
+              )}
+              {mode === 'consultation' && (
+                <svg
+                  className="w-6 h-6 text-white"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M8 7V3a2 2 0 012-2h4a2 2 0 012 2v4m-6 0V4m6 3V4m-6 0h6m6 0v13a2 2 0 01-2 2H6a2 2 0 01-2-2V7h16z"
+                  ></path>
+                </svg>
+              )}
+            </div>
+            <div>
+              {/* @ts-ignore */}
+              <h2 className="text-2xl font-bold text-white">{titles[mode]}</h2>
+              <p className="text-gray-400 text-sm">
+                {mode === 'contact' && 'Completa el formulario y te responderemos pronto'}
+                {mode === 'quote' &&
+                  'Proporciona detalles de tu proyecto para una propuesta personalizada'}
+                {mode === 'consultation' && 'Programa una consulta gratuita con nuestros expertos'}
+              </p>
             </div>
           </div>
-        );
-      },
-      [formData, errors, handleChange]
-    );
-    const titles = {
-      contact: 'Formulario de información y contacto',
-      quote: 'Detalles del Proyecto',
-      consultation: 'Agenda tu Consulta',
-    };
-    return (
-      <div className={`relative ${className}`}>
-        {/* Modales */}
-        {showSuccessModal && (
-          <SuccessModal type={mode} onClose={() => setShowSuccessModal(false)} />
-        )}
-        {showErrorModal && (
-          <ErrorModal error={errorMessage} onClose={() => setShowErrorModal(false)} />
-        )}
 
-        {/* ...existing code... */}
-        <div className="mb-8">
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center space-x-3">
-              <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
-                {mode === 'contact' && (
-                  <svg
-                    className="w-6 h-6 text-white"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
-                    ></path>
-                  </svg>
-                )}
-                {mode === 'quote' && (
-                  <svg
-                    className="w-6 h-6 text-white"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                    ></path>
-                  </svg>
-                )}
-                {mode === 'consultation' && (
-                  <svg
-                    className="w-6 h-6 text-white"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M8 7V3a2 2 0 012-2h4a2 2 0 012 2v4m-6 0V4m6 3V4m-6 0h6m6 0v13a2 2 0 01-2 2H6a2 2 0 01-2-2V7h16z"
-                    ></path>
-                  </svg>
-                )}
-              </div>
-              <div>
-                {/* @ts-ignore */}
-                <h2 className="text-2xl font-bold text-white">{titles[mode]}</h2>
-                <p className="text-gray-400 text-sm">
-                  {mode === 'contact' && 'Completa el formulario y te responderemos pronto'}
-                  {mode === 'quote' &&
-                    'Proporciona detalles de tu proyecto para una propuesta personalizada'}
-                  {mode === 'consultation' &&
-                    'Programa una consulta gratuita con nuestros expertos'}
-                </p>
-              </div>
-            </div>
+          {/* Badge de modo */}
+          <div className="px-3 py-1 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-full border border-blue-500/30">
+            <span className="text-blue-400 text-xs font-semibold uppercase tracking-wider">
+              {mode === 'contact' && 'Contacto'}
+              {mode === 'quote' && 'Propuesta'}
+              {mode === 'consultation' && 'Consulta'}
+            </span>
+          </div>
+        </div>{' '}
+        {/* Barra de progreso visual */}
+        <div className="w-full h-1 bg-gray-700 rounded-full overflow-hidden">
+          <div className="h-full bg-gradient-to-r from-blue-500 to-purple-600 rounded-full animate-pulse"></div>
+        </div>
+      </div>
 
-            {/* Badge de modo */}
-            <div className="px-3 py-1 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-full border border-blue-500/30">
-              <span className="text-blue-400 text-xs font-semibold uppercase tracking-wider">
-                {mode === 'contact' && 'Contacto'}
-                {mode === 'quote' && 'Propuesta'}
-                {mode === 'consultation' && 'Consulta'}
-              </span>
+      {/* Componente de Verificación Dinámica */}
+      <div className="mb-8 p-6 bg-gradient-to-br from-gray-900/80 to-gray-800/80 backdrop-blur-sm border border-gray-700/50 rounded-2xl shadow-xl">
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center space-x-3">
+            <div className="w-8 h-8 bg-gradient-to-br from-green-500 to-emerald-600 rounded-lg flex items-center justify-center">
+              <svg
+                className="w-4 h-4 text-white"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                ></path>
+              </svg>
             </div>
-          </div>{' '}
-          {/* Barra de progreso visual */}
-          <div className="w-full h-1 bg-gray-700 rounded-full overflow-hidden">
-            <div className="h-full bg-gradient-to-r from-blue-500 to-purple-600 rounded-full animate-pulse"></div>
+            <h3 className="text-lg font-semibold text-white">Estado del Formulario</h3>
+          </div>
+
+          <div className="flex items-center space-x-2">
+            <div
+              className={`w-3 h-3 rounded-full ${
+                isFormComplete ? 'bg-green-500 animate-pulse' : 'bg-orange-500'
+              }`}
+            ></div>
+            <span
+              className={`text-sm font-medium ${
+                isFormComplete ? 'text-green-400' : 'text-orange-400'
+              }`}
+            >
+              {isFormComplete ? 'Listo para enviar' : 'Campos pendientes'}
+            </span>
           </div>
         </div>
 
-        {/* Componente de Verificación Dinámica */}
-        <div className="mb-8 p-6 bg-gradient-to-br from-gray-900/80 to-gray-800/80 backdrop-blur-sm border border-gray-700/50 rounded-2xl shadow-xl">
+        {/* Progreso visual */}
+        <div className="mb-4">
+          <div className="flex justify-between items-center mb-2">
+            <span className="text-sm text-gray-400">Progreso</span>
+            <span className="text-sm font-medium text-blue-400">
+              {getCompletedFields.length} / {getRequiredFields().length}
+            </span>
+          </div>
+          <div className="w-full h-2 bg-gray-700 rounded-full overflow-hidden">
+            <div
+              className="h-full bg-gradient-to-r from-blue-500 to-green-500 rounded-full transition-all duration-500 ease-out"
+              style={{
+                width: `${(getCompletedFields.length / getRequiredFields().length) * 100}%`,
+              }}
+            ></div>
+          </div>
+        </div>
+
+        {/* Lista de campos pendientes */}
+        {getPendingFields.length > 0 && (
+          <div className="space-y-2">
+            <h4 className="text-sm font-medium text-orange-400 flex items-center">
+              <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"
+                ></path>
+              </svg>
+              Campos obligatorios pendientes:
+            </h4>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+              {getPendingFields.map(field => (
+                <div
+                  key={field.key}
+                  className="flex items-center space-x-2 p-2 bg-orange-500/10 border border-orange-500/20 rounded-lg"
+                >
+                  <div className="w-2 h-2 bg-orange-500 rounded-full"></div>
+                  <span className="text-sm text-orange-300">{field.label}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Mensaje de éxito cuando está completo */}
+        {isFormComplete && (
+          <div className="flex items-center space-x-3 p-3 bg-green-500/10 border border-green-500/20 rounded-lg">
+            <div className="w-5 h-5 bg-green-500 rounded-full flex items-center justify-center flex-shrink-0">
+              <svg
+                className="w-3 h-3 text-white"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="3"
+                  d="M5 13l4 4L19 7"
+                ></path>
+              </svg>
+            </div>
+            <div>
+              <p className="text-sm font-medium text-green-400">¡Formulario completado!</p>
+              <p className="text-xs text-green-300">
+                Todos los campos obligatorios han sido llenados correctamente.
+              </p>
+            </div>
+          </div>
+        )}
+      </div>
+
+      <form onSubmit={handleSubmit} className="space-y-6">
+        {/* Para el modo contact, renderizar según la sección */}
+        {mode === 'contact' && section === 'basic' && (
+          <div className="space-y-4">
+            <div className="space-y-4">
+              {renderField('name', 'Nombre completo', 'text', true, [], 50)}
+              {renderField('email', 'Email', 'email', true, [], 254)}
+              {renderField('phone', 'Teléfono', 'tel', false, [], 20)}
+              {renderField('company', 'Empresa/Organización', 'text', false, [], 100)}
+            </div>
+          </div>
+        )}
+
+        {mode === 'contact' && section === 'details' && (
+          <div className="space-y-4">
+            {/* Detalles del proyecto */}
+            <div className="space-y-4">
+              {renderField('projectType', 'Tipo de proyecto', 'select', true, PROJECT_TYPES)}
+              {renderField('message', 'Describe tu proyecto', 'textarea', true, [], 1000)}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {renderField('city', 'Ciudad', 'text', false, [], 50)}
+                {renderField('clientType', 'Tipo de cliente', 'select', false, CLIENT_TYPES)}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Para el modo contact sin sección (formulario completo original) */}
+        {mode === 'contact' && !section && (
+          <div className="space-y-6">
+            {/* Sección de información personal */}
+            <div className="bg-gradient-to-br from-gray-900/80 to-gray-800/80 backdrop-blur-sm p-6 rounded-2xl border border-gray-700/50 shadow-xl">
+              <h3 className="text-lg font-semibold text-white mb-4 flex items-center">
+                <svg
+                  className="w-5 h-5 mr-2 text-blue-400"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                  ></path>
+                </svg>
+                Información Personal
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {renderField('name', 'Nombre completo', 'text', true, [], 50)}
+                {renderField('email', 'Email', 'email', true, [], 254)}
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {renderField('phone', 'Teléfono', 'tel', false, [], 20)}
+                {renderField('company', 'Empresa/Organización', 'text', false, [], 100)}
+              </div>
+            </div>
+
+            {/* Sección de mensaje */}
+            <div className="bg-gradient-to-br from-gray-900/80 to-gray-800/80 backdrop-blur-sm p-6 rounded-2xl border border-gray-700/50 shadow-xl">
+              <h3 className="text-lg font-semibold text-white mb-4 flex items-center">
+                <svg
+                  className="w-5 h-5 mr-2 text-green-400"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
+                  ></path>
+                </svg>
+                Tu Mensaje
+              </h3>
+              {renderField('message', 'Mensaje', 'textarea', true, [], 1000)}
+            </div>
+          </div>
+        )}
+
+        {mode === 'quote' && (
+          <div className="space-y-6">
+            {/* Sección de información personal */}
+            <div className="bg-gradient-to-br from-gray-900/80 to-gray-800/80 backdrop-blur-sm p-6 rounded-2xl border border-gray-700/50 shadow-xl">
+              <h3 className="text-lg font-semibold text-white mb-4 flex items-center">
+                <svg
+                  className="w-5 h-5 mr-2 text-blue-400"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                  ></path>
+                </svg>
+                Información Personal
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {renderField('name', 'Nombre completo', 'text', true, [], 50)}
+                {renderField('email', 'Email', 'email', true, [], 254)}
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {renderField('phone', 'Teléfono', 'tel', false, [], 20)}
+                {renderField('company', 'Empresa/Organización', 'text', false, [], 100)}
+              </div>
+            </div>
+
+            {/* Información del proyecto */}
+            <div className="bg-gradient-to-br from-gray-900/80 to-gray-800/80 backdrop-blur-sm p-6 rounded-2xl border border-gray-700/50 shadow-xl">
+              <h3 className="text-lg font-semibold text-white mb-4 flex items-center">
+                <svg
+                  className="w-5 h-5 mr-2 text-yellow-400"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                  ></path>
+                </svg>
+                Detalles del Proyecto
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {renderField('city', 'Ciudad', 'text', false, [], 50)}
+                {renderField('clientType', 'Tipo de cliente', 'select', false, CLIENT_TYPES)}
+              </div>
+              {renderField('projectType', 'Tipo de proyecto', 'select', true, PROJECT_TYPES)}
+              {renderField(
+                'projectDescription',
+                'Descripción del proyecto',
+                'textarea',
+                true,
+                [],
+                1000
+              )}
+              {renderField(
+                'additionalRequirements',
+                'Requisitos adicionales',
+                'textarea',
+                false,
+                [],
+                1000
+              )}
+            </div>
+          </div>
+        )}
+
+        {mode === 'consultation' && (
+          <div className="space-y-6">
+            {/* Sección de información personal */}
+            <div className="bg-gradient-to-br from-gray-900/80 to-gray-800/80 backdrop-blur-sm p-6 rounded-2xl border border-gray-700/50 shadow-xl">
+              <h3 className="text-lg font-semibold text-white mb-4 flex items-center">
+                <svg
+                  className="w-5 h-5 mr-2 text-blue-400"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                  ></path>
+                </svg>
+                Información Personal
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {renderField('name', 'Nombre completo', 'text', true, [], 50)}
+                {renderField('email', 'Email', 'email', true, [], 254)}
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {renderField('phone', 'Teléfono', 'tel', false, [], 20)}
+                {renderField('company', 'Empresa/Organización', 'text', false, [], 100)}
+              </div>
+            </div>
+
+            {/* Información de la consulta */}
+            <div className="bg-gradient-to-br from-gray-900/80 to-gray-800/80 backdrop-blur-sm p-6 rounded-2xl border border-gray-700/50 shadow-xl">
+              <h3 className="text-lg font-semibold text-white mb-4 flex items-center">
+                <svg
+                  className="w-5 h-5 mr-2 text-purple-400"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M8 7V3a2 2 0 012-2h4a2 2 0 012 2v4m-6 0V4m6 3V4m-6 0h6m6 0v13a2 2 0 01-2 2H6a2 2 0 01-2-2V7h16z"
+                  ></path>
+                </svg>
+                Detalles de la Consulta
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {renderField('city', 'Ciudad', 'text', false, [], 50)}
+                {renderField('clientType', 'Tipo de cliente', 'select', false, CLIENT_TYPES)}
+              </div>
+              {renderField(
+                'consultationType',
+                'Tipo de consulta',
+                'select',
+                true,
+                CONSULTATION_TYPES
+              )}
+              {renderField('topics', 'Temas a tratar', 'textarea', true, [], 1000)}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {renderField('preferredDate', 'Fecha preferida', 'date', false, [])}
+                {renderField('preferredTime', 'Hora preferida', 'time', false, [])}
+              </div>
+
+              {/* Tipo de reunión con diseño mejorado */}
+              <div className="group mb-6">
+                <label className="flex items-center text-sm font-semibold text-gray-200 mb-3">
+                  <svg
+                    className="w-4 h-4 mr-2 text-blue-400"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"
+                    ></path>
+                  </svg>
+                  Tipo de reunión
+                </label>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  {MEETING_TYPES.map(option => (
+                    <label key={option.value} className="relative flex items-center cursor-pointer">
+                      <input
+                        type="radio"
+                        name="meetingType"
+                        value={option.value}
+                        checked={formData.meetingType === option.value}
+                        onChange={handleChange}
+                        className="sr-only"
+                      />
+                      <div
+                        className={`w-full p-4 rounded-xl border-2 transition-all duration-300 ${
+                          formData.meetingType === option.value
+                            ? 'border-blue-500 bg-blue-500/10 shadow-lg shadow-blue-500/20'
+                            : 'border-gray-600 bg-gray-800/50 hover:border-gray-500 hover:bg-gray-700/50'
+                        }`}
+                      >
+                        <div className="flex items-center justify-center flex-col space-y-2">
+                          <span className="text-2xl">{option.icon}</span>
+                          <span
+                            className={`text-sm font-medium ${
+                              formData.meetingType === option.value
+                                ? 'text-blue-400'
+                                : 'text-gray-300'
+                            }`}
+                          >
+                            {option.label}
+                          </span>
+                        </div>
+                      </div>
+                    </label>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+        {/* Sistema de seguridad */}
+        <div className="bg-gradient-to-br from-gray-900/80 to-gray-800/80 backdrop-blur-sm p-6 rounded-2xl border border-gray-700/50 shadow-xl">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center space-x-3">
               <div className="w-8 h-8 bg-gradient-to-br from-green-500 to-emerald-600 rounded-lg flex items-center justify-center">
@@ -545,523 +937,132 @@ const UnifiedFormComponent = ({ mode = 'contact', section = null, onClose = null
                     strokeLinecap="round"
                     strokeLinejoin="round"
                     strokeWidth="2"
-                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                  ></path>
+                    d="M9 12l2 2 4-4m5.5-2A8.5 8.5 0 1119 12a8.5 8.5 0 01-8.5-8.5z"
+                  />
                 </svg>
               </div>
-              <h3 className="text-lg font-semibold text-white">Estado del Formulario</h3>
-            </div>
-
-            <div className="flex items-center space-x-2">
-              <div
-                className={`w-3 h-3 rounded-full ${
-                  isFormComplete ? 'bg-green-500 animate-pulse' : 'bg-orange-500'
-                }`}
-              ></div>
-              <span
-                className={`text-sm font-medium ${
-                  isFormComplete ? 'text-green-400' : 'text-orange-400'
-                }`}
-              >
-                {isFormComplete ? 'Listo para enviar' : 'Campos pendientes'}
-              </span>
+              <h3 className="text-lg font-semibold text-white">Verificación de Seguridad</h3>
             </div>
           </div>
 
-          {/* Progreso visual */}
-          <div className="mb-4">
-            <div className="flex justify-between items-center mb-2">
-              <span className="text-sm text-gray-400">Progreso</span>
-              <span className="text-sm font-medium text-blue-400">
-                {getCompletedFields.length} / {getRequiredFields().length}
+          {/* Botón de envío mejorado con estado dinámico */}
+          {/* Indicador de estado antes del botón */}
+          {!isFormComplete && (
+            <div className="flex items-center space-x-2 mb-4">
+              <div className="w-4 h-4 bg-orange-500 rounded-full animate-pulse"></div>
+              <span className="text-sm text-orange-300">
+                Completa los campos obligatorios para continuar
               </span>
-            </div>
-            <div className="w-full h-2 bg-gray-700 rounded-full overflow-hidden">
-              <div
-                className="h-full bg-gradient-to-r from-blue-500 to-green-500 rounded-full transition-all duration-500 ease-out"
-                style={{
-                  width: `${(getCompletedFields.length / getRequiredFields().length) * 100}%`,
-                }}
-              ></div>
-            </div>
-          </div>
-
-          {/* Lista de campos pendientes */}
-          {getPendingFields.length > 0 && (
-            <div className="space-y-2">
-              <h4 className="text-sm font-medium text-orange-400 flex items-center">
-                <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"
-                  ></path>
-                </svg>
-                Campos obligatorios pendientes:
-              </h4>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                {getPendingFields.map(field => (
-                  <div
-                    key={field.key}
-                    className="flex items-center space-x-2 p-2 bg-orange-500/10 border border-orange-500/20 rounded-lg"
-                  >
-                    <div className="w-2 h-2 bg-orange-500 rounded-full"></div>
-                    <span className="text-sm text-orange-300">{field.label}</span>
-                  </div>
-                ))}
-              </div>
             </div>
           )}
 
-          {/* Mensaje de éxito cuando está completo */}
-          {isFormComplete && (
-            <div className="flex items-center space-x-3 p-3 bg-green-500/10 border border-green-500/20 rounded-lg">
-              <div className="w-5 h-5 bg-green-500 rounded-full flex items-center justify-center flex-shrink-0">
-                <svg
-                  className="w-3 h-3 text-white"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="3"
-                    d="M5 13l4 4L19 7"
-                  ></path>
-                </svg>
-              </div>
-              <div>
-                <p className="text-sm font-medium text-green-400">¡Formulario completado!</p>
-                <p className="text-xs text-green-300">
-                  Todos los campos obligatorios han sido llenados correctamente.
-                </p>
-              </div>
+          <button
+            type="submit"
+            disabled={isSubmitting || !isFormComplete}
+            className={`w-full relative overflow-hidden group py-4 px-8 rounded-2xl font-bold text-white transition-all duration-500 transform ${
+              isSubmitting
+                ? 'bg-gray-600 cursor-not-allowed scale-95'
+                : !isFormComplete
+                  ? 'bg-gray-700 cursor-not-allowed opacity-50'
+                  : 'bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800 hover:from-blue-700 hover:via-purple-700 hover:to-blue-900 hover:scale-105 hover:shadow-2xl hover:shadow-blue-500/25'
+            }`}
+          >
+            {/* Efecto de brillo animado solo cuando está habilitado */}
+            {!isSubmitting && isFormComplete && (
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
+            )}
+
+            <div className="relative flex items-center justify-center">
+              {isSubmitting ? (
+                <>
+                  <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-white mr-3"></div>
+                  <span>Enviando...</span>
+                </>
+              ) : !isFormComplete ? (
+                <>
+                  <svg
+                    className="w-5 h-5 mr-3 opacity-50"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"
+                    ></path>
+                  </svg>
+                  <span>Completar campos obligatorios</span>
+                </>
+              ) : (
+                <>
+                  <svg
+                    className="w-5 h-5 mr-3 transform group-hover:translate-x-1 transition-transform duration-300"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
+                    ></path>
+                  </svg>
+                  <span>
+                    {mode === 'contact' && 'Enviar Mensaje'}
+                    {mode === 'quote' && 'Solicitar Propuesta'}
+                    {mode === 'consultation' && 'Programar Consulta'}
+                  </span>
+                </>
+              )}
             </div>
+          </button>
+
+          {/* Información adicional */}
+          <div className="mt-4 p-4 bg-gradient-to-r from-blue-500/10 to-purple-500/10 rounded-xl border border-blue-500/20">
+            <div className="flex items-center text-sm text-gray-300">
+              <svg
+                className="w-4 h-4 mr-2 text-green-400 flex-shrink-0"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                ></path>
+              </svg>
+              <span>
+                Respuesta garantizada en 24 horas • Consulta inicial gratuita • Datos 100% seguros
+              </span>
+            </div>
+          </div>
+
+          {/* Botón de cerrar si es modal */}
+          {onClose && (
+            <button
+              type="button"
+              onClick={onClose}
+              className="w-full mt-4 py-3 px-4 text-gray-400 hover:text-white transition-colors rounded-xl border border-gray-600 hover:border-gray-500 hover:bg-gray-800/50"
+            >
+              Cancelar
+            </button>
           )}
         </div>
-
-        <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Para el modo contact, renderizar según la sección */}
-          {mode === 'contact' && section === 'basic' && (
-            <div className="space-y-4">
-              <div className="space-y-4">
-                {renderField('name', 'Nombre completo', 'text', true, [], 50)}
-                {renderField('email', 'Email', 'email', true, [], 254)}
-                {renderField('phone', 'Teléfono', 'tel', false, [], 20)}
-                {renderField('company', 'Empresa/Organización', 'text', false, [], 100)}
-              </div>
-            </div>
-          )}
-
-          {mode === 'contact' && section === 'details' && (
-            <div className="space-y-4">
-              {/* Detalles del proyecto */}
-              <div className="space-y-4">
-                {renderField('projectType', 'Tipo de proyecto', 'select', true, PROJECT_TYPES)}
-                {renderField('message', 'Describe tu proyecto', 'textarea', true, [], 1000)}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {renderField('city', 'Ciudad', 'text', false, [], 50)}
-                  {renderField('clientType', 'Tipo de cliente', 'select', false, CLIENT_TYPES)}
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* Para el modo contact sin sección (formulario completo original) */}
-          {mode === 'contact' && !section && (
-            <div className="space-y-6">
-              {/* Sección de información personal */}
-              <div className="bg-gradient-to-br from-gray-900/80 to-gray-800/80 backdrop-blur-sm p-6 rounded-2xl border border-gray-700/50 shadow-xl">
-                <h3 className="text-lg font-semibold text-white mb-4 flex items-center">
-                  <svg
-                    className="w-5 h-5 mr-2 text-blue-400"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-                    ></path>
-                  </svg>
-                  Información Personal
-                </h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {renderField('name', 'Nombre completo', 'text', true, [], 50)}
-                  {renderField('email', 'Email', 'email', true, [], 254)}
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {renderField('phone', 'Teléfono', 'tel', false, [], 20)}
-                  {renderField('company', 'Empresa/Organización', 'text', false, [], 100)}
-                </div>
-              </div>
-
-              {/* Sección de mensaje */}
-              <div className="bg-gradient-to-br from-gray-900/80 to-gray-800/80 backdrop-blur-sm p-6 rounded-2xl border border-gray-700/50 shadow-xl">
-                <h3 className="text-lg font-semibold text-white mb-4 flex items-center">
-                  <svg
-                    className="w-5 h-5 mr-2 text-green-400"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
-                    ></path>
-                  </svg>
-                  Tu Mensaje
-                </h3>
-                {renderField('message', 'Mensaje', 'textarea', true, [], 1000)}
-              </div>
-            </div>
-          )}
-
-          {mode === 'quote' && (
-            <div className="space-y-6">
-              {/* Sección de información personal */}
-              <div className="bg-gradient-to-br from-gray-900/80 to-gray-800/80 backdrop-blur-sm p-6 rounded-2xl border border-gray-700/50 shadow-xl">
-                <h3 className="text-lg font-semibold text-white mb-4 flex items-center">
-                  <svg
-                    className="w-5 h-5 mr-2 text-blue-400"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-                    ></path>
-                  </svg>
-                  Información Personal
-                </h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {renderField('name', 'Nombre completo', 'text', true, [], 50)}
-                  {renderField('email', 'Email', 'email', true, [], 254)}
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {renderField('phone', 'Teléfono', 'tel', false, [], 20)}
-                  {renderField('company', 'Empresa/Organización', 'text', false, [], 100)}
-                </div>
-              </div>
-
-              {/* Información del proyecto */}
-              <div className="bg-gradient-to-br from-gray-900/80 to-gray-800/80 backdrop-blur-sm p-6 rounded-2xl border border-gray-700/50 shadow-xl">
-                <h3 className="text-lg font-semibold text-white mb-4 flex items-center">
-                  <svg
-                    className="w-5 h-5 mr-2 text-yellow-400"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                    ></path>
-                  </svg>
-                  Detalles del Proyecto
-                </h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {renderField('city', 'Ciudad', 'text', false, [], 50)}
-                  {renderField('clientType', 'Tipo de cliente', 'select', false, CLIENT_TYPES)}
-                </div>
-                {renderField('projectType', 'Tipo de proyecto', 'select', true, PROJECT_TYPES)}
-                {renderField(
-                  'projectDescription',
-                  'Descripción del proyecto',
-                  'textarea',
-                  true,
-                  [],
-                  1000
-                )}
-                {renderField(
-                  'additionalRequirements',
-                  'Requisitos adicionales',
-                  'textarea',
-                  false,
-                  [],
-                  1000
-                )}
-              </div>
-            </div>
-          )}
-
-          {mode === 'consultation' && (
-            <div className="space-y-6">
-              {/* Sección de información personal */}
-              <div className="bg-gradient-to-br from-gray-900/80 to-gray-800/80 backdrop-blur-sm p-6 rounded-2xl border border-gray-700/50 shadow-xl">
-                <h3 className="text-lg font-semibold text-white mb-4 flex items-center">
-                  <svg
-                    className="w-5 h-5 mr-2 text-blue-400"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-                    ></path>
-                  </svg>
-                  Información Personal
-                </h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {renderField('name', 'Nombre completo', 'text', true, [], 50)}
-                  {renderField('email', 'Email', 'email', true, [], 254)}
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {renderField('phone', 'Teléfono', 'tel', false, [], 20)}
-                  {renderField('company', 'Empresa/Organización', 'text', false, [], 100)}
-                </div>
-              </div>
-
-              {/* Información de la consulta */}
-              <div className="bg-gradient-to-br from-gray-900/80 to-gray-800/80 backdrop-blur-sm p-6 rounded-2xl border border-gray-700/50 shadow-xl">
-                <h3 className="text-lg font-semibold text-white mb-4 flex items-center">
-                  <svg
-                    className="w-5 h-5 mr-2 text-purple-400"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M8 7V3a2 2 0 012-2h4a2 2 0 012 2v4m-6 0V4m6 3V4m-6 0h6m6 0v13a2 2 0 01-2 2H6a2 2 0 01-2-2V7h16z"
-                    ></path>
-                  </svg>
-                  Detalles de la Consulta
-                </h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {renderField('city', 'Ciudad', 'text', false, [], 50)}
-                  {renderField('clientType', 'Tipo de cliente', 'select', false, CLIENT_TYPES)}
-                </div>
-                {renderField(
-                  'consultationType',
-                  'Tipo de consulta',
-                  'select',
-                  true,
-                  CONSULTATION_TYPES
-                )}
-                {renderField('topics', 'Temas a tratar', 'textarea', true, [], 1000)}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {renderField('preferredDate', 'Fecha preferida', 'date', false, [])}
-                  {renderField('preferredTime', 'Hora preferida', 'time', false, [])}
-                </div>
-
-                {/* Tipo de reunión con diseño mejorado */}
-                <div className="group mb-6">
-                  <label className="flex items-center text-sm font-semibold text-gray-200 mb-3">
-                    <svg
-                      className="w-4 h-4 mr-2 text-blue-400"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"
-                      ></path>
-                    </svg>
-                    Tipo de reunión
-                  </label>
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    {MEETING_TYPES.map(option => (
-                      <label
-                        key={option.value}
-                        className="relative flex items-center cursor-pointer"
-                      >
-                        <input
-                          type="radio"
-                          name="meetingType"
-                          value={option.value}
-                          checked={formData.meetingType === option.value}
-                          onChange={handleChange}
-                          className="sr-only"
-                        />
-                        <div
-                          className={`w-full p-4 rounded-xl border-2 transition-all duration-300 ${
-                            formData.meetingType === option.value
-                              ? 'border-blue-500 bg-blue-500/10 shadow-lg shadow-blue-500/20'
-                              : 'border-gray-600 bg-gray-800/50 hover:border-gray-500 hover:bg-gray-700/50'
-                          }`}
-                        >
-                          <div className="flex items-center justify-center flex-col space-y-2">
-                            <span className="text-2xl">{option.icon}</span>
-                            <span
-                              className={`text-sm font-medium ${
-                                formData.meetingType === option.value
-                                  ? 'text-blue-400'
-                                  : 'text-gray-300'
-                              }`}
-                            >
-                              {option.label}
-                            </span>
-                          </div>
-                        </div>
-                      </label>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-          {/* Sistema de seguridad */}
-          <div className="bg-gradient-to-br from-gray-900/80 to-gray-800/80 backdrop-blur-sm p-6 rounded-2xl border border-gray-700/50 shadow-xl">
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center space-x-3">
-                <div className="w-8 h-8 bg-gradient-to-br from-green-500 to-emerald-600 rounded-lg flex items-center justify-center">
-                  <svg
-                    className="w-4 h-4 text-white"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M9 12l2 2 4-4m5.5-2A8.5 8.5 0 1119 12a8.5 8.5 0 01-8.5-8.5z"
-                    />
-                  </svg>
-                </div>
-                <h3 className="text-lg font-semibold text-white">Verificación de Seguridad</h3>
-              </div>
-            </div>
-
-            {/* Botón de envío mejorado con estado dinámico */}
-            {/* Indicador de estado antes del botón */}
-            {!isFormComplete && (
-              <div className="flex items-center space-x-2 mb-4">
-                <div className="w-4 h-4 bg-orange-500 rounded-full animate-pulse"></div>
-                <span className="text-sm text-orange-300">
-                  Completa los campos obligatorios para continuar
-                </span>
-              </div>
-            )}
-
-            <button
-              type="submit"
-              disabled={isSubmitting || !isFormComplete}
-              className={`w-full relative overflow-hidden group py-4 px-8 rounded-2xl font-bold text-white transition-all duration-500 transform ${
-                isSubmitting
-                  ? 'bg-gray-600 cursor-not-allowed scale-95'
-                  : !isFormComplete
-                    ? 'bg-gray-700 cursor-not-allowed opacity-50'
-                    : 'bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800 hover:from-blue-700 hover:via-purple-700 hover:to-blue-900 hover:scale-105 hover:shadow-2xl hover:shadow-blue-500/25'
-              }`}
-            >
-              {/* Efecto de brillo animado solo cuando está habilitado */}
-              {!isSubmitting && isFormComplete && (
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
-              )}
-
-              <div className="relative flex items-center justify-center">
-                {isSubmitting ? (
-                  <>
-                    <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-white mr-3"></div>
-                    <span>Enviando...</span>
-                  </>
-                ) : !isFormComplete ? (
-                  <>
-                    <svg
-                      className="w-5 h-5 mr-3 opacity-50"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"
-                      ></path>
-                    </svg>
-                    <span>Completar campos obligatorios</span>
-                  </>
-                ) : (
-                  <>
-                    <svg
-                      className="w-5 h-5 mr-3 transform group-hover:translate-x-1 transition-transform duration-300"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
-                      ></path>
-                    </svg>
-                    <span>
-                      {mode === 'contact' && 'Enviar Mensaje'}
-                      {mode === 'quote' && 'Solicitar Propuesta'}
-                      {mode === 'consultation' && 'Programar Consulta'}
-                    </span>
-                  </>
-                )}
-              </div>
-            </button>
-
-            {/* Información adicional */}
-            <div className="mt-4 p-4 bg-gradient-to-r from-blue-500/10 to-purple-500/10 rounded-xl border border-blue-500/20">
-              <div className="flex items-center text-sm text-gray-300">
-                <svg
-                  className="w-4 h-4 mr-2 text-green-400 flex-shrink-0"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                  ></path>
-                </svg>
-                <span>
-                  Respuesta garantizada en 24 horas • Consulta inicial gratuita • Datos 100%
-                  seguros
-                </span>
-              </div>
-            </div>
-
-            {/* Botón de cerrar si es modal */}
-            {onClose && (
-              <button
-                type="button"
-                onClick={onClose}
-                className="w-full mt-4 py-3 px-4 text-gray-400 hover:text-white transition-colors rounded-xl border border-gray-600 hover:border-gray-500 hover:bg-gray-800/50"
-              >
-                Cancelar
-              </button>
-            )}
-          </div>
-        </form>
-      </div>
-    );
-  };
+      </form>
+    </div>
+  );
+};
 
 UnifiedFormComponent.propTypes = {
   mode: PropTypes.oneOf(['contact', 'quote', 'consultation']),
   section: PropTypes.string,
   onClose: PropTypes.func,
-  className: PropTypes.string
+  className: PropTypes.string,
 };
 
 export default UnifiedFormComponent;

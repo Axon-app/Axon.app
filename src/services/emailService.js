@@ -45,7 +45,7 @@ const validateFormData = formData => {
  * @param {Object} formData - Datos del formulario
  * @returns {Promise<Object>} - Resultado simulado del envío
  */
-export const sendUnifiedEmail = async (type, formData) => {
+export const sendUnifiedEmail = (type, formData) => {
   // Validar datos básicos
   const validation = validateFormData(formData);
   if (!validation.isValid) {
@@ -82,8 +82,8 @@ export const sendUnifiedEmail = async (type, formData) => {
  * @param {Object} formData - Datos del formulario de contacto
  * @returns {Promise<Object>} - Resultado del envío
  */
-export const sendContactEmail = async formData => {
-  return await sendUnifiedEmail('contact', formData);
+export const sendContactEmail = formData => {
+  return sendUnifiedEmail('contact', formData);
 };
 
 /**
@@ -91,8 +91,8 @@ export const sendContactEmail = async formData => {
  * @param {Object} formData - Datos del formulario de propuesta
  * @returns {Promise<Object>} - Resultado del envío
  */
-export const sendQuoteRequest = async formData => {
-  return await sendUnifiedEmail('quote', formData);
+export const sendQuoteRequest = formData => {
+  return sendUnifiedEmail('quote', formData);
 };
 
 /**
@@ -100,8 +100,8 @@ export const sendQuoteRequest = async formData => {
  * @param {Object} formData - Datos del formulario de consulta
  * @returns {Promise<Object>} - Resultado del envío
  */
-export const sendConsultationRequest = async formData => {
-  return await sendUnifiedEmail('consultation', formData);
+export const sendConsultationRequest = formData => {
+  return sendUnifiedEmail('consultation', formData);
 };
 
 /**
@@ -111,7 +111,7 @@ export const sendConsultationRequest = async formData => {
  * @param {string} _serviceName - Nombre del servicio
  * @returns {Promise<Object>} - Resultado del envío
  */
-export const sendClientConfirmation = async (_clientEmail, _type, _serviceName = '') => {
+export const sendClientConfirmation = (_clientEmail, _type, _serviceName = '') => {
   // Simulación de confirmación
   return {
     success: true,

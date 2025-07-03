@@ -1,7 +1,6 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
-import { ClientsSection } from './ClientsSection';
-import { clientsData } from '../../data/clientsData';
+import ClientsSection from './ClientsSection';
 
 // Mock de los datos de clientes
 vi.mock('../../data/clientsData', () => ({

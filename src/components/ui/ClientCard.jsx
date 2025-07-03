@@ -16,9 +16,9 @@ export const ClientCard = ({ client, index }) => {
     <>
       {/* Tarjeta principal del cliente */}
       <div
-        className={`group relative glass-card rounded-2xl p-6 \
-          transition-all duration-500 hover:scale-105 \
-          animate-fade-in-up cursor-pointer transform-gpu\n          hover:animate-client-card-hover`}
+        className={
+          'group relative glass-card rounded-2xl p-6 transition-all duration-500 hover:scale-105 animate-fade-in-up cursor-pointer transform-gpu hover:animate-client-card-hover'
+        }
         style={{ animationDelay }}
         onClick={() => setShowDetails(true)}
       >

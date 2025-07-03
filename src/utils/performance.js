@@ -17,7 +17,7 @@ import ErrorBoundary from '../components/ErrorBoundary';
 export const withLazyLoading = (importCallback, LoadingComponent = null) => {
   const LazyComponent = lazy(importCallback);
 
-  return (props) => (
+  return props => (
     <ErrorBoundary>
       <Suspense fallback={LoadingComponent || <div>Loading...</div>}>
         <LazyComponent {...props} />
@@ -149,7 +149,7 @@ export const throttle = (func, limit) => {
     if (!inThrottle) {
       func.apply(this, args);
       inThrottle = true;
-      setTimeout(() => inThrottle = false, limit);
+      setTimeout(() => (inThrottle = false), limit);
     }
   };
 };
@@ -161,7 +161,7 @@ export const throttle = (func, limit) => {
  * @returns {Function} Función envuelta con medición
  */
 export const measurePerformance = (func, label = 'Function') => {
-  return async function(...args) {
+  return async function (...args) {
     const start = performance.now();
     const result = await func.apply(this, args);
     const end = performance.now();
@@ -174,7 +174,7 @@ export const measurePerformance = (func, label = 'Function') => {
  * Utilidad para precargar recursos
  * @param {string[]} urls - URLs de recursos a precargar
  */
-export const preloadResources = (urls) => {
+export const preloadResources = urls => {
   urls.forEach(url => {
     const link = document.createElement('link');
     link.rel = 'preload';
@@ -190,7 +190,7 @@ export const preloadResources = (urls) => {
  */
 export const lazyLoadImages = (selector = 'img[data-src]') => {
   if ('IntersectionObserver' in window) {
-    const imageObserver = new IntersectionObserver((entries, observer) => {
+    const imageObserver = new IntersectionObserver(entries => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
           const img = entry.target;

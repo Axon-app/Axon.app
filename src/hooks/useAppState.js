@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
-const useAppState = create(
+const _useAppState = create(
   persist(
     (set, get) => ({
       // Estado de la aplicación

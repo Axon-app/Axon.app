@@ -13,6 +13,8 @@
 
 import reactHooks from 'eslint-plugin-react-hooks';
 import reactRefresh from 'eslint-plugin-react-refresh';
+import react from 'eslint-plugin-react';
+import jsxA11y from 'eslint-plugin-jsx-a11y';
 import globals from 'globals';
 
 export default [
@@ -29,8 +31,10 @@ export default [
       },
     },
     plugins: {
+      react: react,
       'react-hooks': reactHooks,
       'react-refresh': reactRefresh,
+      'jsx-a11y': jsxA11y,
     },
     rules: {
       // Reglas de React
@@ -55,9 +59,9 @@ export default [
       'no-return-await': 'error',
       'require-await': 'error',
 
-      // Reglas de rendimiento
-      'react/memo': 'warn',
-      'react/no-array-index-key': 'warn',
+      // Reglas de React válidas
+      'react/jsx-uses-react': 'error',
+      'react/jsx-uses-vars': 'error',
 
       // Reglas de accesibilidad
       'jsx-a11y/alt-text': 'error',
