@@ -11,8 +11,9 @@
     "moduleResolution": "bundler",
     // Permite archivos .js junto a .jsx
     "allowJs": true,
-    // No verifica errores en archivos JS puros
+    // Desactiva completamente la verificación de tipos
     "checkJs": false,
+    "noImplicitAny": false,
     // Soporte para JSX moderno (React 17+)
     "jsx": "react-jsx",
     "jsxImportSource": "react",
