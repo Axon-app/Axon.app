@@ -5,114 +5,333 @@
  *
  * Este es el componente raíz de la aplicación Axon.app.
  * Maneja toda la lógica de estado global, navegación, modales y secciones.
- *
- * Funcionalidades principales:
- * - Gestión de modales (privacidad, términos, servicios, blog, etc.)
- * - Sistema de navegación y detección de secciones activas
- * - Manejo de estados de UI (menú móvil, banners, formularios)
- * - Integración de todos los componentes de la aplicación
- *
- * Estructura:
- * 1. Importaciones organizadas por categorías
- * 2. Estados de la aplicación
- * 3. Efectos y manejadores de eventos
- * 4. Funciones auxiliares
- * 5. Renderizado del JSX
  */
 
-import React, { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 // === IMPORTACIONES DE COMPONENTES ===
-// Formularios de contacto unificados
-
-// Componentes principales exportados desde index.js
 import {
-  AnimatedCounterWithProgress, // Contador animado con barra de progreso
-  BlogModal, // Modal para mostrar posts del blog
-  BlogSection, // Sección completa del blog
-  EnhancedCookiesModal, // Modal mejorado de cookies
-  EnhancedPrivacyModal, // Modal mejorado de privacidad
-  EnhancedTermsModal, // Modal mejorado de términos
-  FloatingBlogButton, // Tarjeta individual de servicio
-  ServiceDetailModal, // Modal con detalles de servicios
-  TestimonialsBanner,
+  BlogModal,
+  BlogSection,
+  EnhancedCookiesModal,
+  EnhancedPrivacyModal,
+  EnhancedTermsModal,
+  FloatingBlogButton,
+  ServiceDetailModal,
+  TechCarousel,
 } from './components/index';
 
-// Modales unificados para formularios
-import {
-  ConsultationModal, // Modal para solicitar consulta
-  ContactModal, // Modal de contacto general
-  QuoteModal, // Modal para solicitar cotización
-} from './components/modals/UnifiedModals';
+import { ConsultationModal, ContactModal, QuoteModal } from './components/modals/UnifiedModals';
 
-// Secciones específicas de la aplicación
 import ClientsSection from './components/sections/ClientsSection';
-
-// Componentes de UI específicos
 import { EmailLink } from './components/ui/EmailLink';
 
 // === IMPORTACIONES DE DATOS Y HOOKS ===
-// Datos estáticos de la aplicación
-import { testimonials } from './data/content';
-
-// Hooks personalizados
+import { technologies, testimonials } from './data/content';
+import { servicesData } from './data/servicesData';
 import { useModals } from './hooks/useModals';
 
 // === IMPORTACIONES DE ASSETS ===
-// Logos de la aplicación
-import logo1 from '/logo1.png'; // Logo principal
-import logo231 from '/logo231.png'; // Logo alternativo
+import logo1 from '/logo1.png';
+import logo231 from '/logo231.png';
+
+// ===================================================================
+// COMPONENTE NAVLINK
+// ===================================================================
+const NavLink = ({ href, children, mobile, onClick, isActive, scrollToSection }) => {
+  const baseClasses = mobile
+    ? `block px-4 py-3 rounded-lg text-base font-medium transition-all duration-300 transform hover:translate-x-2 border-l-2 cursor-pointer ${
+        isActive
+          ? 'text-blue-400 bg-gradient-to-r from-blue-600/20 to-cyan-600/20 border-blue-400'
+          : 'text-gray-300 hover:text-white hover:bg-gradient-to-r hover:from-blue-600/20 hover:to-cyan-600/20 border-transparent hover:border-blue-400'
+      }`
+    : `relative text-sm font-semibold transition-all duration-300 group px-3 py-2 rounded-lg cursor-pointer ${
+        isActive ? 'text-blue-400 bg-white/10' : 'text-gray-300 hover:text-white hover:bg-white/5'
+      }`;
+
+  const desktopEffect = !mobile ? (
+    <>
+      <div
+        className={`absolute bottom-0 left-0 h-0.5 bg-gradient-to-r from-blue-400 to-cyan-400 transition-all duration-300 rounded-full ${
+          isActive ? 'w-full' : 'w-0 group-hover:w-full'
+        }`}
+      />
+      <div
+        className={`absolute inset-0 bg-gradient-to-r rounded-lg transition-all duration-300 ${
+          isActive
+            ? 'from-blue-600/20 to-cyan-600/20'
+            : 'from-blue-600/0 to-cyan-600/0 group-hover:from-blue-600/10 group-hover:to-cyan-600/10'
+        }`}
+      />
+    </>
+  ) : null;
+
+  const handleClick = e => {
+    e.preventDefault();
+    const sectionId = href.replace('#', '');
+    if (scrollToSection) {
+      scrollToSection(sectionId);
+    }
+    if (onClick) {
+      onClick();
+    }
+  };
+
+  return (
+    <div
+      onClick={handleClick}
+      onKeyDown={e => e.key === 'Enter' && handleClick(e)}
+      role="button"
+      tabIndex={0}
+      className={baseClasses}
+    >
+      {mobile ? (
+        children
+      ) : (
+        <div className="relative">
+          <span
+            className={`relative z-10 transition-all duration-300 ${
+              isActive ? 'text-blue-400 font-semibold' : 'text-gray-300 group-hover:text-white'
+            }`}
+          >
+            {children}
+          </span>
+          {desktopEffect}
+        </div>
+      )}
+    </div>
+  );
+};
+
+// ===================================================================
+// COMPONENTE TESTIMONIALS CAROUSEL
+// ===================================================================
+const TestimonialsCarousel = ({ testimonials }) => {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isAutoPlaying, setIsAutoPlaying] = useState(true);
+
+  // Auto-play functionality
+  useEffect(() => {
+    if (!isAutoPlaying) return;
+
+    const interval = setInterval(() => {
+      setCurrentIndex(prevIndex => (prevIndex === testimonials.length - 1 ? 0 : prevIndex + 1));
+    }, 5000); // Change slide every 5 seconds
+
+    return () => clearInterval(interval);
+  }, [isAutoPlaying, testimonials.length]);
+
+  const goToSlide = index => {
+    setCurrentIndex(index);
+    setIsAutoPlaying(false);
+    // Resume auto-play after 10 seconds of inactivity
+    setTimeout(() => setIsAutoPlaying(true), 10000);
+  };
+
+  const goToPrevious = () => {
+    setCurrentIndex(currentIndex === 0 ? testimonials.length - 1 : currentIndex - 1);
+    setIsAutoPlaying(false);
+    setTimeout(() => setIsAutoPlaying(true), 10000);
+  };
+
+  const goToNext = () => {
+    setCurrentIndex(currentIndex === testimonials.length - 1 ? 0 : currentIndex + 1);
+    setIsAutoPlaying(false);
+    setTimeout(() => setIsAutoPlaying(true), 10000);
+  };
+
+  if (!testimonials || testimonials.length === 0) {
+    return null;
+  }
+
+  return (
+    <div className="relative">
+      {/* Main Carousel Container */}
+      <div className="overflow-hidden rounded-2xl">
+        <div
+          className="flex transition-transform duration-700 ease-in-out"
+          style={{ transform: `translateX(-${currentIndex * 100}%)` }}
+        >
+          {testimonials.map(testimonial => (
+            <div key={testimonial.id} className="w-full flex-shrink-0">
+              <div className="bg-gradient-to-br from-gray-800/80 to-gray-900/80 backdrop-blur-md p-8 lg:p-12 mx-4 rounded-2xl border border-gray-700/50 relative overflow-hidden">
+                {/* Background Decoration */}
+                <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-blue-500/10 to-cyan-500/10 rounded-full blur-2xl"></div>
+                <div className="absolute bottom-0 left-0 w-24 h-24 bg-gradient-to-tr from-purple-500/10 to-pink-500/10 rounded-full blur-2xl"></div>
+
+                <div className="relative z-10">
+                  {/* Quote Icon */}
+                  <div className="flex justify-center mb-6">
+                    <div className="bg-blue-500/20 p-4 rounded-full">
+                      <svg
+                        className="w-8 h-8 text-blue-400"
+                        fill="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h4v10h-10z" />
+                      </svg>
+                    </div>
+                  </div>
+
+                  {/* Review Text */}
+                  <blockquote className="text-lg lg:text-xl text-gray-200 text-center mb-8 leading-relaxed font-light">
+                    "{testimonial.review}"
+                  </blockquote>
+
+                  {/* Rating Stars */}
+                  <div className="flex justify-center mb-6">
+                    {[...Array(5)].map((_, i) => (
+                      <svg
+                        key={i}
+                        className={`w-5 h-5 ${i < testimonial.rating ? 'text-yellow-400' : 'text-gray-600'}`}
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                      >
+                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                      </svg>
+                    ))}
+                  </div>
+
+                  {/* Client Info */}
+                  <div className="flex flex-col lg:flex-row items-center justify-center lg:justify-between">
+                    <div className="flex items-center space-x-4 mb-4 lg:mb-0">
+                      <img
+                        src={testimonial.avatar}
+                        alt={testimonial.name}
+                        className="w-16 h-16 rounded-full border-2 border-gray-600 shadow-lg"
+                      />
+                      <div className="text-center lg:text-left">
+                        <h4 className="text-white font-semibold text-lg">{testimonial.name}</h4>
+                        <p className="text-gray-400 text-sm">{testimonial.role}</p>
+                        <p className="text-blue-400 text-sm font-medium">{testimonial.company}</p>
+                      </div>
+                    </div>
+
+                    {/* Project Badge */}
+                    <div className="bg-gradient-to-r from-blue-600/20 to-cyan-600/20 px-4 py-2 rounded-full border border-blue-500/30">
+                      <span className="text-blue-300 text-sm font-medium">
+                        {testimonial.project}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Navigation Arrows */}
+      <button
+        onClick={goToPrevious}
+        className="absolute left-0 top-1/2 transform -translate-y-1/2 -translate-x-4 bg-gray-800/80 hover:bg-gray-700/80 text-white p-3 rounded-full transition-all duration-300 hover:scale-110 border border-gray-600/50 backdrop-blur-sm"
+        aria-label="Testimonio anterior"
+      >
+        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
+        </svg>
+      </button>
+
+      <button
+        onClick={goToNext}
+        className="absolute right-0 top-1/2 transform -translate-y-1/2 translate-x-4 bg-gray-800/80 hover:bg-gray-700/80 text-white p-3 rounded-full transition-all duration-300 hover:scale-110 border border-gray-600/50 backdrop-blur-sm"
+        aria-label="Siguiente testimonio"
+      >
+        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
+        </svg>
+      </button>
+
+      {/* Dots Indicator */}
+      <div className="flex justify-center mt-8 space-x-3">
+        {testimonials.map((_, index) => (
+          <button
+            key={index}
+            onClick={() => goToSlide(index)}
+            className={`w-3 h-3 rounded-full transition-all duration-300 ${
+              index === currentIndex
+                ? 'bg-blue-500 scale-125 shadow-lg shadow-blue-500/50'
+                : 'bg-gray-600 hover:bg-gray-500'
+            }`}
+            aria-label={`Ir al testimonio ${index + 1}`}
+          />
+        ))}
+      </div>
+
+      {/* Progress Bar */}
+      <div className="mt-6 w-full bg-gray-700/50 rounded-full h-1 overflow-hidden">
+        <div
+          className="h-full bg-gradient-to-r from-blue-500 to-cyan-500 transition-all duration-300 ease-out"
+          style={{
+            width: `${((currentIndex + 1) / testimonials.length) * 100}%`,
+          }}
+        />
+      </div>
+
+      {/* Auto-play Indicator */}
+      <div className="flex justify-center mt-4">
+        <button
+          onClick={() => setIsAutoPlaying(!isAutoPlaying)}
+          className={`flex items-center space-x-2 px-3 py-1 rounded-full text-xs transition-all duration-300 ${
+            isAutoPlaying
+              ? 'bg-green-500/20 text-green-400 border border-green-500/30'
+              : 'bg-gray-600/20 text-gray-400 border border-gray-600/30'
+          }`}
+        >
+          {isAutoPlaying ? (
+            <>
+              <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+              <span>Auto-reproduciendo</span>
+            </>
+          ) : (
+            <>
+              <div className="w-2 h-2 bg-gray-400 rounded-full"></div>
+              <span>Pausado</span>
+            </>
+          )}
+        </button>
+      </div>
+    </div>
+  );
+};
 
 /**
  * COMPONENTE PRINCIPAL APP
- * ========================
- *
- * Maneja todo el estado global de la aplicación y renderiza
- * todas las secciones de la página web de Axon.
  */
 const App = () => {
   // ===================================================================
   // ESTADOS PRINCIPALES DE LA APLICACIÓN
   // ===================================================================
+  const [showMenu, setShowMenu] = useState(false);
+  const [activeSection, setActiveSection] = useState('hero');
+  const [showPrivacyModal, setShowPrivacyModal] = useState(false);
+  const [showTermsModal, setShowTermsModal] = useState(false);
+  const [showCookiesModal, setShowCookiesModal] = useState(false);
+  const [showCookieBanner, setShowCookieBanner] = useState(false);
+  const [showServiceModal, setShowServiceModal] = useState(false);
+  const [selectedService, setSelectedService] = useState(null);
+  const [showBlogModal, setShowBlogModal] = useState(false);
+  const [selectedBlogPost, setSelectedBlogPost] = useState(null);
 
-  // --- Estados de navegación y UI ---
-  const [showMenu, setShowMenu] = useState(false); // Control del menú móvil
-  const [activeSection, setActiveSection] = useState('hero'); // Sección activa en el scroll
-  const [logoError, setLogoError] = useState(false); // Estado de error del logo
-
-  // --- Estados para modales del sistema ---
-  const [showPrivacyModal, setShowPrivacyModal] = useState(false); // Modal de privacidad
-  const [showTermsModal, setShowTermsModal] = useState(false); // Modal de términos
-  const [showCookiesModal, setShowCookiesModal] = useState(false); // Modal de cookies
-  const [showCookieBanner, setShowCookieBanner] = useState(false); // Banner de cookies
-  const [showServiceModal, setShowServiceModal] = useState(false); // Modal de servicios
-  const [selectedService, setSelectedService] = useState(null); // Servicio seleccionado
-
-  // --- Estados para funcionalidad del blog ---
-  const [showBlogModal, setShowBlogModal] = useState(false); // Modal del blog
-  const [selectedBlogPost, setSelectedBlogPost] = useState(null); // Post seleccionado
-
-  // ===================================================================
-  // HOOK PERSONALIZADO PARA MODALES UNIFICADOS
-  // ===================================================================
-
-  /**
-   * Hook que maneja los modales de formularios (contacto, cotización, consulta)
-   * Proporciona estados y funciones para abrir/cerrar modales de forma unificada
-   */
+  // Hook para modales unificados
   const {
-    contactModalOpen, // Estado del modal de contacto
-    quoteModalOpen, // Estado del modal de cotización
-    consultationModalOpen, // Estado del modal de consulta
-    openContactModal, // Función para abrir modal de contacto
-    openQuoteModal, // Función para abrir modal de cotización
-    openConsultationModal, // Función para abrir modal de consulta
-    closeContactModal, // Función para cerrar modal de contacto
+    contactModalOpen,
+    quoteModalOpen,
+    consultationModalOpen,
+    openContactModal,
+    openQuoteModal,
+    openConsultationModal,
+    closeContactModal,
     closeQuoteModal,
     closeConsultationModal,
   } = useModals();
+
+  // ===================================================================
+  // EFECTOS Y MANEJADORES
+  // ===================================================================
+
   // Efecto para detectar la sección activa al hacer scroll
-  React.useEffect(() => {
+  useEffect(() => {
     let ticking = false;
 
     const handleScroll = () => {
@@ -150,10 +369,9 @@ const App = () => {
   }, []);
 
   // Efecto para mostrar el banner de cookies
-  React.useEffect(() => {
+  useEffect(() => {
     const cookiesAccepted = localStorage.getItem('axon-cookies-accepted');
     if (!cookiesAccepted) {
-      // Mostrar el banner después de 2 segundos para no ser intrusivo
       const timer = setTimeout(() => {
         setShowCookieBanner(true);
       }, 2000);
@@ -161,22 +379,20 @@ const App = () => {
     }
   }, []);
 
-  const handleLogoError = () => {
-    setLogoError(true);
-  };
-
+  // Manejadores de eventos
   const handleCloseServiceModal = () => {
     setShowServiceModal(false);
     setSelectedService(null);
   };
+
   const handleOpenQuoteModal = () => {
     openQuoteModal();
   };
+
   const handleOpenConsultationModal = () => {
     openConsultationModal();
   };
 
-  // Funciones para el blog
   const handleOpenBlogModal = post => {
     setSelectedBlogPost(post);
     setShowBlogModal(true);
@@ -191,11 +407,10 @@ const App = () => {
     scrollToSection('blog');
   };
 
-  // Función para navegación suave a las secciones
   const scrollToSection = sectionId => {
     const element = document.getElementById(sectionId);
     if (element) {
-      const offset = 80; // Offset para el navbar fijo
+      const offset = 80;
       const elementPosition = element.getBoundingClientRect().top;
       const offsetPosition = elementPosition + window.pageYOffset - offset;
 
@@ -206,17 +421,9 @@ const App = () => {
     }
   };
 
-  // Logo SVG como fallback
-  const LogoSVG = ({ className }) => (
-    <div
-      className={`bg-gradient-to-r from-blue-400 via-cyan-400 to-green-400 rounded-lg flex items-center justify-center text-white font-bold ${className}`}
-    >
-      <span className="text-2xl">⚡</span>
-    </div>
-  );
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 text-white font-sans overflow-x-hidden">
-      {/* Professional Navbar */}
+      {/* Navbar */}
       <nav className="fixed w-full z-50 glass-effect navbar-blur shadow-2xl border-b border-gray-800/50 nav-slide-in">
         <div className="container mx-auto px-4 lg:px-8">
           <div className="flex justify-between items-center py-4">
@@ -249,7 +456,8 @@ const App = () => {
                   }}
                 />
               </div>
-            </button>{' '}
+            </button>
+
             {/* Desktop Navigation */}
             <div className="hidden lg:flex items-center space-x-8">
               <NavLink
@@ -323,7 +531,7 @@ const App = () => {
                       fillRule="evenodd"
                       d="M18 13V5a2 2 0 00-2-2H4a2 2 0 00-2 2v8a2 2 0 002 2h3l3 3 3-3h3a2 2 0 002-2zM5 7a1 1 0 011-1h8a1 1 0 110 2H6a1 1 0 01-1-1zm1 3a1 1 0 100 2h3a1 1 0 100-2H6z"
                       clipRule="evenodd"
-                    />{' '}
+                    />
                   </svg>
                   <span>Testimonios</span>
                 </span>
@@ -358,9 +566,9 @@ const App = () => {
                 </span>
               </NavLink>
             </div>
+
             {/* CTA Button & Mobile Menu Toggle */}
             <div className="flex items-center space-x-4">
-              {/* CTA Button - Hidden on small screens */}
               <button
                 onClick={handleOpenQuoteModal}
                 className="hidden md:block bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white font-semibold px-6 py-2.5 rounded-full transition-all duration-300 transform hover:scale-105 hover:shadow-lg hover:shadow-blue-500/25 border border-blue-500/20"
@@ -378,7 +586,6 @@ const App = () => {
                 </span>
               </button>
 
-              {/* Mobile Menu Button */}
               <button
                 onClick={() => setShowMenu(!showMenu)}
                 className="lg:hidden flex items-center space-x-2 p-2 rounded-lg text-gray-300 hover:text-white hover:bg-gray-800/50 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all duration-200"
@@ -413,7 +620,7 @@ const App = () => {
             </div>
           </div>
 
-          {/* Enhanced Mobile Menu */}
+          {/* Mobile Menu */}
           <div
             className={`lg:hidden transition-all duration-300 ease-in-out ${
               showMenu ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
@@ -501,917 +708,7 @@ const App = () => {
                       fillRule="evenodd"
                       d="M18 13V5a2 2 0 00-2-2H4a2 2 0 00-2 2v8a2 2 0 002 2h3l3 3 3-3h3a2 2 0 002-2zM5 7a1 1 0 011-1h8a1 1 0 110 2H6a1 1 0 01-1-1zm1 3a1 1 0 100 2h3a1 1 0 100-2H6z"
                       clipRule="evenodd"
-                    />{' '}
-                  </svg>
-                  <span>Testimonios</span>
-                </span>
-              </NavLink>
-              <NavLink
-                href="#blog"
-                mobile
-                onClick={() => setShowMenu(false)}
-                isActive={activeSection === 'blog'}
-                scrollToSection={scrollToSection}
-              >
-                <span className="flex items-center space-x-3">
-                  <svg className="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
-                    <path
-                      fillRule="evenodd"
-                      d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z"
-                      clipRule="evenodd"
                     />
-                  </svg>
-                  <span>Blog</span>
-                </span>
-              </NavLink>
-              <NavLink
-                href="#contact"
-                mobile
-                onClick={() => setShowMenu(false)}
-                isActive={activeSection === 'contact'}
-                scrollToSection={scrollToSection}
-              >
-                <span className="flex items-center space-x-3">
-                  <svg className="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
-                    <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
-                  </svg>
-                  <span>Contacto</span>
-                </span>
-              </NavLink>
-            </div>
-            {/* CTA Button & Mobile Menu Toggle */}
-            <div className="flex items-center space-x-4">
-              {/* CTA Button - Hidden on small screens */}
-              <button
-                onClick={handleOpenQuoteModal}
-                className="hidden md:block bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white font-semibold px-6 py-2.5 rounded-full transition-all duration-300 transform hover:scale-105 hover:shadow-lg hover:shadow-blue-500/25 border border-blue-500/20"
-              >
-                <span className="flex items-center space-x-2">
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-                    />
-                  </svg>
-                  <span>Propuesta Personalizada</span>
-                </span>
-              </button>
-
-              {/* Mobile Menu Button */}
-              <button
-                onClick={() => setShowMenu(!showMenu)}
-                className="lg:hidden flex items-center space-x-2 p-2 rounded-lg text-gray-300 hover:text-white hover:bg-gray-800/50 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all duration-200"
-                aria-label="Toggle mobile menu"
-              >
-                <svg
-                  className={`w-6 h-6 transition-transform duration-300 ${
-                    showMenu ? 'rotate-90' : ''
-                  }`}
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  {showMenu ? (
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M6 18L18 6M6 6l12 12"
-                    />
-                  ) : (
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M4 6h16M4 12h16M4 18h16"
-                    />
-                  )}
-                </svg>
-                <span className="text-sm font-medium">{showMenu ? 'Cerrar' : 'Menú'}</span>
-              </button>
-            </div>
-          </div>
-
-          {/* Enhanced Mobile Menu */}
-          <div
-            className={`lg:hidden transition-all duration-300 ease-in-out ${
-              showMenu ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
-            } overflow-hidden`}
-          >
-            <div className="py-4 space-y-2 border-t border-gray-800/50 menu-slide">
-              <NavLink
-                href="#hero"
-                mobile
-                onClick={() => setShowMenu(false)}
-                isActive={activeSection === 'hero'}
-                scrollToSection={scrollToSection}
-              >
-                <span className="flex items-center space-x-3">
-                  <svg className="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
-                  </svg>
-                  <span>Inicio</span>
-                </span>
-              </NavLink>
-              <NavLink
-                href="#about"
-                mobile
-                onClick={() => setShowMenu(false)}
-                isActive={activeSection === 'about'}
-                scrollToSection={scrollToSection}
-              >
-                <span className="flex items-center space-x-3">
-                  <svg className="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
-                    <path
-                      fillRule="evenodd"
-                      d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-6-3a2 2 0 11-4 0 2 2 0 014 0zm-2 4a5 5 0 00-4.546 2.916A5.986 5.986 0 0010 16a5.986 5.986 0 004.546-2.084A5 5 0 0010 11z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                  <span>Nosotros</span>
-                </span>
-              </NavLink>
-              <NavLink
-                href="#services"
-                mobile
-                onClick={() => setShowMenu(false)}
-                isActive={activeSection === 'services'}
-                scrollToSection={scrollToSection}
-              >
-                <span className="flex items-center space-x-3">
-                  <svg className="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
-                    <path
-                      fillRule="evenodd"
-                      d="M3 4a1 1 0 011-1h4a1 1 0 010 2H6.414l2.293 2.293a1 1 0 01-1.414 1.414L5 6.414V8a1 1 0 01-2 0V4zm9 1a1 1 0 010-2h4a1 1 0 011 1v4a1 1 0 01-2 0V6.414l-2.293 2.293a1 1 0 11-1.414-1.414L13.586 5H12zm-9 7a1 1 0 012 0v1.586l2.293-2.293a1 1 0 111.414 1.414L6.414 15H8a1 1 0 010 2H4a1 1 0 01-1-1v-4zm13-1a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 010-2h1.586l-2.293-2.293a1 1 0 111.414-1.414L15 13.586V12a1 1 0 011-1z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                  <span>Servicios</span>
-                </span>
-              </NavLink>
-              <NavLink
-                href="#technologies"
-                mobile
-                onClick={() => setShowMenu(false)}
-                isActive={activeSection === 'technologies'}
-                scrollToSection={scrollToSection}
-              >
-                <span className="flex items-center space-x-3">
-                  <svg className="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
-                    <path
-                      fillRule="evenodd"
-                      d="M12.316 3.051a1 1 0 01.633 1.265l-4 12a1 1 0 11-1.898-.632l4-12a1 1 0 011.265-.633zM5.707 6.293a1 1 0 010 1.414L3.414 10l2.293 2.293a1 1 0 11-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0zm8.586 0a1 1 0 011.414 0l3 3a1 1 0 010 1.414l-3 3a1 1 0 11-1.414-1.414L16.586 10l-2.293-2.293a1 1 0 010-1.414z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                  <span>Tecnologías</span>
-                </span>
-              </NavLink>
-              <NavLink
-                href="#testimonials"
-                mobile
-                onClick={() => setShowMenu(false)}
-                isActive={activeSection === 'testimonials'}
-                scrollToSection={scrollToSection}
-              >
-                <span className="flex items-center space-x-3">
-                  <svg className="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
-                    <path
-                      fillRule="evenodd"
-                      d="M18 13V5a2 2 0 00-2-2H4a2 2 0 00-2 2v8a2 2 0 002 2h3l3 3 3-3h3a2 2 0 002-2zM5 7a1 1 0 011-1h8a1 1 0 110 2H6a1 1 0 01-1-1zm1 3a1 1 0 100 2h3a1 1 0 100-2H6z"
-                      clipRule="evenodd"
-                    />{' '}
-                  </svg>
-                  <span>Testimonios</span>
-                </span>
-              </NavLink>
-              <NavLink
-                href="#blog"
-                mobile
-                onClick={() => setShowMenu(false)}
-                isActive={activeSection === 'blog'}
-                scrollToSection={scrollToSection}
-              >
-                <span className="flex items-center space-x-3">
-                  <svg className="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
-                    <path
-                      fillRule="evenodd"
-                      d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                  <span>Blog</span>
-                </span>
-              </NavLink>
-              <NavLink
-                href="#contact"
-                mobile
-                onClick={() => setShowMenu(false)}
-                isActive={activeSection === 'contact'}
-                scrollToSection={scrollToSection}
-              >
-                <span className="flex items-center space-x-3">
-                  <svg className="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
-                    <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
-                  </svg>
-                  <span>Contacto</span>
-                </span>
-              </NavLink>
-            </div>
-            {/* CTA Button & Mobile Menu Toggle */}
-            <div className="flex items-center space-x-4">
-              {/* CTA Button - Hidden on small screens */}
-              <button
-                onClick={handleOpenQuoteModal}
-                className="hidden md:block bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white font-semibold px-6 py-2.5 rounded-full transition-all duration-300 transform hover:scale-105 hover:shadow-lg hover:shadow-blue-500/25 border border-blue-500/20"
-              >
-                <span className="flex items-center space-x-2">
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-                    />
-                  </svg>
-                  <span>Propuesta Personalizada</span>
-                </span>
-              </button>
-
-              {/* Mobile Menu Button */}
-              <button
-                onClick={() => setShowMenu(!showMenu)}
-                className="lg:hidden flex items-center space-x-2 p-2 rounded-lg text-gray-300 hover:text-white hover:bg-gray-800/50 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all duration-200"
-                aria-label="Toggle mobile menu"
-              >
-                <svg
-                  className={`w-6 h-6 transition-transform duration-300 ${
-                    showMenu ? 'rotate-90' : ''
-                  }`}
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  {showMenu ? (
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M6 18L18 6M6 6l12 12"
-                    />
-                  ) : (
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M4 6h16M4 12h16M4 18h16"
-                    />
-                  )}
-                </svg>
-                <span className="text-sm font-medium">{showMenu ? 'Cerrar' : 'Menú'}</span>
-              </button>
-            </div>
-          </div>
-
-          {/* Enhanced Mobile Menu */}
-          <div
-            className={`lg:hidden transition-all duration-300 ease-in-out ${
-              showMenu ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
-            } overflow-hidden`}
-          >
-            <div className="py-4 space-y-2 border-t border-gray-800/50 menu-slide">
-              <NavLink
-                href="#hero"
-                mobile
-                onClick={() => setShowMenu(false)}
-                isActive={activeSection === 'hero'}
-                scrollToSection={scrollToSection}
-              >
-                <span className="flex items-center space-x-3">
-                  <svg className="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
-                  </svg>
-                  <span>Inicio</span>
-                </span>
-              </NavLink>
-              <NavLink
-                href="#about"
-                mobile
-                onClick={() => setShowMenu(false)}
-                isActive={activeSection === 'about'}
-                scrollToSection={scrollToSection}
-              >
-                <span className="flex items-center space-x-3">
-                  <svg className="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
-                    <path
-                      fillRule="evenodd"
-                      d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-6-3a2 2 0 11-4 0 2 2 0 014 0zm-2 4a5 5 0 00-4.546 2.916A5.986 5.986 0 0010 16a5.986 5.986 0 004.546-2.084A5 5 0 0010 11z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                  <span>Nosotros</span>
-                </span>
-              </NavLink>
-              <NavLink
-                href="#services"
-                mobile
-                onClick={() => setShowMenu(false)}
-                isActive={activeSection === 'services'}
-                scrollToSection={scrollToSection}
-              >
-                <span className="flex items-center space-x-3">
-                  <svg className="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
-                    <path
-                      fillRule="evenodd"
-                      d="M3 4a1 1 0 011-1h4a1 1 0 010 2H6.414l2.293 2.293a1 1 0 01-1.414 1.414L5 6.414V8a1 1 0 01-2 0V4zm9 1a1 1 0 010-2h4a1 1 0 011 1v4a1 1 0 01-2 0V6.414l-2.293 2.293a1 1 0 11-1.414-1.414L13.586 5H12zm-9 7a1 1 0 012 0v1.586l2.293-2.293a1 1 0 111.414 1.414L6.414 15H8a1 1 0 010 2H4a1 1 0 01-1-1v-4zm13-1a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 010-2h1.586l-2.293-2.293a1 1 0 111.414-1.414L15 13.586V12a1 1 0 011-1z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                  <span>Servicios</span>
-                </span>
-              </NavLink>
-              <NavLink
-                href="#technologies"
-                mobile
-                onClick={() => setShowMenu(false)}
-                isActive={activeSection === 'technologies'}
-                scrollToSection={scrollToSection}
-              >
-                <span className="flex items-center space-x-3">
-                  <svg className="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
-                    <path
-                      fillRule="evenodd"
-                      d="M12.316 3.051a1 1 0 01.633 1.265l-4 12a1 1 0 11-1.898-.632l4-12a1 1 0 011.265-.633zM5.707 6.293a1 1 0 010 1.414L3.414 10l2.293 2.293a1 1 0 11-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0zm8.586 0a1 1 0 011.414 0l3 3a1 1 0 010 1.414l-3 3a1 1 0 11-1.414-1.414L16.586 10l-2.293-2.293a1 1 0 010-1.414z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                  <span>Tecnologías</span>
-                </span>
-              </NavLink>
-              <NavLink
-                href="#testimonials"
-                mobile
-                onClick={() => setShowMenu(false)}
-                isActive={activeSection === 'testimonials'}
-                scrollToSection={scrollToSection}
-              >
-                <span className="flex items-center space-x-3">
-                  <svg className="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
-                    <path
-                      fillRule="evenodd"
-                      d="M18 13V5a2 2 0 00-2-2H4a2 2 0 00-2 2v8a2 2 0 002 2h3l3 3 3-3h3a2 2 0 002-2zM5 7a1 1 0 011-1h8a1 1 0 110 2H6a1 1 0 01-1-1zm1 3a1 1 0 100 2h3a1 1 0 100-2H6z"
-                      clipRule="evenodd"
-                    />{' '}
-                  </svg>
-                  <span>Testimonios</span>
-                </span>
-              </NavLink>
-              <NavLink
-                href="#blog"
-                mobile
-                onClick={() => setShowMenu(false)}
-                isActive={activeSection === 'blog'}
-                scrollToSection={scrollToSection}
-              >
-                <span className="flex items-center space-x-3">
-                  <svg className="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
-                    <path
-                      fillRule="evenodd"
-                      d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                  <span>Blog</span>
-                </span>
-              </NavLink>
-              <NavLink
-                href="#contact"
-                mobile
-                onClick={() => setShowMenu(false)}
-                isActive={activeSection === 'contact'}
-                scrollToSection={scrollToSection}
-              >
-                <span className="flex items-center space-x-3">
-                  <svg className="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
-                    <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
-                  </svg>
-                  <span>Contacto</span>
-                </span>
-              </NavLink>
-            </div>
-            {/* CTA Button & Mobile Menu Toggle */}
-            <div className="flex items-center space-x-4">
-              {/* CTA Button - Hidden on small screens */}
-              <button
-                onClick={handleOpenQuoteModal}
-                className="hidden md:block bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white font-semibold px-6 py-2.5 rounded-full transition-all duration-300 transform hover:scale-105 hover:shadow-lg hover:shadow-blue-500/25 border border-blue-500/20"
-              >
-                <span className="flex items-center space-x-2">
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-                    />
-                  </svg>
-                  <span>Propuesta Personalizada</span>
-                </span>
-              </button>
-
-              {/* Mobile Menu Button */}
-              <button
-                onClick={() => setShowMenu(!showMenu)}
-                className="lg:hidden flex items-center space-x-2 p-2 rounded-lg text-gray-300 hover:text-white hover:bg-gray-800/50 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all duration-200"
-                aria-label="Toggle mobile menu"
-              >
-                <svg
-                  className={`w-6 h-6 transition-transform duration-300 ${
-                    showMenu ? 'rotate-90' : ''
-                  }`}
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  {showMenu ? (
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M6 18L18 6M6 6l12 12"
-                    />
-                  ) : (
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M4 6h16M4 12h16M4 18h16"
-                    />
-                  )}
-                </svg>
-                <span className="text-sm font-medium">{showMenu ? 'Cerrar' : 'Menú'}</span>
-              </button>
-            </div>
-          </div>
-
-          {/* Enhanced Mobile Menu */}
-          <div
-            className={`lg:hidden transition-all duration-300 ease-in-out ${
-              showMenu ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
-            } overflow-hidden`}
-          >
-            <div className="py-4 space-y-2 border-t border-gray-800/50 menu-slide">
-              <NavLink
-                href="#hero"
-                mobile
-                onClick={() => setShowMenu(false)}
-                isActive={activeSection === 'hero'}
-                scrollToSection={scrollToSection}
-              >
-                <span className="flex items-center space-x-3">
-                  <svg className="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
-                  </svg>
-                  <span>Inicio</span>
-                </span>
-              </NavLink>
-              <NavLink
-                href="#about"
-                mobile
-                onClick={() => setShowMenu(false)}
-                isActive={activeSection === 'about'}
-                scrollToSection={scrollToSection}
-              >
-                <span className="flex items-center space-x-3">
-                  <svg className="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
-                    <path
-                      fillRule="evenodd"
-                      d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-6-3a2 2 0 11-4 0 2 2 0 014 0zm-2 4a5 5 0 00-4.546 2.916A5.986 5.986 0 0010 16a5.986 5.986 0 004.546-2.084A5 5 0 0010 11z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                  <span>Nosotros</span>
-                </span>
-              </NavLink>
-              <NavLink
-                href="#services"
-                mobile
-                onClick={() => setShowMenu(false)}
-                isActive={activeSection === 'services'}
-                scrollToSection={scrollToSection}
-              >
-                <span className="flex items-center space-x-3">
-                  <svg className="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
-                    <path
-                      fillRule="evenodd"
-                      d="M3 4a1 1 0 011-1h4a1 1 0 010 2H6.414l2.293 2.293a1 1 0 01-1.414 1.414L5 6.414V8a1 1 0 01-2 0V4zm9 1a1 1 0 010-2h4a1 1 0 011 1v4a1 1 0 01-2 0V6.414l-2.293 2.293a1 1 0 11-1.414-1.414L13.586 5H12zm-9 7a1 1 0 012 0v1.586l2.293-2.293a1 1 0 111.414 1.414L6.414 15H8a1 1 0 010 2H4a1 1 0 01-1-1v-4zm13-1a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 010-2h1.586l-2.293-2.293a1 1 0 111.414-1.414L15 13.586V12a1 1 0 011-1z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                  <span>Servicios</span>
-                </span>
-              </NavLink>
-              <NavLink
-                href="#technologies"
-                mobile
-                onClick={() => setShowMenu(false)}
-                isActive={activeSection === 'technologies'}
-                scrollToSection={scrollToSection}
-              >
-                <span className="flex items-center space-x-3">
-                  <svg className="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
-                    <path
-                      fillRule="evenodd"
-                      d="M12.316 3.051a1 1 0 01.633 1.265l-4 12a1 1 0 11-1.898-.632l4-12a1 1 0 011.265-.633zM5.707 6.293a1 1 0 010 1.414L3.414 10l2.293 2.293a1 1 0 11-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0zm8.586 0a1 1 0 011.414 0l3 3a1 1 0 010 1.414l-3 3a1 1 0 11-1.414-1.414L16.586 10l-2.293-2.293a1 1 0 010-1.414z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                  <span>Tecnologías</span>
-                </span>
-              </NavLink>
-              <NavLink
-                href="#testimonials"
-                mobile
-                onClick={() => setShowMenu(false)}
-                isActive={activeSection === 'testimonials'}
-                scrollToSection={scrollToSection}
-              >
-                <span className="flex items-center space-x-3">
-                  <svg className="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
-                    <path
-                      fillRule="evenodd"
-                      d="M18 13V5a2 2 0 00-2-2H4a2 2 0 00-2 2v8a2 2 0 002 2h3l3 3 3-3h3a2 2 0 002-2zM5 7a1 1 0 011-1h8a1 1 0 110 2H6a1 1 0 01-1-1zm1 3a1 1 0 100 2h3a1 1 0 100-2H6z"
-                      clipRule="evenodd"
-                    />{' '}
-                  </svg>
-                  <span>Testimonios</span>
-                </span>
-              </NavLink>
-              <NavLink
-                href="#blog"
-                mobile
-                onClick={() => setShowMenu(false)}
-                isActive={activeSection === 'blog'}
-                scrollToSection={scrollToSection}
-              >
-                <span className="flex items-center space-x-3">
-                  <svg className="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
-                    <path
-                      fillRule="evenodd"
-                      d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                  <span>Blog</span>
-                </span>
-              </NavLink>
-              <NavLink
-                href="#contact"
-                mobile
-                onClick={() => setShowMenu(false)}
-                isActive={activeSection === 'contact'}
-                scrollToSection={scrollToSection}
-              >
-                <span className="flex items-center space-x-3">
-                  <svg className="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
-                    <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
-                  </svg>
-                  <span>Contacto</span>
-                </span>
-              </NavLink>
-            </div>
-            {/* CTA Button & Mobile Menu Toggle */}
-            <div className="flex items-center space-x-4">
-              {/* CTA Button - Hidden on small screens */}
-              <button
-                onClick={handleOpenQuoteModal}
-                className="hidden md:block bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white font-semibold px-6 py-2.5 rounded-full transition-all duration-300 transform hover:scale-105 hover:shadow-lg hover:shadow-blue-500/25 border border-blue-500/20"
-              >
-                <span className="flex items-center space-x-2">
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-                    />
-                  </svg>
-                  <span>Propuesta Personalizada</span>
-                </span>
-              </button>
-
-              {/* Mobile Menu Button */}
-              <button
-                onClick={() => setShowMenu(!showMenu)}
-                className="lg:hidden flex items-center space-x-2 p-2 rounded-lg text-gray-300 hover:text-white hover:bg-gray-800/50 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all duration-200"
-                aria-label="Toggle mobile menu"
-              >
-                <svg
-                  className={`w-6 h-6 transition-transform duration-300 ${
-                    showMenu ? 'rotate-90' : ''
-                  }`}
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  {showMenu ? (
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M6 18L18 6M6 6l12 12"
-                    />
-                  ) : (
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M4 6h16M4 12h16M4 18h16"
-                    />
-                  )}
-                </svg>
-                <span className="text-sm font-medium">{showMenu ? 'Cerrar' : 'Menú'}</span>
-              </button>
-            </div>
-          </div>
-
-          {/* Enhanced Mobile Menu */}
-          <div
-            className={`lg:hidden transition-all duration-300 ease-in-out ${
-              showMenu ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
-            } overflow-hidden`}
-          >
-            <div className="py-4 space-y-2 border-t border-gray-800/50 menu-slide">
-              <NavLink
-                href="#hero"
-                mobile
-                onClick={() => setShowMenu(false)}
-                isActive={activeSection === 'hero'}
-                scrollToSection={scrollToSection}
-              >
-                <span className="flex items-center space-x-3">
-                  <svg className="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
-                  </svg>
-                  <span>Inicio</span>
-                </span>
-              </NavLink>
-              <NavLink
-                href="#about"
-                mobile
-                onClick={() => setShowMenu(false)}
-                isActive={activeSection === 'about'}
-                scrollToSection={scrollToSection}
-              >
-                <span className="flex items-center space-x-3">
-                  <svg className="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
-                    <path
-                      fillRule="evenodd"
-                      d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-6-3a2 2 0 11-4 0 2 2 0 014 0zm-2 4a5 5 0 00-4.546 2.916A5.986 5.986 0 0010 16a5.986 5.986 0 004.546-2.084A5 5 0 0010 11z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                  <span>Nosotros</span>
-                </span>
-              </NavLink>
-              <NavLink
-                href="#services"
-                mobile
-                onClick={() => setShowMenu(false)}
-                isActive={activeSection === 'services'}
-                scrollToSection={scrollToSection}
-              >
-                <span className="flex items-center space-x-3">
-                  <svg className="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
-                    <path
-                      fillRule="evenodd"
-                      d="M3 4a1 1 0 011-1h4a1 1 0 010 2H6.414l2.293 2.293a1 1 0 01-1.414 1.414L5 6.414V8a1 1 0 01-2 0V4zm9 1a1 1 0 010-2h4a1 1 0 011 1v4a1 1 0 01-2 0V6.414l-2.293 2.293a1 1 0 11-1.414-1.414L13.586 5H12zm-9 7a1 1 0 012 0v1.586l2.293-2.293a1 1 0 111.414 1.414L6.414 15H8a1 1 0 010 2H4a1 1 0 01-1-1v-4zm13-1a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 010-2h1.586l-2.293-2.293a1 1 0 111.414-1.414L15 13.586V12a1 1 0 011-1z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                  <span>Servicios</span>
-                </span>
-              </NavLink>
-              <NavLink
-                href="#technologies"
-                mobile
-                onClick={() => setShowMenu(false)}
-                isActive={activeSection === 'technologies'}
-                scrollToSection={scrollToSection}
-              >
-                <span className="flex items-center space-x-3">
-                  <svg className="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
-                    <path
-                      fillRule="evenodd"
-                      d="M12.316 3.051a1 1 0 01.633 1.265l-4 12a1 1 0 11-1.898-.632l4-12a1 1 0 011.265-.633zM5.707 6.293a1 1 0 010 1.414L3.414 10l2.293 2.293a1 1 0 11-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0zm8.586 0a1 1 0 011.414 0l3 3a1 1 0 010 1.414l-3 3a1 1 0 11-1.414-1.414L16.586 10l-2.293-2.293a1 1 0 010-1.414z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                  <span>Tecnologías</span>
-                </span>
-              </NavLink>
-              <NavLink
-                href="#testimonials"
-                mobile
-                onClick={() => setShowMenu(false)}
-                isActive={activeSection === 'testimonials'}
-                scrollToSection={scrollToSection}
-              >
-                <span className="flex items-center space-x-3">
-                  <svg className="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
-                    <path
-                      fillRule="evenodd"
-                      d="M18 13V5a2 2 0 00-2-2H4a2 2 0 00-2 2v8a2 2 0 002 2h3l3 3 3-3h3a2 2 0 002-2zM5 7a1 1 0 011-1h8a1 1 0 110 2H6a1 1 0 01-1-1zm1 3a1 1 0 100 2h3a1 1 0 100-2H6z"
-                      clipRule="evenodd"
-                    />{' '}
-                  </svg>
-                  <span>Testimonios</span>
-                </span>
-              </NavLink>
-              <NavLink
-                href="#blog"
-                mobile
-                onClick={() => setShowMenu(false)}
-                isActive={activeSection === 'blog'}
-                scrollToSection={scrollToSection}
-              >
-                <span className="flex items-center space-x-3">
-                  <svg className="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
-                    <path
-                      fillRule="evenodd"
-                      d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                  <span>Blog</span>
-                </span>
-              </NavLink>
-              <NavLink
-                href="#contact"
-                mobile
-                onClick={() => setShowMenu(false)}
-                isActive={activeSection === 'contact'}
-                scrollToSection={scrollToSection}
-              >
-                <span className="flex items-center space-x-3">
-                  <svg className="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
-                    <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
-                  </svg>
-                  <span>Contacto</span>
-                </span>
-              </NavLink>
-            </div>
-            {/* CTA Button & Mobile Menu Toggle */}
-            <div className="flex items-center space-x-4">
-              {/* CTA Button - Hidden on small screens */}
-              <button
-                onClick={handleOpenQuoteModal}
-                className="hidden md:block bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white font-semibold px-6 py-2.5 rounded-full transition-all duration-300 transform hover:scale-105 hover:shadow-lg hover:shadow-blue-500/25 border border-blue-500/20"
-              >
-                <span className="flex items-center space-x-2">
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-                    />
-                  </svg>
-                  <span>Propuesta Personalizada</span>
-                </span>
-              </button>
-
-              {/* Mobile Menu Button */}
-              <button
-                onClick={() => setShowMenu(!showMenu)}
-                className="lg:hidden flex items-center space-x-2 p-2 rounded-lg text-gray-300 hover:text-white hover:bg-gray-800/50 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all duration-200"
-                aria-label="Toggle mobile menu"
-              >
-                <svg
-                  className={`w-6 h-6 transition-transform duration-300 ${
-                    showMenu ? 'rotate-90' : ''
-                  }`}
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  {showMenu ? (
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M6 18L18 6M6 6l12 12"
-                    />
-                  ) : (
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M4 6h16M4 12h16M4 18h16"
-                    />
-                  )}
-                </svg>
-                <span className="text-sm font-medium">{showMenu ? 'Cerrar' : 'Menú'}</span>
-              </button>
-            </div>
-          </div>
-
-          {/* Enhanced Mobile Menu */}
-          <div
-            className={`lg:hidden transition-all duration-300 ease-in-out ${
-              showMenu ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
-            } overflow-hidden`}
-          >
-            <div className="py-4 space-y-2 border-t border-gray-800/50 menu-slide">
-              <NavLink
-                href="#hero"
-                mobile
-                onClick={() => setShowMenu(false)}
-                isActive={activeSection === 'hero'}
-                scrollToSection={scrollToSection}
-              >
-                <span className="flex items-center space-x-3">
-                  <svg className="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
-                  </svg>
-                  <span>Inicio</span>
-                </span>
-              </NavLink>
-              <NavLink
-                href="#about"
-                mobile
-                onClick={() => setShowMenu(false)}
-                isActive={activeSection === 'about'}
-                scrollToSection={scrollToSection}
-              >
-                <span className="flex items-center space-x-3">
-                  <svg className="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
-                    <path
-                      fillRule="evenodd"
-                      d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-6-3a2 2 0 11-4 0 2 2 0 014 0zm-2 4a5 5 0 00-4.546 2.916A5.986 5.986 0 0010 16a5.986 5.986 0 004.546-2.084A5 5 0 0010 11z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                  <span>Nosotros</span>
-                </span>
-              </NavLink>
-              <NavLink
-                href="#services"
-                mobile
-                onClick={() => setShowMenu(false)}
-                isActive={activeSection === 'services'}
-                scrollToSection={scrollToSection}
-              >
-                <span className="flex items-center space-x-3">
-                  <svg className="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
-                    <path
-                      fillRule="evenodd"
-                      d="M3 4a1 1 0 011-1h4a1 1 0 010 2H6.414l2.293 2.293a1 1 0 01-1.414 1.414L5 6.414V8a1 1 0 01-2 0V4zm9 1a1 1 0 010-2h4a1 1 0 011 1v4a1 1 0 01-2 0V6.414l-2.293 2.293a1 1 0 11-1.414-1.414L13.586 5H12zm-9 7a1 1 0 012 0v1.586l2.293-2.293a1 1 0 111.414 1.414L6.414 15H8a1 1 0 010 2H4a1 1 0 01-1-1v-4zm13-1a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 010-2h1.586l-2.293-2.293a1 1 0 111.414-1.414L15 13.586V12a1 1 0 011-1z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                  <span>Servicios</span>
-                </span>
-              </NavLink>
-              <NavLink
-                href="#technologies"
-                mobile
-                onClick={() => setShowMenu(false)}
-                isActive={activeSection === 'technologies'}
-                scrollToSection={scrollToSection}
-              >
-                <span className="flex items-center space-x-3">
-                  <svg className="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
-                    <path
-                      fillRule="evenodd"
-                      d="M12.316 3.051a1 1 0 01.633 1.265l-4 12a1 1 0 11-1.898-.632l4-12a1 1 0 011.265-.633zM5.707 6.293a1 1 0 010 1.414L3.414 10l2.293 2.293a1 1 0 11-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0zm8.586 0a1 1 0 011.414 0l3 3a1 1 0 010 1.414l-3 3a1 1 0 11-1.414-1.414L16.586 10l-2.293-2.293a1 1 0 010-1.414z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                  <span>Tecnologías</span>
-                </span>
-              </NavLink>
-              <NavLink
-                href="#testimonials"
-                mobile
-                onClick={() => setShowMenu(false)}
-                isActive={activeSection === 'testimonials'}
-                scrollToSection={scrollToSection}
-              >
-                <span className="flex items-center space-x-3">
-                  <svg className="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
-                    <path
-                      fillRule="evenodd"
-                      d="M18 13V5a2 2 0 00-2-2H4a2 2 0 00-2 2v8a2 2 0 002 2h3l3 3 3-3h3a2 2 0 002-2zM5 7a1 1 0 011-1h8a1 1 0 110 2H6a1 1 0 01-1-1zm1 3a1 1 0 100 2h3a1 1 0 100-2H6z"
-                      clipRule="evenodd"
-                    />{' '}
                   </svg>
                   <span>Testimonios</span>
                 </span>
@@ -1453,1279 +750,741 @@ const App = () => {
           </div>
         </div>
       </nav>
+
       {/* Hero Section */}
       <section
         id="hero"
-        className="relative flex items-center justify-center min-h-screen text-center p-8 overflow-hidden pt-20 md:pt-0 bg-gradient-to-br from-gray-900 via-black to-gray-900"
+        className="min-h-screen flex items-center justify-center relative overflow-hidden pt-20"
       >
-        {/* Geometric Background Elements */}
-        <div className="absolute inset-0 z-0">
-          {/* Animated Rotating Squares */}
-          <div className="absolute top-1/4 left-1/6 w-20 h-20 bg-gradient-to-br from-blue-500/20 to-cyan-500/20 backdrop-blur-sm border border-blue-400/30 animate-rotateSquare"></div>
-          <div
-            className="absolute top-1/3 right-1/5 w-16 h-16 bg-gradient-to-br from-purple-500/20 to-pink-500/20 backdrop-blur-sm border border-purple-400/30 animate-rotateSquareReverse"
-            style={{ animationDelay: '1s' }}
-          ></div>
-          <div
-            className="absolute bottom-1/4 left-1/3 w-24 h-24 bg-gradient-to-br from-cyan-500/20 to-teal-500/20 backdrop-blur-sm border border-cyan-400/30 animate-rotateSquare"
-            style={{ animationDelay: '2s' }}
-          ></div>
-          <div
-            className="absolute top-1/2 right-1/3 w-18 h-18 bg-gradient-to-br from-indigo-500/20 to-blue-500/20 backdrop-blur-sm border border-indigo-400/30 animate-rotateSquareReverse"
-            style={{ animationDelay: '3s' }}
-          ></div>
-          <div
-            className="absolute bottom-1/3 right-1/6 w-14 h-14 bg-gradient-to-br from-emerald-500/20 to-green-500/20 backdrop-blur-sm border border-emerald-400/30 animate-rotateSquare"
-            style={{ animationDelay: '4s' }}
-          ></div>
-
-          {/* Floating Grid Pattern */}
-          <div className="absolute inset-0 opacity-10">
-            <svg className="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
-              <defs>
-                <pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse">
-                  <path
-                    d="M 10 0 L 0 0 0 10"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="0.5"
-                    opacity="0.3"
-                  />
-                </pattern>
-              </defs>
-              <rect width="100%" height="100%" fill="url(#grid)" className="text-blue-400/20" />
-            </svg>
-          </div>
-
-          {/* Ambient Glow Effects */}
-          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl animate-pulse"></div>
-          <div
-            className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-purple-500/10 rounded-full blur-3xl animate-pulse"
-            style={{ animationDelay: '2s' }}
-          ></div>
+        {/* Background Effects */}
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-900/30 via-purple-900/30 to-cyan-900/30"></div>
+        <div className="absolute inset-0">
+          <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl animate-pulse"></div>
+          <div className="absolute bottom-1/4 right-1/4 w-64 h-64 bg-cyan-500/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-purple-500/5 rounded-full blur-3xl animate-pulse delay-500"></div>
         </div>
 
-        <div className="relative z-10 flex flex-col items-center max-w-5xl mx-auto">
-          {/* Logo de fondo - detrás del texto */}
-          <div className="absolute inset-0 flex items-center justify-center z-0 opacity-20">
-            {!logoError ? (
-              <img
-                src={logo1}
-                alt="Axon.App Logo Background"
-                className="h-96 md:h-[500px] lg:h-[600px] w-auto animate-horizontal-rotate drop-shadow-2xl logo-banner-white-reflection"
-                onError={handleLogoError}
-              />
-            ) : (
-              <LogoSVG className="h-96 md:h-[500px] lg:h-[600px] w-96 md:w-[500px] lg:w-[600px] animate-horizontal-rotate drop-shadow-2xl opacity-30 logo-banner-white-reflection" />
-            )}
+        <div className="container mx-auto px-4 lg:px-8 relative z-10">
+          <div className="text-center max-w-6xl mx-auto">
+            {/* Main Headline */}
+            <div className="mb-8">
+              <h1 className="text-6xl lg:text-8xl font-extrabold mb-4 bg-gradient-to-r from-blue-400 via-cyan-400 to-green-400 bg-clip-text text-transparent">
+                Axon.App
+              </h1>
+              <div className="h-1 w-32 bg-gradient-to-r from-blue-400 to-cyan-400 mx-auto rounded-full mb-6"></div>
+            </div>
+
+            {/* Value Proposition */}
+            <h2 className="text-2xl lg:text-4xl font-bold text-white mb-6 leading-tight">
+              Transformamos <span className="text-cyan-400">ideas</span> en{' '}
+              <span className="text-blue-400">soluciones digitales</span> que impulsan tu negocio
+            </h2>
+
+            <p className="text-lg lg:text-xl text-gray-300 mb-10 max-w-4xl mx-auto leading-relaxed">
+              Somos expertos en <strong className="text-white">desarrollo web</strong>,{' '}
+              <strong className="text-white">apps móviles</strong>,{' '}
+              <strong className="text-white">inteligencia artificial</strong> y{' '}
+              <strong className="text-white">marketing digital</strong>. Creamos experiencias
+              digitales que conectan con tus usuarios y generan resultados reales.
+            </p>
+
+            {/* Key Services Pills */}
+            <div className="flex flex-wrap justify-center gap-3 mb-12">
+              <span className="bg-blue-500/20 text-blue-400 px-4 py-2 rounded-full text-sm font-medium border border-blue-500/30">
+                🌐 Desarrollo Web
+              </span>
+              <span className="bg-cyan-500/20 text-cyan-400 px-4 py-2 rounded-full text-sm font-medium border border-cyan-500/30">
+                📱 Apps Móviles
+              </span>
+              <span className="bg-purple-500/20 text-purple-400 px-4 py-2 rounded-full text-sm font-medium border border-purple-500/30">
+                🤖 Inteligencia Artificial
+              </span>
+              <span className="bg-green-500/20 text-green-400 px-4 py-2 rounded-full text-sm font-medium border border-green-500/30">
+                📊 Marketing Digital
+              </span>
+              <span className="bg-yellow-500/20 text-yellow-400 px-4 py-2 rounded-full text-sm font-medium border border-yellow-500/30">
+                🎨 UI/UX Design
+              </span>
+            </div>
+
+            {/* CTA Buttons */}
+            <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
+              <button
+                onClick={openContactModal}
+                className="group bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white font-bold px-10 py-4 rounded-full transition-all duration-300 transform hover:scale-105 hover:shadow-2xl hover:shadow-blue-500/25 relative overflow-hidden"
+              >
+                <span className="relative z-10">Comenzar Proyecto</span>
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-700 to-cyan-700 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              </button>
+
+              <button
+                onClick={openQuoteModal}
+                className="group border-2 border-blue-500 text-blue-400 hover:bg-blue-500 hover:text-white font-bold px-10 py-4 rounded-full transition-all duration-300 hover:shadow-xl hover:shadow-blue-500/25 relative overflow-hidden"
+              >
+                <span className="relative z-10">Cotización Gratuita</span>
+                <div className="absolute inset-0 bg-blue-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></div>
+              </button>
+            </div>
+
+            {/* Stats or Trust Indicators */}
+            <div className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto">
+              <div className="text-center">
+                <div className="text-3xl font-bold text-white mb-2">100+</div>
+                <div className="text-gray-400 text-sm">Proyectos Exitosos</div>
+              </div>
+              <div className="text-center">
+                <div className="text-3xl font-bold text-white mb-2">50+</div>
+                <div className="text-gray-400 text-sm">Clientes Satisfechos</div>
+              </div>
+              <div className="text-center">
+                <div className="text-3xl font-bold text-white mb-2">24/7</div>
+                <div className="text-gray-400 text-sm">Soporte Técnico</div>
+              </div>
+              <div className="text-center">
+                <div className="text-3xl font-bold text-white mb-2">5⭐</div>
+                <div className="text-gray-400 text-sm">Calificación Promedio</div>
+              </div>
+            </div>
           </div>
+        </div>
 
-          {/* 3D Professional Title */}
-          <h1 className="professional-3d-title text-5xl md:text-7xl lg:text-8xl font-black mb-8 leading-tight animate-fadeInUp relative z-20">
-            <span className="block mb-2 text-white">Desarrollamos el</span>
-            <span className="block text-white">Futuro Digital</span>
-          </h1>
-
-          {/* Elegant Subtitle */}
-          <p
-            className="text-xl md:text-2xl text-gray-300 mb-12 animate-fadeInUp max-w-4xl leading-relaxed font-light"
-            style={{ animationDelay: '0.3s' }}
-          >
-            <span className="block mb-2">
-              Soluciones de software innovadoras y aplicaciones de vanguardia
-            </span>
-            <span className="text-gray-400">
-              que transforman ideas ambiciosas en realidades digitales exitosas.
-            </span>
-          </p>
-
-          {/* Professional CTA Section */}
-          <div
-            className="flex flex-col sm:flex-row gap-6 animate-fadeInUp"
-            style={{ animationDelay: '0.6s' }}
-          >
-            <a
-              href="#services"
-              className="group relative bg-gradient-to-r from-blue-600 via-blue-700 to-cyan-600 hover:from-blue-700 hover:via-blue-800 hover:to-cyan-700 text-white font-semibold py-4 px-10 rounded-2xl shadow-2xl transition-all duration-500 transform hover:scale-105 hover:shadow-blue-500/25 overflow-hidden"
-            >
-              <span className="relative z-10 flex items-center justify-center space-x-3">
-                <span>Explorar Servicios</span>
-                <svg
-                  className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M17 8l4 4m0 0l-4 4m4-4H3"
-                  />
-                </svg>
-              </span>
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000"></div>
-            </a>
-
-            <button
-              onClick={openContactModal}
-              className="group bg-transparent border-2 border-gray-600 hover:border-blue-400 text-gray-300 hover:text-white font-semibold py-4 px-10 rounded-2xl transition-all duration-500 transform hover:scale-105 backdrop-blur-sm hover:bg-blue-500/10"
-            >
-              <span className="flex items-center justify-center space-x-3">
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
-                  />
-                </svg>
-                <span>Consulta Gratuita</span>
-              </span>
-            </button>
+        {/* Scroll Indicator */}
+        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
+          <div className="w-6 h-10 border-2 border-gray-400 rounded-full flex justify-center">
+            <div className="w-1 h-3 bg-gray-400 rounded-full mt-2 animate-pulse"></div>
           </div>
         </div>
       </section>
-      {/* About Us Section - Mission & Vision */}
-      <section
-        id="about"
-        className="py-20 md:py-32 bg-gradient-to-br from-gray-900 via-black to-gray-900 relative overflow-hidden"
-      >
-        {/* Efectos de fondo animados */}
-        <div className="absolute inset-0">
-          <div className="absolute top-1/4 left-1/4 w-72 h-72 bg-blue-500/10 rounded-full blur-3xl animate-blob"></div>
-          <div
-            className="absolute bottom-1/4 right-1/4 w-72 h-72 bg-purple-500/10 rounded-full blur-3xl animate-blob"
-            style={{ animationDelay: '2s' }}
-          ></div>
-          <div
-            className="absolute top-1/2 left-1/2 w-64 h-64 bg-cyan-500/10 rounded-full blur-3xl animate-blob"
-            style={{ animationDelay: '4s' }}
-          ></div>
-        </div>
 
-        <div className="container mx-auto px-4 relative z-10">
-          {/* Section Header */}
-          <div className="text-center mb-20">
-            <div className="inline-flex items-center bg-blue-500/10 border border-blue-500/30 rounded-full px-6 py-3 mb-6">
-              <div className="w-2 h-2 bg-blue-400 rounded-full animate-pulse mr-3"></div>
-              <span className="text-blue-300 text-sm font-medium uppercase tracking-wider">
-                Quiénes Somos
-              </span>
-            </div>
-            <h2 className="text-4xl md:text-6xl font-bold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-purple-400 to-cyan-400">
-              Nuestra Esencia
-            </h2>
-            <p className="text-xl md:text-2xl text-gray-300 max-w-4xl mx-auto leading-relaxed">
-              Transformamos ideas en soluciones digitales de clase mundial, impulsando el
-              crecimiento y éxito de nuestros clientes
-            </p>
-          </div>
-
-          {/* Mission & Vision Grid */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-20">
-            {/* Mission */}
-            <div className="group bg-gradient-to-br from-blue-900/30 to-cyan-900/20 backdrop-blur-sm rounded-3xl p-8 border border-blue-400/20 hover:border-blue-400/50 transition-all duration-500 hover:transform hover:scale-[1.02] hover:shadow-2xl hover:shadow-blue-500/20">
-              <div className="flex items-center mb-6">
-                <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-2xl flex items-center justify-center mr-5 group-hover:scale-110 transition-transform duration-300">
-                  <span className="text-2xl">🎯</span>
-                </div>
-                <h3 className="text-2xl md:text-3xl font-bold text-blue-300 group-hover:text-blue-200 transition-colors">
-                  Nuestra Misión
-                </h3>
-              </div>
-              <p className="text-gray-300 text-lg leading-relaxed group-hover:text-gray-200 transition-colors">
-                Democratizar la tecnología de vanguardia, creando soluciones digitales accesibles e
-                innovadoras que impulsen el crecimiento exponencial de nuestros clientes. Nos
-                comprometemos a entregar productos de software excepcionales que transformen ideas
-                ambiciosas en realidades digitales exitosas.
-              </p>
-            </div>
-
-            {/* Vision */}
-            <div className="group bg-gradient-to-br from-purple-900/30 to-pink-900/20 backdrop-blur-sm rounded-3xl p-8 border border-purple-400/20 hover:border-purple-400/50 transition-all duration-500 hover:transform hover:scale-[1.02] hover:shadow-2xl hover:shadow-purple-500/20">
-              <div className="flex items-center mb-6">
-                <div className="w-16 h-16 bg-gradient-to-r from-purple-500 to-pink-500 rounded-2xl flex items-center justify-center mr-5 group-hover:scale-110 transition-transform duration-300">
-                  <span className="text-2xl">🚀</span>
-                </div>
-                <h3 className="text-2xl md:text-3xl font-bold text-purple-300 group-hover:text-purple-200 transition-colors">
-                  Nuestra Visión
-                </h3>
-              </div>
-              <p className="text-gray-300 text-lg leading-relaxed group-hover:text-gray-200 transition-colors">
-                Ser la empresa líder en desarrollo de software personalizado en Latinoamérica,
-                reconocida mundialmente por nuestra excelencia técnica, innovación disruptiva y
-                capacidad excepcional de anticipar y moldear las necesidades del mercado digital
-                global.
-              </p>
-            </div>
-          </div>
-
-          {/* Strategic Pillars */}
-          <div className="bg-gradient-to-r from-gray-800/40 via-gray-700/30 to-gray-800/40 backdrop-blur-sm rounded-3xl p-8 md:p-12 border border-gray-600/30 mb-20">
-            <div className="text-center mb-12">
-              <h3 className="text-3xl md:text-4xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-cyan-400">
-                Pilares Estratégicos
-              </h3>
-              <p className="text-gray-300 text-lg max-w-3xl mx-auto">
-                Nuestra roadmap hacia la excelencia tecnológica y el liderazgo en innovación
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-              {/* Immediate Excellence */}
-              <div className="space-y-6">
-                <div className="flex items-center mb-8">
-                  <div className="w-14 h-14 bg-gradient-to-r from-green-500 to-emerald-500 rounded-2xl flex items-center justify-center mr-5">
-                    <span className="text-xl">⚡</span>
-                  </div>
-                  <h4 className="text-2xl font-bold text-green-300">Excelencia Inmediata</h4>
-                </div>
-                <div className="space-y-4">
-                  <div className="flex items-start group">
-                    <div className="w-2 h-2 bg-green-400 rounded-full mt-3 mr-4 group-hover:scale-150 transition-transform"></div>
-                    <span className="text-gray-300 text-lg group-hover:text-green-200 transition-colors">
-                      Equipo especializado de desarrolladores senior y arquitectos de software
-                    </span>
-                  </div>
-                  <div className="flex items-start group">
-                    <div className="w-2 h-2 bg-green-400 rounded-full mt-3 mr-4 group-hover:scale-150 transition-transform"></div>
-                    <span className="text-gray-300 text-lg group-hover:text-green-200 transition-colors">
-                      Metodologías ágiles avanzadas y procesos DevOps optimizados
-                    </span>
-                  </div>
-                  <div className="flex items-start group">
-                    <div className="w-2 h-2 bg-green-400 rounded-full mt-3 mr-4 group-hover:scale-150 transition-transform"></div>
-                    <span className="text-gray-300 text-lg group-hover:text-green-200 transition-colors">
-                      Portafolio robusto de proyectos de alta complejidad y rendimiento
-                    </span>
-                  </div>
-                  <div className="flex items-start group">
-                    <div className="w-2 h-2 bg-green-400 rounded-full mt-3 mr-4 group-hover:scale-150 transition-transform"></div>
-                    <span className="text-gray-300 text-lg group-hover:text-green-200 transition-colors">
-                      Alianzas estratégicas con líderes tecnológicos globales
-                    </span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Future Innovation */}
-              <div className="space-y-6">
-                <div className="flex items-center mb-8">
-                  <div className="w-14 h-14 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-2xl flex items-center justify-center mr-5">
-                    <span className="text-xl">�</span>
-                  </div>
-                  <h4 className="text-2xl font-bold text-cyan-300">Innovación Continua</h4>
-                </div>
-                <div className="space-y-4">
-                  <div className="flex items-start group">
-                    <div className="w-2 h-2 bg-cyan-400 rounded-full mt-3 mr-4 group-hover:scale-150 transition-transform"></div>
-                    <span className="text-gray-300 text-lg group-hover:text-cyan-200 transition-colors">
-                      Investigación y desarrollo constante de nuevas soluciones
-                    </span>
-                  </div>
-                  <div className="flex items-start group">
-                    <div className="w-2 h-2 bg-cyan-400 rounded-full mt-3 mr-4 group-hover:scale-150 transition-transform"></div>
-                    <span className="text-gray-300 text-lg group-hover:text-cyan-200 transition-colors">
-                      Adopción temprana de tecnologías disruptivas
-                    </span>
-                  </div>
-                  <div className="flex items-start group">
-                    <div className="w-2 h-2 bg-cyan-400 rounded-full mt-3 mr-4 group-hover:scale-150 transition-transform"></div>
-                    <span className="text-gray-300 text-lg group-hover:text-cyan-200 transition-colors">
-                      Cultura de innovación y mejora continua
-                    </span>
-                  </div>
-                  <div className="flex items-start group">
-                    <div className="w-2 h-2 bg-cyan-400 rounded-full mt-3 mr-4 group-hover:scale-150 transition-transform"></div>
-                    <span className="text-gray-300 text-lg group-hover:text-cyan-200 transition-colors">
-                      Capacitación y desarrollo profesional constante
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Stats compactos y CTA */}
-            <div className="flex flex-col md:flex-row items-center justify-between mt-12 pt-8 border-t border-gray-800/50">
-              {/* Stats minimalistas */}
-              <div className="flex items-center space-x-8 mb-6 md:mb-0">
-                <div className="text-center">
-                  <div className="text-2xl font-bold text-blue-400">20+</div>
-                  <div className="text-xs text-gray-500 uppercase tracking-wide">Tecnologías</div>
-                </div>
-                <div className="text-center">
-                  <div className="text-2xl font-bold text-emerald-400">5+</div>
-                  <div className="text-xs text-gray-500 uppercase tracking-wide">Años Exp</div>
-                </div>
-                <div className="text-center">
-                  <div className="text-2xl font-bold text-purple-400">100%</div>
-                  <div className="text-xs text-gray-500 uppercase tracking-wide">Actualizados</div>
-                </div>
-              </div>
-
-              {/* CTA compacto */}
-              <div className="flex space-x-3">
-                {' '}
-                <button
-                  onClick={() => openQuoteModal()}
-                  className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-medium py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 text-sm"
-                >
-                  Propuesta
-                </button>
-                <button
-                  onClick={() => openConsultationModal()}
-                  className="bg-transparent border border-gray-600 hover:border-gray-500 text-gray-300 hover:text-white font-medium py-3 px-6 rounded-lg transition-all duration-300 text-sm"
-                >
-                  Consulta
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-      {/* Stats Counter Section - Logros y Proyectos */}
-      <section className="py-16 md:py-20 bg-gradient-to-br from-gray-900 via-black to-gray-900 relative overflow-hidden">
-        {/* Efectos de fondo */}
-        <div className="absolute inset-0">
-          <div className="absolute top-1/4 left-1/4 w-72 h-72 bg-blue-500/10 rounded-full blur-3xl animate-blob"></div>
-          <div
-            className="absolute bottom-1/4 right-1/4 w-72 h-72 bg-purple-500/10 rounded-full blur-3xl animate-blob"
-            style={{ animationDelay: '2s' }}
-          ></div>
-          <div
-            className="absolute top-1/2 left-1/2 w-64 h-64 bg-cyan-500/10 rounded-full blur-3xl animate-blob"
-            style={{ animationDelay: '4s' }}
-          ></div>
-        </div>
-
-        <div className="container mx-auto px-4 relative z-10">
-          {/* Header */}
-          <div className="text-center mb-12">
-            <div className="inline-flex items-center bg-gray-700/30 backdrop-blur-sm rounded-full px-4 py-2 mb-4 border border-gray-600/30">
-              <div className="w-2 h-2 bg-emerald-400 rounded-full mr-2 animate-pulse"></div>
-              <span className="text-gray-300 text-sm font-medium">Nuestros Logros</span>
-            </div>
-
-            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-white">
-              Proyectos que
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-blue-400">
-                {' '}
-                Transforman
-              </span>
-            </h2>
-
-            <p className="text-gray-400 max-w-2xl mx-auto">
-              Cada número representa la confianza de nuestros clientes y nuestro compromiso con la
-              excelencia
-            </p>
-          </div>
-
-          {/* Contadores Grid */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
-            {/* Proyectos Completados */}
-            <AnimatedCounterWithProgress
-              end={150}
-              suffix="+"
-              duration={2500}
-              title="Proyectos"
-              subtitle="Completados"
-              progressColor="from-blue-500 to-cyan-500"
-              progressWidth={80}
-              hoverColor="blue-500"
-            />
-
-            {/* Clientes Satisfechos */}
-            <AnimatedCounterWithProgress
-              end={120}
-              suffix="+"
-              duration={2200}
-              title="Clientes"
-              subtitle="Satisfechos"
-              progressColor="from-emerald-500 to-green-500"
-              progressWidth={100}
-              hoverColor="emerald-500"
-            />
-
-            {/* Años de Experiencia */}
-            <AnimatedCounterWithProgress
-              end={5}
-              suffix="+"
-              duration={1800}
-              title="Años"
-              subtitle="Experiencia"
-              progressColor="from-purple-500 to-pink-500"
-              progressWidth={75}
-              hoverColor="purple-500"
-            />
-
-            {/* Uptime/Disponibilidad */}
-            <AnimatedCounterWithProgress
-              end={99.9}
-              suffix="%"
-              duration={3000}
-              decimals={1}
-              title="Uptime"
-              subtitle="Disponibilidad"
-              progressColor="from-amber-500 to-orange-500"
-              progressWidth={99.9}
-              hoverColor="amber-500"
-            />
-          </div>
-
-          {/* Logros adicionales en formato horizontal */}
-          <div className="mt-12 bg-gradient-to-r from-gray-800/30 to-gray-700/30 backdrop-blur-sm rounded-xl p-6 border border-gray-700/20">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
-              <div className="flex items-center justify-center space-x-3">
-                <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full flex items-center justify-center">
-                  <svg
-                    className="w-5 h-5 text-white"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M13 10V3L4 14h7v7l9-11h-7z"
-                    />
-                  </svg>
-                </div>
-                <div>
-                  <div className="text-lg font-bold text-white">Respuesta &lt; 24h</div>
-                  <div className="text-sm text-gray-400">Garantizada</div>
-                </div>
-              </div>
-
-              <div className="flex items-center justify-center space-x-3">
-                <div className="w-10 h-10 bg-gradient-to-r from-emerald-500 to-green-500 rounded-full flex items-center justify-center">
-                  <svg
-                    className="w-5 h-5 text-white"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                    />
-                  </svg>
-                </div>
-                <div>
-                  <div className="text-lg font-bold text-white">100% Seguro</div>
-                  <div className="text-sm text-gray-400">SSL & Cifrado</div>
-                </div>
-              </div>
-
-              <div className="flex items-center justify-center space-x-3">
-                <div className="w-10 h-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center">
-                  <svg
-                    className="w-5 h-5 text-white"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"
-                    />
-                  </svg>
-                </div>
-                <div>
-                  <div className="text-lg font-bold text-white">Soporte 24/7</div>
-                  <div className="text-sm text-gray-400">Técnico Dedicado</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>{' '}
-      {/* Testimonials Section */}{' '}
-      <section
-        id="testimonials"
-        className="py-16 md:py-24 bg-gradient-to-br from-gray-900 via-black to-gray-900 relative overflow-hidden"
-      >
-        {/* Efectos de fondo animados */}
-        <div className="absolute inset-0">
-          <div className="absolute top-1/4 left-1/4 w-72 h-72 bg-blue-500/10 rounded-full blur-3xl animate-blob"></div>
-          <div
-            className="absolute bottom-1/4 right-1/4 w-72 h-72 bg-purple-500/10 rounded-full blur-3xl animate-blob"
-            style={{ animationDelay: '2s' }}
-          ></div>
-          <div
-            className="absolute top-1/2 left-1/2 w-64 h-64 bg-cyan-500/10 rounded-full blur-3xl animate-blob"
-            style={{ animationDelay: '4s' }}
-          ></div>
-        </div>
-
-        <div className="container mx-auto px-4 relative z-10">
-          {/* Header */}
+      {/* About Section */}
+      <section id="about" className="py-20 bg-gray-900/50">
+        <div className="container mx-auto px-4 lg:px-8">
           <div className="text-center mb-16">
-            <div className="inline-flex items-center bg-gray-800/50 backdrop-blur-sm rounded-full px-6 py-3 mb-6 border border-gray-700/50">
-              <div className="w-2 h-2 bg-yellow-400 rounded-full mr-3 animate-pulse"></div>
-              <span className="text-gray-300 font-medium">Testimonios</span>
-            </div>
-
-            <h2 className="text-4xl md:text-5xl font-bold mb-6 text-white">
-              Lo que Dicen Nuestros
-              <span className="block text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-orange-400">
-                Clientes
-              </span>
-            </h2>
-
-            <p className="text-lg text-gray-400 max-w-3xl mx-auto leading-relaxed">
-              La satisfacción de nuestros clientes es nuestra mejor carta de presentación. Descubre
-              cómo hemos transformado sus negocios con soluciones tecnológicas innovadoras.
+            <h2 className="text-4xl font-bold mb-4 text-white">Sobre Nosotros</h2>
+            <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+              Somos expertos en desarrollo de software y soluciones tecnológicas innovadoras.
+              Transformamos ideas en realidades digitales que impulsan el crecimiento de tu negocio.
             </p>
-          </div>{' '}
-          {/* Testimonials Banner */}
-          <TestimonialsBanner testimonials={testimonials} /> {/* Clients Section */}
-          <div className="mt-20">
-            <ClientsSection />
           </div>
-          {/* Blog Section */}
-          <div className="mt-20">
-            <BlogSection onOpenBlogModal={handleOpenBlogModal} />
-          </div>
-          {/* Stats Row */}
-          <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
-            <div className="text-center">
-              <div className="text-3xl font-bold text-yellow-400 mb-2">4.9/5</div>
-              <div className="text-gray-400">Calificación Promedio</div>
-              <div className="flex justify-center mt-2">
-                {[...Array(5)].map((_, i) => (
-                  <svg
-                    key={i}
-                    className="w-4 h-4 text-yellow-400 mr-1"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
-                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="bg-gray-800/50 p-6 rounded-xl border border-gray-700/50">
+              <div className="text-center">
+                <div className="bg-blue-500/20 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <svg className="w-8 h-8 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
-                ))}
+                </div>
+                <h3 className="text-xl font-semibold text-white mb-2">Calidad Garantizada</h3>
+                <p className="text-gray-300">
+                  Código limpio, escalable y optimizado para el mejor rendimiento.
+                </p>
               </div>
             </div>
-
-            <div className="text-center">
-              <div className="text-3xl font-bold text-emerald-400 mb-2">100%</div>
-              <div className="text-gray-400">Proyectos Exitosos</div>
-              <div className="text-sm text-emerald-300 mt-1">Sin fallos en entrega</div>
+            <div className="bg-gray-800/50 p-6 rounded-xl border border-gray-700/50">
+              <div className="text-center">
+                <div className="bg-cyan-500/20 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <svg className="w-8 h-8 text-cyan-400" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z" />
+                  </svg>
+                </div>
+                <h3 className="text-xl font-semibold text-white mb-2">Equipo Experto</h3>
+                <p className="text-gray-300">
+                  Profesionales con años de experiencia en tecnologías modernas.
+                </p>
+              </div>
             </div>
-
-            <div className="text-center">
-              <div className="text-3xl font-bold text-blue-400 mb-2">98%</div>
-              <div className="text-gray-400">Clientes Recurrentes</div>
-              <div className="text-sm text-blue-300 mt-1">Confían en nosotros</div>
-            </div>
-          </div>
-          {/* CTA */}
-          <div className="text-center mt-12">
-            <p className="text-gray-400 mb-6 text-lg">
-              ¿Quieres ser nuestro próximo caso de éxito?
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button
-                onClick={() => openQuoteModal()}
-                className="bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-white font-bold py-4 px-8 rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg shadow-yellow-500/25"
-              >
-                Iniciar Mi Proyecto
-              </button>
-              <button
-                onClick={() => openConsultationModal()}
-                className="bg-transparent border-2 border-gray-500 text-gray-300 hover:border-gray-400 hover:text-white font-bold py-4 px-8 rounded-full transition-all duration-300"
-              >
-                Ver Más Casos
-              </button>
+            <div className="bg-gray-800/50 p-6 rounded-xl border border-gray-700/50">
+              <div className="text-center">
+                <div className="bg-green-500/20 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <svg className="w-8 h-8 text-green-400" fill="currentColor" viewBox="0 0 20 20">
+                    <path
+                      fillRule="evenodd"
+                      d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                </div>
+                <h3 className="text-xl font-semibold text-white mb-2">Soporte 24/7</h3>
+                <p className="text-gray-300">
+                  Respuesta rápida y soporte continuo para todos nuestros proyectos.
+                </p>
+              </div>
             </div>
           </div>
         </div>
       </section>
+
+      {/* Services Section */}
+      <section id="services" className="py-20">
+        <div className="container mx-auto px-4 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold mb-4 text-white">Nuestros Servicios</h2>
+            <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+              Ofrecemos soluciones tecnológicas completas adaptadas a las necesidades de tu negocio
+            </p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {Object.values(servicesData).map((service, index) => (
+              <div
+                key={index}
+                className="bg-gray-800/50 p-6 rounded-xl border border-gray-700/50 hover:border-blue-500/50 transition-all duration-300 cursor-pointer group"
+                onClick={() => {
+                  setSelectedService(service);
+                  setShowServiceModal(true);
+                }}
+                onKeyDown={e => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    setSelectedService(service);
+                    setShowServiceModal(true);
+                  }
+                }}
+                role="button"
+                tabIndex={0}
+                aria-label={`Ver más detalles sobre ${service.title}`}
+              >
+                <div className="text-center">
+                  <div className="bg-blue-500/20 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-blue-500/30 transition-all duration-300">
+                    <span className="text-2xl">{service.icon}</span>
+                  </div>
+                  <h3 className="text-xl font-semibold text-white mb-2 group-hover:text-blue-400 transition-colors">
+                    {service.title}
+                  </h3>
+                  <p className="text-gray-300 mb-4">{service.description}</p>
+                  <div className="text-blue-400 font-semibold group-hover:text-blue-300 transition-colors">
+                    Ver más →
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Technologies Section */}
+      <section id="technologies" className="py-20 bg-gray-900/50">
+        <div className="container mx-auto px-4 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold mb-4 text-white">Tecnologías que Dominamos</h2>
+            <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+              Trabajamos con las tecnologías más modernas y eficientes del mercado
+            </p>
+          </div>
+          <TechCarousel technologies={technologies} />
+        </div>
+      </section>
+
+      {/* Testimonials Section */}
+      <section id="testimonials" className="py-20">
+        <div className="container mx-auto px-4 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold mb-4 text-white">Lo Que Dicen Nuestros Clientes</h2>
+            <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+              La confianza de nuestros clientes es nuestro mayor logro. Estas son sus experiencias
+              trabajando con nosotros.
+            </p>
+          </div>
+
+          {/* Testimonials Carousel */}
+          <div className="relative max-w-6xl mx-auto">
+            <TestimonialsCarousel testimonials={testimonials} />
+          </div>
+        </div>
+      </section>
+
+      {/* Blog Section */}
+      <section id="blog" className="py-20 bg-gray-900/50">
+        <div className="container mx-auto px-4 lg:px-8">
+          <BlogSection onOpenBlogModal={handleOpenBlogModal} />
+        </div>
+      </section>
+
+      {/* Clients Section */}
+      <ClientsSection />
+
       {/* Contact Section */}
       <section
         id="contact"
-        className="py-20 md:py-32 bg-gradient-to-br from-gray-900 via-black to-gray-900 relative overflow-hidden"
+        className="py-20 bg-gradient-to-br from-gray-900/50 via-gray-800/30 to-gray-900/50 relative overflow-hidden"
       >
-        {/* Efectos de fondo animados */}
+        {/* Background Effects */}
         <div className="absolute inset-0">
-          <div className="absolute top-1/4 left-1/4 w-72 h-72 bg-blue-500/10 rounded-full blur-3xl animate-blob"></div>
-          <div
-            className="absolute bottom-1/4 right-1/4 w-72 h-72 bg-purple-500/10 rounded-full blur-3xl animate-blob"
-            style={{ animationDelay: '2s' }}
-          ></div>
-          <div
-            className="absolute top-1/2 left-1/2 w-64 h-64 bg-cyan-500/10 rounded-full blur-3xl animate-blob"
-            style={{ animationDelay: '4s' }}
-          ></div>
+          <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-blue-500/5 rounded-full blur-3xl animate-pulse"></div>
+          <div className="absolute bottom-1/4 right-1/4 w-64 h-64 bg-cyan-500/5 rounded-full blur-3xl animate-pulse delay-1000"></div>
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-purple-500/5 rounded-full blur-3xl animate-pulse delay-500"></div>
         </div>
 
-        <div className="container mx-auto px-4 relative z-10">
+        <div className="container mx-auto px-4 lg:px-8 relative z-10">
           <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-6xl font-bold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 via-orange-400 to-red-400 animate-fadeIn">
-              Contáctanos
+            <h2 className="text-4xl lg:text-5xl font-bold mb-6 text-white">
+              ¿Listo para{' '}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400">
+                Transformar
+              </span>{' '}
+              tu Negocio?
             </h2>
-            <p className="text-xl text-gray-300 max-w-2xl mx-auto">
-              ¿Listo para transformar tu idea en una solución tecnológica exitosa?
+            <div className="h-1 w-24 bg-gradient-to-r from-blue-400 to-cyan-400 mx-auto rounded-full mb-6"></div>
+            <p className="text-xl text-gray-300 max-w-4xl mx-auto leading-relaxed">
+              Conversemos sobre tu proyecto. Nuestro equipo de expertos está listo para ayudarte a
+              crear soluciones digitales que impulsen tu crecimiento.
             </p>
           </div>
 
-          {/* Layout de contacto simplificado */}
-          <div className="max-w-7xl mx-auto space-y-8">
-            {/* Información de contacto y formulario como botones */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
-              {/* Email */}
-              <div className="bg-gradient-to-br from-gray-800/80 to-gray-900/80 backdrop-blur-md p-4 rounded-xl border border-gray-700/50">
-                <div className="flex items-center space-x-3">
-                  <div className="bg-blue-500/20 p-2 rounded-lg">
-                    <svg className="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
-                      <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"></path>
-                      <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"></path>
-                    </svg>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 max-w-6xl mx-auto">
+            {/* Left Side - Contact Info */}
+            <div className="space-y-8">
+              <div>
+                <h3 className="text-2xl font-bold text-white mb-6">Conecta con Nosotros</h3>
+                <p className="text-gray-300 text-lg mb-8">
+                  Estamos aquí para escucharte y crear juntos la solución perfecta para tu negocio.
+                </p>
+              </div>
+
+              {/* Contact Methods */}
+              <div className="space-y-6">
+                {/* Email */}
+                <div className="bg-gradient-to-br from-gray-800/60 to-gray-900/60 backdrop-blur-md p-6 rounded-2xl border border-gray-700/50 hover:border-blue-500/50 transition-all duration-300 group">
+                  <div className="flex items-center space-x-4">
+                    <div className="bg-blue-500/20 p-4 rounded-xl group-hover:bg-blue-500/30 transition-all duration-300">
+                      <svg
+                        className="w-8 h-8 text-blue-400"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                      >
+                        <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
+                        <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
+                      </svg>
+                    </div>
+                    <div>
+                      <h4 className="text-white font-semibold text-lg mb-1">Email Directo</h4>
+                      <EmailLink className="text-blue-400 text-lg font-medium hover:text-blue-300 transition-colors">
+                        contacto@axon.app
+                      </EmailLink>
+                      <p className="text-gray-400 text-sm">Respuesta garantizada en 24 horas</p>
+                    </div>
                   </div>
-                  <div>
-                    <h4 className="text-white font-semibold text-sm">Email</h4>
-                    <EmailLink
-                      mailtoUrl="mailto:axonapp.info@gmail.com?subject=Consulta%20sobre%20servicios%20de%20Axon.App"
-                      className="text-blue-400 hover:text-blue-300 text-sm transition duration-200"
-                    >
-                      axonapp.info@gmail.com
-                    </EmailLink>
+                </div>
+
+                {/* Location */}
+                <div className="bg-gradient-to-br from-gray-800/60 to-gray-900/60 backdrop-blur-md p-6 rounded-2xl border border-gray-700/50 hover:border-purple-500/50 transition-all duration-300 group">
+                  <div className="flex items-center space-x-4">
+                    <div className="bg-purple-500/20 p-4 rounded-xl group-hover:bg-purple-500/30 transition-all duration-300">
+                      <svg
+                        className="w-8 h-8 text-purple-400"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                    </div>
+                    <div>
+                      <h4 className="text-white font-semibold text-lg mb-1">Ubicación</h4>
+                      <p className="text-purple-400 text-lg font-medium">Colombia</p>
+                      <p className="text-gray-400 text-sm">Atendemos clientes globalmente</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Support */}
+                <div className="bg-gradient-to-br from-gray-800/60 to-gray-900/60 backdrop-blur-md p-6 rounded-2xl border border-gray-700/50 hover:border-green-500/50 transition-all duration-300 group">
+                  <div className="flex items-center space-x-4">
+                    <div className="bg-green-500/20 p-4 rounded-xl group-hover:bg-green-500/30 transition-all duration-300">
+                      <svg
+                        className="w-8 h-8 text-green-400"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                    </div>
+                    <div>
+                      <h4 className="text-white font-semibold text-lg mb-1">Soporte 24/7</h4>
+                      <p className="text-green-400 text-lg font-medium">Siempre disponibles</p>
+                      <p className="text-gray-400 text-sm">Soporte continuo post-lanzamiento</p>
+                    </div>
                   </div>
                 </div>
               </div>
 
-              {/* WhatsApp */}
-              <div className="bg-gradient-to-br from-gray-800/80 to-gray-900/80 backdrop-blur-md p-4 rounded-xl border border-gray-700/50">
-                <div className="flex items-center space-x-3">
-                  <div className="bg-green-500/20 p-2 rounded-lg">
-                    <svg className="w-5 h-5 text-green-400" fill="currentColor" viewBox="0 0 20 20">
-                      <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"></path>
-                    </svg>
+              {/* Trust Indicators */}
+              <div className="grid grid-cols-2 gap-4 pt-6">
+                <div className="text-center p-4 bg-gradient-to-br from-blue-500/10 to-cyan-500/10 rounded-xl border border-blue-500/20">
+                  <div className="text-2xl font-bold text-white mb-1">100+</div>
+                  <div className="text-blue-400 text-sm">Proyectos Completados</div>
+                </div>
+                <div className="text-center p-4 bg-gradient-to-br from-green-500/10 to-emerald-500/10 rounded-xl border border-green-500/20">
+                  <div className="text-2xl font-bold text-white mb-1">5⭐</div>
+                  <div className="text-green-400 text-sm">Calificación Promedio</div>
+                </div>
+              </div>
+            </div>
+
+            {/* Right Side - CTA Actions */}
+            <div className="space-y-8">
+              <div>
+                <h3 className="text-2xl font-bold text-white mb-6">¿Cómo Podemos Ayudarte?</h3>
+                <p className="text-gray-300 text-lg">
+                  Elige la opción que mejor se adapte a tus necesidades y comencemos a trabajar
+                  juntos.
+                </p>
+              </div>
+
+              {/* CTA Cards */}
+              <div className="space-y-6">
+                {/* Project Consultation */}
+                <div
+                  className="bg-gradient-to-br from-blue-600/20 to-cyan-600/20 backdrop-blur-md p-8 rounded-2xl border border-blue-500/30 hover:border-blue-500/50 transition-all duration-300 group cursor-pointer"
+                  onClick={openConsultationModal}
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={e => e.key === 'Enter' && openConsultationModal()}
+                >
+                  <div className="flex items-start space-x-4">
+                    <div className="bg-blue-500/30 p-3 rounded-xl group-hover:bg-blue-500/40 transition-all duration-300">
+                      <svg
+                        className="w-6 h-6 text-blue-300"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
+                          d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"
+                        />
+                      </svg>
+                    </div>
+                    <div className="flex-1">
+                      <h4 className="text-white font-bold text-xl mb-2">Consultoría Estratégica</h4>
+                      <p className="text-blue-200 mb-4">
+                        Conversemos sobre tu visión y diseñemos juntos la estrategia perfecta para
+                        tu proyecto.
+                      </p>
+                      <div className="flex items-center text-blue-300 font-semibold group-hover:text-blue-200 transition-colors">
+                        <span>Agendar Consulta Gratuita</span>
+                        <svg
+                          className="w-5 h-5 ml-2 transform group-hover:translate-x-1 transition-transform"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            d="M9 5l7 7-7 7"
+                          />
+                        </svg>
+                      </div>
+                    </div>
                   </div>
-                  <div>
-                    <h4 className="text-white font-semibold text-sm">WhatsApp</h4>
-                    <a
-                      href="https://wa.me/573233932071"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-green-400 hover:text-green-300 text-sm transition duration-200"
-                    >
-                      +57 323 393 2071
-                    </a>
+                </div>
+
+                {/* Quote Request */}
+                <div
+                  className="bg-gradient-to-br from-purple-600/20 to-pink-600/20 backdrop-blur-md p-8 rounded-2xl border border-purple-500/30 hover:border-purple-500/50 transition-all duration-300 group cursor-pointer"
+                  onClick={openQuoteModal}
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={e => e.key === 'Enter' && openQuoteModal()}
+                >
+                  <div className="flex items-start space-x-4">
+                    <div className="bg-purple-500/30 p-3 rounded-xl group-hover:bg-purple-500/40 transition-all duration-300">
+                      <svg
+                        className="w-6 h-6 text-purple-300"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
+                          d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"
+                        />
+                      </svg>
+                    </div>
+                    <div className="flex-1">
+                      <h4 className="text-white font-bold text-xl mb-2">
+                        Cotización Personalizada
+                      </h4>
+                      <p className="text-purple-200 mb-4">
+                        Recibe una propuesta detallada con costos, tiempos y especificaciones
+                        técnicas.
+                      </p>
+                      <div className="flex items-center text-purple-300 font-semibold group-hover:text-purple-200 transition-colors">
+                        <span>Solicitar Cotización</span>
+                        <svg
+                          className="w-5 h-5 ml-2 transform group-hover:translate-x-1 transition-transform"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            d="M9 5l7 7-7 7"
+                          />
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Direct Contact */}
+                <div
+                  className="bg-gradient-to-br from-green-600/20 to-emerald-600/20 backdrop-blur-md p-8 rounded-2xl border border-green-500/30 hover:border-green-500/50 transition-all duration-300 group cursor-pointer"
+                  onClick={openContactModal}
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={e => e.key === 'Enter' && openContactModal()}
+                >
+                  <div className="flex items-start space-x-4">
+                    <div className="bg-green-500/30 p-3 rounded-xl group-hover:bg-green-500/40 transition-all duration-300">
+                      <svg
+                        className="w-6 h-6 text-green-300"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
+                          d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
+                        />
+                      </svg>
+                    </div>
+                    <div className="flex-1">
+                      <h4 className="text-white font-bold text-xl mb-2">Contacto Directo</h4>
+                      <p className="text-green-200 mb-4">
+                        Envíanos un mensaje directo y te responderemos en menos de 24 horas.
+                      </p>
+                      <div className="flex items-center text-green-300 font-semibold group-hover:text-green-200 transition-colors">
+                        <span>Enviar Mensaje</span>
+                        <svg
+                          className="w-5 h-5 ml-2 transform group-hover:translate-x-1 transition-transform"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            d="M9 5l7 7-7 7"
+                          />
+                        </svg>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
 
-              {/* Ubicación */}
-              <div className="bg-gradient-to-br from-gray-800/80 to-gray-900/80 backdrop-blur-md p-4 rounded-xl border border-gray-700/50">
-                <div className="flex items-center space-x-3">
-                  <div className="bg-purple-500/20 p-2 rounded-lg">
+              {/* Emergency Contact */}
+              <div className="bg-gradient-to-br from-orange-600/10 to-red-600/10 backdrop-blur-md p-6 rounded-2xl border border-orange-500/20">
+                <div className="flex items-center space-x-3 mb-3">
+                  <div className="bg-orange-500/20 p-2 rounded-lg">
                     <svg
-                      className="w-5 h-5 text-purple-400"
+                      className="w-5 h-5 text-orange-400"
                       fill="currentColor"
                       viewBox="0 0 20 20"
                     >
                       <path
                         fillRule="evenodd"
-                        d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z"
-                        clipRule="evenodd"
-                      ></path>
-                    </svg>
-                  </div>
-                  <div>
-                    <h4 className="text-white font-semibold text-sm">Ubicación</h4>
-                    <p className="text-purple-400 text-sm">Colombia</p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Tiempo de respuesta */}
-              <div className="bg-gradient-to-br from-gray-800/80 to-gray-900/80 backdrop-blur-md p-4 rounded-xl border border-gray-700/50">
-                <div className="flex items-center space-x-3">
-                  <div className="bg-yellow-500/20 p-2 rounded-lg">
-                    <svg
-                      className="w-5 h-5 text-yellow-400"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"
-                        clipRule="evenodd"
-                      ></path>
-                    </svg>
-                  </div>
-                  <div>
-                    <h4 className="text-white font-semibold text-sm">Respuesta</h4>
-                    <p className="text-yellow-400 text-sm">≤ 24 horas</p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Formulario como botón */}
-              <div
-                className="bg-gradient-to-br from-gray-800/80 to-gray-900/80 backdrop-blur-md p-4 rounded-xl border border-gray-700/50 hover:border-blue-500/50 transition-all duration-300 cursor-pointer group"
-                onClick={openContactModal}
-                onKeyDown={e => e.key === 'Enter' && openContactModal()}
-                role="button"
-                tabIndex={0}
-                aria-label="Abrir formulario de contacto"
-              >
-                <div className="flex items-center space-x-3">
-                  <div className="bg-blue-500/20 p-2 rounded-lg group-hover:bg-blue-500/30 transition-all duration-300">
-                    <svg
-                      className="w-5 h-5 text-blue-400"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
-                      ></path>
-                    </svg>
-                  </div>
-                  <div>
-                    <h4 className="text-white font-semibold text-sm">Formulario</h4>
-                    <p className="text-blue-400 text-sm group-hover:text-blue-300 transition-colors">
-                      Enviar mensaje
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Call to Action de WhatsApp */}
-            <div className="bg-gradient-to-r from-green-600/20 to-emerald-600/20 backdrop-blur-md p-6 rounded-2xl border border-green-500/30 text-center">
-              <h4 className="text-white font-bold text-lg mb-2">
-                ¿Necesitas una respuesta inmediata?
-              </h4>
-              <p className="text-gray-300 text-sm mb-4">
-                Contáctanos por WhatsApp para consultas urgentes y obtén respuesta al instante
-              </p>
-              <a
-                href="https://wa.me/573233932071?text=Hola%2C%20estoy%20interesado%20en%20sus%20servicios%20de%20desarrollo%20tecnológico"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-6 rounded-lg transition duration-300 transform hover:scale-105"
-              >
-                <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.885 3.488" />
-                </svg>
-                Chatear en WhatsApp
-              </a>
-            </div>
-          </div>
-        </div>
-      </section>
-      {/* Footer Profesional */}
-      <footer className="bg-gradient-to-br from-gray-900 via-black to-gray-900 relative overflow-hidden">
-        {/* Efectos de fondo animados sutiles */}
-        <div className="absolute inset-0">
-          <div className="absolute top-1/4 left-1/4 w-72 h-72 bg-blue-500/5 rounded-full blur-3xl animate-blob"></div>
-          <div
-            className="absolute bottom-1/4 right-1/4 w-72 h-72 bg-purple-500/5 rounded-full blur-3xl animate-blob"
-            style={{ animationDelay: '2s' }}
-          ></div>
-        </div>
-
-        <div className="container mx-auto px-4 py-16 relative z-10">
-          {/* Main Footer Content */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
-            {/* Columna 1: Información de la Empresa */}
-            <div className="space-y-6 text-center">
-              <div className="flex items-center justify-center space-x-4 mb-4">
-                <img
-                  src={logo1}
-                  alt="Axon Logo Original"
-                  className="h-16 w-16 object-contain logo-rotate-1 rounded-lg"
-                  onError={e => {
-                    e.target.style.display = 'none';
-                  }}
-                />
-                <img
-                  src={logo231}
-                  alt="Axon.App Logo 3D"
-                  className="h-20 w-auto object-contain logo-rotate-2 rounded-lg"
-                  onError={e => {
-                    e.target.style.display = 'none';
-                  }}
-                />
-              </div>
-              <p className="text-gray-300 text-sm leading-relaxed text-center">
-                Transformamos ideas en soluciones digitales innovadoras. Desarrollo web,
-                aplicaciones móviles, inteligencia artificial y más.
-              </p>
-              <div className="flex items-center justify-center space-x-2 text-sm text-gray-400">
-                <svg className="w-4 h-4 text-purple-400" fill="currentColor" viewBox="0 0 20 20">
-                  <path
-                    fillRule="evenodd"
-                    d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-                <span>Bogotá D.C., Colombia</span>
-              </div>
-            </div>
-
-            {/* Columna 2: Servicios */}
-            <div className="space-y-6">
-              <h4 className="text-xl font-semibold text-white font-rajdhani">
-                🚀 Nuestros Servicios
-              </h4>
-              <ul className="space-y-3 text-sm">
-                <li>
-                  <button
-                    onClick={() => scrollToSection('services')}
-                    className="text-gray-300 hover:text-green-400 transition-colors duration-200 flex items-center space-x-2 cursor-pointer"
-                  >
-                    <span className="text-green-400">▶</span>
-                    <span>Desarrollo Web</span>
-                  </button>
-                </li>
-                <li>
-                  <button
-                    onClick={() => scrollToSection('services')}
-                    className="text-gray-300 hover:text-green-400 transition-colors duration-200 flex items-center space-x-2 cursor-pointer"
-                  >
-                    <span className="text-green-400">▶</span>
-                    <span>Aplicaciones Móviles</span>
-                  </button>
-                </li>{' '}
-                <li>
-                  <button
-                    onClick={() => scrollToSection('services')}
-                    className="text-gray-300 hover:text-green-400 transition-colors duration-200 flex items-center space-x-2 cursor-pointer"
-                  >
-                    <span className="text-green-400">▶</span>
-                    <span>Marketing Digital</span>
-                  </button>
-                </li>
-                <li>
-                  <button
-                    onClick={() => scrollToSection('services')}
-                    className="text-gray-300 hover:text-green-400 transition-colors duration-200 flex items-center space-x-2 cursor-pointer"
-                  >
-                    <span className="text-green-400">▶</span>
-                    <span>Consultoría TI</span>
-                  </button>
-                </li>
-                <li>
-                  <button
-                    onClick={() => scrollToSection('services')}
-                    className="text-gray-300 hover:text-green-400 transition-colors duration-200 flex items-center space-x-2 cursor-pointer"
-                  >
-                    <span className="text-green-400">▶</span>
-                    <span>E-commerce</span>
-                  </button>
-                </li>{' '}
-                <li>
-                  <button
-                    onClick={() => scrollToSection('services')}
-                    className="text-gray-300 hover:text-green-400 transition-colors duration-200 flex items-center space-x-2 cursor-pointer"
-                  >
-                    <span className="text-green-400">▶</span>
-                    <span>Soporte Hardware y Software</span>
-                  </button>
-                </li>
-              </ul>
-            </div>
-
-            {/* Columna 3: Contacto */}
-            <div className="space-y-6">
-              <h4 className="text-xl font-semibold text-white font-rajdhani">📞 Contacto</h4>
-              <div className="space-y-4 text-sm">
-                <div className="flex items-center space-x-3">
-                  <div className="w-10 h-10 bg-gradient-to-r from-green-500 to-green-600 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
-                      <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
-                    </svg>
-                  </div>
-                  <div>
-                    <p className="text-gray-400">Email</p>
-                    <EmailLink
-                      mailtoUrl="mailto:axonapp.info@gmail.com?subject=Contacto%20desde%20sitio%20web%20-%20Axon.App&body=Hola%20equipo%20de%20Axon.App,%0A%0AMe%20pongo%20en%20contacto%20con%20ustedes%20desde%20su%20sitio%20web%20para:%0A%0A-%20%0A-%20%0A-%20%0A%0AMis%20datos%20de%20contacto:%0ANombre:%20%0ATeléfono:%20%0AEmpresa:%20%0A%0AGracias%20por%20su%20tiempo.%0A%0ASaludos,"
-                      className="text-purple-400 hover:text-purple-300 transition-colors"
-                    >
-                      axonapp.info@gmail.com
-                    </EmailLink>
-                  </div>
-                </div>
-
-                <div className="flex items-center space-x-3">
-                  <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
-                    </svg>
-                  </div>
-                  <div>
-                    <p className="text-gray-400">Teléfono</p>
-                    <a
-                      href="tel:+573233932071"
-                      className="text-blue-400 hover:text-blue-300 transition-colors"
-                    >
-                      +57 323 393 2071
-                    </a>
-                  </div>
-                </div>
-
-                <div className="flex items-center space-x-3">
-                  <div className="w-10 h-10 bg-gradient-to-r from-purple-500 to-purple-600 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
-                      <path
-                        fillRule="evenodd"
-                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"
+                        d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"
                         clipRule="evenodd"
                       />
                     </svg>
                   </div>
-                  <div>
-                    <p className="text-gray-400">Horario</p>
-                    <p className="text-purple-400">Lun - Vie: 8AM - 6PM</p>
-                    <p className="text-purple-400">Sáb: 9AM - 2PM</p>
-                  </div>
+                  <h4 className="text-orange-300 font-semibold">¿Proyecto Urgente?</h4>
+                </div>
+                <p className="text-gray-300 text-sm">
+                  Para proyectos que requieren atención inmediata, contáctanos directamente por
+                  email con el asunto "URGENTE".
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="bg-gradient-to-br from-gray-900 via-black to-gray-900 relative overflow-hidden">
+        <div className="absolute inset-0">
+          <div className="absolute top-1/4 left-1/4 w-72 h-72 bg-blue-500/5 rounded-full blur-3xl animate-blob"></div>
+          <div className="absolute bottom-1/4 right-1/4 w-72 h-72 bg-cyan-500/5 rounded-full blur-3xl animate-blob animation-delay-2000"></div>
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-72 h-72 bg-green-500/5 rounded-full blur-3xl animate-blob animation-delay-4000"></div>
+        </div>
+
+        <div className="relative z-10">
+          <div className="container mx-auto px-4 lg:px-8 py-12">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+              {/* Company Info */}
+              <div className="md:col-span-2">
+                <div className="flex items-center space-x-4 mb-6">
+                  <img
+                    src={logo1}
+                    alt="Axon Logo"
+                    className="h-12 w-12 object-contain rounded-lg"
+                  />
+                  <h3 className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
+                    Axon.App
+                  </h3>
+                </div>
+                <p className="text-gray-300 mb-6 max-w-md">
+                  Soluciones tecnológicas innovadoras para impulsar tu negocio hacia el futuro
+                  digital.
+                </p>
+              </div>
+
+              {/* Services */}
+              <div>
+                <h4 className="text-lg font-semibold text-white mb-4">Servicios</h4>
+                <ul className="space-y-2">
+                  <li>
+                    <a
+                      href="#services"
+                      className="text-gray-300 hover:text-blue-400 transition-colors"
+                    >
+                      Desarrollo Web
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      href="#services"
+                      className="text-gray-300 hover:text-blue-400 transition-colors"
+                    >
+                      Apps Móviles
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      href="#services"
+                      className="text-gray-300 hover:text-blue-400 transition-colors"
+                    >
+                      Consultoría TI
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      href="#services"
+                      className="text-gray-300 hover:text-blue-400 transition-colors"
+                    >
+                      Automatización
+                    </a>
+                  </li>
+                </ul>
+              </div>
+
+              {/* Contact */}
+              <div>
+                <h4 className="text-lg font-semibold text-white mb-4">Contacto</h4>
+                <ul className="space-y-2">
+                  <li className="text-gray-300">
+                    <EmailLink>contacto@axon.app</EmailLink>
+                  </li>
+                  <li className="text-gray-300">Colombia</li>
+                  <li className="text-gray-300">Respuesta ≤ 24h</li>
+                </ul>
+              </div>
+            </div>
+
+            <div className="border-t border-gray-800 mt-12 pt-8">
+              <div className="flex flex-col md:flex-row justify-between items-center">
+                <p className="text-gray-400 text-sm">
+                  © 2025 Axon.App. Todos los derechos reservados.
+                </p>
+                <div className="flex space-x-6 mt-4 md:mt-0">
+                  <button
+                    onClick={() => setShowPrivacyModal(true)}
+                    className="text-gray-400 hover:text-blue-400 text-sm transition-colors"
+                  >
+                    Política de Privacidad
+                  </button>
+                  <button
+                    onClick={() => setShowTermsModal(true)}
+                    className="text-gray-400 hover:text-blue-400 text-sm transition-colors"
+                  >
+                    Términos de Servicio
+                  </button>
+                  <button
+                    onClick={() => setShowCookiesModal(true)}
+                    className="text-gray-400 hover:text-blue-400 text-sm transition-colors"
+                  >
+                    Cookies
+                  </button>
                 </div>
               </div>
             </div>
-
-            {/* Columna 4: Enlaces Rápidos */}
-            <div className="space-y-6">
-              <h4 className="text-xl font-semibold text-white font-rajdhani">🔗 Enlaces Rápidos</h4>
-              <ul className="space-y-3 text-sm">
-                <li>
-                  <button
-                    onClick={() => scrollToSection('hero')}
-                    className="text-gray-300 hover:text-green-400 transition-colors duration-200 flex items-center space-x-2 cursor-pointer"
-                  >
-                    <span className="text-green-400">▶</span>
-                    <span>Inicio</span>
-                  </button>
-                </li>
-                <li>
-                  <button
-                    onClick={() => scrollToSection('about')}
-                    className="text-gray-300 hover:text-green-400 transition-colors duration-200 flex items-center space-x-2 cursor-pointer"
-                  >
-                    <span className="text-green-400">▶</span>
-                    <span>Nosotros</span>
-                  </button>
-                </li>
-                <li>
-                  <button
-                    onClick={() => scrollToSection('services')}
-                    className="text-gray-300 hover:text-green-400 transition-colors duration-200 flex items-center space-x-2 cursor-pointer"
-                  >
-                    <span className="text-green-400">▶</span>
-                    <span>Servicios</span>
-                  </button>
-                </li>
-                <li>
-                  <button
-                    onClick={() => scrollToSection('technologies')}
-                    className="text-gray-300 hover:text-green-400 transition-colors duration-200 flex items-center space-x-2 cursor-pointer"
-                  >
-                    <span className="text-green-400">▶</span>
-                    <span>Tecnologías</span>
-                  </button>
-                </li>
-                <li>
-                  <button
-                    onClick={() => scrollToSection('testimonials')}
-                    className="text-gray-300 hover:text-green-400 transition-colors duration-200 flex items-center space-x-2 cursor-pointer"
-                  >
-                    <span className="text-green-400">▶</span>
-                    <span>Testimonios</span>
-                  </button>
-                </li>
-                <li>
-                  <button
-                    onClick={() => scrollToSection('contact')}
-                    className="text-gray-300 hover:text-green-400 transition-colors duration-200 flex items-center space-x-2 cursor-pointer"
-                  >
-                    <span className="text-green-400">▶</span>
-                    <span>Contacto</span>
-                  </button>
-                </li>
-              </ul>
-            </div>
-          </div>
-
-          {/* Divider */}
-          <div className="border-t border-gray-800 pt-8">
-            {/* Social Media Section */}
-            <div className="text-center mb-8">
-              <h4 className="text-lg font-semibold text-white mb-6 font-rajdhani">
-                🌐 Síguenos en Redes Sociales
-              </h4>
-              <div className="flex justify-center items-center space-x-6">
-                {/* Facebook */}
-                <a
-                  href="https://facebook.com/axonapp.colombia"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group relative"
-                >
-                  <div className="w-12 h-12 bg-gradient-to-r from-blue-600 to-blue-700 rounded-full flex items-center justify-center transform transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6 shadow-lg">
-                    <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
-                    </svg>
-                  </div>
-                  <span className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 text-xs text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity">
-                    Facebook
-                  </span>
-                </a>
-
-                {/* Instagram */}
-                <a
-                  href="https://instagram.com/axonapp.co"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group relative"
-                >
-                  <div className="w-12 h-12 bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500 rounded-full flex items-center justify-center transform transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6 shadow-lg">
-                    <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
-                    </svg>
-                  </div>
-                  <span className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 text-xs text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity">
-                    Instagram
-                  </span>
-                </a>
-
-                {/* Twitter/X */}
-                <a
-                  href="https://x.com/axonapp_co"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group relative"
-                >
-                  <div className="w-12 h-12 bg-gradient-to-r from-gray-800 to-black rounded-full flex items-center justify-center transform transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6 shadow-lg">
-                    <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-                    </svg>
-                  </div>
-                  <span className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 text-xs text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity">
-                    Twitter
-                  </span>
-                </a>
-
-                {/* LinkedIn */}
-                <a
-                  href="https://linkedin.com/company/axonapp-colombia"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group relative"
-                >
-                  <div className="w-12 h-12 bg-gradient-to-r from-blue-700 to-blue-800 rounded-full flex items-center justify-center transform transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6 shadow-lg">
-                    <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
-                    </svg>
-                  </div>
-                  <span className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 text-xs text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity">
-                    LinkedIn
-                  </span>
-                </a>
-
-                {/* YouTube */}
-                <a
-                  href="https://youtube.com/@axonapp-colombia"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group relative"
-                >
-                  <div className="w-12 h-12 bg-gradient-to-r from-red-600 to-red-700 rounded-full flex items-center justify-center transform transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6 shadow-lg">
-                    <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
-                    </svg>
-                  </div>
-                  <span className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 text-xs text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity">
-                    YouTube
-                  </span>
-                </a>
-
-                {/* WhatsApp */}
-                <a
-                  href="https://wa.me/573233932071"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group relative"
-                >
-                  <div className="w-12 h-12 bg-gradient-to-r from-green-500 to-green-600 rounded-full flex items-center justify-center transform transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6 shadow-lg">
-                    <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.885 3.488" />
-                    </svg>
-                  </div>
-                  <span className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 text-xs text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity">
-                    WhatsApp
-                  </span>
-                </a>
-
-                {/* LinkedIn */}
-                <a href="#" target="_blank" rel="noopener noreferrer" className="group relative">
-                  <div className="w-12 h-12 bg-gradient-to-r from-blue-600 to-blue-700 rounded-full flex items-center justify-center transform transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6 shadow-lg">
-                    <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
-                    </svg>
-                  </div>
-                  <span className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 text-xs text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity">
-                    LinkedIn
-                  </span>
-                </a>
-              </div>
-            </div>
-
-            {/* Bottom Footer */}
-            <div className="flex flex-col md:flex-row justify-between items-center pt-6 border-t border-gray-800">
-              <div className="text-center md:text-left mb-4 md:mb-0">
-                <p className="text-gray-400 text-sm">
-                  &copy; {new Date().getFullYear()}{' '}
-                  <span className="font-semibold">
-                    <span className="text-cyan-300">Axon</span>
-                    <span className="text-emerald-400">.App</span>
-                  </span>
-                  . Todos los derechos reservados.
-                </p>
-                <p className="text-gray-500 text-xs mt-1">Desarrollado con ❤️ en Colombia 🇨🇴</p>
-              </div>
-
-              <div className="flex flex-wrap justify-center space-x-6 text-sm">
-                <button
-                  onClick={() => setShowPrivacyModal(true)}
-                  className="text-gray-400 hover:text-green-400 transition-colors duration-200"
-                >
-                  Privacidad
-                </button>
-                <button
-                  onClick={() => setShowTermsModal(true)}
-                  className="text-gray-400 hover:text-green-400 transition-colors duration-200"
-                >
-                  Términos
-                </button>
-                <a
-                  href="#"
-                  className="text-gray-400 hover:text-green-400 transition-colors duration-200"
-                >
-                  Mapa del sitio
-                </a>
-                <button
-                  onClick={() => setShowCookiesModal(true)}
-                  className="text-gray-400 hover:text-green-400 transition-colors duration-200"
-                >
-                  Cookies
-                </button>
-              </div>
-            </div>
           </div>
         </div>
+      </footer>
 
-        {/* Floating Action Button - WhatsApp */}
-        <div className="fixed right-4 sm:right-8 z-50" style={{ top: 'calc(50% - 2.5rem)' }}>
-          <a
-            href="https://wa.me/573233932071?text=Hola%2C%20me%20interesa%20conocer%20más%20sobre%20sus%20servicios%20de%20desarrollo%20web"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="group block"
-          >
-            <div className="w-14 h-14 bg-gradient-to-r from-green-500 to-green-600 rounded-full flex items-center justify-center shadow-lg transform transition-all duration-300 group-hover:scale-110 group-hover:shadow-xl animate-pulse">
-              <svg className="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.885 3.488" />
-              </svg>
-            </div>
-
-            {/* Tooltip */}
-            <div className="absolute right-full mr-3 top-1/2 transform -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
-              <div className="bg-gray-900 text-white px-3 py-2 rounded-lg text-sm whitespace-nowrap shadow-lg border border-gray-700">
-                💬 ¡Chatea con nosotros!
-                <div className="absolute left-full top-1/2 transform -translate-y-1/2 border-l-4 border-l-gray-900 border-y-4 border-y-transparent"></div>
-              </div>
-            </div>
-          </a>
-        </div>
-      </footer>{' '}
       {/* Cookie Banner */}
       {showCookieBanner && (
-        <div className="fixed bottom-0 left-0 right-0 bg-gray-900 border-t border-gray-700 shadow-2xl z-40 p-4">
-          <div className="container mx-auto max-w-6xl">
-            <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
-              {' '}
-              <div className="flex items-start gap-3 flex-1">
-                <div className="flex-shrink-0">
-                  <img src="logo1.png" alt="Axon Logo" className="w-8 h-8 rounded-lg" />
-                </div>
-                <div className="text-sm text-gray-300">
-                  <p className="font-semibold text-white mb-1">
-                    Utilizamos cookies para mejorar tu experiencia
-                  </p>
-                  <p>
-                    Usamos cookies esenciales y opcionales para personalizar contenido, analizar el
-                    tráfico y mejorar nuestros servicios.{' '}
-                    <button
-                      onClick={() => setShowCookiesModal(true)}
-                      className="text-blue-400 hover:text-blue-300 underline"
-                    >
-                      Ver configuración detallada
-                    </button>
-                  </p>
-                </div>
+        <div className="fixed bottom-4 left-4 right-4 z-50 max-w-md mx-auto">
+          <div className="bg-gray-900/95 backdrop-blur-md border border-gray-700/50 rounded-xl p-6 shadow-2xl">
+            <div className="flex items-start space-x-4">
+              <div className="bg-blue-500/20 p-2 rounded-lg flex-shrink-0">
+                <svg className="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
+                  <path
+                    fillRule="evenodd"
+                    d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+                    clipRule="evenodd"
+                  />
+                </svg>
               </div>
-              <div className="flex flex-col sm:flex-row gap-2 lg:gap-3 w-full lg:w-auto">
-                <button
-                  onClick={() => {
-                    // Solo cookies necesarias
-                    const onlyNecessary = {
-                      necessary: true,
-                      analytics: false,
-                      marketing: false,
-                      preferences: false,
-                    };
-                    localStorage.setItem('axon-cookie-preferences', JSON.stringify(onlyNecessary));
-                    localStorage.setItem('axon-cookies-accepted', 'true');
-                    setShowCookieBanner(false);
-                  }}
-                  className="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition-colors text-sm"
-                >
-                  Solo Necesarias
-                </button>
-                <button
-                  onClick={() => {
-                    // Aceptar todas
-                    const allAccepted = {
-                      necessary: true,
-                      analytics: true,
-                      marketing: true,
-                      preferences: true,
-                    };
-                    localStorage.setItem('axon-cookie-preferences', JSON.stringify(allAccepted));
-                    localStorage.setItem('axon-cookies-accepted', 'true');
-                    setShowCookieBanner(false);
-                  }}
-                  className="px-4 py-2 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white rounded-lg transition-colors text-sm font-semibold"
-                >
-                  Aceptar Todas
-                </button>
-                <button
-                  onClick={() => setShowCookiesModal(true)}
-                  className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors text-sm"
-                >
-                  Configurar
-                </button>
+              <div className="flex-1">
+                <h4 className="text-white font-semibold text-sm mb-2">🍪 Uso de Cookies</h4>
+                <p className="text-gray-300 text-sm mb-4">
+                  Utilizamos cookies para mejorar tu experiencia. Al continuar navegando, aceptas
+                  nuestro uso de cookies.
+                </p>
+                <div className="flex flex-col sm:flex-row gap-2">
+                  <button
+                    onClick={() => {
+                      const allAccepted = {
+                        necessary: true,
+                        analytics: true,
+                        marketing: true,
+                        preferences: true,
+                      };
+                      localStorage.setItem('axon-cookie-preferences', JSON.stringify(allAccepted));
+                      localStorage.setItem('axon-cookies-accepted', 'true');
+                      setShowCookieBanner(false);
+                    }}
+                    className="px-4 py-2 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white rounded-lg transition-colors text-sm font-semibold"
+                  >
+                    Aceptar Todas
+                  </button>
+                  <button
+                    onClick={() => setShowCookiesModal(true)}
+                    className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors text-sm"
+                  >
+                    Configurar
+                  </button>
+                </div>
               </div>
             </div>
           </div>
         </div>
       )}
-      {/* Modals mejorados de Privacidad y Términos */}
+
+      {/* Modals */}
       <EnhancedPrivacyModal isOpen={showPrivacyModal} onClose={() => setShowPrivacyModal(false)} />
       <EnhancedTermsModal isOpen={showTermsModal} onClose={() => setShowTermsModal(false)} />
       <EnhancedCookiesModal isOpen={showCookiesModal} onClose={() => setShowCookiesModal(false)} />
-      {/* ServiceDetailModal temporalmente comentado para debug */}
+
       {selectedService && showServiceModal && (
         <ServiceDetailModal
           service={selectedService}
@@ -2734,81 +1493,15 @@ const App = () => {
           onOpenQuote={handleOpenQuoteModal}
           onOpenConsultation={handleOpenConsultationModal}
         />
-      )}{' '}
-      {/* Modales Unificados */}
+      )}
+
       <ContactModal isOpen={contactModalOpen} onClose={closeContactModal} />
       <QuoteModal isOpen={quoteModalOpen} onClose={closeQuoteModal} />
       <ConsultationModal isOpen={consultationModalOpen} onClose={closeConsultationModal} />
-      {/* Modal del Blog */}
+
       <BlogModal isOpen={showBlogModal} onClose={handleCloseBlogModal} post={selectedBlogPost} />
-      {/* Botón flotante del blog */}
+
       <FloatingBlogButton onClick={scrollToBlog} isVisible={true} />
-    </div>
-  );
-};
-
-// Componente para enlaces de navegación
-const NavLink = ({ href, children, mobile, onClick, isActive, scrollToSection }) => {
-  const baseClasses = mobile
-    ? `block px-4 py-3 rounded-lg text-base font-medium transition-all duration-300 transform hover:translate-x-2 border-l-2 cursor-pointer ${
-        isActive
-          ? 'text-blue-400 bg-gradient-to-r from-blue-600/20 to-cyan-600/20 border-blue-400'
-          : 'text-gray-300 hover:text-white hover:bg-gradient-to-r hover:from-blue-600/20 hover:to-cyan-600/20 border-transparent hover:border-blue-400'
-      }`
-    : `relative text-sm font-semibold transition-all duration-300 group px-3 py-2 rounded-lg cursor-pointer ${
-        isActive ? 'text-blue-400 bg-white/10' : 'text-gray-300 hover:text-white hover:bg-white/5'
-      }`;
-
-  const desktopEffect = !mobile ? (
-    <>
-      <div
-        className={`absolute bottom-0 left-0 h-0.5 bg-gradient-to-r from-blue-400 to-cyan-400 transition-all duration-300 rounded-full ${
-          isActive ? 'w-full' : 'w-0 group-hover:w-full'
-        }`}
-      ></div>
-      <div
-        className={`absolute inset-0 bg-gradient-to-r rounded-lg transition-all duration-300 ${
-          isActive
-            ? 'from-blue-600/20 to-cyan-600/20'
-            : 'from-blue-600/0 to-cyan-600/0 group-hover:from-blue-600/10 group-hover:to-cyan-600/10'
-        }`}
-      ></div>
-    </>
-  ) : null;
-
-  const handleClick = e => {
-    e.preventDefault();
-    const sectionId = href.replace('#', '');
-    if (scrollToSection) {
-      scrollToSection(sectionId);
-    }
-    if (onClick) {
-      onClick();
-    }
-  };
-
-  return (
-    <div
-      onClick={handleClick}
-      onKeyDown={e => e.key === 'Enter' && handleClick()}
-      role="button"
-      tabIndex={0}
-      className={baseClasses}
-    >
-      {mobile ? (
-        children
-      ) : (
-        <div className="relative">
-          <span
-            className={`relative z-10 transition-all duration-300 ${
-              isActive ? 'text-blue-400 font-semibold' : 'text-gray-300 group-hover:text-white'
-            }`}
-          >
-            {children}
-          </span>
-          {desktopEffect}
-        </div>
-      )}
     </div>
   );
 };

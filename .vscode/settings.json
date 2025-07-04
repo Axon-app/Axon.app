@@ -37,32 +37,63 @@
   "typescript.preferences.quoteStyle": "double",
   "javascript.updateImportsOnFileMove.enabled": "always",
   "typescript.updateImportsOnFileMove.enabled": "always",
-  // ===== GitHub Copilot =====
+  // ===== GitHub Copilot - Configuración Optimizada para Velocidad =====
   "github.copilot.enable": {
     "*": true, // Habilita Copilot en todos los lenguajes
-    "plaintext": false, // Deshabilita en texto plano
-    "markdown": true // Habilita en Markdown
+    "plaintext": false, // Deshabilita en texto plano para mejor rendimiento
+    "markdown": true, // Habilita en Markdown
+    "yaml": false, // Deshabilita en YAML para velocidad
+    "json": true, // Habilita en JSON
+    "log": false // Deshabilita en logs para rendimiento
   },
   "github.copilot.advanced": {
-    "length": 500, // Longitud máxima de sugerencia
-    "temperature": 0.5, // Creatividad de las sugerencias
-    "indentationMode": "automatic" // Indentación automática
+    "length": 500, // Longitud optimizada para velocidad (reduce latencia)
+    "temperature": 0.1, // Baja temperatura para respuestas más rápidas y precisas
+    "top_p": 0.9, // Optimiza selección de tokens
+    "indentationMode": "automatic", // Indentación automática
+    "listCount": 3, // Reduce número de sugerencias para mayor velocidad
+    "inlineSuggestCount": 3 // Limita sugerencias inline para rendimiento
   },
   "github.copilot.chat": {
-    "localeOverride": "es" // Copilot Chat en español
+    "localeOverride": "es", // Copilot Chat en español
+    "maxTokens": 4000, // Reducido para respuestas más rápidas
+    "temperature": 0.1, // Baja temperatura para velocidad
+    "welcomeMessage": "enabled", // Habilita mensajes de bienvenida
+    "streaming": true, // Habilita streaming para respuestas más rápidas
+    "cacheEnabled": true // Habilita caché para mejorar velocidad
   },
-  // ===== Tailwind CSS =====
-  "tailwindCSS.includeLanguages": {
-    "html": "html",
-    "javascript": "javascript",
-    "javascriptreact": "javascriptreact",
-    "typescript": "typescript",
-    "typescriptreact": "typescriptreact"
+  // ===== Configuraciones adicionales de rendimiento =====
+  "editor.quickSuggestions": {
+    "other": true,
+    "comments": false,
+    "strings": true
   },
-  "tailwindCSS.experimental.classRegex": [
-    ["clsx\\(([^)]*)\\)", "(?:'|\"|`)([^']*)(?:'|\"|`)"],
-    ["className\\s*:\\s*['\"`]([^'\"`]*)['\"`]"]
-  ],
+  "editor.quickSuggestionsDelay": 0, // Sin delay para sugerencias más rápidas
+  "editor.suggestOnTriggerCharacters": true, // Sugerencias al escribir caracteres especiales
+  "editor.acceptSuggestionOnCommitCharacter": true, // Acepta sugerencias rápidamente
+  "editor.acceptSuggestionOnEnter": "on", // Acepta con Enter
+  "editor.wordBasedSuggestions": "off", // Desactiva sugerencias basadas en palabras para usar solo Copilot
+  // ===== Optimizaciones de rendimiento general =====
+  "extensions.autoUpdate": false, // Desactiva actualizaciones automáticas para mayor estabilidad
+  "telemetry.telemetryLevel": "off", // Desactiva telemetría para mejor rendimiento
+  "workbench.enableExperiments": false, // Desactiva experimentos
+  "workbench.settings.enableNaturalLanguageSearch": false, // Desactiva búsqueda en lenguaje natural
+  // ===== Optimizaciones de memoria y caché =====
+  "search.useGlobalIgnoreFiles": true, // Usa archivos .gitignore para búsquedas más rápidas
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/dist": true,
+    "**/build": true,
+    "**/.git": true,
+    "**/.DS_Store": true
+  },
+  "files.watcherExclude": {
+    "**/.git/objects/**": true,
+    "**/.git/subtree-cache/**": true,
+    "**/node_modules/**": true,
+    "**/dist/**": true,
+    "**/build/**": true
+  },
   // ===== Configuración específica de lenguaje =====
   "[javascript]": {
     "editor.defaultFormatter": "dbaeumer.vscode-eslint"

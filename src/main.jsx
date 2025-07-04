@@ -2,39 +2,19 @@
  * main.jsx - Punto de entrada principal de la aplicación Axon.App
  * ==============================================================
  * Renderiza el componente App principal en el DOM usando React 18+.
- *
- * Características:
- * - Utiliza createRoot (Concurrent Features)
- * - StrictMode activado para desarrollo seguro
- * - Importación de estilos globales
- * - Renderizado en el elemento #root del HTML
- *
- * @author Axon.app Team
- * @version 2.4.0
  */
 
-import { StrictMode, Suspense, lazy } from 'react'; // Añadido Suspense y lazy
-import { createRoot } from 'react-dom/client'; // API moderna de React 18 para renderizado
-import ErrorBoundary from './components/ErrorBoundary.jsx'; // Manejo global de errores
-import Loader from './components/Loader.jsx'; // Loader internacionalizado
-import './i18n'; // Configuración de internacionalización
-import './index.css'; // Estilos globales de la aplicación
-
-// Lazy load del componente App
-const App = lazy(() => import('./App.jsx'));
+import { StrictMode } from 'react';
+import { createRoot } from 'react-dom/client';
+import App from './App.jsx';
+import './index.css';
 
 /**
  * Renderizado principal de la aplicación
- * Crea la raíz de React y renderiza la aplicación completa
- * con StrictMode activado para mejor desarrollo y debugging
  */
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <ErrorBoundary>
-      <Suspense fallback={<Loader />}>
-        <App />
-      </Suspense>
-    </ErrorBoundary>
+    <App />
   </StrictMode>
 );
 
