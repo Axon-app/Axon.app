@@ -1,0 +1,919 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Axon.app - Soluciones Digitales Innovadoras</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <!-- Three.js CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <!-- Three.js Post-processing Addons for Bloom Effect -->
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/EffectComposer.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/RenderPass.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/ShaderPass.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/shaders/CopyShader.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/UnrealBloomPass.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/shaders/LuminosityHighPassShader.js"></script>
+
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <!-- The canvas for the 3D animation. It will be positioned behind everything. -->
+  <canvas id="bg-canvas"></canvas>
+
+  <!-- Header -->
+  <header id="header">
+    <nav>
+      <a href="#inicio" class="logo-container">
+        <div class="logo">A</div>
+        <span class="logo-text">Axon.app</span>
+      </a>
+      <div class="nav-links">
+        <a href="#inicio"><i class="fas fa-home"></i> Inicio</a>
+        <a href="#nosotros"><i class="fas fa-users"></i> Nosotros</a>
+        <a href="#servicios"><i class="fas fa-cogs"></i> Servicios</a>
+        <a href="#tecnologias"><i class="fas fa-microchip"></i> Tecnologías</a>
+        <a href="#portafolio"><i class="fas fa-briefcase"></i> Portafolio</a>
+        <a href="#blog"><i class="fas fa-blog"></i> Blog</a>
+        <a href="#testimonios"><i class="fas fa-comments"></i> Testimonios</a>
+        <a href="#contacto"><i class="fas fa-envelope"></i> Contacto</a>
+      </div>
+      <button class="hamburger" id="hamburger">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </nav>
+    <div class="menu-overlay" id="menu-overlay"></div>
+    <div class="mobile-menu" id="mobile-menu">
+      <a href="#inicio" onclick="closeMenu()"><i class="fas fa-home"></i> Inicio</a>
+      <a href="#nosotros" onclick="closeMenu()"><i class="fas fa-users"></i> Sobre Nosotros</a>
+      <a href="#servicios" onclick="closeMenu()"><i class="fas fa-cogs"></i> Servicios</a>
+      <a href="#tecnologias" onclick="closeMenu()"><i class="fas fa-microchip"></i> Tecnologías</a>
+      <a href="#portafolio" onclick="closeMenu()"><i class="fas fa-briefcase"></i> Portafolio</a>
+      <a href="#blog" onclick="closeMenu()"><i class="fas fa-blog"></i> Blog</a>
+      <a href="#testimonios" onclick="closeMenu()"><i class="fas fa-comments"></i> Testimonios</a>
+      <a href="#contacto" onclick="closeMenu()"><i class="fas fa-envelope"></i> Contacto</a>
+    </div>
+  </header>
+
+  <!-- Main content wrapper to ensure sections are above the canvas and have consistent padding -->
+  <main class="main-content">
+    <!-- Hero -->
+    <section class="hero" id="inicio">
+      <div class="container hero-content">
+        <h1>Transformamos ideas en software poderoso</h1>
+        <p>En Axon.app creamos aplicaciones inteligentes, rápidas y escalables. Innovación con propósito, diseño con alma.</p>
+        <a href="#contacto" class="btn">Empecemos tu proyecto</a>
+      </div>
+    </section>
+
+    <!-- About Us -->
+    <section id="nosotros" class="fade-in">
+      <div class="container">
+        <div class="section-title">
+          <h2>Sobre Axon.app</h2>
+        </div>
+        <div class="about">
+          <div class="about-img fade-in">
+            <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="">
+          </div>
+          <div class="about-content fade-in">
+            <p>En Axon.app, fusionamos creatividad, tecnología y estrategia para construir soluciones digitales que transforman negocios. Nuestro enfoque ágil y centrado en el usuario nos permite entregar productos de alto impacto.</p>
+            <p>Lideramos proyectos desde la idea hasta el lanzamiento, con equipos expertos en desarrollo, diseño y crecimiento digital. Nos apasiona resolver desafíos complejos y convertir visiones en realidades funcionales y estéticamente atractivas.</p>
+            <p>Creemos firmemente en la colaboración transparente y en mantener una comunicación constante con nuestros clientes. Tu éxito es nuestro éxito, y trabajamos incansablemente para superar tus expectativas.</p>
+          </div>
+        </div>
+        <div class="mission-vision fade-in">
+          <div class="mv-item">
+            <h3><i class="fas fa-rocket"></i> Misión</h3>
+            <p>Conectar tecnología e innovación para impulsar el crecimiento sostenible de empresas visionarias.</p>
+          </div>
+          <div class="mv-item">
+            <h3><i class="fas fa-lightbulb"></i> Visión</h3>
+            <p>Ser la plataforma de desarrollo digital de referencia global para startups y corporaciones.</p>
+          </div>
+        </div>
+
+        <!-- New: About Us - Values Section -->
+        <div class="section-title" style="margin-top: 5rem;">
+          <h2>Nuestros Valores</h2>
+        </div>
+        <div class="about-values-grid fade-in">
+          <div class="value-item">
+            <i class="fas fa-handshake"></i>
+            <h4>Colaboración</h4>
+            <p>Trabajamos codo a codo con nuestros clientes, asegurando que sus ideas se integren en cada fase del desarrollo.</p>
+          </div>
+          <div class="value-item">
+            <i class="fas fa-flask"></i>
+            <h4>Innovación</h4>
+            <p>Estamos siempre a la vanguardia, explorando nuevas tecnologías para ofrecer soluciones creativas y eficientes.</p>
+          </div>
+          <div class="value-item">
+            <i class="fas fa-shield-alt"></i>
+            <h4>Calidad</h4>
+            <p>Nos comprometemos a entregar productos robustos, seguros y de alto rendimiento que superen los estándares de la industria.</p>
+          </div>
+          <div class="value-item">
+            <i class="fas fa-users-cog"></i>
+            <h4>Orientación al Cliente</h4>
+            <p>Ponemos las necesidades del usuario en el centro de todo lo que hacemos, diseñando experiencias intuitivas y valiosas.</p>
+          </div>
+          <div class="value-item">
+            <i class="fas fa-bolt"></i>
+            <h4>Agilidad</h4>
+            <p>Adoptamos metodologías ágiles para adaptarnos rápidamente a los cambios y entregar valor de forma continua.</p>
+          </div>
+          <div class="value-item">
+            <i class="fas fa-leaf"></i>
+            <h4>Sostenibilidad</h4>
+            <p>Desarrollamos soluciones pensando en el impacto a largo plazo, tanto tecnológico como ambiental y social.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Services -->
+    <section id="servicios" class="fade-in">
+      <div class="container">
+        <div class="section-title">
+          <h2>Nuestros Servicios</h2>
+        </div>
+        <div class="services-grid">
+          <div class="service-card fade-in">
+            <div class="service-icon">📱</div>
+            <h3>Aplicaciones Móviles</h3>
+            <p>Desarrollamos apps nativas e híbridas para iOS y Android con diseño intuitivo y alto rendimiento.</p>
+            <button class="btn-small" onclick="openModal('modal-mobile-overlay', event)">Leer más</button>
+          </div>
+          <div class="service-card fade-in">
+            <div class="service-icon">🌐</div>
+            <h3>Desarrollo Web</h3>
+            <p>Sitios web modernos, rápidos y escalables usando React, Vue, Node.js, Next.js y más.</p>
+            <button class="btn-small" onclick="openModal('modal-web-overlay')">Leer más</button>
+          </div>
+          <div class="service-card fade-in">
+            <div class="service-icon">⚙️</div>
+            <h3>Software a Medida</h3>
+            <p>Sistemas empresariales personalizados que automatizan procesos y aumentan la productividad.</p>
+            <button class="btn-small" onclick="openModal('modal-custom-overlay')">Leer más</button>
+          </div>
+          <div class="service-card fade-in">
+            <div class="service-icon">☁️</div>
+            <h3>Cloud & DevOps</h3>
+            <p>Implementamos soluciones en la nube (AWS, Azure) y pipelines CI/CD para despliegue continuo.</p>
+            <button class="btn-small" onclick="openModal('modal-cloud-overlay')">Leer más</button>
+          </div>
+          <div class="service-card fade-in">
+            <div class="service-icon">📊</div>
+            <h3>UX/UI Design</h3>
+            <p>Diseñamos interfaces intuitivas y centradas en el usuario para mejorar la experiencia.</p>
+            <button class="btn-small" onclick="openModal('modal-ux-overlay')">Leer más</button>
+          </div>
+          <div class="service-card fade-in">
+            <div class="service-icon">🔍</div>
+            <h3>Consultoría Tech</h3>
+            <p>Asesoramos en arquitectura, stack tecnológico y estrategia digital para tu negocio.</p>
+            <button class="btn-small" onclick="openModal('modal-consulting-overlay')">Leer más</button>
+          </div>
+          <div class="service-card fade-in">
+            <div class="service-icon">🧠</div>
+            <h3>Integración de IA</h3>
+            <p>Incorporamos inteligencia artificial para automatizar tareas y mejorar decisiones.</p>
+            <button class="btn-small" onclick="openModal('modal-ai-overlay')">Leer más</button>
+          </div>
+          <div class="service-card fade-in">
+            <div class="service-icon">🛠️</div>
+            <h3>Mantenimiento y Soporte</h3>
+            <p>Soporte técnico continuo y actualizaciones para mantener tu software siempre optimizado.</p>
+            <button class="btn-small" onclick="openModal('modal-support-overlay')">Leer más</button>
+          </div>
+          <div class="service-card fade-in">
+            <div class="service-icon">🏢</div>
+            <h3>Aplicaciones para Empresas</h3>
+            <p>Soluciones ERP, CRM y herramientas internas para mejorar la gestión empresarial.</p>
+            <button class="btn-small" onclick="openModal('modal-enterprise-overlay')">Leer más</button>
+          </div>
+          <div class="service-card fade-in">
+            <div class="service-icon">🔧</div>
+            <h3>Desarrollo Backend</h3>
+            <p>APIs robustas, bases de datos y lógica de negocio escalable y segura.</p>
+            <button class="btn-small" onclick="openModal('modal-backend-overlay')">Leer más</button>
+          </div>
+          <div class="service-card fade-in">
+            <div class="service-icon">🎨</div>
+            <h3>Desarrollo Frontend</h3>
+            <p>Interfaces modernas, responsivas y con alto rendimiento usando las últimas tecnologías.</p>
+            <button class="btn-small" onclick="openModal('modal-frontend-overlay')">Leer más</button>
+          </div>
+          <div class="service-card fade-in">
+            <div class="service-icon">🔄</div>
+            <h3>Aplicaciones Multiplataforma</h3>
+            <p>Una sola base de código para iOS, Android, Web y escritorio con Flutter y React Native.</p>
+            <button class="btn-small" onclick="openModal('modal-cross-overlay')">Leer más</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Technologies -->
+    <section id="tecnologias" class="fade-in">
+      <div class="container tech">
+        <div class="section-title">
+          <h2>Tecnologías que Usamos</h2>
+        </div>
+        <p>Trabajamos con las tecnologías más modernas y demandadas del mercado para construir soluciones robustas, seguras y escalables.</p>
+        <div class="tech-logos">
+          <div class="tech-logo html5">
+            <i class="fab fa-html5"></i>
+            <span>HTML5</span>
+          </div>
+          <div class="tech-logo css3">
+            <i class="fab fa-css3-alt"></i>
+            <span>CSS3</span>
+          </div>
+          <div class="tech-logo js">
+            <i class="fab fa-js"></i>
+            <span>JavaScript</span>
+          </div>
+          <div class="tech-logo react">
+            <i class="fab fa-react"></i>
+            <span>React</span>
+          </div>
+          <div class="tech-logo vue">
+            <i class="fab fa-vuejs"></i>
+            <span>Vue.js</span>
+          </div>
+          <div class="tech-logo angular">
+            <i class="fab fa-angular"></i>
+            <span>Angular</span>
+          </div>
+          <div class="tech-logo svelte">
+            <i class="fas fa-cube"></i>
+            <span>Svelte</span>
+          </div>
+          <div class="tech-logo nextjs">
+            <i class="fab fa-node-js"></i>
+            <span>Next.js</span>
+          </div>
+          <div class="tech-logo tailwind">
+            <i class="fas fa-wind"></i>
+            <span>Tailwind</span>
+          </div>
+          <div class="tech-logo bootstrap">
+            <i class="fab fa-bootstrap"></i>
+            <span>Bootstrap</span>
+          </div>
+          <div class="tech-logo nodejs">
+            <i class="fab fa-node-js"></i>
+            <span>Node.js</span>
+          </div>
+          <div class="tech-logo express">
+            <i class="fas fa-server"></i>
+            <span>Express</span>
+          </div>
+          <div class="tech-logo django">
+            <i class="fab fa-python"></i>
+            <span>Django</span>
+          </div>
+          <div class="tech-logo flask">
+            <i class="fab fa-python"></i>
+            <span>Flask</span>
+          </div>
+          <div class="tech-logo spring">
+            <i class="fas fa-leaf"></i>
+            <span>Spring</span>
+          </div>
+          <div class="tech-logo laravel">
+            <i class="fab fa-laravel"></i>
+            <span>Laravel</span>
+          </div>
+          <div class="tech-logo mongodb">
+            <i class="fas fa-database"></i>
+            <span>MongoDB</span>
+          </div>
+          <div class="tech-logo postgresql">
+            <i class="fas fa-database"></i>
+            <span>PostgreSQL</span>
+          </div>
+          <div class="tech-logo mysql">
+            <i class="fas fa-database"></i>
+            <span>MySQL</span>
+          </div>
+          <div class="tech-logo aws">
+            <i class="fab fa-aws"></i>
+            <span>AWS</span>
+          </div>
+          <div class="tech-logo azure">
+            <i class="fab fa-microsoft"></i>
+            <span>Azure</span>
+          </div>
+          <div class="tech-logo docker">
+            <i class="fab fa-docker"></i>
+            <span>Docker</span>
+          </div>
+          <div class="tech-logo kubernetes">
+            <i class="fas fa-cubes"></i>
+            <span>Kubernetes</span>
+          </div>
+          <div class="tech-logo firebase">
+            <i class="fas fa-fire"></i>
+            <span>Firebase</span>
+          </div>
+          <div class="tech-logo github">
+            <i class="fab fa-github"></i>
+            <span>GitHub</span>
+          </div>
+          <div class="tech-logo figma">
+            <i class="fab fa-figma"></i>
+            <span>Figma</span>
+          </div>
+          <!-- Updated: Removed Adobe XD, Slack is here -->
+          <div class="tech-logo jira">
+            <i class="fab fa-jira"></i>
+            <span>Jira</span>
+          </div>
+          <div class="tech-logo slack">
+            <i class="fab fa-slack"></i>
+            <span>Slack</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Portfolio -->
+    <section id="portafolio" class="fade-in">
+      <div class="container">
+        <div class="section-title">
+          <h2>Proyectos Destacados</h2>
+        </div>
+        <div class="portfolio-grid">
+          <div class="portfolio-item fade-in">
+            <img src="https://placehold.co/600x400/4361ee/ffffff?text=FinTrack+Pro" alt="">
+            <div class="portfolio-overlay">
+              <h4>FinTrack Pro</h4>
+              <p>App de finanzas personales para iOS y Android</p>
+              <button id="project-1-btn" class="btn-small project-btn" data-modal="modal-project-1-overlay">Leer más</button>
+            </div>
+          </div>
+          <div class="portfolio-item fade-in">
+            <img src="https://images.unsplash.com/photo-1555423835-04428314e367?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="">
+            <div class="portfolio-overlay">
+              <h4>EduLearn Platform</h4>
+              <p>Sistema de aprendizaje en línea con IA</p>
+              <button id="project-2-btn" class="btn-small project-btn" data-modal="modal-project-2-overlay">Leer más</button>
+            </div>
+          </div>
+          <div class="portfolio-item fade-in">
+            <img src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="">
+            <div class="portfolio-overlay">
+              <h4>CoreERP</h4>
+              <p>Sistema de gestión empresarial modular</p>
+              <button id="project-3-btn" class="btn-small project-btn" data-modal="modal-project-3-overlay">Leer más</button>
+            </div>
+          </div>
+          <div class="portfolio-item fade-in">
+            <img src="https://images.unsplash.com/photo-1593642634315-48f5913d3a15?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="">
+            <div class="portfolio-overlay">
+              <h4>HealthSync</h4>
+              <p>App de gestión de salud y citas médicas</p>
+              <button id="project-4-btn" class="btn-small project-btn" data-modal="modal-project-4-overlay">Leer más</button>
+            </div>
+          </div>
+          <div class="portfolio-item fade-in">
+            <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="">
+            <div class="portfolio-overlay">
+              <h4>ShopFlow</h4>
+              <p>Plataforma de comercio electrónico con pagos seguros</p>
+              <button id="project-5-btn" class="btn-small project-btn" data-modal="modal-project-5-overlay">Leer más</button>
+            </div>
+          </div>
+          <div class="portfolio-item fade-in">
+            <img src="https://placehold.co/600x400/4cc9f0/ffffff?text=DataDash" alt="">
+            <div class="portfolio-overlay">
+              <h4>DataDash</h4>
+              <p>Dashboard de analítica en tiempo real para empresas</p>
+              <button id="project-6-btn" class="btn-small project-btn" data-modal="modal-project-6-overlay">Leer más</button>
+            </div>
+          </div>
+          <div class="portfolio-item fade-in">
+            <img src="https://images.unsplash.com/photo-1561070791-2526d30994b5?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="">
+            <div class="portfolio-overlay">
+              <h4>LogiTrack</h4>
+              <p>Sistema de seguimiento de envíos y logística</p>
+              <button id="project-7-btn" class="btn-small project-btn" data-modal="modal-project-7-overlay">Leer más</button>
+            </div>
+          </div>
+          <div class="portfolio-item fade-in">
+            <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="">
+            <div class="portfolio-overlay">
+              <h4>SocialHub</h4>
+              <p>Red social para profesionales del sector tecnológico</p>
+              <button id="project-8-btn" class="btn-small project-btn" data-modal="modal-project-8-overlay">Leer más</button>
+            </div>
+          </div>
+          <div class="portfolio-item fade-in">
+            <img src="https://images.unsplash.com/photo-1557804506-669a67965ba0?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="">
+            <div class="portfolio-overlay">
+              <h4>InvestPro</h4>
+              <p>App de inversión automatizada con IA</p>
+              <button id="project-9-btn" class="btn-small project-btn" data-modal="modal-project-9-overlay">Leer más</button>
+            </div>
+          </div>
+          <div class="portfolio-item fade-in">
+            <img src="https://images.unsplash.com/photo-1556761175-b413da4baf72?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="">
+            <div class="portfolio-overlay">
+              <h4>TravelMate</h4>
+              <p>App de planificación de viajes y reservas</p>
+              <button id="project-10-btn" class="btn-small project-btn" data-modal="modal-project-10-overlay">Leer más</button>
+            </div>
+          </div>
+          <div class="portfolio-item fade-in">
+            <img src="https://images.unsplash.com/photo-1521791136064-7986c2920216?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="">
+            <div class="portfolio-overlay">
+              <h4>AgroSmart</h4>
+              <p>Sistema de monitoreo agrícola con IoT</p>
+              <button id="project-11-btn" class="btn-small project-btn" data-modal="modal-project-11-overlay">Leer más</button>
+            </div>
+          </div>
+          <div class="portfolio-item fade-in">
+            <img src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="">
+            <div class="portfolio-overlay">
+              <h4>Learnly</h4>
+              <p>Plataforma educativa con gamificación</p>
+              <button id="project-12-btn" class="btn-small project-btn" data-modal="modal-project-12-overlay">Leer más</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Blog -->
+    <section id="blog" class="fade-in">
+      <div class="container">
+        <div class="section-title">
+          <h2>Últimos Artículos del Blog</h2>
+        </div>
+        <div class="blog-grid">
+          <div class="blog-card fade-in">
+            <div class="blog-img">
+              <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="">
+            </div>
+            <div class="blog-content">
+              <div class="blog-date">15 Abril, 2025</div>
+              <h3>10 Tendencias de desarrollo web en 2025</h3>
+              <p>Descubre las tecnologías y enfoques que están definiendo el futuro del desarrollo web moderno.</p>
+              <button class="btn-small fade-in" onclick="openModal('modal-blog-1-overlay', event)">Leer más</button>
+            </div>
+          </div>
+          <div class="blog-card fade-in">
+            <div class="blog-img">
+              <img src="https://placehold.co/600x400/4361ee/ffffff?text=Elegir+Stack+Tecnologico" alt="">
+            </div>
+            <div class="blog-content">
+              <div class="blog-date">8 Abril, 2025</div>
+              <h3>Cómo elegir el stack tecnológico ideal</h3>
+              <p>Guía práctica para startups y empresas que inician un proyecto digital.</p>
+              <button class="btn-small fade-in" onclick="openModal('modal-blog-2-overlay', event)">Leer más</button>
+            </div>
+          </div>
+          <div class="blog-card fade-in">
+            <div class="blog-img">
+              <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="">
+            </div>
+            <div class="blog-content">
+              <div class="blog-date">1 Abril, 2025</div>
+              <h3>El poder del diseño UX en aplicaciones móviles</h3>
+              <p>Por qué una buena experiencia de usuario es clave para el éxito de tu app.</p>
+              <button class="btn-small fade-in" onclick="openModal('modal-blog-3-overlay', event)">Leer más</button>
+            </div>
+          </div>
+          <div class="blog-card fade-in">
+            <div class="blog-img">
+              <img src="https://placehold.co/600x400/4cc9f0/ffffff?text=IA+Generativa+Software" alt="">
+            </div>
+            <div class="blog-content">
+              <div class="blog-date">28 Marzo, 2025</div>
+              <h3>IA Generativa: Revolución en el Desarrollo de Software</h3>
+              <p>Las herramientas de IA generativa están transformando cómo escribimos código.</p>
+              <button class="btn-small fade-in" onclick="openModal('modal-blog-4-overlay', event)">Leer más</button>
+            </div>
+          </div>
+          <div class="blog-card fade-in">
+            <div class="blog-img">
+              <img src="https://images.unsplash.com/photo-1620712943543-bcc4688e7485?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="">
+            </div>
+            <div class="blog-content">
+              <div class="blog-date">20 Marzo, 2025</div>
+              <h3>Web3 y Contratos Inteligentes en Aplicaciones Reales</h3>
+              <p>Cómo blockchain está cambiando la forma en que construimos aplicaciones descentralizadas.</p>
+              <button class="btn-small fade-in" onclick="openModal('modal-blog-5-overlay', event)">Leer más</button>
+            </div>
+          </div>
+          <div class="blog-card fade-in">
+            <div class="blog-img">
+              <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="">
+            </div>
+            <div class="blog-content">
+              <div class="blog-date">12 Marzo, 2025</div>
+              <h3>Edge Computing: El Futuro de la Latencia Ultra Baja</h3>
+              <p>Procesar datos cerca del usuario mejora el rendimiento y reduce costos.</p>
+              <button class="btn-small fade-in" onclick="openModal('modal-blog-6-overlay', event)">Leer más</button>
+            </div>
+          </div>
+          <div class="blog-card fade-in">
+            <div class="blog-img">
+              <img src="https://images.unsplash.com/photo-1563986768609-322da13575f3?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="">
+            </div>
+            <div class="blog-content">
+              <div class="blog-date">5 Marzo, 2025</div>
+              <h3>Quantum Computing: ¿Está Listo para el Mainstream?</h3>
+              <p>Avances recientes en computación cuántica y su impacto en criptografía y simulación.</p>
+              <button class="btn-small fade-in" onclick="openModal('modal-blog-7-overlay', event)">Leer más</button>
+            </div>
+          </div>
+          <div class="blog-card fade-in">
+            <div class="blog-img">
+              <img src="https://placehold.co/600x400/8d5bff/ffffff?text=Ciberseguridad+IA" alt="">
+            </div>
+            <div class="blog-content">
+              <div class="blog-date">26 Febrero, 2025</div>
+              <h3>Ciberseguridad en la Era de la IA</h3>
+              <p>Nuevos riesgos y defensas en un mundo donde los ataques son cada vez más inteligentes.</p>
+              <button class="btn-small fade-in" onclick="openModal('modal-blog-8-overlay', event)">Leer más</button>
+            </div>
+          </div>
+          <div class="blog-card fade-in">
+            <div class="blog-img">
+              <img src="https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="">
+            </div>
+            <div class="blog-content">
+              <div class="blog-date">18 Febrero, 2025</div>
+              <h3>Low-Code/No-Code: ¿Amenaza o Oportunidad para los Desarrolladores?</h3>
+              <p>El auge de plataformas sin código y su impacto en el desarrollo profesional.</p>
+              <button class="btn-small fade-in" onclick="openModal('modal-blog-9-overlay', event)">Leer más</button>
+            </div>
+          </div>
+          <div class="blog-card fade-in">
+            <div class="blog-img">
+              <img src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="">
+            </div>
+            <div class="blog-content">
+              <div class="blog-date">10 Febrero, 2025</div>
+              <h3>DevOps y GitOps: La Evolución de la Entrega Continua</h3>
+              <p>Automatización, infraestructura como código y nuevos paradigmas de despliegue.</p>
+              <button class="btn-small fade-in" onclick="openModal('modal-blog-10-overlay', event)">Leer más</button>
+            </div>
+          </div>
+          <div class="blog-card fade-in">
+            <div class="blog-img">
+              <img src="https://images.unsplash.com/photo-1522542550221-31fd19575a2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="">
+            </div>
+            <div class="blog-content">
+              <div class="blog-date">3 Febrero, 2025</div>
+              <h3>Realidad Aumentada en Aplicaciones Comerciales</h3>
+              <p>Cómo AR está transformando el retail, la educación y la industria.</p>
+              <button class="btn-small fade-in" onclick="openModal('modal-blog-11-overlay', event)">Leer más</button>
+            </div>
+          </div>
+          <div class="blog-card fade-in">
+            <div class="blog-img">
+              <img src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="">
+            </div>
+            <div class="blog-content">
+              <div class="blog-date">25 Enero, 2025</div>
+              <h3>Arquitectura de Microservicios vs. Monolitos Modernos</h3>
+              <p>Análisis comparativo de enfoques arquitectónicos en 2025.</p>
+              <button class="btn-small fade-in" onclick="openModal('modal-blog-12-overlay', event)">Leer más</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section id="testimonios" class="testimonials fade-in">
+      <div class="container">
+        <div class="section-title">
+          <h2>Lo que Dicen Nuestros Clientes</h2>
+        </div>
+        <div class="testimonial-container">
+          <div class="testimonial-track">
+            <div class="testimonial-item">
+              <div class="stars">★★★★★</div>
+              <p class="testimonial-text">Axon.app transformó nuestra plataforma. Entregaron antes de tiempo, con calidad excepcional y soporte constante.</p>
+              <div class="client">
+                <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="">
+                <div class="client-info">
+                  <h4>Carlos Mendoza</h4>
+                  <p>CEO, TechNova</p>
+                </div>
+              </div>
+            </div>
+            <div class="testimonial-item">
+              <div class="stars">★★★★★</div>
+              <p class="testimonial-text">El equipo entendió nuestra visión desde el primer día. La app móvil superó todas nuestras expectativas.</p>
+              <div class="client">
+                <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="">
+                <div class="client-info">
+                  <h4>Laura Fernández</h4>
+                  <p>Directora Digital, Innovia</p>
+                </div>
+              </div>
+            </div>
+            <div class="testimonial-item">
+              <div class="stars">★★★★★</div>
+              <p class="testimonial-text">Profesionales, puntuales y con un ojo increíble para el detalle. Recomendados 100%.</p>
+              <div class="client">
+                <img src="https://randomuser.me/api/portraits/men/67.jpg" alt="">
+                <div class="client-info">
+                  <h4>Andrés Rojas</h4>
+                  <p>CTO, DataFlow</p>
+                </div>
+              </div>
+            </div>
+            <div class="testimonial-item">
+              <div class="stars">★★★★★</div>
+              <p class="testimonial-text">Gracias a Axon.app, nuestra startup creció un 300% en 6 meses. El software fue clave.</p>
+              <div class="client">
+
+                <img src="https://randomuser.me/api/portraits/women/26.jpg" alt="">
+                <div class="client-info">
+                  <h4>Valentina Cruz</h4>
+                  <p>Founder, ScaleUp</p>
+                </div>
+              </div>
+            </div>
+            <div class="testimonial-item">
+              <div class="stars">★★★★★</div>
+              <p class="testimonial-text">Soporte técnico impecable y desarrollo limpio. Una experiencia sin estrés.</p>
+              <div class="client">
+                <img src="https://randomuser.me/api/portraits/men/81.jpg" alt="">
+                <div class="client-info">
+                  <h4>Ricardo Vega</h4>
+                  <p>Gerente TI, GlobalCorp</p>
+                </div>
+              </div>
+            </div>
+            <div class="testimonial-item">
+              <div class="stars">★★★★★</div>
+              <p class="testimonial-text">Diseño moderno, rendimiento excelente y un equipo que escucha. Lo volvería a contratar.</p>
+              <div class="client">
+                <img src="https://randomuser.me/api/portraits/women/19.jpg" alt="">
+                <div class="client-info">
+                  <h4>Camila Ortiz</h4>
+                  <p>Product Manager, NextGen</p>
+                </div>
+              </div>
+            </div>
+            <div class="testimonial-item">
+              <div class="stars">★★★★★</div>
+              <p class="testimonial-text">Cumplieron con todos los requisitos de seguridad y escalabilidad. Excelente trabajo técnico.</p>
+              <div class="client">
+                <img src="https://randomuser.me/api/portraits/men/52.jpg" alt="">
+                <div class="client-info">
+                  <h4>Fernando Silva</h4>
+                  <p>Director, SecureNet</p>
+                </div>
+              </div>
+            </div>
+            <div class="testimonial-item">
+              <div class="stars">★★★★★</div>
+              <p class="testimonial-text">El UX/UI es espectacular. Nuestros usuarios aman la interfaz. ¡Gran valor agregado!</p>
+              <div class="client">
+                <img src="https://randomuser.me/api/portraits/women/73.jpg" alt="">
+                <div class="client-info">
+                  <h4>Isabel Ríos</h4>
+                  <p>Creative Lead, UXLab</p>
+                </div>
+              </div>
+            </div>
+            <div class="testimonial-item">
+              <div class="stars">★★★★★</div>
+              <p class="testimonial-text">Desde la primera reunión, supieron lo que necesitábamos. Comunicación clara y resultados reales.</p>
+              <div class="client">
+                <img src="https://randomuser.me/api/portraits/men/29.jpg" alt="">
+                <div class="client-info">
+                  <h4>Javier Pérez</h4>
+                  <p>CEO, StartWave</p>
+                </div>
+              </div>
+            </div>
+            <div class="testimonial-item">
+              <div class="stars">★★★★★</div>
+              <p class="testimonial-text">Innovadores, rápidos y con visión estratégica. Un partner tecnológico de alto nivel.</p>
+              <div class="client">
+                <img src="https://randomuser.me/api/portraits/women/65.jpg" alt="">
+                <div class="client-info">
+                  <h4>Paula Méndez</h4>
+                  <p>Directora Digital, FutureCorp</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Repetition for infinite effect -->
+            <div class="testimonial-item">
+              <div class="stars">★★★★★</div>
+              <p class="testimonial-text">Axon.app transformó nuestra plataforma. Entregaron antes de tiempo, con calidad excepcional y soporte constante.</p>
+              <div class="client">
+                <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="">
+                <div class="client-info">
+                  <h4>Carlos Mendoza</h4>
+                  <p>CEO, TechNova</p>
+                </div>
+              </div>
+            </div>
+            <div class="testimonial-item">
+              <div class="stars">★★★★★</div>
+              <p class="testimonial-text">El equipo entendió nuestra visión desde el primer día. La app móvil superó todas nuestras expectativas.</p>
+              <div class="client">
+                <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="">
+                <div class="client-info">
+                  <h4>Laura Fernández</h4>
+                  <p>Directora Digital, Innovia</p>
+                </div>
+              </div>
+            </div>
+            <div class="testimonial-item">
+              <div class="stars">★★★★★</div>
+              <p class="testimonial-text">Profesionales, puntuales y con un ojo increíble para el detalle. Recomendados 100%.</p>
+              <div class="client">
+                <img src="https://randomuser.me/api/portraits/men/67.jpg" alt="">
+                <div class="client-info">
+                  <h4>Andrés Rojas</h4>
+                  <p>CTO, DataFlow</p>
+                </div>
+              </div>
+            </div>
+            <div class="testimonial-item">
+              <div class="stars">★★★★★</div>
+              <p class="testimonial-text">Gracias a Axon.app, nuestra startup creció un 300% en 6 meses. El software fue clave.</p>
+              <div class="client">
+                <img src="https://randomuser.me/api/portraits/women/26.jpg" alt="">
+                <div class="client-info">
+                  <h4>Valentina Cruz</h4>
+                  <p>Founder, ScaleUp</p>
+                </div>
+              </div>
+            </div>
+            <div class="testimonial-item">
+              <div class="stars">★★★★★</div>
+              <p class="testimonial-text">Soporte técnico impecable y desarrollo limpio. Una experiencia sin estrés.</p>
+              <div class="client">
+                <img src="https://randomuser.me/api/portraits/men/81.jpg" alt="">
+                <div class="client-info">
+                  <h4>Ricardo Vega</h4>
+                  <p>Gerente TI, GlobalCorp</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact -->
+    <section id="contacto" class="fade-in">
+      <div class="container">
+        <div class="section-title">
+          <h2>Contáctanos</h2>
+        </div>
+        <div class="contact">
+          <div class="contact-info">
+            <h3>Estamos listos para tu proyecto</h3>
+            <p>Nos encantaría escuchar sobre tu idea y cómo podemos ayudarte a transformarla en una realidad digital. Ponte en contacto con nosotros para una consulta gratuita.</p>
+            <p><i class="fas fa-envelope"></i> <strong>Email:</strong> hola@axon.app</p>
+            <p><i class="fas fa-phone-alt"></i> <strong>Teléfono:</strong> +1 (555) 123-4567</p>
+            <p><i class="fas fa-map-marker-alt"></i> <strong>Oficina:</strong> Madrid, España</p>
+            <button class="btn-contact-modal" onclick="openModal('modal-contact-form-overlay')">
+              Enviar un Mensaje
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main> <!-- End of main-content wrapper -->
+
+  <!-- Modern Footer -->
+  <footer class="modern-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <!-- Column 1: About Axon.app -->
+        <div class="footer-column">
+          <a href="#inicio" class="footer-logo">
+            <div class="logo">A</div>
+            <span class="logo-text">Axon.app</span>
+          </a>
+          <p class="footer-description">
+            Innovando el futuro, uno de código a la vez. Especialistas en desarrollo de software, aplicaciones y experiencias digitales de alto impacto.
+          </p>
+          <div class="social-links">
+            <a href="#"><i class="fab fa-facebook-f"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+            <a href="#"><i class="fab fa-youtube"></i></a>
+            <a href="#"><i class="fab fa-tiktok"></i></a>
+            <a href="#"><i class="fab fa-pinterest"></i></a>
+            <a href="#"><i class="fab fa-reddit-alien"></i></a>
+            <a href="#"><i class="fab fa-snapchat-ghost"></i></a>
+            <a href="#"><i class="fab fa-telegram-plane"></i></a>
+            <a href="#"><i class="fab fa-discord"></i></a>
+          </div>
+        </div>
+
+        <!-- Column 2: Quick links -->
+        <div class="footer-column">
+          <h4>Enlaces Rápidos</h4>
+          <ul class="footer-links">
+            <li><a href="#inicio"><i class="fas fa-home"></i> Inicio</a></li>
+            <li><a href="#nosotros"><i class="fas fa-users"></i> Sobre Nosotros</a></li>
+            <li><a href="#servicios"><i class="fas fa-cogs"></i> Servicios</a></li>
+            <li><a href="#tecnologias"><i class="fas fa-microchip"></i> Tecnologías</a></li>
+            <li><a href="#portafolio"><i class="fas fa-briefcase"></i> Portafolio</a></li>
+            <li><a href="#blog"><i class="fas fa-newspaper"></i> Blog</a></li>
+            <li><a href="#testimonios"><i class="fas fa-comments"></i> Testimonios</a></li>
+            <li><a href="#contacto"><i class="fas fa-envelope"></i> Contacto</a></li>
+          </ul>
+        </div>
+
+        <!-- Column 3: Contact Info & Legal & Resources -->
+        <div class="footer-column">
+          <h4>Contacto</h4>
+          <div class="footer-info">
+            <p><i class="fas fa-map-marker-alt"></i> Madrid, España</p>
+            <p><i class="fas fa-envelope"></i> hola@axon.app</p>
+            <p><i class="fas fa-phone-alt"></i> +1 (555) 123-4567</p>
+          </div>
+          <h4 style="margin-top: 2rem;">Legal & Recursos</h4>
+          <ul class="footer-legal-links">
+            <li><a href="javascript:void(0);" onclick="openModal('modal-privacy-policy-overlay')"><i class="fas fa-shield-alt"></i> Política de Privacidad</a></li>
+            <li><a href="javascript:void(0);" onclick="openModal('modal-terms-conditions-overlay')"><i class="fas fa-file-contract"></i> Términos y Condiciones</a></li>
+            <li><a href="javascript:void(0);" onclick="openModal('modal-cookies-policy-overlay')"><i class="fas fa-cookie-bite"></i> Política de Cookies</a></li>
+            <li><a href="javascript:void(0);" onclick="openModal('modal-legal-notice-overlay')"><i class="fas fa-gavel"></i> Aviso Legal</a></li>
+            <li><a href="javascript:void(0);" onclick="openModal('modal-faq-overlay')"><i class="fas fa-question-circle"></i> Preguntas Frecuentes</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <hr class="footer-divider">
+      <div class="footer-bottom">
+        <p>&copy; 2025 Axon.app. Todos los derechos reservados.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Floating Buttons -->
+  <div class="floating-buttons">
+    <!-- Social Media Links Container (initially hidden) -->
+    <div class="social-media-floating-container" id="social-media-floating-container">
+        <a href="https://www.facebook.com/AxonApp" target="_blank" class="facebook" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+        <a href="https://twitter.com/AxonApp" target="_blank" class="twitter" title="Twitter"><i class="fab fa-twitter"></i></a>
+        <a href="https://www.instagram.com/AxonApp" target="_blank" class="instagram" title="Instagram"><i class="fab fa-instagram"></i></a>
+        <a href="https://www.linkedin.com/company/axonapp" target="_blank" class="linkedin" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+        <a href="https://www.youtube.com/AxonApp" target="_blank" class="youtube" title="YouTube"><i class="fab fa-youtube"></i></a>
+        <a href="https://www.tiktok.com/@AxonApp" target="_blank" class="tiktok" title="TikTok"><i class="fab fa-tiktok"></i></a>
+        <a href="https://www.pinterest.com/AxonApp" target="_blank" class="pinterest" title="Pinterest"><i class="fab fa-pinterest"></i></a>
+        <a href="https://www.reddit.com/r/AxonApp" target="_blank" class="reddit" title="Reddit"><i class="fab fa-reddit-alien"></i></a>
+        <a href="https://www.snapchat.com/add/AxonApp" target="_blank" class="snapchat" title="Snapchat"><i class="fab fa-snapchat-ghost"></i></a>
+        <a href="https://t.me/AxonApp" target="_blank" class="telegram" title="Telegram"><i class="fab fa-telegram-plane"></i></a>
+        <a href="https://discord.gg/AxonApp" target="_blank" class="discord" title="Discord"><i class="fab fa-discord"></i></a>
+    </div>
+    <!-- New Social Media Floating Button -->
+    <button class="floating-btn btn-social-media" id="btn-social-media" title="Redes Sociales">
+        <i class="fas fa-share-alt"></i>
+    </button>
+    
+    <a href="https://wa.me/15551234567?text=Hola%20Axon.app%2C%20vengo%20de%20su%20página%20web%20y%20quiero%20cotizar%20mi%20proyecto%3A%20%5Bnombre%5D" target="_blank" class="floating-btn btn-whatsapp" title="Chatea con nosotros por WhatsApp">
+      <i class="fab fa-whatsapp"></i>
+    </a>
+    <button class="floating-btn btn-blog" title="Ir al Blog" onclick="document.getElementById('blog').scrollIntoView({ behavior: 'smooth' });">
+      <i class="fas fa-newspaper"></i>
+    </button>
+    <!-- New: Floating Contact Form Button -->
+    <button class="floating-btn btn-contact-form-float" title="Contactar" onclick="openModal('modal-contact-form-overlay')">
+      <i class="fas fa-envelope-open-text"></i>
+    </button>
+  </div>
+
+  <!-- Original floating button (Scroll to top) -->
+  <div class="scroll-top" id="scroll-top">
+    <i class="fas fa-arrow-up"></i>
+  </div>
+
+  <!-- Include all modals -->
+  <div id="modals-container"></div>
+
+  <!-- JavaScript -->
+  <script src="js/main.js"></script>
+</body>
+</html>
