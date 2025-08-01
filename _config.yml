@@ -1,0 +1,6 @@
+theme: jekyll-theme-cayman
+title: Axon.app
+description: Transformamos ideas en software poderoso
+baseurl: ""
+url: "https://axon.app"
+permalink: pretty
