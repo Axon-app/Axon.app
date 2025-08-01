@@ -3,6 +3,7 @@
 Sitio web empresarial moderno para Axon.app con animación 3D de fondo usando Three.js.
 
 **Sitio web en vivo:** [https://axon-app.github.io/Axon.app/](https://axon-app.github.io/Axon.app/)
+> Utilizando el hosting gratuito de GitHub Pages
 
 ## Estructura del Proyecto
 
