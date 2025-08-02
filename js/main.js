@@ -3,7 +3,7 @@ const hamburger = document.getElementById('hamburger');
 const mobileMenu = document.getElementById('mobile-menu');
 const menuOverlay = document.getElementById('menu-overlay');
 
-// Effect on the menu when scrolling
+// Efecto en el menú al hacer scroll
 window.addEventListener('scroll', () => {
   if (window.scrollY > 50) {
     header.classList.add('scrolled');
@@ -12,7 +12,7 @@ window.addEventListener('scroll', () => {
   }
 });
 
-// Hamburger menu functionality
+// Funcionalidad del menú hamburguesa
 function toggleMenu() {
   hamburger.classList.toggle('open');
   mobileMenu.classList.toggle('active');
@@ -30,9 +30,13 @@ function closeMenu() {
   document.body.style.overflow = 'auto';
 }
 
-// Scroll animations
+// Animaciones de scroll
 const faders = document.querySelectorAll('.fade-in');
-const appearOptions = { threshold: 0.1, rootMargin: "0px 0px -100px 0px" };
+const appearOptions = { 
+  threshold: 0.1, 
+  rootMargin: "0px 0px -100px 0px" 
+};
+
 const appearOnScroll = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
     if (entry.isIntersecting) {
@@ -46,7 +50,7 @@ faders.forEach(fader => {
   if (fader) appearOnScroll.observe(fader);
 });
 
-// Scroll to top button
+// Botón de scroll hacia arriba
 const scrollTopBtn = document.getElementById('scroll-top');
 window.addEventListener('scroll', () => {
   if (window.scrollY > 500) {
@@ -60,7 +64,7 @@ scrollTopBtn.addEventListener('click', () => {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 });
 
-// Smooth scrolling for navigation links
+// Scroll suave para enlaces de navegación
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
   anchor.addEventListener('click', function (e) {
     const href = this.getAttribute('href');
@@ -75,44 +79,37 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
   });
 });
 
-// Modal functions
+// Funciones para modales
 function openModal(id, event) {
-  console.log('Abriendo modal:', id);
-  // If event parameter is provided, prevent default behavior
   if (event) {
     event.preventDefault();
-    event.stopPropagation(); // Stop event propagation to prevent other handlers
+    event.stopPropagation();
   }
   
   const modal = document.getElementById(id);
   if (modal) {
     modal.classList.add('active');
     document.body.style.overflow = 'hidden';
-    
-    // Log for debugging
-    console.log('Modal activado:', id);
   } else {
-    console.error('Modal con ID no encontrado:', id);
+    console.error('Modal no encontrado:', id);
     
-    // Forzar la carga de modales si no están disponibles
+    // Si el modal no se encuentra, intentamos cargar el contenido
     loadModalsContent();
     
-    // Intentar nuevamente después de cargar los modales
+    // Intentamos nuevamente después de cargar los modales
     setTimeout(() => {
       const retryModal = document.getElementById(id);
       if (retryModal) {
         retryModal.classList.add('active');
         document.body.style.overflow = 'hidden';
-        console.log('Modal activado en segundo intento:', id);
       } else {
-        console.error('Modal no encontrado incluso después de cargar:', id);
+        console.error('Modal no encontrado después de cargar contenido:', id);
       }
     }, 100);
   }
 }
 
 function closeAllModals() {
-  console.log('Cerrando todos los modales');
   const modals = document.querySelectorAll('.modal-overlay');
   modals.forEach(modal => {
     modal.classList.remove('active');
@@ -120,70 +117,53 @@ function closeAllModals() {
   document.body.style.overflow = 'auto';
 }
 
-// Close modal when clicking outside and set up project buttons
+// Configuración de eventos de modales
 document.addEventListener('DOMContentLoaded', function() {
-  // Load modals content after DOM is ready
+  // Cargar contenido de modales después de que el DOM esté listo
   loadModalsContent();
   
-  // Add event listeners to close modals when clicking outside
-  function setupModalListeners() {
-    document.querySelectorAll('.modal-overlay').forEach(modal => {
-      // Remove any existing listeners to prevent duplicates
-      const newModal = modal.cloneNode(true);
-      modal.parentNode.replaceChild(newModal, modal);
-      
-      // Add new click listener
-      newModal.addEventListener('click', function(e) {
-        if (e.target === this) {
-          closeAllModals();
-        }
-      });
-    });
-    
-    // Setup enhanced click handlers for project buttons
-    document.querySelectorAll('.project-btn').forEach(btn => {
-      btn.addEventListener('click', function(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        
-        const modalId = this.getAttribute('data-modal');
-        console.log('Project button clicked, opening modal:', modalId);
-        
-        if (modalId) {
-          const modal = document.getElementById(modalId);
-          if (modal) {
-            modal.classList.add('active');
-            document.body.style.overflow = 'hidden';
-          } else {
-            console.error('Modal not found, forcing reload');
-            loadModalsContent();
-            setTimeout(() => {
-              const retryModal = document.getElementById(modalId);
-              if (retryModal) {
-                retryModal.classList.add('active');
-                document.body.style.overflow = 'hidden';
-              }
-            }, 100);
-          }
-        }
-      });
-    });
-    
-    // Also set up listeners for all portfolio buttons to ensure they work
-    document.querySelectorAll('.portfolio-overlay .btn-small').forEach(button => {
-      button.style.pointerEvents = 'auto';
-      button.style.cursor = 'pointer';
-    });
-  }
-  
-  // Set up listeners initially
+  // Configurar listeners para modales (una sola vez)
   setupModalListeners();
-  
-  // Also set up again after a short delay to ensure all elements are ready
-  setTimeout(setupModalListeners, 500);
 });
 
-// Custom message box function (replacement for alert)
+// Configura todos los listeners de modales
+function setupModalListeners() {
+  // Cerrar modal al hacer clic fuera de él
+  document.querySelectorAll('.modal-overlay').forEach(modal => {
+    // Eliminamos listeners anteriores para evitar duplicados
+    const newModal = modal.cloneNode(true);
+    modal.parentNode.replaceChild(newModal, modal);
+    
+    // Añadir nuevo listener
+    newModal.addEventListener('click', function(e) {
+      if (e.target === this) {
+        closeAllModals();
+      }
+    });
+  });
+  
+  // Configurar botones de proyectos
+  document.querySelectorAll('.project-btn').forEach(btn => {
+    btn.addEventListener('click', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      
+      const modalId = this.getAttribute('data-modal');
+      if (modalId) {
+        openModal(modalId);
+      }
+    });
+  });
+  
+  // Asegurar que todos los botones en overlays de portfolio funcionen
+  document.querySelectorAll('.portfolio-overlay .btn-small').forEach(button => {
+    button.style.pointerEvents = 'auto';
+    button.style.cursor = 'pointer';
+    button.style.zIndex = '20';
+  });
+}
+
+// Función de mensaje personalizado (reemplaza alert)
 function showCustomMessage(message) {
   const messageBox = document.createElement('div');
   messageBox.style.cssText = `
@@ -208,17 +188,17 @@ function showCustomMessage(message) {
 
   setTimeout(() => {
     messageBox.style.opacity = '1';
-  }, 10); // Small delay to trigger transition
+  }, 10);
 
   setTimeout(() => {
     messageBox.style.opacity = '0';
     messageBox.addEventListener('transitionend', () => {
-      messageBox.remove();
+      document.body.removeChild(messageBox);
     });
-  }, 3000); // Message disappears after 3 seconds
+  }, 3000);
 }
 
-// Social media button functionality
+// Funcionalidad del botón de redes sociales
 const btnSocialMedia = document.getElementById('btn-social-media');
 const socialMediaContainer = document.getElementById('social-media-floating-container');
 
@@ -226,13 +206,24 @@ if (btnSocialMedia && socialMediaContainer) {
     btnSocialMedia.addEventListener('click', () => {
         socialMediaContainer.classList.toggle('active');
     });
+    
+    // Cerrar al hacer clic fuera
+    document.addEventListener('click', (e) => {
+        if (socialMediaContainer.classList.contains('active') && 
+            !socialMediaContainer.contains(e.target) && 
+            e.target !== btnSocialMedia) {
+            socialMediaContainer.classList.remove('active');
+        }
+    });
 }
 
-// Form Validation Logic
+// Lógica de validación de formularios
 document.addEventListener('DOMContentLoaded', function() {
   const contactForm = document.getElementById('main-contact-form');
-  const formGroups = contactForm ? contactForm.querySelectorAll('.form-group') : [];
-
+  if (!contactForm) return;
+  
+  const formGroups = contactForm.querySelectorAll('.form-group');
+  
   const validationRules = {
       text: {
           regex: /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s'-]+$/,
@@ -257,7 +248,6 @@ document.addEventListener('DOMContentLoaded', function() {
       },
       time: {
           validate: (value) => {
-              // Basic check for time format HH:MM
               return /^(?:2[0-3]|[01]?[0-9]):(?:[0-5]?[0-9])$/.test(value);
           },
           message: 'Formato de hora inválido (HH:MM).'
@@ -267,11 +257,11 @@ document.addEventListener('DOMContentLoaded', function() {
           message: 'Debes seleccionar una opción.'
       },
       textarea: {
-          validate: (value) => value.trim().length > 10, // Minimum 10 characters
+          validate: (value) => value.trim().length > 10,
           message: 'Describe tu proyecto (mínimo 10 caracteres).'
       },
       'optional-text': {
-          validate: (value) => true, // Always valid, but can be empty
+          validate: (value) => true,
           message: ''
       }
   };
@@ -299,73 +289,68 @@ document.addEventListener('DOMContentLoaded', function() {
           }
       }
 
+      parentGroup.classList.remove('invalid', 'valid');
       if (isValid) {
-          parentGroup.classList.remove('invalid');
-          parentGroup.classList.add('valid');
+          if (value !== '' || inputElement.hasAttribute('required')) {
+              parentGroup.classList.add('valid');
+              validationIcon.style.opacity = '1';
+              validationIcon.className = 'fas fa-check-circle validation-icon';
+              validationIcon.style.color = '#27ae60';
+          } else {
+              validationIcon.style.opacity = '0';
+          }
           messageSpan.textContent = '';
-          validationIcon.style.opacity = '1';
-          validationIcon.classList.remove('fa-times-circle'); // Remove potential error icon
-          validationIcon.classList.add('fa-check-circle'); // Add checkmark icon
-          validationIcon.style.color = '#27ae60'; // Green check
       } else {
-          parentGroup.classList.remove('valid');
           parentGroup.classList.add('invalid');
           messageSpan.textContent = errorMessage;
           validationIcon.style.opacity = '1';
-          validationIcon.classList.remove('fa-check-circle'); // Remove potential checkmark icon
-          validationIcon.classList.add('fa-times-circle'); // Add error icon
-          validationIcon.style.color = '#e74c3c'; // Red X
-      }
-      
-      // If the field is not required and empty, it's considered valid for the purpose of the icon
-      if (!inputElement.hasAttribute('required') && value === '') {
-          parentGroup.classList.remove('invalid');
-          parentGroup.classList.remove('valid');
-          messageSpan.textContent = '';
-          validationIcon.style.opacity = '0'; // Hide icon if optional and empty
-          validationIcon.classList.remove('fa-check-circle', 'fa-times-circle'); // Ensure no icon class remains
+          validationIcon.className = 'fas fa-times-circle validation-icon';
+          validationIcon.style.color = '#e74c3c';
       }
   }
 
   formGroups.forEach(group => {
       const input = group.querySelector('input, select, textarea');
       if (input) {
-          input.addEventListener('input', () => validateField(input));
-          input.addEventListener('change', () => validateField(input)); // For select and date/time
-          input.addEventListener('blur', () => validateField(input)); // Validate on blur
+          ['input', 'change', 'blur'].forEach(eventType => {
+              input.addEventListener(eventType, () => validateField(input));
+          });
       }
   });
 
-  if (contactForm) {
-      contactForm.addEventListener('submit', function(e) {
-          e.preventDefault();
-          let formIsValid = true;
-          formGroups.forEach(group => {
-              const input = group.querySelector('input, select, textarea');
-              if (input) {
-                  validateField(input); // Validate all fields on submit
-                  if (group.classList.contains('invalid')) {
-                      formIsValid = false;
-                  }
+  contactForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      let formIsValid = true;
+      
+      formGroups.forEach(group => {
+          const input = group.querySelector('input, select, textarea');
+          if (input) {
+              validateField(input);
+              if (group.classList.contains('invalid')) {
+                  formIsValid = false;
               }
-          });
-
-          if (formIsValid) {
-              showCustomMessage('¡Gracias por tu mensaje! Te responderemos pronto.');
-              this.reset();
-              closeAllModals(); // Close the modal after successful submission
-              // Reset validation states
-              formGroups.forEach(group => {
-                  group.classList.remove('valid', 'invalid');
-                  group.querySelector('.validation-message').textContent = '';
-                  group.querySelector('.validation-icon').style.opacity = '0';
-                  group.querySelector('.validation-icon').classList.remove('fa-check-circle', 'fa-times-circle');
-              });
-          } else {
-              showCustomMessage('Por favor, corrige los errores en el formulario.');
           }
       });
-  }
+
+      if (formIsValid) {
+          showCustomMessage('¡Gracias por tu mensaje! Te responderemos pronto.');
+          this.reset();
+          closeAllModals();
+          
+          formGroups.forEach(group => {
+              group.classList.remove('valid', 'invalid');
+              const messageSpan = group.querySelector('.validation-message');
+              const validationIcon = group.querySelector('.validation-icon');
+              if (messageSpan) messageSpan.textContent = '';
+              if (validationIcon) {
+                  validationIcon.style.opacity = '0';
+                  validationIcon.className = 'validation-icon';
+              }
+          });
+      } else {
+          showCustomMessage('Por favor, corrige los errores en el formulario.');
+      }
+  });
 });
 
 // Three.js Cosmic River Animation
@@ -379,8 +364,8 @@ document.addEventListener('DOMContentLoaded', function() {
 function initCosmicRiver() {
     let scene, camera, renderer, composer, clock;
     let particles;
-    let mouse = new THREE.Vector2(); // Vector para almacenar la posición del ratón
-    let scrollPercent = 0; // Porcentaje de desplazamiento de la página
+    let mouse = new THREE.Vector2();
+    let scrollPercent = 0;
 
     const canvas = document.getElementById('bg-canvas');
     if (!canvas) {
@@ -390,210 +375,227 @@ function initCosmicRiver() {
     
     // 1. Configuración de la Escena
     scene = new THREE.Scene();
-    clock = new THREE.Clock(); // Para controlar el tiempo en la animación
+    clock = new THREE.Clock();
     
     // 2. Configuración de la Cámara
-    // PerspectiveCamera(fov, aspect, near, far)
-    // fov: Campo de visión vertical
-    // aspect: Relación de aspecto (ancho/alto de la ventana)
-    // near: Plano de recorte cercano
-    // far: Plano de recorte lejano
     camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 2000);
-    camera.position.z = 5; // La cámara comienza un poco adelante en el "río"
+    camera.position.z = 5;
     
     // 3. Configuración del Renderer
-    renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true }); // antialias para bordes suaves
-    renderer.setPixelRatio(window.devicePixelRatio); // Ajusta la resolución para pantallas de alta densidad
-    renderer.setSize(window.innerWidth, window.innerHeight); // Establece el tamaño del renderizador al tamaño de la ventana
+    renderer = new THREE.WebGLRenderer({ 
+        canvas: canvas, 
+        antialias: true,
+        powerPreference: 'high-performance' // Optimización para rendimiento
+    });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)); // Limitar ratio de píxeles para mejor rendimiento
+    renderer.setSize(window.innerWidth, window.innerHeight);
 
     // 4. Post-procesamiento para el Efecto de Resplandor (Bloom)
-    // RenderPass: Renderiza la escena en un buffer
     const renderScene = new THREE.RenderPass(scene, camera);
-    // UnrealBloomPass: Aplica un efecto de resplandor a los objetos brillantes
-    // (resolución, fuerza, radio, umbral)
-    const bloomPass = new THREE.UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), 1.5, 0.4, 0.85);
-    bloomPass.threshold = 0; // Umbral de luminosidad para aplicar el resplandor
-    bloomPass.strength = 1.5; // Intensidad del resplandor
-    bloomPass.radius = 0.5; // Radio del resplandor
+    const bloomPass = new THREE.UnrealBloomPass(
+        new THREE.Vector2(window.innerWidth / 2, window.innerHeight / 2), // Reducir resolución para mejor rendimiento
+        1.5, 0.4, 0.85
+    );
+    bloomPass.threshold = 0;
+    bloomPass.strength = 1.5;
+    bloomPass.radius = 0.5;
     
-    // EffectComposer: Encadena los pases de post-procesamiento
     composer = new THREE.EffectComposer(renderer);
-    composer.addPass(renderScene); // Primero renderiza la escena
-    composer.addPass(bloomPass); // Luego aplica el efecto de resplandor
+    composer.addPass(renderScene);
+    composer.addPass(bloomPass);
 
     // 5. Creación de las Partículas del Río Cósmico
-    const particleCount = 20000; // Número total de partículas
-    const positions = new Float32Array(particleCount * 3); // Array para las coordenadas x, y, z de cada partícula
-    const colors = new Float32Array(particleCount * 3); // Array para los componentes R, G, B de cada partícula
+    // Ajustar la cantidad de partículas según el dispositivo
+    const isMobile = window.innerWidth < 768;
+    const particleCount = isMobile ? 10000 : 20000; // Menos partículas en móviles
     
-    // Obtener los colores definidos en las variables CSS
+    const positions = new Float32Array(particleCount * 3);
+    const colors = new Float32Array(particleCount * 3);
+    
     const color1 = new THREE.Color(getComputedStyle(document.documentElement).getPropertyValue('--color1').trim());
     const color2 = new THREE.Color(getComputedStyle(document.documentElement).getPropertyValue('--color2').trim());
     const color3 = new THREE.Color(getComputedStyle(document.documentElement).getPropertyValue('--color3').trim());
 
-    const riverLength = 4000; // La "longitud" simulada de nuestro río en unidades 3D
+    const riverLength = 4000;
 
-    // Generar posiciones y colores para cada partícula
     for (let i = 0; i < particleCount; i++) {
-        const i3 = i * 3; // Índice para acceder a las coordenadas (x, y, z)
+        const i3 = i * 3;
         
-        // Posición de la partícula
-        // z: Distribuir a lo largo del eje Z, desde el fondo del río hasta cerca de la cámara
-        const z = THREE.MathUtils.randFloat(-riverLength, 0); 
-        const angle = Math.random() * Math.PI * 2; // Ángulo aleatorio para la distribución circular
-        // radius: Radio aleatorio, con más partículas cerca del centro para un efecto de "río"
-        const radius = 20 + Math.random() * 80 * Math.pow(Math.random(), 2); 
+        const z = THREE.MathUtils.randFloat(-riverLength, 0);
+        const angle = Math.random() * Math.PI * 2;
+        const radius = 20 + Math.random() * 80 * Math.pow(Math.random(), 2);
 
-        positions[i3] = Math.cos(angle) * radius; // Coordenada X
-        positions[i3 + 1] = Math.sin(angle) * radius; // Coordenada Y
-        positions[i3 + 2] = z; // Coordenada Z
+        positions[i3] = Math.cos(angle) * radius;
+        positions[i3 + 1] = Math.sin(angle) * radius;
+        positions[i3 + 2] = z;
 
-        // Color Degradado
-        // percent: Normaliza la posición Z de la partícula (0 en el fondo, 1 cerca de la cámara)
-        const percent = (z / -riverLength); 
+        const percent = (z / -riverLength);
         let color;
-        // Interpolar colores para crear un degradado a lo largo del río
         if (percent < 0.5) {
             color = color1.clone().lerp(color2, percent * 2);
         } else {
             color = color2.clone().lerp(color3, (percent - 0.5) * 2);
         }
 
-        colors[i3] = color.r; // Componente rojo
-        colors[i3 + 1] = color.g; // Componente verde
-        colors[i3 + 2] = color.b; // Componente azul
+        colors[i3] = color.r;
+        colors[i3 + 1] = color.g;
+        colors[i3 + 2] = color.b;
     }
 
     const particleGeometry = new THREE.BufferGeometry();
-    // Asignar los arrays de posiciones y colores a la geometría de las partículas
     particleGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
     particleGeometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
 
     const particleMaterial = new THREE.PointsMaterial({
-        size: 1.5, // Tamaño de cada partícula
-        vertexColors: true, // Usar los colores definidos por vértice
-        blending: THREE.AdditiveBlending, // Modo de mezcla para un efecto de brillo
-        transparent: true, // Permite la transparencia
-        opacity: 0.8, // Opacidad de las partículas
-        sizeAttenuation: true // El tamaño de las partículas disminuye con la distancia
+        size: isMobile ? 1.2 : 1.5, // Tamaño más pequeño en móviles
+        vertexColors: true,
+        blending: THREE.AdditiveBlending,
+        transparent: true,
+        opacity: 0.8,
+        sizeAttenuation: true
     });
 
-    particles = new THREE.Points(particleGeometry, particleMaterial); // Crear el objeto de puntos 3D
-    scene.add(particles); // Añadir las partículas a la escena
+    particles = new THREE.Points(particleGeometry, particleMaterial);
+    scene.add(particles);
 
-    // 6. Manejo de Eventos
-    /**
-     * Actualiza el porcentaje de desplazamiento de la página.
-     */
+    // 6. Manejo de Eventos con throttling para mejorar rendimiento
+    let ticking = false;
+    
     function onScroll() {
-        const scrollableHeight = document.documentElement.scrollHeight - window.innerHeight;
-        // Limitar el scrollPercent a un máximo de 0.7 para mantener la animación visible incluso en el footer
-        scrollPercent = Math.min(0.7, window.scrollY / scrollableHeight); // Calcula el porcentaje de scroll con límite
+        if (!ticking) {
+            requestAnimationFrame(() => {
+                const scrollableHeight = document.documentElement.scrollHeight - window.innerHeight;
+                scrollPercent = Math.min(0.7, window.scrollY / scrollableHeight);
+                ticking = false;
+            });
+            ticking = true;
+        }
     }
-    window.addEventListener('scroll', onScroll, false); // Escucha el evento de scroll
+    window.addEventListener('scroll', onScroll, { passive: true });
     
-    /**
-     * Actualiza la posición del ratón en coordenadas normalizadas (-1 a 1).
-     * @param {MouseEvent} event - El evento del ratón.
-     */
     function onMouseMove(event) {
-        mouse.x = (event.clientX / window.innerWidth) * 2 - 1; // Normaliza la posición X del ratón
-        mouse.y = -(event.clientY / window.innerHeight) * 2 + 1; // Normaliza la posición Y del ratón (invertida para Three.js)
+        if (!ticking) {
+            requestAnimationFrame(() => {
+                mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+                mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+                ticking = false;
+            });
+            ticking = true;
+        }
     }
-    window.addEventListener('mousemove', onMouseMove, false); // Escucha el evento de movimiento del ratón
+    window.addEventListener('mousemove', onMouseMove, { passive: true });
 
-    /**
-     * Ajusta el tamaño del renderizador y la cámara cuando la ventana cambia de tamaño.
-     */
     function onWindowResize() {
-        camera.aspect = window.innerWidth / window.innerHeight; // Actualiza la relación de aspecto de la cámara
-        camera.updateProjectionMatrix(); // Recalcula la matriz de proyección de la cámara
-        renderer.setSize(window.innerWidth, window.innerHeight); // Ajusta el tamaño del renderizador
-        composer.setSize(window.innerWidth, window.innerHeight); // Ajusta el tamaño del compositor de efectos
+        const width = window.innerWidth;
+        const height = window.innerHeight;
+        
+        camera.aspect = width / height;
+        camera.updateProjectionMatrix();
+        
+        renderer.setSize(width, height);
+        composer.setSize(width, height);
+        
+        // Reducir calidad en dispositivos móviles
+        const isMobile = width < 768;
+        renderer.setPixelRatio(isMobile ? 1 : Math.min(window.devicePixelRatio, 2));
+        
+        // Ajustar bloom pass para dispositivos móviles
+        bloomPass.resolution.set(width / (isMobile ? 4 : 2), height / (isMobile ? 4 : 2));
     }
-    window.addEventListener('resize', onWindowResize, false); // Escucha el evento de redimensionamiento de la ventana
+    window.addEventListener('resize', onWindowResize, { passive: true });
     
-    // 7. Bucle de Animación
-    /**
-     * Bucle principal de animación. Se llama repetidamente para actualizar la escena.
-     */
-    function animate() {
-        requestAnimationFrame(animate); // Solicita el siguiente frame de animación
-        const delta = clock.getDelta(); // Tiempo transcurrido desde el último frame
+    // 7. Bucle de Animación con optimizaciones
+    let lastTime = 0;
+    const frameRate = 1000 / 60; // Limitar a 60 FPS
+    
+    function animate(currentTime) {
+        requestAnimationFrame(animate);
+        
+        // Limitar la tasa de fotogramas
+        const deltaTime = currentTime - lastTime;
+        if (deltaTime < frameRate) return;
+        lastTime = currentTime - (deltaTime % frameRate);
+        
+        const delta = clock.getDelta();
         
         // Mover las partículas para un efecto de "flujo"
-        // Esto crea la ilusión de que las partículas se mueven hacia el usuario
         particles.position.z += delta * 20;
 
-        // Reciclar partículas: Si una partícula se mueve demasiado lejos, la teletransportamos
-        // al final del río para crear un flujo infinito.
+        // Reciclar partículas
         const positionsArray = particles.geometry.attributes.position.array;
         const currentCameraZ = camera.position.z;
-        const particleSpeed = 20; // Velocidad de las partículas (debe coincidir con el movimiento de particles.position.z)
+        const particleSpeed = 20;
+        const resetThreshold = 5;
+        const resetOffset = 10;
 
-        // Umbral y offset para el reciclaje de partículas
-        const resetThreshold = 5; // Qué tan lejos de la cámara antes de reiniciar
-        const resetOffset = 10;  // Qué tan atrás de la cámara se reinicia la partícula
-
-        for (let i = 0; i < particleCount; i++) {
+        // Optimización: procesar partículas en lotes para reducir la carga de CPU
+        const batchSize = 1000; // Procesar 1000 partículas por fotograma
+        const startIndex = Math.floor(Math.random() * (particleCount - batchSize));
+        
+        for (let i = startIndex; i < startIndex + batchSize && i < particleCount; i++) {
             const i3 = i * 3;
-            // Mover la partícula hacia adelante
             positionsArray[i3 + 2] += delta * particleSpeed;
 
-            // Si la partícula se mueve más allá de un umbral relativo a la cámara, la reiniciamos
-            // Reiniciamos su posición Z al final del río, relativo a la cámara
-            // Añadimos un poco de aleatoriedad para evitar un patrón visible
             if (positionsArray[i3 + 2] > currentCameraZ + resetThreshold) {
                 positionsArray[i3 + 2] = currentCameraZ - riverLength - resetOffset + (Math.random() * resetOffset * 2);
             }
         }
-        // Marcamos que las posiciones de la geometría necesitan ser actualizadas en la GPU
+        
         particles.geometry.attributes.position.needsUpdate = true;
 
-
         // Mover la cámara basado en el scroll
-        // targetZ: La posición Z deseada de la cámara basada en el porcentaje de scroll
-        // Limitamos el movimiento para mantener siempre visible la animación
-        const minCameraZ = 5; // Posición inicial de la cámara
-        const maxScrollEffect = riverLength * 0.7; // Limitar cuánto afecta el scroll
+        const minCameraZ = 5;
+        const maxScrollEffect = riverLength * 0.7;
         const targetZ = minCameraZ - scrollPercent * maxScrollEffect;
-        // Lerp (interpolación lineal): Suaviza el movimiento de la cámara hacia el objetivo
         camera.position.z = THREE.MathUtils.lerp(camera.position.z, targetZ, 0.05);
 
         // Mover la vista de la cámara con el ratón
-        // Ajusta la rotación de la cámara para simular una perspectiva con el movimiento del ratón
         camera.rotation.y = THREE.MathUtils.lerp(camera.rotation.y, (-mouse.x * Math.PI) / 20, 0.05);
         camera.rotation.x = THREE.MathUtils.lerp(camera.rotation.x, (mouse.y * Math.PI) / 20, 0.05);
         
         // Ajustar la fuerza del resplandor (bloom) con el scroll
-        // Aumenta la fuerza del resplandor a medida que el usuario se desplaza, hasta un máximo
-        // Incluso en el footer, mantenemos un valor adecuado para que se siga viendo bien
         const minBloomStrength = 1.5;
-        const maxBloomStrength = 3.0; // Reducido ligeramente para mantener visibilidad consistente
+        const maxBloomStrength = 3.0;
         bloomPass.strength = THREE.MathUtils.lerp(minBloomStrength, maxBloomStrength, scrollPercent);
 
-
-        composer.render(); // Renderiza la escena con los efectos de post-procesamiento
+        composer.render();
     }
     
-    animate(); // Inicia el bucle de animación
+    animate(0);
 }
 
-// Inicializa Three.js cuando la ventana se haya cargado completamente
-window.onload = function() {
-  // Asegura que Three.js se haya cargado antes de intentar inicializar la animación
+// Inicializar Three.js solo cuando la ventana se haya cargado completamente
+window.addEventListener('load', function() {
   if (typeof THREE === 'undefined') {
       console.error("Three.js no se ha cargado.");
-  } else {
-      initCosmicRiver();
+      return;
   }
-};
+  
+  // Detectar si es un dispositivo de baja potencia
+  const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+  const isLowPower = isMobile && (navigator.deviceMemory < 4 || navigator.hardwareConcurrency < 4);
+  
+  if (isLowPower) {
+    // En dispositivos de baja potencia, usamos un fondo estático en lugar de la animación 3D
+    const canvas = document.getElementById('bg-canvas');
+    if (canvas) {
+      canvas.style.background = 'radial-gradient(circle at 50% 50%, rgba(67, 97, 238, 0.15) 0%, rgba(13, 19, 33, 0.95) 70%)';
+    }
+  } else {
+    // Solo iniciar la animación en dispositivos con suficiente potencia
+    initCosmicRiver();
+  }
+});
 
-// Function to load modals content
+// Función para cargar el contenido de los modales
 function loadModalsContent() {
   const modalsContainer = document.getElementById('modals-container');
   if (!modalsContainer) return;
 
+  // Evitar duplicar los modales si ya se han cargado
+  if (modalsContainer.children.length > 0) return;
+  
+  // El contenido HTML de los modales va aquí...
   const modalsHTML = `
     <!-- Service Modals -->
     <div class="modal-overlay" id="modal-mobile-overlay">
@@ -617,6 +619,8 @@ function loadModalsContent() {
         </div>
       </div>
     </div>
+
+    <!-- Resto del código de modales... -->
 
     <div class="modal-overlay" id="modal-web-overlay">
       <div class="modal">

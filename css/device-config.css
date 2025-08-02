@@ -1,0 +1,127 @@
+/* 
+ * DEVICE CONFIGURATION CSS
+ * This file contains device-specific variables and configurations 
+ * to ensure changes to mobile styles don't affect desktop and vice versa
+ */
+
+:root {
+  /* Global shared variables (used by all devices) */
+  --primary: #4361ee;
+  --primary-light: #4cc9f0;
+  --dark: #101010;
+  --light: #f8f9ff;
+  --gray: #adb5bd;
+  --gradient: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+  --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  --shadow-sm: 0 5px 15px rgba(0, 0, 0, 0.08);
+  --radius: 16px;
+  --transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  --menu-bg: #0f0f1e;
+  
+  /* Colors for Three.js background animation */
+  --color1: #0A0A1A; /* Very dark blue/black for deep space */
+  --color2: #1A1A2E; /* Darker blue */
+  --color3: #4361ee; /* Primary blue for subtle highlights/glow */
+}
+
+/* Base styles applicable to all devices (Desktop First approach) */
+:root {
+  /* Desktop-specific variables */
+  --logo-size: 55px;
+  --hero-title-size: 4.2rem;
+  --hero-title-weight: 700;
+  --hero-title-line-height: 1.1;
+  --hero-title-letter-spacing: -1px;
+  --hero-subtitle-size: 1.25rem;
+  --hero-subtitle-weight: 300;
+  --hero-button-padding: 0.9rem 2.2rem;
+  --hero-button-font-size: 1rem;
+  --hero-content-gap: 1.5rem;
+  --section-padding: 6rem 0;
+  --container-padding: 0 2rem;
+  --nav-padding: 0.8rem 0;
+  --footer-logo-size: 65px;
+}
+
+/* Tablet Variables (992px and below) */
+@media (max-width: 992px) {
+  :root {
+    --hero-title-size: 3.5rem;
+    --hero-title-letter-spacing: -0.5px;
+    --hero-subtitle-size: 1.1rem;
+    --hero-button-padding: 0.8rem 2rem;
+    --hero-content-gap: 1.2rem;
+    --section-padding: 5rem 0;
+  }
+}
+
+/* Medium tablets (768px and below) */
+@media (max-width: 768px) {
+  :root {
+    --logo-size: 45px;
+    --hero-title-size: 2.8rem;
+    --hero-title-weight: 700;
+    --hero-title-letter-spacing: -0.5px;
+    --hero-subtitle-size: 1rem;
+    --hero-button-padding: 0.8rem 1.8rem;
+    --hero-button-font-size: 0.9rem;
+    --hero-content-gap: 1rem;
+    --section-padding: 4rem 0;
+    --container-padding: 0 1.5rem;
+    --nav-padding: 0.6rem 0;
+    --footer-logo-size: 55px;
+  }
+}
+
+/* Mobile phones (576px and below) */
+@media (max-width: 576px) {
+  :root {
+    --logo-size: 40px;
+    --hero-title-size: 3.5rem;
+    --hero-subtitle-size: 1.2rem;
+    --hero-button-padding: 0.8rem 2rem;
+    --hero-button-font-size: 1.1rem;
+  }
+}
+
+/* Small mobile phones (480px and below) */
+@media (max-width: 480px) {
+  :root {
+    --logo-size: 35px;
+    --hero-title-size: 2.5rem;
+    --hero-title-letter-spacing: -0.3px;
+    --hero-subtitle-size: 0.95rem;
+    --hero-button-padding: 0.7rem 1.5rem;
+    --hero-button-font-size: 0.85rem;
+    --hero-content-gap: 0.8rem;
+    --section-padding: 3rem 0;
+    --container-padding: 0 1rem;
+    --nav-padding: 0.5rem 0;
+    --footer-logo-size: 45px;
+  }
+}
+
+/* 
+ * DEVICE-SPECIFIC CLASSES
+ * These classes can be used to show/hide elements only on specific devices
+ */
+
+/* Hide on mobile, show on desktop */
+.desktop-only {
+  display: block;
+}
+
+.mobile-only {
+  display: none;
+}
+
+/* Mobile-specific display settings */
+@media (max-width: 768px) {
+  .desktop-only {
+    display: none;
+  }
+  
+  .mobile-only {
+    display: block;
+  }
+}

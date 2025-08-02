@@ -3,6 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="Axon.app - Soluciones digitales innovadoras para aplicaciones móviles, desarrollo web y software a medida con las últimas tecnologías"/>
+  <meta name="keywords" content="desarrollo web, aplicaciones móviles, software a medida, cloud, devops, inteligencia artificial"/>
+  <meta name="author" content="Axon.app"/>
+  <meta name="theme-color" content="#4361ee"/>
+  <!-- Preconectar a los orígenes externos para mejorar el rendimiento -->
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
   <title>Axon.app - Soluciones Digitales Innovadoras</title>
 
   <!-- Google Fonts -->
@@ -11,21 +17,28 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
   
   <!-- Font Awesome -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" media="print" onload="this.media='all'">
 
-  <!-- Three.js CDN -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <!-- Three.js CDN - Cargar de forma asíncrona para no bloquear el renderizado -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" defer></script>
   <!-- Three.js Post-processing Addons for Bloom Effect -->
-  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/EffectComposer.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/RenderPass.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/ShaderPass.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/shaders/CopyShader.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/UnrealBloomPass.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/shaders/LuminosityHighPassShader.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/EffectComposer.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/RenderPass.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/ShaderPass.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/shaders/CopyShader.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/UnrealBloomPass.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/shaders/LuminosityHighPassShader.js" defer></script>
 
+  <!-- CSS Base - Estilos comunes para todos los dispositivos -->
+  <link rel="stylesheet" href="css/config.css">
   <link rel="stylesheet" href="css/styles.css">
   <link rel="stylesheet" href="css/navbar.css">
   <link rel="stylesheet" href="css/temp-styles.css">
+  <link rel="stylesheet" href="css/device-classes.css">
+  
+  <!-- CSS Específico - Separación de estilos por tipo de dispositivo -->
+  <link rel="stylesheet" href="css/desktop.css">
+  <link rel="stylesheet" href="css/mobile.css">
 </head>
 <body>
   <!-- The canvas for the 3D animation. It will be positioned behind everything. -->
@@ -848,9 +861,11 @@
           <div class="contact-info">
             <h3>Estamos listos para tu proyecto</h3>
             <p>Nos encantaría escuchar sobre tu idea y cómo podemos ayudarte a transformarla en una realidad digital. Ponte en contacto con nosotros para una consulta gratuita.</p>
-            <p><i class="fas fa-envelope"></i> <strong>Email:</strong> hola@axon.app</p>
-            <p><i class="fas fa-phone-alt"></i> <strong>Teléfono:</strong> +1 (555) 123-4567</p>
-            <p><i class="fas fa-map-marker-alt"></i> <strong>Oficina:</strong> Madrid, España</p>
+            <div class="contact-details">
+              <p><i class="fas fa-envelope"></i> <span><strong>Email:</strong> hola@axon.app</span></p>
+              <p><i class="fas fa-phone-alt"></i> <span><strong>Teléfono:</strong> +1 (555) 123-4567</span></p>
+              <p><i class="fas fa-map-marker-alt"></i> <span><strong>Oficina:</strong> Madrid, España</span></p>
+            </div>
             <button class="btn-contact-modal" onclick="openModal('modal-contact-form-overlay')">
               Enviar un Mensaje
             </button>
@@ -878,13 +893,7 @@
             <a href="#"><i class="fab fa-twitter"></i></a>
             <a href="#"><i class="fab fa-instagram"></i></a>
             <a href="#"><i class="fab fa-linkedin-in"></i></a>
-            <a href="#"><i class="fab fa-youtube"></i></a>
             <a href="#"><i class="fab fa-tiktok"></i></a>
-            <a href="#"><i class="fab fa-pinterest"></i></a>
-            <a href="#"><i class="fab fa-reddit-alien"></i></a>
-            <a href="#"><i class="fab fa-snapchat-ghost"></i></a>
-            <a href="#"><i class="fab fa-telegram-plane"></i></a>
-            <a href="#"><i class="fab fa-discord"></i></a>
           </div>
         </div>
 
@@ -937,13 +946,7 @@
         <a href="https://twitter.com/AxonApp" target="_blank" class="twitter" title="Twitter"><i class="fab fa-twitter"></i></a>
         <a href="https://www.instagram.com/AxonApp" target="_blank" class="instagram" title="Instagram"><i class="fab fa-instagram"></i></a>
         <a href="https://www.linkedin.com/company/axonapp" target="_blank" class="linkedin" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
-        <a href="https://www.youtube.com/AxonApp" target="_blank" class="youtube" title="YouTube"><i class="fab fa-youtube"></i></a>
         <a href="https://www.tiktok.com/@AxonApp" target="_blank" class="tiktok" title="TikTok"><i class="fab fa-tiktok"></i></a>
-        <a href="https://www.pinterest.com/AxonApp" target="_blank" class="pinterest" title="Pinterest"><i class="fab fa-pinterest"></i></a>
-        <a href="https://www.reddit.com/r/AxonApp" target="_blank" class="reddit" title="Reddit"><i class="fab fa-reddit-alien"></i></a>
-        <a href="https://www.snapchat.com/add/AxonApp" target="_blank" class="snapchat" title="Snapchat"><i class="fab fa-snapchat-ghost"></i></a>
-        <a href="https://t.me/AxonApp" target="_blank" class="telegram" title="Telegram"><i class="fab fa-telegram-plane"></i></a>
-        <a href="https://discord.gg/AxonApp" target="_blank" class="discord" title="Discord"><i class="fab fa-discord"></i></a>
     </div>
     <!-- New Social Media Floating Button -->
     <button class="floating-btn btn-social-media" id="btn-social-media" title="Redes Sociales">
@@ -970,8 +973,9 @@
   <!-- Include all modals -->
   <div id="modals-container"></div>
 
-  <!-- JavaScript -->
-  <script src="js/main.js"></script>
-  <script src="js/counter.js"></script>
+  <!-- JavaScript con atributo defer para optimizar la carga -->
+  <script src="js/device-styles.js" defer></script>
+  <script src="js/counter.js" defer></script>
+  <script src="js/main.js" defer></script>
 </body>
 </html>

@@ -206,8 +206,4 @@ nav {
   }
 }
 
-/* Animation for logo rotation */
-@keyframes rotateLogo {
-  0% { transform: rotateY(0deg); }
-  100% { transform: rotateY(360deg); }
-}
+/* Nota: La animación rotateLogo está definida en styles.css para evitar duplicación */

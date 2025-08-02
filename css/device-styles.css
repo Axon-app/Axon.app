@@ -1,0 +1,140 @@
+/*
+ * DEVICE-SPECIFIC STYLES 
+ * This file contains isolated styles for specific device types
+ * Changes to mobile styles won't affect desktop and vice versa
+ */
+
+/* 
+ * DESKTOP STYLES 
+ * Styles specifically for desktop devices (default)
+ * These will be overridden by device-specific media queries
+ */
+.logo-img {
+  width: var(--logo-size);
+  height: var(--logo-size);
+  object-fit: contain;
+  padding: 0;
+  filter: brightness(1.1) contrast(1.1);
+  animation: rotateLogo 8s linear infinite;
+  transition: all 0.3s ease;
+}
+
+.hero-content h1 {
+  font-size: var(--hero-title-size);
+  font-weight: var(--hero-title-weight);
+  line-height: var(--hero-title-line-height);
+  letter-spacing: var(--hero-title-letter-spacing);
+  margin-bottom: 0;
+  background: linear-gradient(135deg, #ffffff 0%, #e0e0e0 80%, #bbdefb 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+  width: 100%;
+  transform-origin: center;
+  animation: heroTextEnter 1.2s cubic-bezier(0.17, 0.67, 0.83, 0.67) forwards, textPulse 6s ease-in-out infinite 1.2s;
+}
+
+.hero-content p {
+  font-size: var(--hero-subtitle-size);
+  font-weight: var(--hero-subtitle-weight);
+  margin-bottom: 0;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+  color: rgba(245, 245, 245, 0.9);
+  line-height: 1.6;
+  text-shadow: 0px 1px 2px rgba(0, 0, 0, 0.2);
+  animation: fadeInUpCustom 1.5s cubic-bezier(0.215, 0.61, 0.355, 1) forwards;
+  letter-spacing: 0.3px;
+}
+
+.hero-content .btn {
+  padding: var(--hero-button-padding);
+  font-size: var(--hero-button-font-size);
+  font-weight: 500;
+  border-radius: 50px;
+  background: linear-gradient(135deg, #4361ee 0%, #4cc9f0 100%);
+  color: white;
+  box-shadow: 0 4px 12px rgba(67, 97, 238, 0.35);
+  transition: all 0.3s ease;
+  animation: buttonPulse 2s infinite ease-in-out;
+  border: none;
+  margin-top: 0.5rem;
+  display: inline-block;
+  opacity: 1;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 10;
+  max-width: 100%;
+  width: 95%;
+  padding: 0;
+  text-align: center;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--hero-content-gap);
+}
+
+section {
+  padding: var(--section-padding);
+  position: relative;
+  z-index: 1;
+  background-color: rgba(13, 17, 23, 0.6);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: var(--radius);
+  margin-bottom: 4rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: var(--container-padding);
+}
+
+header {
+  padding: var(--nav-padding);
+}
+
+.footer-logo .logo-img {
+  width: var(--footer-logo-size);
+  height: var(--footer-logo-size);
+  object-fit: contain;
+  filter: brightness(1.1) contrast(1.1);
+  animation: rotateLogo 8s linear infinite;
+  transition: all 0.3s ease;
+}
+
+/* Animation for logo rotation - horizontal */
+@keyframes rotateLogo {
+  from { transform: rotateY(0deg); }
+  to { transform: rotateY(360deg); }
+}
+
+/*
+ * The following classes provide more targeted device-specific styling
+ * Use these classes when you need to apply styles that should only affect one device type
+ */
+
+/* Desktop-specific styles */
+.desktop-style {
+  /* These styles will only apply on desktop */
+}
+
+/* Mobile-specific styles */
+.mobile-style {
+  /* These styles will only apply on mobile */
+}
+
+/* Tablet-specific styles */
+.tablet-style {
+  /* These styles will only apply on tablets */
+}
