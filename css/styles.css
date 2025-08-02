@@ -336,7 +336,7 @@ header.scrolled .mobile-menu a i {
   position: relative; /* Crucial: ensures content is above the canvas */
   z-index: 1; /* Ensures content is above the canvas */
   width: 100%;
-  max-width: 1200px; /* Adjust as needed for your layout */
+  max-width: 1400px; /* Aumentado para aprovechar mejor el espacio en pantallas grandes */
   margin: 0 auto;
   padding: 0; /* Sections will handle their own padding */
 }
@@ -381,7 +381,7 @@ header.scrolled .mobile-menu a i {
   position: relative;
   z-index: 10; /* Above canvas */
   max-width: 100%;
-  width: 95%;
+  width: 100%; /* Aumentado al 100% para aprovechar todo el espacio */
   padding: 0;
   text-align: center;
   margin: 0 auto;
@@ -390,6 +390,7 @@ header.scrolled .mobile-menu a i {
   align-items: center;
   justify-content: center;
   gap: 1.5rem; /* Añadido espacio uniforme entre elementos */
+  padding-top: 3rem; /* Añadido espacio superior para mover el contenido hacia abajo */
 }
 
 /* New animations for hero content elements */
@@ -423,7 +424,8 @@ header.scrolled .mobile-menu a i {
     font-size: 1.25rem; /* Reducido de 1.6rem para un aspecto más refinado */
     font-weight: 300; /* Más ligero para mayor elegancia */
     margin-bottom: 0; /* Eliminado margen inferior, ahora lo controla el gap del contenedor */
-    max-width: 700px; /* Un poco más estrecho para mejor legibilidad */
+    max-width: 100%; /* Ocupar el ancho total disponible */
+    width: 100%; /* Asegurar ancho completo */
     margin-left: auto;
     margin-right: auto;
     color: rgba(245, 245, 245, 0.9); /* Ligeramente transparente para sutileza */
@@ -435,7 +437,7 @@ header.scrolled .mobile-menu a i {
 
 .hero-content .btn {
     animation-delay: 0.8s;
-    padding: 0.9rem 2.2rem; /* Ligeramente más pequeño para proporción */
+    padding: 1.2rem 2.8rem; /* Aumentado el padding vertical e horizontal */
     font-size: 1rem; /* Reducido para consistencia con el texto más pequeño */
     font-weight: 500; /* Un poco menos pesado para elegancia */
     border-radius: 50px;
@@ -445,7 +447,7 @@ header.scrolled .mobile-menu a i {
     transition: all 0.3s ease;
     animation: buttonPulse 2s infinite ease-in-out;
     border: none;
-    margin-top: 0.5rem; /* Pequeño margen adicional */
+    margin-top: 1rem; /* Aumentado el margen superior */
     display: inline-block;
     opacity: 1;
     text-transform: uppercase; /* Mayúsculas para elegancia */
@@ -954,6 +956,7 @@ section:nth-child(even) {
 .about-content {
   flex: 1;
   min-width: 300px;
+  text-align: justify;
 }
 
 /* Improved Mission & Vision Section */
@@ -1506,6 +1509,9 @@ section:nth-child(even) {
   position: relative;
   z-index: 20; /* Ensure blog section appears above portfolio section */
   margin-top: 6rem; /* Add extra margin to the top of the blog section */
+  /* Asegurar que la sección del blog sea siempre visible, incluso durante el scroll */
+  will-change: transform;
+  backface-visibility: hidden;
 }
 
 .blog-grid {
@@ -1597,9 +1603,17 @@ section:nth-child(even) {
 
 .testimonial-track {
   display: flex;
-  width: calc(1000%); /* Adjusted for infinite scroll effect */
-  animation: scroll-left 30s linear infinite;
-  gap: 2rem;
+  width: auto; /* JS will set the exact width needed */
+  animation: scroll-left 60s linear infinite; /* Base animation that JS will adjust */
+  transition: all 0.3s ease;
+}
+
+/* Removed gap property - JS will handle spacing consistently */
+
+/* Animation control via JS, but keeping CSS fallback */
+.testimonial-container:hover .testimonial-track,
+.testimonial-container:active .testimonial-track {
+  animation-play-state: paused;
 }
 
 @keyframes scroll-left {
@@ -1607,7 +1621,7 @@ section:nth-child(even) {
     transform: translateX(0);
   }
   100% {
-    transform: translateX(-50%);
+    transform: translateX(calc(-50% - 0.75rem)); /* Adjusted to ensure smooth looping */
   }
 }
 
@@ -1619,6 +1633,7 @@ section:nth-child(even) {
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
   text-align: left;
   border: 1px solid rgba(255, 255, 255, 0.1); /* Borde sutil */
+  margin-right: 1.5rem; /* Consistent spacing between items */
 }
 
 .stars {
@@ -2027,14 +2042,100 @@ section:nth-child(even) {
 
 .footer-divider {
   border: none;
-  border-top: 1px solid rgba(255, 255, 255, 0.15); /* Slightly more visible divider */
-  margin: 3rem 0; /* More margin for separation */
+  background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.2) 50%, rgba(255,255,255,0) 100%);
+  height: 1px;
+  margin: 3rem 0;
+  position: relative;
 }
 
 .footer-bottom {
   text-align: center;
-  font-size: 0.95rem; /* Slightly larger font */
-  color: rgba(255, 255, 255, 0.4); /* Lighter copyright text */
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.6);
+  padding: 1.5rem 0;
+  background-color: rgba(10, 14, 25, 0.5);
+  backdrop-filter: blur(8px);
+  margin: 0 -2rem -3rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+  box-shadow: 0 -8px 20px rgba(0, 0, 0, 0.1);
+}
+
+.footer-bottom p {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Inter', sans-serif;
+  letter-spacing: 0.8px;
+  font-weight: 400;
+  position: relative;
+  padding: 0.5rem 0;
+  transition: all 0.3s ease;
+}
+
+.footer-bottom p:hover {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.logo-symbol {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  background: linear-gradient(135deg, rgba(67, 97, 238, 0.3) 0%, rgba(76, 201, 240, 0.3) 100%);
+  border-radius: 50%;
+  margin-right: 12px;
+  box-shadow: 0 0 10px rgba(67, 97, 238, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+  transform-origin: center;
+  animation: pulse 4s infinite ease-in-out;
+}
+
+.logo-symbol i {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 12px;
+}
+
+.footer-bottom p:hover .logo-symbol {
+  transform: rotate(360deg);
+  background: linear-gradient(135deg, rgba(67, 97, 238, 0.6) 0%, rgba(76, 201, 240, 0.6) 100%);
+  box-shadow: 0 0 15px rgba(67, 97, 238, 0.8);
+}
+
+.footer-bottom p::before,
+.footer-bottom p::after {
+  content: '';
+  height: 1px;
+  background: linear-gradient(90deg, rgba(67, 97, 238, 0) 0%, rgba(67, 97, 238, 0.5) 100%);
+  width: 60px;
+  margin: 0 20px;
+  display: inline-block;
+  transition: all 0.3s ease;
+}
+
+.footer-bottom p:hover::before,
+.footer-bottom p:hover::after {
+  width: 80px;
+  background: linear-gradient(90deg, rgba(67, 97, 238, 0) 0%, rgba(67, 97, 238, 0.8) 100%);
+}
+
+.footer-bottom p::after {
+  background: linear-gradient(90deg, rgba(67, 97, 238, 0.5) 0%, rgba(67, 97, 238, 0) 100%);
+}
+
+.footer-bottom p:hover::after {
+  background: linear-gradient(90deg, rgba(67, 97, 238, 0.8) 0%, rgba(67, 97, 238, 0) 100%);
+}
+
+@keyframes pulse {
+  0%, 100% {
+    box-shadow: 0 0 10px rgba(67, 97, 238, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(67, 97, 238, 0.8);
+  }
 }
 
 /* Floating Buttons (Vertically centered on the right) */

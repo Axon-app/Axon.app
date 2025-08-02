@@ -41,7 +41,16 @@ const appearOnScroll = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
     if (entry.isIntersecting) {
       entry.target.classList.add('visible');
-      appearOnScroll.unobserve(entry.target); 
+      // No dejamos de observar las secciones principales como el blog para que sigan siendo visibles
+      if (!entry.target.id || !['blog'].includes(entry.target.id)) {
+        appearOnScroll.unobserve(entry.target); 
+      }
+    } else {
+      // Si la sección tiene ID "blog" y sale del viewport, no quitamos la clase visible
+      if (entry.target.id && entry.target.id === 'blog') {
+        // Mantener visible la sección del blog incluso al salir del viewport
+        entry.target.classList.add('visible');
+      }
     }
   });
 }, appearOptions);
@@ -575,11 +584,24 @@ window.addEventListener('load', function() {
   const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
   const isLowPower = isMobile && (navigator.deviceMemory < 4 || navigator.hardwareConcurrency < 4);
   
-  if (isLowPower) {
+  if (isLowPower || isMobile) { // Extendemos la condición a todos los móviles para mejorar el rendimiento
     // En dispositivos de baja potencia, usamos un fondo estático en lugar de la animación 3D
     const canvas = document.getElementById('bg-canvas');
     if (canvas) {
       canvas.style.background = 'radial-gradient(circle at 50% 50%, rgba(67, 97, 238, 0.15) 0%, rgba(13, 19, 33, 0.95) 70%)';
+    }
+    
+    // Aseguramos que todas las secciones fade-in sean visibles en dispositivos móviles
+    document.querySelectorAll('section.fade-in').forEach(section => {
+      section.classList.add('visible');
+    });
+    
+    // Específicamente aseguramos que el blog sea visible
+    const blogSection = document.getElementById('blog');
+    if (blogSection) {
+      blogSection.classList.add('visible');
+      blogSection.style.opacity = '1';
+      blogSection.style.transform = 'translateY(0)';
     }
   } else {
     // Solo iniciar la animación en dispositivos con suficiente potencia

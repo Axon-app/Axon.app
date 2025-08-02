@@ -7,9 +7,29 @@
   <meta name="keywords" content="desarrollo web, aplicaciones móviles, software a medida, cloud, devops, inteligencia artificial"/>
   <meta name="author" content="Axon.app"/>
   <meta name="theme-color" content="#4361ee"/>
+  
+  <!-- Open Graph Meta Tags para compartir en redes sociales -->
+  <meta property="og:title" content="Axon.app - Soluciones Digitales Innovadoras"/>
+  <meta property="og:description" content="Soluciones digitales innovadoras para aplicaciones móviles, desarrollo web y software a medida con las últimas tecnologías"/>
+  <meta property="og:image" content="https://axon-app.github.io/Axon.app/assets/images/logo.png"/>
+  <meta property="og:url" content="https://axon-app.github.io/Axon.app/"/>
+  <meta property="og:type" content="website"/>
+  <meta property="og:site_name" content="Axon.app"/>
+  
+  <!-- Twitter Card Meta Tags -->
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:title" content="Axon.app - Soluciones Digitales Innovadoras"/>
+  <meta name="twitter:description" content="Soluciones digitales innovadoras para aplicaciones móviles, desarrollo web y software a medida"/>
+  <meta name="twitter:image" content="https://axon-app.github.io/Axon.app/assets/images/logo.png"/>
+  
   <!-- Preconectar a los orígenes externos para mejorar el rendimiento -->
   <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
-  <title>Axon.app - Soluciones Digitales Innovadoras</title>
+  <!-- Favicon optimizado para mejor visibilidad - tamaños múltiples para mejor soporte -->
+  <link rel="icon" href="assets/images/logo.png" type="image/png" sizes="32x32">
+  <link rel="icon" href="assets/images/logo.png" type="image/png" sizes="64x64">
+  <link rel="icon" href="assets/images/logo.png" type="image/png" sizes="96x96">
+  <link rel="apple-touch-icon" href="assets/images/logo.png">
+  <title>Axon.app_SOFTWARE DEVELOPMENT</title>
 
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -39,6 +59,46 @@
   <!-- CSS Específico - Separación de estilos por tipo de dispositivo -->
   <link rel="stylesheet" href="css/desktop.css">
   <link rel="stylesheet" href="css/mobile.css">
+  
+  <!-- Script para mejorar la visibilidad del favicon -->
+  <script>
+    // Este script mejora el favicon en navegadores modernos
+    document.addEventListener('DOMContentLoaded', function() {
+      // Intentar cargar un favicon con fondo más claro para mejorar visibilidad
+      const faviconLink = document.querySelector("link[rel='icon']") || document.createElement('link');
+      
+      // Crear un canvas para modificar el favicon
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      canvas.width = canvas.height = 64; // Tamaño más grande
+      
+      // Crear imagen
+      const img = new Image();
+      img.onload = function() {
+        // Dibujar un fondo claro para mejorar contraste
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0, 0, 64, 64);
+        
+        // Dibujar un borde sutil
+        ctx.strokeStyle = '#4361ee';
+        ctx.lineWidth = 2;
+        ctx.strokeRect(1, 1, 62, 62);
+        
+        // Dibujar la imagen original en tamaño más grande
+        ctx.drawImage(img, 4, 4, 56, 56);
+        
+        // Aplicar el nuevo favicon
+        faviconLink.type = 'image/x-icon';
+        faviconLink.rel = 'icon';
+        faviconLink.href = canvas.toDataURL('image/png');
+        document.head.appendChild(faviconLink);
+      };
+      img.src = 'assets/images/logo.png';
+    });
+  </script>
+  
+  <!-- Script para el carrusel de testimonios -->
+  <script src="js/testimonial-carousel.js"></script>
 </head>
 <body>
   <!-- The canvas for the 3D animation. It will be positioned behind everything. -->
@@ -97,8 +157,8 @@
         </div>
       </div>
       <div class="container hero-content">
-        <h1>Transformamos ideas en software poderoso</h1>
-        <p>En Axon.app creamos aplicaciones inteligentes, rápidas y escalables. Innovación con propósito, diseño con alma.</p>
+        <h1>Transformamos tus ideas en software</h1>
+        <p>En Axon.app desarrollamos aplicaciones inteligentes, rápidas y escalables. Innovamos con propósito y diseñamos con alma para transformar ideas en experiencias únicas.</p>
         <a href="#contacto" class="btn btn-contact">Empecemos tu proyecto</a>
         
         <!-- Stats Bar -->
@@ -135,12 +195,12 @@
           
           <div class="stat-item">
             <div class="stat-icon">
-              <i class="fas fa-trophy"></i>
+              <i class="fas fa-history"></i>
             </div>
             <div class="stat-count">
-              <span class="counter" data-target="15">0</span>
+              <span class="counter" data-target="3">0</span>
             </div>
-            <div class="stat-label">PREMIOS RECIBIDOS</div>
+            <div class="stat-label">AÑOS DE EXPERIENCIA</div>
           </div>
         </div>
       </div>
@@ -158,18 +218,20 @@
           </div>
           <div class="about-content fade-in">
             <p>En Axon.app, fusionamos creatividad, tecnología y estrategia para construir soluciones digitales que transforman negocios. Nuestro enfoque ágil y centrado en el usuario nos permite entregar productos de alto impacto.</p>
+            <br>
             <p>Lideramos proyectos desde la idea hasta el lanzamiento, con equipos expertos en desarrollo, diseño y crecimiento digital. Nos apasiona resolver desafíos complejos y convertir visiones en realidades funcionales y estéticamente atractivas.</p>
+            <br>
             <p>Creemos firmemente en la colaboración transparente y en mantener una comunicación constante con nuestros clientes. Tu éxito es nuestro éxito, y trabajamos incansablemente para superar tus expectativas.</p>
           </div>
         </div>
         <div class="mission-vision fade-in">
           <div class="mv-item">
             <h3><i class="fas fa-rocket"></i> Misión</h3>
-            <p>Conectar tecnología e innovación para impulsar el crecimiento sostenible de empresas visionarias.</p>
+            <p>Crear soluciones de software inteligentes, seguras y escalables que transformen ideas en experiencias digitales excepcionales, impulsando el crecimiento y la innovación de nuestros clientes en un mundo cada vez más conectado.</p>
           </div>
           <div class="mv-item">
             <h3><i class="fas fa-lightbulb"></i> Visión</h3>
-            <p>Ser la plataforma de desarrollo digital de referencia global para startups y corporaciones.</p>
+            <p>Ser la empresa de desarrollo de software más reconocida por combinar innovación, calidad y diseño, liderando la transformación digital y marcando tendencias tecnológicas a nivel global.</p>
           </div>
         </div>
 
@@ -933,7 +995,9 @@
 
       <hr class="footer-divider">
       <div class="footer-bottom">
-        <p>&copy; 2025 Axon.app. Todos los derechos reservados.</p>
+        <div class="container">
+          <p><span class="logo-symbol"><i class="fas fa-code"></i></span> &copy; 2025 Axon.app. Todos los derechos reservados.</p>
+        </div>
       </div>
     </div>
   </footer>

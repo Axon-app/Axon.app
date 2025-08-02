@@ -97,6 +97,7 @@
     gap: 1rem;
     position: relative; /* Asegurar posicionamiento correcto */
     z-index: 10; /* Colocar el contenido por encima del logo */
+    padding-top: 2.5rem; /* Añadido espacio superior para mover el contenido hacia abajo en dispositivos móviles */
   }
   
   .hero-content h1 { 
@@ -161,7 +162,8 @@
   }
   
   .about-content { 
-    min-width: unset; 
+    min-width: unset;
+    text-align: justify;
   }
   
   /* ===== Footer ===== */
@@ -249,6 +251,8 @@
   
   #blog {
     margin-top: 1.5rem; /* Reducir aún más el espacio para móviles */
+    opacity: 1 !important; /* Forzar visibilidad en móviles */
+    transform: translateY(0) !important; /* Asegurar posición correcta */
   }
 }
 
@@ -261,6 +265,7 @@
     padding: 1rem;
     position: relative; /* Asegurar posicionamiento correcto */
     z-index: 10; /* Colocar el contenido por encima del logo */
+    padding-top: 2rem; /* Añadido espacio superior para mover el contenido hacia abajo en dispositivos móviles pequeños */
   }
   
   .hero-content h1 {
@@ -499,5 +504,34 @@
   
   #blog {
     margin-top: 1rem; /* Reducir aún más el espacio para móviles pequeños */
+  }
+  
+  /* ===== Footer Bottom Responsive Styles ===== */
+  .footer-bottom {
+    padding: 1.2rem 0;
+    margin: 0 -1rem -2rem;
+  }
+  
+  .footer-bottom p {
+    font-size: 0.85rem;
+    letter-spacing: 0.5px;
+    flex-wrap: wrap;
+    padding: 0 1rem;
+  }
+  
+  .footer-bottom p::before,
+  .footer-bottom p::after {
+    width: 30px;
+    margin: 0 10px;
+  }
+  
+  .logo-symbol {
+    width: 24px;
+    height: 24px;
+    margin-right: 8px;
+  }
+  
+  .logo-symbol i {
+    font-size: 10px;
   }
 }
