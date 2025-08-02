@@ -1,0 +1,119 @@
+/* desktop.css - Estilos específicos para dispositivos desktop */
+/* Este archivo solo contiene estilos que se aplican a computadoras (min-width: 993px) */
+/* Todos los cambios aquí no afectarán a los dispositivos móviles */
+
+@media screen and (min-width: 993px) {
+  /* ===== Hero Section ===== */
+  .hero-content {
+    text-align: center;
+    align-items: center; /* Centrar todos los elementos del hero en computadoras */
+  }
+  
+  .hero-content h1 {
+    font-size: 4.2rem;
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -1px;
+    text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+    text-align: center; /* Centrar el texto del título */
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .hero-content p {
+    font-size: 1.25rem;
+    font-weight: 300;
+    max-width: 700px;
+    color: rgba(245, 245, 245, 0.9);
+    line-height: 1.6;
+    text-shadow: 0px 1px 2px rgba(0, 0, 0, 0.2);
+    letter-spacing: 0.3px;
+    text-align: center; /* Centrar el texto del párrafo */
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .hero-content .btn {
+    padding: 0.9rem 2.2rem;
+    font-size: 1rem;
+    font-weight: 500;
+    border-radius: 50px;
+    letter-spacing: 0.5px;
+    /* El botón ya se centra automáticamente debido a align-items: center en .hero-content */
+  }
+  
+  /* ===== Stats Bar ===== */
+  .stats-bar {
+    margin-top: 4rem;
+    display: flex;
+    justify-content: center; /* Centrar las estadísticas horizontalmente */
+    width: 100%;
+    max-width: 1100px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  .stat-item {
+    text-align: center; /* Asegurar que el contenido de cada estadística esté centrado */
+  }
+  
+  /* ===== Navigation ===== */
+  .nav-links {
+    display: flex;
+  }
+  
+  .hamburger {
+    display: none;
+  }
+  
+  /* ===== About Section ===== */
+  .about {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4rem;
+  }
+  
+  /* ===== Services ===== */
+  .services-grid {
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+  }
+  
+  /* ===== Tech ===== */
+  .tech-logos {
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  }
+  
+  /* ===== Portfolio ===== */
+  .portfolio-grid {
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+  }
+  
+  /* ===== Blog ===== */
+  .blog-grid {
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+  }
+  
+  /* ===== Footer ===== */
+  .footer-grid {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2.5rem;
+  }
+  
+  /* ===== Logo Rotations ===== */
+  /* Estos estilos se aplican tanto al logo en el navbar como en el footer */
+  .logo-img, .footer-logo .logo-img, .hero-logo-img {
+    animation: rotateHorizontal 8s linear infinite;
+  }
+  
+  @keyframes rotateHorizontal {
+    from {
+      transform: rotateY(0deg);
+    }
+    to {
+      transform: rotateY(360deg);
+    }
+  }
+}

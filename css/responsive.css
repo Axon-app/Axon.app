@@ -1,0 +1,298 @@
+/* 
+ * UNIFIED RESPONSIVE STYLES
+ * 
+ * This file contains a complete restructuring of the responsive design for Axon.app
+ * It uses a dedicated media query strategy that isolates mobile and desktop styles
+ * to ensure changes to one don't affect the other.
+ */
+
+/* 
+ * MOBILE-FIRST APPROACH WITH DEVICE SEGMENTATION
+ * 
+ * We'll use the following breakpoints:
+ * - Mobile (base): 0-480px
+ * - Small Tablets: 481px-767px
+ * - Tablets: 768px-991px  
+ * - Desktops: 992px+
+ *
+ * Each device type has its own isolated class structure
+ */
+
+/* Common elements that will have device-specific customizations */
+.logo-img,
+.hero-content h1,
+.hero-content p,
+.hero-content .btn,
+section,
+.container,
+header,
+.footer-logo .logo-img {
+  /* These elements will have device-specific styles */
+  transition: all 0.3s ease;
+}
+
+/* 
+ * BASE MOBILE STYLES - These apply to all mobile devices by default
+ * All other device styles will build on top of these
+ */
+.mobile-view {
+  display: block;
+}
+
+.desktop-view {
+  display: none;
+}
+
+/* Apply mobile-specific styles directly without media queries */
+/* These will be overridden for larger screens */
+
+/* 
+ * SMALL TABLET STYLES - Apply to screens 481px-767px
+ * These styles won't affect mobile or desktop
+ */
+@media (min-width: 481px) {
+  /* Small tablet specific styles */
+  .small-tablet-view {
+    display: block;
+  }
+}
+
+/* 
+ * TABLET STYLES - Apply to screens 768px-991px
+ * These styles won't affect mobile or desktop
+ */
+@media (min-width: 768px) {
+  .mobile-view {
+    display: none;
+  }
+  
+  .tablet-view {
+    display: block;
+  }
+  
+  .desktop-view {
+    display: none;
+  }
+  
+  /* Tablet-specific styles */
+  .nav-links {
+    display: flex;
+  }
+  
+  .hamburger {
+    display: none;
+  }
+}
+
+/* 
+ * DESKTOP STYLES - Apply to screens 992px and up
+ * These styles won't affect mobile or tablets
+ */
+@media (min-width: 992px) {
+  .mobile-view,
+  .small-tablet-view,
+  .tablet-view {
+    display: none;
+  }
+  
+  .desktop-view {
+    display: block;
+  }
+  
+  /* Desktop-specific styles */
+}
+
+/* 
+ * UTILITY CLASSES FOR DEVICE-SPECIFIC ELEMENTS
+ * Use these classes to show/hide elements on specific devices
+ * without affecting the overall layout
+ */
+
+/* Element will only be visible on mobile */
+.mobile-only {
+  display: none;
+}
+
+@media (max-width: 767px) {
+  .mobile-only {
+    display: block;
+  }
+}
+
+/* Element will only be visible on tablets */
+.tablet-only {
+  display: none;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  .tablet-only {
+    display: block;
+  }
+}
+
+/* Element will only be visible on desktop */
+.desktop-only {
+  display: none;
+}
+
+@media (min-width: 992px) {
+  .desktop-only {
+    display: block;
+  }
+}
+
+/* 
+ * SEGREGATED CONTAINERS FOR MAXIMUM ISOLATION
+ * These containers ensure complete style separation
+ */
+
+/* Container that will ONLY be styled on mobile devices */
+.mobile-container {
+  /* Mobile base styling */
+}
+
+@media (min-width: 768px) {
+  .mobile-container {
+    /* Reset mobile-specific styling for larger screens */
+    /* This ensures mobile styles don't affect desktop */
+  }
+}
+
+/* Container that will ONLY be styled on desktop devices */
+.desktop-container {
+  /* Hidden by default on mobile */
+  display: none;
+}
+
+@media (min-width: 992px) {
+  .desktop-container {
+    /* Show and style only on desktop */
+    display: block;
+    /* Desktop-specific styling */
+  }
+}
+
+/* 
+ * RESPONSIVE MODIFIERS 
+ * Apply these classes alongside element classes to modify
+ * their behavior on specific devices without affecting others
+ */
+
+/* Apply to elements that need different sizing on mobile */
+.mobile-size-sm { font-size: 80%; }
+.mobile-size-lg { font-size: 120%; }
+
+/* Apply to elements that need different sizing on desktop */
+.desktop-size-sm { font-size: 100%; } /* Default on mobile */
+.desktop-size-lg { font-size: 100%; } /* Default on mobile */
+
+@media (min-width: 992px) {
+  .desktop-size-sm { font-size: 80%; }  /* Smaller on desktop */
+  .desktop-size-lg { font-size: 120%; } /* Larger on desktop */
+  
+  /* Reset mobile modifiers on desktop */
+  .mobile-size-sm,
+  .mobile-size-lg {
+    font-size: 100%;
+  }
+}
+
+/* 
+ * COMBINED RESPONSIVE UTILITIES
+ * For more complex responsive behaviors 
+ */
+
+/* Flex direction changes based on device */
+.responsive-flex {
+  display: flex;
+  flex-direction: column; /* Default for mobile */
+}
+
+@media (min-width: 768px) {
+  .responsive-flex {
+    flex-direction: row; /* Row for tablets and up */
+  }
+}
+
+/* Text alignment changes based on device */
+.responsive-text-align {
+  text-align: center; /* Default for mobile */
+}
+
+@media (min-width: 992px) {
+  .responsive-text-align {
+    text-align: left; /* Left-aligned for desktop */
+  }
+}
+
+/* 
+ * RESPONSIVE GRID SYSTEM
+ * Use these classes to create responsive layouts
+ * that behave differently on different devices
+ */
+
+.responsive-grid {
+  display: grid;
+  grid-template-columns: 1fr; /* Single column for mobile */
+  gap: 1rem;
+}
+
+@media (min-width: 768px) {
+  .responsive-grid {
+    grid-template-columns: repeat(2, 1fr); /* 2 columns for tablets */
+  }
+}
+
+@media (min-width: 992px) {
+  .responsive-grid {
+    grid-template-columns: repeat(3, 1fr); /* 3 columns for desktop */
+  }
+}
+
+/* 
+ * Example of isolated section styling that can be applied to containers 
+ * These won't interfere with one another
+ */
+
+/* Mobile-specific hero section styling */
+.mobile-hero {
+  padding: 3rem 1rem;
+  text-align: center;
+}
+
+.mobile-hero h1 {
+  font-size: 2.5rem;
+  line-height: 1.2;
+}
+
+.mobile-hero p {
+  font-size: 1rem;
+  margin: 1rem 0;
+}
+
+/* Desktop-specific hero section styling */
+.desktop-hero {
+  display: none;
+}
+
+@media (min-width: 992px) {
+  .mobile-hero {
+    display: none;
+  }
+  
+  .desktop-hero {
+    display: block;
+    padding: 6rem 2rem;
+    text-align: center;
+  }
+  
+  .desktop-hero h1 {
+    font-size: 4.2rem;
+    line-height: 1.1;
+  }
+  
+  .desktop-hero p {
+    font-size: 1.25rem;
+    margin: 1.5rem 0;
+  }
+}

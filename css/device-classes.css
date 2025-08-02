@@ -1,0 +1,75 @@
+/* device-classes.css - Clases auxiliares para selección específica por dispositivo */
+/* Este archivo proporciona clases que permiten esconder o mostrar elementos 
+   específicos según el tipo de dispositivo */
+
+/* Clases para mostrar elementos solo en ciertos dispositivos */
+.desktop-only {
+  display: none;
+}
+
+.tablet-only {
+  display: none;
+}
+
+.mobile-only {
+  display: none;
+}
+
+/* Mostrar elementos basados en la clase del html */
+html.device-desktop .desktop-only {
+  display: block;
+}
+
+html.device-tablet .tablet-only {
+  display: block;
+}
+
+html.device-mobile .mobile-only {
+  display: block;
+}
+
+/* Versiones inline */
+.desktop-inline-only {
+  display: none;
+}
+
+.tablet-inline-only {
+  display: none;
+}
+
+.mobile-inline-only {
+  display: none;
+}
+
+html.device-desktop .desktop-inline-only {
+  display: inline-block;
+}
+
+html.device-tablet .tablet-inline-only {
+  display: inline-block;
+}
+
+html.device-mobile .mobile-inline-only {
+  display: inline-block;
+}
+
+/* Clases para ocultar elementos en ciertos dispositivos */
+html.device-desktop .hide-on-desktop {
+  display: none;
+}
+
+html.device-tablet .hide-on-tablet {
+  display: none;
+}
+
+html.device-mobile .hide-on-mobile {
+  display: none;
+}
+
+/* Nota: Las siguientes clases son marcadores para aplicar estilos personalizados
+   desde los archivos desktop.css y mobile.css */
+/* 
+html.device-desktop .style-for-desktop { }
+html.device-tablet .style-for-tablet { }
+html.device-mobile .style-for-mobile { } 
+*/

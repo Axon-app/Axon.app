@@ -1,0 +1,55 @@
+/* config.css - Variables y configuraciones CSS centralizadas */
+/* Este archivo contiene variables globales, colores y configuraciones que se pueden usar en cualquier parte del proyecto */
+
+:root {
+  /* Colores primarios */
+  --primary: #4361ee;
+  --primary-light: #4cc9f0;
+  --dark: #101010;
+  --light: #f8f9ff;
+  --gray: #adb5bd;
+  --gradient: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+  
+  /* Sombras */
+  --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  --shadow-sm: 0 5px 15px rgba(0, 0, 0, 0.08);
+  
+  /* Bordes */
+  --radius: 16px;
+  
+  /* Transiciones */
+  --transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  
+  /* Menú */
+  --menu-bg: #0f0f1e;
+  
+  /* Colores para fondo Three.js */
+  --color1: #0A0A1A; /* Azul muy oscuro/negro para espacio profundo */
+  --color2: #1A1A2E; /* Azul más oscuro */
+  --color3: #4361ee; /* Azul primario para destacados sutiles/brillo */
+  
+  /* Tipografía */
+  --font-primary: 'Inter', sans-serif;
+  --font-heading: 'Space Grotesk', sans-serif;
+  --font-logo: 'Poppins', sans-serif;
+  
+  /* Espaciado */
+  --spacing-xs: 0.5rem;
+  --spacing-sm: 1rem;
+  --spacing-md: 2rem;
+  --spacing-lg: 3rem;
+  --spacing-xl: 5rem;
+  
+  /* Tamaños de texto */
+  --text-xs: 0.8rem;
+  --text-sm: 0.95rem;
+  --text-md: 1.1rem;
+  --text-lg: 1.4rem;
+  --text-xl: 1.8rem;
+  --text-2xl: 2.5rem;
+  --text-3xl: 3.5rem;
+  --text-4xl: 4.2rem;
+}
+
+/* Mixins utilitarios - para usar con propiedades personalizadas en el futuro */
+/* Actualmente CSS no soporta mixins nativos, pero estos se podrían usar con preprocesadores como SASS */
