@@ -106,6 +106,25 @@
     gap: 2.5rem;
   }
   
+  /* ===== Sección Sobre Axon.app - Optimización para desktop ===== */
+  .about-content p {
+    font-size: 0.875rem; /* Texto más pequeño pero legible en pantallas grandes */
+    line-height: 1.7;
+    margin-bottom: 1.1rem;
+    text-align: justify;
+    max-width: 100%;
+  }
+  
+  .mv-item p {
+    font-size: 0.875rem; /* Texto más pequeño en misión y visión para desktop */
+    line-height: 1.7;
+    text-align: justify;
+  }
+  
+  .mv-item {
+    padding: 2.2rem; /* Más padding en desktop */
+  }
+
   /* ===== Logo Rotations ===== */
   /* Estos estilos se aplican tanto al logo en el navbar como en el footer */
   .logo-img, .footer-logo .logo-img, .hero-logo-img {

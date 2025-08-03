@@ -13,11 +13,71 @@
     font-size: 1.15rem;
   }
 
-  /* ===== Portfolio and Blog Sections ===== */
-  .portfolio-grid {
-    margin-bottom: 2rem; /* Reducir el espacio entre portafolio y blog */
+  /* ===== Sección Sobre Axon.app - Ajustes para tablets ===== */
+  .about-content p {
+    font-size: 0.875rem; /* Texto más pequeño para tablets */
+    line-height: 1.6;
+    margin-bottom: 0.9rem;
   }
   
+  .mv-item p {
+    font-size: 0.875rem; /* Texto más pequeño en misión y visión */
+    line-height: 1.6;
+  }
+
+  /* ===== Portfolio and Blog Sections ===== */
+  .portfolio-grid {
+    margin-bottom: 2rem;
+  }
+}
+
+/* ===== Estilos específicos para móviles muy pequeños ===== */
+@media screen and (max-width: 480px) {
+  /* Optimización adicional de texto para pantallas muy pequeñas */
+  .about-content p {
+    font-size: 0.8rem; /* Texto aún más pequeño para pantallas muy pequeñas */
+    line-height: 1.55;
+    margin-bottom: 0.8rem;
+    text-align: justify;
+  }
+  
+  .mv-item p {
+    font-size: 0.8rem;
+    line-height: 1.55;
+    text-align: justify;
+  }
+  
+  .mv-item h3 {
+    font-size: 1.3rem;
+  }
+  
+  .mv-item h3 i {
+    font-size: 1.6rem;
+  }
+  
+  /* Reducir padding en elementos de misión y visión */
+  .mv-item {
+    padding: 1.5rem;
+  }
+}
+
+/* ===== Media Query adicional para pantallas extra pequeñas ===== */
+@media screen and (max-width: 360px) {
+  .about-content p {
+    font-size: 0.8rem;
+    line-height: 1.3;
+  }
+  
+  .mv-item p {
+    font-size: 0.8rem;
+    line-height: 1.3;
+  }
+  
+  .mv-item h3 {
+    font-size: 1.2rem;
+  }
+  
+  /* Reducir el espacio entre portafolio y blog */
   #blog {
     margin-top: 2rem; /* Reducir el espacio entre portafolio y blog */
   }
@@ -164,6 +224,22 @@
   .about-content { 
     min-width: unset;
     text-align: justify;
+  }
+  
+  /* Optimización de texto para móviles en sección nosotros */
+  .about-content p {
+    font-size: 0.9rem; /* Texto ligeramente más pequeño en móviles */
+    line-height: 1.5;
+    margin-bottom: 0.8rem;
+  }
+  
+  .mv-item p {
+    font-size: 0.9rem; /* Texto optimizado para misión y visión en móviles */
+    line-height: 1.5;
+  }
+  
+  .mv-item h3 {
+    font-size: 1.4rem; /* Títulos más pequeños en móviles */
   }
   
   /* ===== Footer ===== */
