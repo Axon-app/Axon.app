@@ -2789,3 +2789,31 @@ section:nth-child(even) {
   from { transform: rotateY(0deg); }
   to { transform: rotateY(360deg); }
 }
+
+/* Estilos específicos para imágenes de portfolio - FinTrack Pro */
+#portfolio-fintrackpro {
+  width: 100%;
+  height: 250px;
+  object-fit: cover;
+  border-radius: 4px;
+  transition: transform 0.5s ease;
+}
+
+/* Responsive styles for FinTrack Pro portfolio image */
+@media (max-width: 992px) {
+  #portfolio-fintrackpro {
+    height: 220px;
+  }
+}
+
+@media (max-width: 768px) {
+  #portfolio-fintrackpro {
+    height: 200px;
+  }
+}
+
+@media (max-width: 480px) {
+  #portfolio-fintrackpro {
+    height: 180px;
+  }
+}
