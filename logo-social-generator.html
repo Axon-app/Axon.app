@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Generador de Logo Social para Axon.app</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .canvas-container {
+            margin: 20px 0;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .controls {
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            max-width: 800px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #4361ee;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .color-picker {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .instructions {
+            max-width: 800px;
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #fff;
+            border-radius: 4px;
+            box-shadow: 0 0 5px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Generador de Logo Social para Axon.app</h1>
+        
+        <div class="controls">
+            <div class="color-picker">
+                <label for="backgroundColor">Color de fondo:</label>
+                <input type="color" id="backgroundColor" value="#1a7a63">
+                
+                <label for="textColor" style="margin-left: 20px;">Color del texto:</label>
+                <input type="color" id="textColor" value="#ffffff">
+            </div>
+            
+            <button id="generateButton">Generar Imagen</button>
+            <button id="downloadButton">Descargar Imagen</button>
+        </div>
+        
+        <div class="canvas-container">
+            <canvas id="socialCanvas" width="1200" height="630"></canvas>
+        </div>
+        
+        <div class="instructions">
+            <h3>Instrucciones:</h3>
+            <ol>
+                <li>Ajusta los colores según prefieras usando los selectores de color</li>
+                <li>Haz clic en "Generar Imagen" para previsualizar</li>
+                <li>Cuando estés conforme con el resultado, haz clic en "Descargar Imagen"</li>
+                <li>Guarda la imagen descargada como "logo-social.png" en la carpeta "assets/images/"</li>
+                <li>¡Listo! Tu imagen ya está optimizada para compartir en redes sociales</li>
+            </ol>
+            <p><strong>Nota:</strong> La imagen generada tiene dimensiones de 1200x630px, que es el tamaño óptimo para compartir en la mayoría de las plataformas sociales.</p>
+        </div>
+    </div>
+    
+    <script>
+        const canvas = document.getElementById('socialCanvas');
+        const ctx = canvas.getContext('2d');
+        const backgroundColorPicker = document.getElementById('backgroundColor');
+        const textColorPicker = document.getElementById('textColor');
+        const generateButton = document.getElementById('generateButton');
+        const downloadButton = document.getElementById('downloadButton');
+        
+        // Cargar la imagen del logo
+        const logo = new Image();
+        logo.src = 'assets/images/logo.png';
+        
+        logo.onload = function() {
+            generateSocialImage();
+        };
+        
+        generateButton.addEventListener('click', generateSocialImage);
+        downloadButton.addEventListener('click', downloadImage);
+        
+        function generateSocialImage() {
+            // Obtener colores seleccionados
+            const bgColor = backgroundColorPicker.value;
+            const txtColor = textColorPicker.value;
+            
+            // Limpiar el canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Dibujar fondo
+            ctx.fillStyle = bgColor;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Dibujar logo
+            const logoSize = 200;
+            ctx.drawImage(logo, (canvas.width / 2) - (logoSize / 2), 150, logoSize, logoSize);
+            
+            // Dibujar texto
+            ctx.fillStyle = txtColor;
+            ctx.font = 'bold 72px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText('Axon.app', canvas.width / 2, 420);
+            
+            ctx.font = '36px Arial';
+            ctx.fillText('SOFTWARE DEVELOPMENT', canvas.width / 2, 480);
+            
+            // Dibujar subtítulo
+            ctx.font = '24px Arial';
+            ctx.fillText('Soluciones digitales innovadoras para aplicaciones móviles,', canvas.width / 2, 540);
+            ctx.fillText('desarrollo web y software a medida con las últimas tecnologías', canvas.width / 2, 570);
+        }
+        
+        function downloadImage() {
+            // Crear un enlace temporal
+            const link = document.createElement('a');
+            link.download = 'logo-social.png';
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        }
+    </script>
+</body>
+</html>
