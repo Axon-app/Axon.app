@@ -2240,6 +2240,26 @@ section:nth-child(even) {
     position: relative; /* Needed for positioning the social media container */
     z-index: 1002; /* Higher z-index to ensure it's on top */
     transition: all 0.3s ease, transform 0.5s cubic-bezier(0.68, -0.6, 0.32, 1.6); /* Custom animation curve */
+    overflow: visible; /* Permite que la animación del brillo se muestre correctamente */
+}
+
+.btn-social-media:before {
+    content: '';
+    position: absolute;
+    top: -4px;
+    left: -4px;
+    right: -4px;
+    bottom: -4px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+    opacity: 0;
+    z-index: -1;
+    transition: opacity 0.3s ease;
+}
+
+.btn-social-media:hover:before {
+    opacity: 0.4;
+    animation: pulse 1.5s infinite ease-in-out;
 }
 
 /* Animation for active state */
@@ -2247,6 +2267,22 @@ section:nth-child(even) {
     transform: scale(1.1) rotate(45deg); /* Rotate when active */
     background: #1565c0; /* Darker blue when active */
     box-shadow: 0 0 20px rgba(67, 97, 238, 0.6); /* Glowing effect */
+}
+
+.btn-social-media.active:before {
+    opacity: 0.6;
+    animation: pulse 1s infinite ease-in-out;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 0.4;
+    }
+    50% {
+        transform: scale(1.1);
+        opacity: 0.6;
+    }
 }
 
 /* New Contact Form Floating Button */
@@ -2275,6 +2311,7 @@ section:nth-child(even) {
     pointer-events: none; /* Allow clicks to pass through when hidden */
     height: auto; /* Auto height */
     width: auto; /* Auto width based on content */
+    right: 100px; /* Posición fija desde la derecha */
 }
 
 .social-media-floating-container.active {
@@ -2310,19 +2347,19 @@ section:nth-child(even) {
 }
 
 .social-media-floating-container.active a:nth-child(1) { 
-    animation: popIn 0.3s forwards 0.05s;
+    animation: popIn 0.4s forwards 0.05s;
 }
 .social-media-floating-container.active a:nth-child(2) { 
-    animation: popIn 0.3s forwards 0.1s;
+    animation: popIn 0.4s forwards 0.1s;
 }
 .social-media-floating-container.active a:nth-child(3) { 
-    animation: popIn 0.3s forwards 0.15s;
+    animation: popIn 0.4s forwards 0.15s;
 }
 .social-media-floating-container.active a:nth-child(4) { 
-    animation: popIn 0.3s forwards 0.2s;
+    animation: popIn 0.4s forwards 0.2s;
 }
 .social-media-floating-container.active a:nth-child(5) { 
-    animation: popIn 0.3s forwards 0.25s;
+    animation: popIn 0.4s forwards 0.25s;
 }
 
 @keyframes popIn {
@@ -2337,6 +2374,14 @@ section:nth-child(even) {
         opacity: 1;
         transform: scale(1) translateX(0);
     }
+}
+
+/* Aseguramos que los enlaces dentro del contenedor de redes sociales sean interactivos */
+.social-media-floating-container a {
+    opacity: 0; /* Inicialmente invisibles */
+    cursor: pointer; /* Aseguramos que el cursor cambie */
+    position: relative; /* Para garantizar el posicionamiento correcto */
+    z-index: 1003; /* Aseguramos que estén por encima de todo */
 }
 
 .social-media-floating-container a:hover {

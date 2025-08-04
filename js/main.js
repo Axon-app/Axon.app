@@ -252,51 +252,32 @@ document.addEventListener('DOMContentLoaded', function() {
     const btnSocialMedia = document.getElementById('btn-social-media');
     const socialMediaContainer = document.getElementById('social-media-floating-container');
     
+    console.log('Inicializando botón de redes sociales...');
+    console.log('Botón encontrado:', !!btnSocialMedia);
+    console.log('Contenedor encontrado:', !!socialMediaContainer);
+    
     if (!btnSocialMedia || !socialMediaContainer) {
         console.error('No se encontraron los elementos necesarios para las redes sociales.');
         return;
     }
     
-    // Función mejorada para calcular y actualizar la posición del contenedor
+    // Función simplificada para posicionar el contenedor solo cuando sea necesario
     function updateSocialContainerPosition() {
         if (!btnSocialMedia || !socialMediaContainer) return;
         
-        // El botón flotante siempre mantiene su posición fija en la pantalla
-        // por lo que podemos obtener su posición visual actual
-        const btnRect = btnSocialMedia.getBoundingClientRect();
+        // Solo actualizamos posición si el contenedor está activo
+        if (!socialMediaContainer.classList.contains('active')) return;
         
-        // Calculamos la posición vertical del centro del botón
+        const btnRect = btnSocialMedia.getBoundingClientRect();
         const btnCenterY = btnRect.top + btnRect.height / 2;
         
-        // Obtenemos la altura del contenedor de redes sociales
-        let containerHeight = 150; // Valor estimado por defecto
+        // Obtenemos la altura real del contenedor
+        const containerHeight = socialMediaContainer.offsetHeight || 60;
         
-        // Si el contenedor está activo, podemos obtener su altura real
-        if (socialMediaContainer.classList.contains('active')) {
-            containerHeight = socialMediaContainer.offsetHeight;
-        } else {
-            // Para obtener una altura precisa, lo hacemos temporalmente visible pero transparente
-            const originalVisibility = socialMediaContainer.style.visibility || '';
-            const originalOpacity = socialMediaContainer.style.opacity || '';
-            const originalDisplay = socialMediaContainer.style.display || '';
-            
-            socialMediaContainer.style.visibility = 'hidden';
-            socialMediaContainer.style.opacity = '0';
-            socialMediaContainer.style.display = 'flex';
-            
-            containerHeight = socialMediaContainer.offsetHeight;
-            
-            // Restauramos los estilos originales
-            socialMediaContainer.style.visibility = originalVisibility;
-            socialMediaContainer.style.opacity = originalOpacity;
-            socialMediaContainer.style.display = originalDisplay;
-        }
-        
-        // Ajustamos la posición del contenedor para que se alinee verticalmente con el botón
-        // y se mantenga en posición fija relativa a la ventana, no al documento
+        // Posicionamos el contenedor
         socialMediaContainer.style.position = 'fixed';
         socialMediaContainer.style.top = (btnCenterY - containerHeight / 2) + 'px';
-        socialMediaContainer.style.left = (btnRect.left - socialMediaContainer.offsetWidth - 10) + 'px';
+        socialMediaContainer.style.right = '100px'; // Posición fija desde la derecha
     }
     
     // Manejar clic en el botón de redes sociales
@@ -306,22 +287,26 @@ document.addEventListener('DOMContentLoaded', function() {
         
         console.log('Botón de redes sociales clickeado');
         
-        // Aplicamos las clases para activar/desactivar
-        const isActive = !socialMediaContainer.classList.contains('active');
+        // Verificar si está activo actualmente
+        const isCurrentlyActive = socialMediaContainer.classList.contains('active');
+        console.log('Estado actual del menú:', isCurrentlyActive ? 'activo' : 'inactivo');
         
-        // Aplicar o quitar la clase active
-        if (isActive) {
+        if (!isCurrentlyActive) {
+            // Activar el menú
+            console.log('Agregando clase active...');
             socialMediaContainer.classList.add('active');
             btnSocialMedia.classList.add('active');
-            console.log('Activando menú de redes sociales');
+            console.log('Clases agregadas. Activando menú de redes sociales');
+            
+            // Actualizar posición después de activar
+            setTimeout(updateSocialContainerPosition, 50);
         } else {
+            // Desactivar el menú
+            console.log('Removiendo clase active...');
             socialMediaContainer.classList.remove('active');
             btnSocialMedia.classList.remove('active');
-            console.log('Desactivando menú de redes sociales');
+            console.log('Clases removidas. Desactivando menú de redes sociales');
         }
-        
-        // Actualizamos la posición después de cambiar el estado
-        setTimeout(updateSocialContainerPosition, 10);
     }
     
     // Cerrar al hacer clic fuera
@@ -335,10 +320,16 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
-    // Actualizar posición cuando sea necesario
-    window.addEventListener('load', updateSocialContainerPosition);
-    window.addEventListener('resize', updateSocialContainerPosition);
-    window.addEventListener('scroll', updateSocialContainerPosition);
+    // Actualizar posición solo cuando el menú esté activo
+    function updatePositionIfActive() {
+        if (socialMediaContainer.classList.contains('active')) {
+            updateSocialContainerPosition();
+        }
+    }
+    
+    // Event listeners para actualizar posición
+    window.addEventListener('resize', updatePositionIfActive);
+    window.addEventListener('scroll', updatePositionIfActive);
     
     // Limpiar event listeners antiguos para prevenir duplicados
     btnSocialMedia.removeEventListener('click', handleSocialButtonClick);
@@ -354,9 +345,6 @@ document.addEventListener('DOMContentLoaded', function() {
             e.stopPropagation();
         });
     });
-    
-    // Inicializar la posición después de que todo esté cargado
-    setTimeout(updateSocialContainerPosition, 300);
     
     console.log('Funcionalidad de redes sociales inicializada');
 });
