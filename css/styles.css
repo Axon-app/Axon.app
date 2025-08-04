@@ -1693,7 +1693,7 @@ section:nth-child(even) {
 }
 
 .contact-info {
-  padding: 2.5rem; /* Increased padding */
+  padding: 3.5rem 2.5rem 4.5rem 2.5rem; /* Increased padding, especially at bottom */
   background: rgba(255, 255, 255, 0.05); /* Fondo sutil */
   border-radius: var(--radius);
   box-shadow: var(--shadow-sm);
@@ -1705,34 +1705,79 @@ section:nth-child(even) {
 
 .contact-info h3 {
   color: var(--primary-light); /* Título más claro */
-  margin-bottom: 1.8rem; /* More space below heading */
+  margin-bottom: 2.5rem; /* Increased space below heading */
   font-size: 2rem; /* Larger heading */
+  padding-top: 1rem; /* Added padding at the top */
 }
 
 .contact-info p {
-  margin-bottom: 1.2rem; /* More space between lines */
-  display: flex;
-  align-items: center;
-  justify-content: center; /* Center icons and text */
-  gap: 0.8rem;
+  margin-bottom: 1.5rem; /* Increased space between lines */
   color: rgba(255, 255, 255, 0.8); /* Texto más claro */
   font-size: 1.1rem; /* Slightly larger font */
+  padding: 0 0.5rem; /* Added horizontal padding */
 }
 
-.contact-info p strong {
-  color: white; /* Texto fuerte blanco */
+/* Texto normal y elementos de contacto */
+.contact-text {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 1.1rem;
 }
 
-.contact-info p i {
+/* Estilo específico para el párrafo de introducción */
+.contact-info .contact-intro {
+  margin-bottom: 2.5rem; /* Mayor espacio debajo de la introducción */
+  line-height: 1.8; /* Mejor espaciado entre líneas */
+  padding: 0 1rem; /* Padding horizontal adicional */
+}
+
+/* Contact details spacing */
+.contact-details {
+  margin-bottom: 2.5rem; /* Increased space between details and button */
+  padding-bottom: 0.5rem; /* Added padding at bottom */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.2rem;
+}
+
+/* Nuevos estilos para alinear los elementos de contacto */
+.contact-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  max-width: 350px;
+}
+
+.contact-icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 40px;
+}
+
+.contact-icon i {
   color: var(--primary-light);
-  font-size: 1.3rem; /* Larger icons */
+  font-size: 1.3rem;
+}
+
+.contact-text {
+  display: flex;
+  align-items: center;
+  text-align: left;
+}
+
+.contact-text strong {
+  color: white;
+  margin-right: 0.5rem;
 }
 
 /* New button for opening contact form modal */
 .btn-contact-modal {
   display: inline-block;
-  margin-top: 1.5rem; /* Space above button */
-  padding: 1rem 2.5rem;
+  margin-top: 2.5rem; /* Increased space above button */
+  margin-bottom: 1rem; /* Added space below button */
+  padding: 1.2rem 2.8rem; /* Increased padding for button */
   background: var(--gradient);
   color: white;
   border-radius: 50px;
@@ -2193,7 +2238,15 @@ section:nth-child(even) {
 .btn-social-media {
     background: var(--primary); /* Primary color for the main social button */
     position: relative; /* Needed for positioning the social media container */
-    z-index: 10; /* Ensure it's above the social media links when collapsed */
+    z-index: 1002; /* Higher z-index to ensure it's on top */
+    transition: all 0.3s ease, transform 0.5s cubic-bezier(0.68, -0.6, 0.32, 1.6); /* Custom animation curve */
+}
+
+/* Animation for active state */
+.btn-social-media.active {
+    transform: scale(1.1) rotate(45deg); /* Rotate when active */
+    background: #1565c0; /* Darker blue when active */
+    box-shadow: 0 0 20px rgba(67, 97, 238, 0.6); /* Glowing effect */
 }
 
 /* New Contact Form Floating Button */
@@ -2203,50 +2256,93 @@ section:nth-child(even) {
 
 /* Social Media Links Container */
 .social-media-floating-container {
-    position: absolute;
-    bottom: 0; /* Align with the bottom of the parent button */
-    right: 70px; /* Position to the left of the main social media button */
-    display: flex;
+    position: fixed; /* Fixed position */
+    /* top and left values are set dynamically by JS */
+    display: none; /* Initially hidden - will change to flex when active */
     flex-direction: row; /* Horizontal deployment */
     align-items: center; /* Vertically align icons */
-    gap: 0.8rem;
+    gap: 0.6rem; /* Slightly smaller gap */
     opacity: 0;
     visibility: hidden;
-    transform: translateX(20px); /* Start slightly to the right */
-    transition: opacity 0.3s ease-out, transform 0.3s ease-out, visibility 0.3s ease-out;
-    z-index: 5; /* Below the main button */
-    padding: 0.5rem; /* Add some padding around the icons */
-    background: rgba(255, 255, 255, 0.1); /* Subtle background for the container */
+    transform: scale(0.8) translateX(20px); /* Start collapsed */
+    transition: all 0.3s ease-out;
+    z-index: 1001; /* Above all other buttons */
+    padding: 0.6rem; /* Slightly more padding for better visibility */
+    background: rgba(22, 28, 45, 0.95); /* Darker, more opaque background */
     border-radius: 50px; /* Rounded container */
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-    backdrop-filter: blur(5px); /* Subtle blur effect */
+    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+    backdrop-filter: blur(8px); /* Stronger blur effect */
+    pointer-events: none; /* Allow clicks to pass through when hidden */
+    height: auto; /* Auto height */
+    width: auto; /* Auto width based on content */
 }
 
 .social-media-floating-container.active {
+    display: flex; /* Show when active */
     opacity: 1;
     visibility: visible;
-    transform: translateX(0);
+    transform: scale(1) translateX(0);
+    pointer-events: all; /* Re-enable pointer events when visible */
+    box-shadow: 0 10px 25px rgba(0,0,0,0.4); /* Más prominente cuando está activo */
 }
 
 .social-media-floating-container a {
-    width: 50px; /* Slightly smaller icons for the dropdown */
-    height: 50px;
+    width: 42px; /* Slightly smaller icons for better fit */
+    height: 42px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.2rem; /* Smaller icon size */
+    font-size: 1.1rem; /* Smaller icon size */
     color: white;
     text-decoration: none;
     box-shadow: 0 5px 15px rgba(0,0,0,0.15);
-    transition: all 0.3s ease;
+    transition: all 0.25s ease; /* Faster transition for snappier feel */
     background: var(--primary-light); /* Light primary color for links */
+    margin: 0 2px; /* Add small margin between icons */
+    opacity: 0;
+    transform: translateX(-10px); /* Start to the left and animate right */
+}
+
+/* Animation for icons appearing one after another */
+.social-media-floating-container.active a { 
+    opacity: 1; /* Ensure all links are visible when active */
+}
+
+.social-media-floating-container.active a:nth-child(1) { 
+    animation: popIn 0.3s forwards 0.05s;
+}
+.social-media-floating-container.active a:nth-child(2) { 
+    animation: popIn 0.3s forwards 0.1s;
+}
+.social-media-floating-container.active a:nth-child(3) { 
+    animation: popIn 0.3s forwards 0.15s;
+}
+.social-media-floating-container.active a:nth-child(4) { 
+    animation: popIn 0.3s forwards 0.2s;
+}
+.social-media-floating-container.active a:nth-child(5) { 
+    animation: popIn 0.3s forwards 0.25s;
+}
+
+@keyframes popIn {
+    0% {
+        opacity: 0;
+        transform: scale(0.5) translateX(-15px);
+    }
+    70% {
+        transform: scale(1.1) translateX(5px);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1) translateX(0);
+    }
 }
 
 .social-media-floating-container a:hover {
-    transform: scale(1.1);
+    transform: scale(1.15) rotate(5deg); /* More noticeable effect */
     box-shadow: 0 8px 20px rgba(0,0,0,0.25);
-    filter: brightness(1.1);
+    filter: brightness(1.15); /* Brighter on hover */
 }
 
 /* Specific Social Media Colors (optional, but good for branding) */
@@ -2788,32 +2884,4 @@ section:nth-child(even) {
 @keyframes rotateLogo {
   from { transform: rotateY(0deg); }
   to { transform: rotateY(360deg); }
-}
-
-/* Estilos específicos para imágenes de portfolio - FinTrack Pro */
-#portfolio-fintrackpro {
-  width: 100%;
-  height: 250px;
-  object-fit: cover;
-  border-radius: 4px;
-  transition: transform 0.5s ease;
-}
-
-/* Responsive styles for FinTrack Pro portfolio image */
-@media (max-width: 992px) {
-  #portfolio-fintrackpro {
-    height: 220px;
-  }
-}
-
-@media (max-width: 768px) {
-  #portfolio-fintrackpro {
-    height: 200px;
-  }
-}
-
-@media (max-width: 480px) {
-  #portfolio-fintrackpro {
-    height: 180px;
-  }
 }

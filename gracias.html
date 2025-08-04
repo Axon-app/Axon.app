@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="Axon.app - ¡Mensaje recibido! Gracias por contactarnos"/>
+  <meta name="author" content="Axon.app"/>
+  <meta name="theme-color" content="#4361ee"/>
+  
+  <link rel="icon" href="assets/images/logo.png" type="image/png" sizes="32x32">
+  <link rel="icon" href="assets/images/logo.png" type="image/png" sizes="64x64">
+  <link rel="icon" href="assets/images/logo.png" type="image/png" sizes="96x96">
+  <link rel="apple-touch-icon" href="assets/images/logo.png">
+  <title>Mensaje Recibido | Axon.app</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="css/config.css">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/device-classes.css">
+  
+  <style>
+    .thanks-container {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 2rem;
+      background: var(--gradient-primary);
+      color: var(--color-light);
+    }
+    
+    .thanks-icon {
+      font-size: 5rem;
+      color: var(--color-accent);
+      margin-bottom: 2rem;
+      animation: pulse 2s infinite;
+    }
+    
+    .thanks-title {
+      font-family: var(--font-heading);
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+    
+    .thanks-message {
+      font-size: 1.2rem;
+      max-width: 600px;
+      margin-bottom: 2rem;
+      line-height: 1.6;
+    }
+    
+    .return-btn {
+      background-color: var(--color-accent);
+      color: var(--color-light);
+      border: none;
+      padding: 1rem 2rem;
+      border-radius: 30px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      display: inline-block;
+    }
+    
+    .return-btn:hover {
+      background-color: var(--color-accent-dark);
+      transform: translateY(-3px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    }
+    
+    @keyframes pulse {
+      0% {
+        transform: scale(1);
+        opacity: 1;
+      }
+      50% {
+        transform: scale(1.1);
+        opacity: 0.8;
+      }
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+    
+    .particle {
+      position: absolute;
+      border-radius: 50%;
+      background: var(--color-accent);
+      opacity: 0.6;
+      pointer-events: none;
+    }
+    
+    @media (max-width: 768px) {
+      .thanks-title {
+        font-size: 2rem;
+      }
+      
+      .thanks-message {
+        font-size: 1rem;
+      }
+      
+      .thanks-icon {
+        font-size: 3.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="thanks-container">
+    <i class="fas fa-check-circle thanks-icon"></i>
+    <h1 class="thanks-title">¡Mensaje Recibido!</h1>
+    <p class="thanks-message">
+      Gracias por ponerte en contacto con nosotros. Hemos recibido tu mensaje y nos pondremos en contacto contigo a la brevedad posible. Mientras tanto, puedes seguir explorando nuestros servicios.
+    </p>
+    <a href="index.html" class="return-btn">
+      <i class="fas fa-home"></i> Volver al Inicio
+    </a>
+  </div>
+  
+  <script>
+    // Efecto de partículas en la página de agradecimiento
+    document.addEventListener('DOMContentLoaded', function() {
+      const container = document.querySelector('.thanks-container');
+      
+      // Crear partículas aleatorias
+      for (let i = 0; i < 20; i++) {
+        createParticle();
+      }
+      
+      function createParticle() {
+        const particle = document.createElement('div');
+        particle.classList.add('particle');
+        
+        // Posición aleatoria
+        const posX = Math.random() * window.innerWidth;
+        const posY = Math.random() * window.innerHeight;
+        
+        // Tamaño aleatorio
+        const size = Math.random() * 15 + 5;
+        
+        // Configurar propiedades
+        particle.style.width = `${size}px`;
+        particle.style.height = `${size}px`;
+        particle.style.left = `${posX}px`;
+        particle.style.top = `${posY}px`;
+        
+        // Animación
+        const duration = Math.random() * 15 + 5;
+        particle.style.animation = `float ${duration}s linear infinite`;
+        
+        // Velocidad y dirección aleatorias
+        const speedX = (Math.random() - 0.5) * 2;
+        const speedY = (Math.random() - 0.5) * 2;
+        
+        // Agregar al DOM
+        container.appendChild(particle);
+        
+        // Mover la partícula
+        let x = posX;
+        let y = posY;
+        
+        function moveParticle() {
+          x += speedX;
+          y += speedY;
+          
+          // Mantener dentro de los límites
+          if (x < 0 || x > window.innerWidth) x = posX;
+          if (y < 0 || y > window.innerHeight) y = posY;
+          
+          particle.style.left = `${x}px`;
+          particle.style.top = `${y}px`;
+          
+          requestAnimationFrame(moveParticle);
+        }
+        
+        moveParticle();
+      }
+    });
+  </script>
+</body>
+</html>

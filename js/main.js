@@ -173,58 +173,193 @@ function setupModalListeners() {
 }
 
 // Función de mensaje personalizado (reemplaza alert)
-function showCustomMessage(message) {
+function showCustomMessage(message, isSuccess = true) {
   const messageBox = document.createElement('div');
   messageBox.style.cssText = `
     position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background-color: #4361ee;
+    background-color: ${isSuccess ? '#4361ee' : '#e74c3c'};
     color: white;
-    padding: 20px 30px;
-    border-radius: 10px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    padding: 30px 40px;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
     z-index: 9999;
     font-family: 'Inter', sans-serif;
-    font-size: 1.1rem;
+    font-size: 1.2rem;
     text-align: center;
     opacity: 0;
-    transition: opacity 0.3s ease-in-out;
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transform: translate(-50%, -50%) scale(0.8);
+    max-width: 90%;
+    width: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
   `;
-  messageBox.textContent = message;
+  
+  // Añadir icono según el tipo de mensaje
+  const icon = document.createElement('div');
+  icon.style.cssText = `
+    font-size: 2.5rem;
+    margin-bottom: 15px;
+    height: 60px;
+    width: 60px;
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 15px;
+  `;
+  
+  if (message.includes("enviado")) {
+    icon.innerHTML = '<i class="fas fa-check-circle"></i>';
+  } else if (message.includes("Enviando")) {
+    icon.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+  } else if (message.includes("problema")) {
+    icon.innerHTML = '<i class="fas fa-exclamation-triangle"></i>';
+  } else {
+    icon.innerHTML = '<i class="fas fa-info-circle"></i>';
+  }
+  
+  const textMessage = document.createElement('div');
+  textMessage.textContent = message;
+  textMessage.style.fontWeight = '500';
+  
+  messageBox.appendChild(icon);
+  messageBox.appendChild(textMessage);
   document.body.appendChild(messageBox);
 
   setTimeout(() => {
     messageBox.style.opacity = '1';
+    messageBox.style.transform = 'translate(-50%, -50%) scale(1)';
   }, 10);
 
   setTimeout(() => {
     messageBox.style.opacity = '0';
+    messageBox.style.transform = 'translate(-50%, -50%) scale(0.8)';
     messageBox.addEventListener('transitionend', () => {
       document.body.removeChild(messageBox);
     });
-  }, 3000);
+  }, 3500);
 }
 
 // Funcionalidad del botón de redes sociales
-const btnSocialMedia = document.getElementById('btn-social-media');
-const socialMediaContainer = document.getElementById('social-media-floating-container');
-
-if (btnSocialMedia && socialMediaContainer) {
-    btnSocialMedia.addEventListener('click', () => {
-        socialMediaContainer.classList.toggle('active');
-    });
+document.addEventListener('DOMContentLoaded', function() {
+    const btnSocialMedia = document.getElementById('btn-social-media');
+    const socialMediaContainer = document.getElementById('social-media-floating-container');
+    
+    if (!btnSocialMedia || !socialMediaContainer) {
+        console.error('No se encontraron los elementos necesarios para las redes sociales.');
+        return;
+    }
+    
+    // Función mejorada para calcular y actualizar la posición del contenedor
+    function updateSocialContainerPosition() {
+        if (!btnSocialMedia || !socialMediaContainer) return;
+        
+        // El botón flotante siempre mantiene su posición fija en la pantalla
+        // por lo que podemos obtener su posición visual actual
+        const btnRect = btnSocialMedia.getBoundingClientRect();
+        
+        // Calculamos la posición vertical del centro del botón
+        const btnCenterY = btnRect.top + btnRect.height / 2;
+        
+        // Obtenemos la altura del contenedor de redes sociales
+        let containerHeight = 150; // Valor estimado por defecto
+        
+        // Si el contenedor está activo, podemos obtener su altura real
+        if (socialMediaContainer.classList.contains('active')) {
+            containerHeight = socialMediaContainer.offsetHeight;
+        } else {
+            // Para obtener una altura precisa, lo hacemos temporalmente visible pero transparente
+            const originalVisibility = socialMediaContainer.style.visibility || '';
+            const originalOpacity = socialMediaContainer.style.opacity || '';
+            const originalDisplay = socialMediaContainer.style.display || '';
+            
+            socialMediaContainer.style.visibility = 'hidden';
+            socialMediaContainer.style.opacity = '0';
+            socialMediaContainer.style.display = 'flex';
+            
+            containerHeight = socialMediaContainer.offsetHeight;
+            
+            // Restauramos los estilos originales
+            socialMediaContainer.style.visibility = originalVisibility;
+            socialMediaContainer.style.opacity = originalOpacity;
+            socialMediaContainer.style.display = originalDisplay;
+        }
+        
+        // Ajustamos la posición del contenedor para que se alinee verticalmente con el botón
+        // y se mantenga en posición fija relativa a la ventana, no al documento
+        socialMediaContainer.style.position = 'fixed';
+        socialMediaContainer.style.top = (btnCenterY - containerHeight / 2) + 'px';
+        socialMediaContainer.style.left = (btnRect.left - socialMediaContainer.offsetWidth - 10) + 'px';
+    }
+    
+    // Manejar clic en el botón de redes sociales
+    function handleSocialButtonClick(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        console.log('Botón de redes sociales clickeado');
+        
+        // Aplicamos las clases para activar/desactivar
+        const isActive = !socialMediaContainer.classList.contains('active');
+        
+        // Aplicar o quitar la clase active
+        if (isActive) {
+            socialMediaContainer.classList.add('active');
+            btnSocialMedia.classList.add('active');
+            console.log('Activando menú de redes sociales');
+        } else {
+            socialMediaContainer.classList.remove('active');
+            btnSocialMedia.classList.remove('active');
+            console.log('Desactivando menú de redes sociales');
+        }
+        
+        // Actualizamos la posición después de cambiar el estado
+        setTimeout(updateSocialContainerPosition, 10);
+    }
     
     // Cerrar al hacer clic fuera
-    document.addEventListener('click', (e) => {
+    function handleDocumentClick(e) {
         if (socialMediaContainer.classList.contains('active') && 
             !socialMediaContainer.contains(e.target) && 
             e.target !== btnSocialMedia) {
             socialMediaContainer.classList.remove('active');
+            btnSocialMedia.classList.remove('active');
+            console.log('Cerrando menú por clic fuera');
         }
+    }
+    
+    // Actualizar posición cuando sea necesario
+    window.addEventListener('load', updateSocialContainerPosition);
+    window.addEventListener('resize', updateSocialContainerPosition);
+    window.addEventListener('scroll', updateSocialContainerPosition);
+    
+    // Limpiar event listeners antiguos para prevenir duplicados
+    btnSocialMedia.removeEventListener('click', handleSocialButtonClick);
+    document.removeEventListener('click', handleDocumentClick);
+    
+    // Añadir event listeners
+    btnSocialMedia.addEventListener('click', handleSocialButtonClick);
+    document.addEventListener('click', handleDocumentClick);
+    
+    // Evitar que los clics en los enlaces cierren el menú
+    socialMediaContainer.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.stopPropagation();
+        });
     });
-}
+    
+    // Inicializar la posición después de que todo esté cargado
+    setTimeout(updateSocialContainerPosition, 300);
+    
+    console.log('Funcionalidad de redes sociales inicializada');
+});
 
 // Lógica de validación de formularios
 document.addEventListener('DOMContentLoaded', function() {
@@ -328,7 +463,7 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 
   contactForm.addEventListener('submit', function(e) {
-      e.preventDefault();
+      // Validamos el formulario pero sin prevenir el envío si es válido
       let formIsValid = true;
       
       formGroups.forEach(group => {
@@ -341,24 +476,24 @@ document.addEventListener('DOMContentLoaded', function() {
           }
       });
 
-      if (formIsValid) {
-          showCustomMessage('¡Gracias por tu mensaje! Te responderemos pronto.');
-          this.reset();
-          closeAllModals();
-          
-          formGroups.forEach(group => {
-              group.classList.remove('valid', 'invalid');
-              const messageSpan = group.querySelector('.validation-message');
-              const validationIcon = group.querySelector('.validation-icon');
-              if (messageSpan) messageSpan.textContent = '';
-              if (validationIcon) {
-                  validationIcon.style.opacity = '0';
-                  validationIcon.className = 'validation-icon';
-              }
-          });
-      } else {
+      if (!formIsValid) {
+          e.preventDefault(); // Solo prevenimos el envío si hay errores
           showCustomMessage('Por favor, corrige los errores en el formulario.');
+          return;
       }
+      
+      // Mostrar mensaje de carga mientras se envía el formulario
+      showCustomMessage('Enviando mensaje...');
+      
+      // Si el formulario es válido, permitimos que se envíe a Formspree
+      // El manejo del formulario será mediante el action definido en el form
+      
+      // Después del envío, Formspree redirigirá a la página especificada en _next
+      // o mostrará un mensaje de éxito
+      
+      // Nota: Para ver el progreso de envío y mostrar mensajes personalizados, 
+      // podríamos usar fetch API, pero eso requeriría prevenir el envío predeterminado
+      // y manejar todo mediante AJAX, lo cual implementaremos si es necesario.
   });
 });
 
@@ -894,28 +1029,28 @@ function loadModalsContent() {
         </div>
         <div class="modal-body">
           <p>Completa el siguiente formulario y nos pondremos en contacto contigo a la brevedad posible.</p>
-          <form class="contact-form" id="main-contact-form">
+          <form class="contact-form" id="main-contact-form" action="https://formspree.io/f/axonapp.info@gmail.com" method="POST">
             <div class="form-group">
-              <label for="nombre">Nombre:</label>
-              <input type="text" id="nombre" placeholder="Tu nombre" required data-validation-type="text">
+              <label for="nombre"><i class="fas fa-user"></i> Nombre:</label>
+              <input type="text" id="nombre" name="nombre" placeholder="Tu nombre" required data-validation-type="text">
               <span class="validation-message"></span>
               <i class="fas fa-check-circle validation-icon"></i>
             </div>
             <div class="form-group">
-              <label for="apellido">Apellido:</label>
-              <input type="text" id="apellido" placeholder="Tu apellido" required data-validation-type="text">
+              <label for="apellido"><i class="fas fa-user-tag"></i> Apellido:</label>
+              <input type="text" id="apellido" name="apellido" placeholder="Tu apellido" required data-validation-type="text">
               <span class="validation-message"></span>
               <i class="fas fa-check-circle validation-icon"></i>
             </div>
             <div class="form-group">
-              <label for="email">Correo Electrónico:</label>
-              <input type="email" id="email" placeholder="tu.email@ejemplo.com" required data-validation-type="email">
+              <label for="email"><i class="fas fa-envelope"></i> Correo Electrónico:</label>
+              <input type="email" id="email" name="email" placeholder="tu.email@ejemplo.com" required data-validation-type="email">
               <span class="validation-message"></span>
               <i class="fas fa-check-circle validation-icon"></i>
             </div>
             <div class="form-group">
-              <label for="tipo-cliente">Tipo de Cliente:</label>
-              <select id="tipo-cliente" required data-validation-type="select">
+              <label for="tipo-cliente"><i class="fas fa-building"></i> Tipo de Cliente:</label>
+              <select id="tipo-cliente" name="tipo_cliente" required data-validation-type="select">
                 <option value="">Selecciona una opción</option>
                 <option value="empresa">Empresa</option>
                 <option value="particular">Particular</option>
@@ -924,32 +1059,32 @@ function loadModalsContent() {
               <i class="fas fa-check-circle validation-icon"></i>
             </div>
             <div class="form-group">
-              <label for="telefono">Número de Contacto:</label>
-              <input type="tel" id="telefono" placeholder="+XX XXX XXX XXXX" required data-validation-type="phone">
+              <label for="telefono"><i class="fas fa-phone-alt"></i> Número de Contacto:</label>
+              <input type="tel" id="telefono" name="telefono" placeholder="+XX XXX XXX XXXX" required data-validation-type="phone">
               <span class="validation-message"></span>
               <i class="fas fa-check-circle validation-icon"></i>
             </div>
             <div class="form-group">
-              <label for="fecha-contacto">Fecha Preferida de Contacto:</label>
-              <input type="date" id="fecha-contacto" required data-validation-type="date">
+              <label for="fecha-contacto"><i class="far fa-calendar-alt"></i> Fecha Preferida:</label>
+              <input type="date" id="fecha-contacto" name="fecha_contacto" required data-validation-type="date">
               <span class="validation-message"></span>
               <i class="fas fa-check-circle validation-icon"></i>
             </div>
             <div class="form-group">
-              <label for="hora-contacto">Hora Preferida de Contacto:</label>
-              <input type="time" id="hora-contacto" required data-validation-type="time">
+              <label for="hora-contacto"><i class="far fa-clock"></i> Hora Preferida:</label>
+              <input type="time" id="hora-contacto" name="hora_contacto" required data-validation-type="time">
               <span class="validation-message"></span>
               <i class="fas fa-check-circle validation-icon"></i>
             </div>
             <div class="form-group">
-              <label for="direccion">Dirección:</label>
-              <input type="text" id="direccion" placeholder="Tu dirección (opcional)" data-validation-type="optional-text">
+              <label for="direccion"><i class="fas fa-map-marker-alt"></i> Dirección:</label>
+              <input type="text" id="direccion" name="direccion" placeholder="Tu dirección (opcional)" data-validation-type="optional-text">
               <span class="validation-message"></span>
               <i class="fas fa-check-circle validation-icon"></i>
             </div>
-            <div class="form-group">
-              <label for="tipo-proyecto">Tipo de Proyecto Requerido:</label>
-              <select id="tipo-proyecto" required data-validation-type="select">
+            <div class="form-group full-width">
+              <label for="tipo-proyecto"><i class="fas fa-laptop-code"></i> Tipo de Proyecto:</label>
+              <select id="tipo-proyecto" name="tipo_proyecto" required data-validation-type="select">
                 <option value="">Selecciona un servicio</option>
                 <option value="movil">Aplicaciones Móviles</option>
                 <option value="web">Desarrollo Web</option>
@@ -967,12 +1102,15 @@ function loadModalsContent() {
               <span class="validation-message"></span>
               <i class="fas fa-check-circle validation-icon"></i>
             </div>
-            <div class="form-group">
-              <label for="mensaje">Cuéntanos sobre tu proyecto:</label>
-              <textarea id="mensaje" placeholder="Describe tu proyecto..." required data-validation-type="textarea"></textarea>
+            <div class="form-group full-width">
+              <label for="mensaje"><i class="fas fa-comment-alt"></i> Cuéntanos sobre tu proyecto:</label>
+              <textarea id="mensaje" name="mensaje" placeholder="Describe tu proyecto..." required data-validation-type="textarea"></textarea>
               <span class="validation-message"></span>
               <i class="fas fa-check-circle validation-icon"></i>
             </div>
+            <input type="hidden" name="_subject" value="Nuevo contacto desde Axon.app">
+            <input type="hidden" name="_next" value="https://axon.app/gracias.html">
+            <input type="text" name="_gotcha" style="display:none">
 
             <button type="submit" class="btn">Enviar Mensaje</button>
           </form>
@@ -1086,14 +1224,15 @@ function loadModalsContent() {
           <h3>FinTrack Pro</h3>
         </div>
         <div class="modal-body">
-          <img src="https://placehold.co/600x400/4361ee/ffffff?text=FinTrack+Pro" alt="" style="width:100%; border-radius:10px; margin-bottom:1rem;">
-          <p>Desarrollamos una app de finanzas personales con seguimiento de gastos, metas de ahorro y reportes automáticos.</p>
+          <img src="assets/images/FinTrackPro.png" alt="FinTrack Pro - App de finanzas personales para iOS y Android" style="width:100%; border-radius:10px; margin-bottom:1rem;">
+          <p>Aplicación móvil multiplataforma para gestión integral de finanzas personales que permite visualizar gastos, establecer presupuestos, generar informes avanzados y proyecciones financieras personalizadas.</p>
           <h4>Tecnologías usadas</h4>
           <ul>
             <li>React Native</li>
             <li>Firebase</li>
             <li>Node.js</li>
-            <li>Figma</li>
+            <li>Chart.js</li>
+            <li>Redux</li>
           </ul>
         </div>
         <div class="modal-footer">
@@ -1105,16 +1244,17 @@ function loadModalsContent() {
     <div class="modal-overlay" id="modal-project-2-overlay">
       <div class="modal">
         <div class="modal-header">
-          <h3>EcoStore</h3>
+          <h3>EduLearn Platform</h3>
         </div>
         <div class="modal-body">
-          <img src="https://images.unsplash.com/photo-1555423835-04428314e367?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="" style="width:100%; border-radius:10px; margin-bottom:1rem;">
-          <p>Plataforma e-commerce para productos ecológicos con integración de pagos y gestión de inventario.</p>
+          <img src="assets/images/EduLearnPlatform.png" alt="EduLearn Platform - Sistema de aprendizaje en línea con IA" style="width:100%; border-radius:10px; margin-bottom:1rem;">
+          <p>Sistema de aprendizaje en línea con inteligencia artificial para personalizar la experiencia educativa.</p>
           <h4>Tecnologías usadas</h4>
           <ul>
-            <li>Next.js</li>
-            <li>Stripe</li>
-            <li>MongoDB</li>
+            <li>React</li>
+            <li>TensorFlow.js</li>
+            <li>Node.js</li>
+            <li>PostgreSQL</li>
             <li>AWS</li>
           </ul>
         </div>
@@ -1127,17 +1267,18 @@ function loadModalsContent() {
     <div class="modal-overlay" id="modal-project-3-overlay">
       <div class="modal">
         <div class="modal-header">
-          <h3>WorkSmart</h3>
+          <h3>CoreERP</h3>
         </div>
         <div class="modal-body">
-          <img src="https://images.unsplash.com/photo-1545239351-cefa43af60f3?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="" style="width:100%; border-radius:10px; margin-bottom:1rem;">
-          <p>Software de gestión de proyectos y equipos con seguimiento de tiempo, tareas y colaboración en tiempo real.</p>
+          <img src="assets/images/CoreERP.png" alt="CoreERP - Sistema de gestión empresarial modular" style="width:100%; border-radius:10px; margin-bottom:1rem;">
+          <p>Sistema integrado de gestión empresarial modular que optimiza procesos de negocios, incluyendo inventario, finanzas, recursos humanos y CRM.</p>
           <h4>Tecnologías usadas</h4>
           <ul>
-            <li>Vue.js</li>
-            <li>Socket.io</li>
-            <li>Express</li>
+            <li>Java Spring Boot</li>
+            <li>Angular</li>
             <li>PostgreSQL</li>
+            <li>Docker</li>
+            <li>Redis</li>
           </ul>
         </div>
         <div class="modal-footer">
@@ -1149,17 +1290,18 @@ function loadModalsContent() {
     <div class="modal-overlay" id="modal-project-4-overlay">
       <div class="modal">
         <div class="modal-header">
-          <h3>MediConnect</h3>
+          <h3>HealthSync</h3>
         </div>
         <div class="modal-body">
-          <img src="https://images.unsplash.com/photo-1576091160550-2173dba999ef?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="" style="width:100%; border-radius:10px; margin-bottom:1rem;">
-          <p>Aplicación de telemedicina para consultas virtuales, agendamiento y seguimiento médico.</p>
+          <img src="assets/images/HealthSync.png" alt="HealthSync - App de gestión de salud y citas médicas" style="width:100%; border-radius:10px; margin-bottom:1rem;">
+          <p>Aplicación móvil para gestión integral de salud personal, reserva de citas médicas, seguimiento de tratamientos y acceso a expedientes médicos digitales.</p>
           <h4>Tecnologías usadas</h4>
           <ul>
-            <li>Flutter</li>
+            <li>React Native</li>
+            <li>Firebase</li>
+            <li>Node.js</li>
+            <li>MongoDB</li>
             <li>WebRTC</li>
-            <li>Go</li>
-            <li>PostgreSQL</li>
           </ul>
         </div>
         <div class="modal-footer">
@@ -1171,17 +1313,18 @@ function loadModalsContent() {
     <div class="modal-overlay" id="modal-project-5-overlay">
       <div class="modal">
         <div class="modal-header">
-          <h3>LearnHub</h3>
+          <h3>ShopFlow</h3>
         </div>
         <div class="modal-body">
-          <img src="https://images.unsplash.com/photo-1509475826633-fed577a2c71b?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="" style="width:100%; border-radius:10px; margin-bottom:1rem;">
-          <p>Plataforma de educación online con cursos interactivos, evaluaciones y certificados digitales.</p>
+          <img src="assets/images/ShopFlow.png" alt="ShopFlow - Plataforma de comercio electrónico con pagos seguros" style="width:100%; border-radius:10px; margin-bottom:1rem;">
+          <p>Solución integral de e-commerce que ofrece una experiencia de compra personalizada, gestión de inventario en tiempo real, integración con múltiples métodos de pago y análisis avanzado del comportamiento del consumidor.</p>
           <h4>Tecnologías usadas</h4>
           <ul>
-            <li>React</li>
-            <li>Django</li>
-            <li>Redis</li>
-            <li>FFmpeg</li>
+            <li>Next.js</li>
+            <li>Stripe</li>
+            <li>Node.js</li>
+            <li>MongoDB</li>
+            <li>AWS S3</li>
           </ul>
         </div>
         <div class="modal-footer">
@@ -1193,17 +1336,18 @@ function loadModalsContent() {
     <div class="modal-overlay" id="modal-project-6-overlay">
       <div class="modal">
         <div class="modal-header">
-          <h3>SmartHome</h3>
+          <h3>DataDash</h3>
         </div>
         <div class="modal-body">
-          <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="" style="width:100%; border-radius:10px; margin-bottom:1rem;">
-          <p>Sistema IoT para hogares inteligentes con control de dispositivos, automatización y análisis de consumo.</p>
+          <img src="assets/images/DataDash.png" alt="DataDash - Dashboard de analítica en tiempo real para empresas" style="width:100%; border-radius:10px; margin-bottom:1rem;">
+          <p>Plataforma empresarial de análisis de datos en tiempo real que transforma datos complejos en visualizaciones interactivas, permitiendo a las organizaciones tomar decisiones estratégicas basadas en información precisa y actualizada.</p>
           <h4>Tecnologías usadas</h4>
           <ul>
-            <li>MQTT</li>
+            <li>React</li>
+            <li>D3.js</li>
             <li>Node.js</li>
-            <li>React Native</li>
-            <li>InfluxDB</li>
+            <li>MongoDB</li>
+            <li>Socket.IO</li>
           </ul>
         </div>
         <div class="modal-footer">
@@ -1215,17 +1359,18 @@ function loadModalsContent() {
     <div class="modal-overlay" id="modal-project-7-overlay">
       <div class="modal">
         <div class="modal-header">
-          <h3>TravelBuddy</h3>
+          <h3>LogiTrack</h3>
         </div>
         <div class="modal-body">
-          <img src="https://images.unsplash.com/photo-1503457574462-bd27054394c1?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="" style="width:100%; border-radius:10px; margin-bottom:1rem;">
-          <p>Aplicación de viajes con planificación de itinerarios, recomendaciones personalizadas y mapas offline.</p>
+          <img src="assets/images/LogiTrack.png" alt="LogiTrack - Sistema de seguimiento de envíos y logística" style="width:100%; border-radius:10px; margin-bottom:1rem;">
+          <p>Sistema avanzado de gestión logística con seguimiento en tiempo real de envíos, optimización de rutas, gestión de inventario en almacenes y generación de informes detallados para mejorar la cadena de suministro.</p>
           <h4>Tecnologías usadas</h4>
           <ul>
-            <li>Kotlin</li>
-            <li>MapBox</li>
-            <li>Spring Boot</li>
-            <li>Neo4j</li>
+            <li>React</li>
+            <li>Node.js</li>
+            <li>GraphQL</li>
+            <li>PostgreSQL</li>
+            <li>Azure Maps</li>
           </ul>
         </div>
         <div class="modal-footer">
@@ -1237,17 +1382,18 @@ function loadModalsContent() {
     <div class="modal-overlay" id="modal-project-8-overlay">
       <div class="modal">
         <div class="modal-header">
-          <h3>FoodDelivery</h3>
+          <h3>SocialHub</h3>
         </div>
         <div class="modal-body">
-          <img src="https://images.unsplash.com/photo-1576458088548-035a13a11b8e?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="" style="width:100%; border-radius:10px; margin-bottom:1rem;">
-          <p>Plataforma de delivery con seguimiento en tiempo real, pagos integrados y sistema de reseñas.</p>
+          <img src="assets/images/SocialHub.png" alt="SocialHub - Red social para profesionales del sector tecnológico" style="width:100%; border-radius:10px; margin-bottom:1rem;">
+          <p>Plataforma de networking profesional especializada para el sector tecnológico que facilita la conexión entre desarrolladores, diseñadores y profesionales IT, con funcionalidades para compartir proyectos, oportunidades laborales y eventos de la industria.</p>
           <h4>Tecnologías usadas</h4>
           <ul>
-            <li>React Native</li>
-            <li>GraphQL</li>
-            <li>Elixir</li>
-            <li>PostgreSQL</li>
+            <li>React</li>
+            <li>TypeScript</li>
+            <li>Firebase</li>
+            <li>Node.js</li>
+            <li>WebSockets</li>
           </ul>
         </div>
         <div class="modal-footer">
@@ -1259,17 +1405,18 @@ function loadModalsContent() {
     <div class="modal-overlay" id="modal-project-9-overlay">
       <div class="modal">
         <div class="modal-header">
-          <h3>AIAnalytics</h3>
+          <h3>InvestPro</h3>
         </div>
         <div class="modal-body">
-          <img src="https://images.unsplash.com/photo-1518186285589-2f7649de83e0?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="" style="width:100%; border-radius:10px; margin-bottom:1rem;">
-          <p>Dashboard de análisis de datos con IA para predicciones de mercado y detección de patrones.</p>
+          <img src="assets/images/InvestPro.png" alt="InvestPro - App de inversión automatizada con IA" style="width:100%; border-radius:10px; margin-bottom:1rem;">
+          <p>Aplicación de inversión inteligente que utiliza algoritmos de aprendizaje automático para analizar tendencias del mercado, optimizar carteras de inversión y recomendar estrategias personalizadas según el perfil de riesgo del usuario.</p>
           <h4>Tecnologías usadas</h4>
           <ul>
-            <li>Python</li>
+            <li>React Native</li>
+            <li>Python (scikit-learn)</li>
             <li>TensorFlow</li>
-            <li>D3.js</li>
-            <li>FastAPI</li>
+            <li>Django REST</li>
+            <li>PostgreSQL</li>
           </ul>
         </div>
         <div class="modal-footer">
@@ -1281,11 +1428,11 @@ function loadModalsContent() {
     <div class="modal-overlay" id="modal-project-10-overlay">
       <div class="modal">
         <div class="modal-header">
-          <h3>FitLife</h3>
+          <h3>TravelMate</h3>
         </div>
         <div class="modal-body">
-          <img src="https://images.unsplash.com/photo-1534258936925-c58bed479fcb?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="" style="width:100%; border-radius:10px; margin-bottom:1rem;">
-          <p>App de fitness con planes personalizados, seguimiento de progreso y comunidad de usuarios.</p>
+          <img src="assets/images/TravelMate.png" alt="TravelMate - App de planificación de viajes y reservas" style="width:100%; border-radius:10px; margin-bottom:1rem;">
+          <p>App de planificación de viajes y reservas que facilita la organización de itinerarios y reservas de hoteles.</p>
           <h4>Tecnologías usadas</h4>
           <ul>
             <li>Swift</li>
@@ -1303,11 +1450,11 @@ function loadModalsContent() {
     <div class="modal-overlay" id="modal-project-11-overlay">
       <div class="modal">
         <div class="modal-header">
-          <h3>LegalTech</h3>
+          <h3>AgroSmart</h3>
         </div>
         <div class="modal-body">
-          <img src="https://images.unsplash.com/photo-1589994965851-a1f84c3bbd0a?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="" style="width:100%; border-radius:10px; margin-bottom:1rem;">
-          <p>Plataforma legal para generación de contratos, firma digital y gestión documental.</p>
+          <img src="assets/images/AgroSmart.png" alt="AgroSmart - Sistema de monitoreo agrícola con IoT" style="width:100%; border-radius:10px; margin-bottom:1rem;">
+          <p>Sistema de monitoreo agrícola con IoT que permite a los agricultores controlar y optimizar sus cultivos.</p>
           <h4>Tecnologías usadas</h4>
           <ul>
             <li>Angular</li>
@@ -1325,11 +1472,11 @@ function loadModalsContent() {
     <div class="modal-overlay" id="modal-project-12-overlay">
       <div class="modal">
         <div class="modal-header">
-          <h3>VRExperience</h3>
+          <h3>Learnly</h3>
         </div>
         <div class="modal-body">
-          <img src="https://images.unsplash.com/photo-1622979135225-d2ba269cf1ac?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="" style="width:100%; border-radius:10px; margin-bottom:1rem;">
-          <p>Experiencias inmersivas en realidad virtual para entrenamiento corporativo y educación.</p>
+          <img src="assets/images/Learnly.png" alt="Learnly - Plataforma educativa con gamificación" style="width:100%; border-radius:10px; margin-bottom:1rem;">
+          <p>Plataforma educativa con elementos de gamificación que transforma el aprendizaje en una experiencia interactiva y motivadora.</p>
           <h4>Tecnologías usadas</h4>
           <ul>
             <li>Unity</li>
@@ -1373,7 +1520,7 @@ function loadModalsContent() {
           <h3>Cómo elegir el stack tecnológico ideal</h3>
         </div>
         <div class="modal-body">
-          <img src="https://placehold.co/600x400/4361ee/ffffff?text=Elegir+Stack+Tecnologico" alt="" style="width:100%; border-radius:10px; margin-bottom:1rem;">
+          <img src="assets/images/stacktecnológico.png" alt="Cómo elegir el stack tecnológico ideal" style="width:100%; border-radius:10px; margin-bottom:1rem;">
           <p>La elección del stack tecnológico para tu proyecto es una decisión crítica que impactará todo el ciclo de desarrollo. Debes considerar factores como la escalabilidad futura, el talento disponible, la comunidad de soporte y la madurez de las tecnologías.</p>
           <h4>Consideraciones clave:</h4>
           <ul>
@@ -1418,7 +1565,7 @@ function loadModalsContent() {
           <h3>IA Generativa: Revolución en el Desarrollo de Software</h3>
         </div>
         <div class="modal-body">
-          <img src="https://placehold.co/600x400/4cc9f0/ffffff?text=IA+Generativa+Software" alt="" style="width:100%; border-radius:10px; margin-bottom:1rem;">
+          <img src="assets/images/inteligencia_artificial.png" alt="IA Generativa: Revolución en el Desarrollo de Software" style="width:100%; border-radius:10px; margin-bottom:1rem;">
           <p>La inteligencia artificial generativa está transformando el desarrollo de software, permitiendo a los programadores aumentar su productividad y creatividad. Herramientas como Copilot y otros asistentes basados en IA pueden generar código, sugerir soluciones y ayudar en el debugging.</p>
           <h4>Impacto en el desarrollo:</h4>
           <ul>
@@ -1506,7 +1653,7 @@ function loadModalsContent() {
           <h3>Ciberseguridad en la Era de la IA</h3>
         </div>
         <div class="modal-body">
-          <img src="https://placehold.co/600x400/8d5bff/ffffff?text=Ciberseguridad+IA" alt="" style="width:100%; border-radius:10px; margin-bottom:1rem;">
+          <img src="assets/images/Ciberseguridad.png" alt="Ciberseguridad en la Era de la IA" style="width:100%; border-radius:10px; margin-bottom:1rem;">
           <p>La inteligencia artificial está cambiando el panorama de la ciberseguridad, tanto para atacantes como para defensores. Los sistemas de seguridad basados en IA pueden detectar amenazas en tiempo real, pero también surgen nuevos vectores de ataque como el adversarial machine learning.</p>
           <h4>Desafíos emergentes:</h4>
           <ul>
@@ -1572,7 +1719,7 @@ function loadModalsContent() {
           <h3>Realidad Aumentada en Aplicaciones Comerciales</h3>
         </div>
         <div class="modal-body">
-          <img src="https://images.unsplash.com/photo-1522542550221-31fd19575a2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="" style="width:100%; border-radius:10px; margin-bottom:1rem;">
+          <img src="assets/images/RealidadAumentada.png" alt="Realidad Aumentada en Aplicaciones Comerciales" style="width:100%; border-radius:10px; margin-bottom:1rem;">
           <p>La realidad aumentada (AR) está madurando más allá de aplicaciones de entretenimiento, encontrando casos de uso valiosos en retail, educación, manufactura y atención médica. Las mejoras en hardware y APIs como ARKit y ARCore facilitan la creación de experiencias AR inmersivas.</p>
           <h4>Aplicaciones prácticas:</h4>
           <ul>
@@ -1594,7 +1741,7 @@ function loadModalsContent() {
           <h3>Arquitectura de Microservicios vs. Monolitos Modernos</h3>
         </div>
         <div class="modal-body">
-          <img src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="" style="width:100%; border-radius:10px; margin-bottom:1rem;">
+          <img src="assets/images/Arquitectura.png" alt="Arquitectura de Microservicios vs. Monolitos Modernos" style="width:100%; border-radius:10px; margin-bottom:1rem;">
           <p>El péndulo arquitectónico está encontrando un equilibrio entre microservicios puros y monolitos. Mientras los microservicios ofrecen escalabilidad y despliegue independiente, los "monolitos modulares" están ganando popularidad por su menor complejidad operativa y mejor rendimiento inicial.</p>
           <h4>Factores de decisión:</h4>
           <ul>
