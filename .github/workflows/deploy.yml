@@ -12,6 +12,11 @@ jobs:
       contents: read        # for checkout
       pages: write          # for deployment
       id-token: write       # for OpenID Connect tokens
+    
+    # Specify the environment
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
 
     steps:
       - name: Checkout repository
@@ -23,7 +28,8 @@ jobs:
       - name: Upload artifact for deployment
         uses: actions/upload-pages-artifact@v1
         with:
-          path: './'
+          path: '.'
 
       - name: Deploy to GitHub Pages
+        id: deployment
         uses: actions/deploy-pages@v1

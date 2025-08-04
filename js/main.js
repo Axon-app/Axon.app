@@ -1029,7 +1029,7 @@ function loadModalsContent() {
         </div>
         <div class="modal-body">
           <p>Completa el siguiente formulario y nos pondremos en contacto contigo a la brevedad posible.</p>
-          <form class="contact-form" id="main-contact-form" action="https://formspree.io/f/axonapp.info@gmail.com" method="POST">
+          <form class="contact-form" id="main-contact-form" action="https://formspree.io/f/xrgnoqej" method="POST">
             <div class="form-group">
               <label for="nombre"><i class="fas fa-user"></i> Nombre:</label>
               <input type="text" id="nombre" name="nombre" placeholder="Tu nombre" required data-validation-type="text">
@@ -1109,7 +1109,7 @@ function loadModalsContent() {
               <i class="fas fa-check-circle validation-icon"></i>
             </div>
             <input type="hidden" name="_subject" value="Nuevo contacto desde Axon.app">
-            <input type="hidden" name="_next" value="https://axon.app/gracias.html">
+            <input type="hidden" name="_next" value="https://axon-app.github.io/Axon.app/gracias.html">
             <input type="text" name="_gotcha" style="display:none">
 
             <button type="submit" class="btn">Enviar Mensaje</button>
