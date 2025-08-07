@@ -2141,22 +2141,47 @@ section:nth-child(even) {
   background: linear-gradient(135deg, rgba(67, 97, 238, 0.3) 0%, rgba(76, 201, 240, 0.3) 100%);
   border-radius: 50%;
   margin-right: 12px;
-  box-shadow: 0 0 10px rgba(67, 97, 238, 0.5);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 0 10px rgba(67, 97, 238, 0.5), 0 0 20px rgba(67, 97, 238, 0.3);
+  border: 1px solid rgba(76, 201, 240, 0.5);
   transition: all 0.3s ease;
   transform-origin: center;
-  animation: pulse 4s infinite ease-in-out;
+  animation: neonSpinGlow 8s infinite linear;
+  filter: brightness(1.2);
+  z-index: 5;
+  position: relative;
+}
+
+/* Asegurarnos de que la animación funcione en todos los dispositivos */
+footer .logo-symbol {
+  animation: neonSpinGlow 8s infinite linear !important;
 }
 
 .logo-symbol i {
-  color: rgba(255, 255, 255, 0.9);
+  color: rgba(255, 255, 255, 1);
   font-size: 12px;
+  text-shadow: 0 0 5px rgba(255, 255, 255, 0.8);
+  filter: brightness(1.2);
+  animation: iconPulse 3s infinite alternate;
+}
+
+@keyframes iconPulse {
+  0% {
+    text-shadow: 0 0 3px rgba(255, 255, 255, 0.7);
+    opacity: 0.8;
+  }
+  100% {
+    text-shadow: 0 0 8px #ffffff, 0 0 12px #4cc9f0;
+    opacity: 1;
+  }
 }
 
 .footer-bottom p:hover .logo-symbol {
-  transform: rotate(360deg);
+  filter: brightness(1.5);
   background: linear-gradient(135deg, rgba(67, 97, 238, 0.6) 0%, rgba(76, 201, 240, 0.6) 100%);
-  box-shadow: 0 0 15px rgba(67, 97, 238, 0.8);
+  box-shadow: 0 0 15px rgba(67, 97, 238, 0.8), 0 0 30px rgba(67, 97, 238, 0.6), 0 0 45px rgba(67, 97, 238, 0.4);
+  border-color: rgba(76, 201, 240, 1);
+  /* Mantenemos la animación en hover */
+  animation: neonSpinGlow 5s infinite linear; /* Más rápido en hover */
 }
 
 .footer-bottom p::before,
@@ -2190,6 +2215,39 @@ section:nth-child(even) {
   }
   50% {
     box-shadow: 0 0 20px rgba(67, 97, 238, 0.8);
+  }
+}
+
+@keyframes neonSpinGlow {
+  0% {
+    transform: rotate(0deg);
+    box-shadow: 0 0 5px #4361ee, 0 0 10px #4361ee;
+    background: linear-gradient(135deg, rgba(67, 97, 238, 0.2) 0%, rgba(76, 201, 240, 0.2) 100%);
+    border-color: rgba(67, 97, 238, 0.3);
+  }
+  25% {
+    transform: rotate(90deg);
+    box-shadow: 0 0 10px #4361ee, 0 0 20px #4361ee, 0 0 25px #4361ee;
+    background: linear-gradient(135deg, rgba(67, 97, 238, 0.4) 0%, rgba(76, 201, 240, 0.6) 100%);
+    border-color: rgba(76, 201, 240, 0.6);
+  }
+  50% {
+    transform: rotate(180deg);
+    box-shadow: 0 0 15px #4361ee, 0 0 30px #4361ee, 0 0 40px #4361ee;
+    background: linear-gradient(135deg, rgba(67, 97, 238, 0.6) 0%, rgba(76, 201, 240, 0.8) 100%);
+    border-color: rgba(67, 97, 238, 0.9);
+  }
+  75% {
+    transform: rotate(270deg);
+    box-shadow: 0 0 10px #4361ee, 0 0 20px #4361ee, 0 0 25px #4361ee;
+    background: linear-gradient(135deg, rgba(67, 97, 238, 0.4) 0%, rgba(76, 201, 240, 0.6) 100%);
+    border-color: rgba(76, 201, 240, 0.6);
+  }
+  100% {
+    transform: rotate(360deg);
+    box-shadow: 0 0 5px #4361ee, 0 0 10px #4361ee;
+    background: linear-gradient(135deg, rgba(67, 97, 238, 0.2) 0%, rgba(76, 201, 240, 0.2) 100%);
+    border-color: rgba(67, 97, 238, 0.3);
   }
 }
 

@@ -268,16 +268,35 @@ document.addEventListener('DOMContentLoaded', function() {
         // Solo actualizamos posición si el contenedor está activo
         if (!socialMediaContainer.classList.contains('active')) return;
         
-        const btnRect = btnSocialMedia.getBoundingClientRect();
-        const btnCenterY = btnRect.top + btnRect.height / 2;
+        console.log('Aplicando posicionamiento de la barra social');
         
-        // Obtenemos la altura real del contenedor
-        const containerHeight = socialMediaContainer.offsetHeight || 60;
+        // Buscamos el primer botón flotante (que debe ser el botón azul de redes sociales)
+        const firstFloatingBtn = document.querySelector('.floating-btn');
         
-        // Posicionamos el contenedor
-        socialMediaContainer.style.position = 'fixed';
-        socialMediaContainer.style.top = (btnCenterY - containerHeight / 2) + 'px';
-        socialMediaContainer.style.right = '100px'; // Posición fija desde la derecha
+        if (firstFloatingBtn) {
+            const btnRect = firstFloatingBtn.getBoundingClientRect();
+            
+            // Posicionamos el contenedor ARRIBA del primer botón flotante
+            const containerHeight = socialMediaContainer.offsetHeight || 50; // Altura estimada
+            const topPosition = btnRect.top - containerHeight - 150; // Reducimos separación a 150px para bajarlo un poco
+            
+            socialMediaContainer.style.position = 'fixed';
+            socialMediaContainer.style.top = topPosition + 'px'; // Arriba del primer botón
+            socialMediaContainer.style.right = '90px'; // Distancia desde la derecha
+            
+            console.log('Posición aplicada arriba del primer botón:', topPosition, 'Altura contenedor:', containerHeight);
+        } else {
+            // Respaldo: usar la posición del botón que abre el menú
+            const btnRect = btnSocialMedia.getBoundingClientRect();
+            const containerHeight = socialMediaContainer.offsetHeight || 50;
+            const topPosition = btnRect.top - containerHeight - 200; // Reducimos separación a 150px
+            
+            socialMediaContainer.style.position = 'fixed';
+            socialMediaContainer.style.top = topPosition + 'px';
+            socialMediaContainer.style.right = '90px';
+            
+            console.log('Posición de respaldo aplicada arriba:', topPosition);
+        }
     }
     
     // Manejar clic en el botón de redes sociales
@@ -298,7 +317,33 @@ document.addEventListener('DOMContentLoaded', function() {
             btnSocialMedia.classList.add('active');
             console.log('Clases agregadas. Activando menú de redes sociales');
             
-            // Actualizar posición después de activar
+            // Posicionar directamente ARRIBA del primer botón flotante
+            const firstFloatingBtn = document.querySelector('.floating-btn');
+            
+            if (firstFloatingBtn) {
+                const btnRect = firstFloatingBtn.getBoundingClientRect();
+                const containerHeight = socialMediaContainer.offsetHeight || 50; // Altura estimada
+                const topPosition = btnRect.top - containerHeight - 200; // Reducimos separación a 150px para bajarlo un poco
+                
+                socialMediaContainer.style.position = 'fixed';
+                socialMediaContainer.style.top = topPosition + 'px'; // Arriba del primer botón
+                socialMediaContainer.style.right = '90px'; // Distancia desde la derecha
+                
+                console.log('Posicionamiento aplicado arriba del primer botón:', topPosition);
+            } else {
+                // Respaldo usando el botón de redes sociales
+                const btnRect = btnSocialMedia.getBoundingClientRect();
+                const containerHeight = socialMediaContainer.offsetHeight || 50;
+                const topPosition = btnRect.top - containerHeight - 200; // Reducimos separación a 150px
+                
+                socialMediaContainer.style.position = 'fixed';
+                socialMediaContainer.style.top = topPosition + 'px';
+                socialMediaContainer.style.right = '90px';
+                
+                console.log('Posicionamiento de respaldo aplicado arriba:', topPosition);
+            }
+            
+            // Actualizamos la posición después de un breve retraso para asegurar que se calculen bien las dimensiones
             setTimeout(updateSocialContainerPosition, 50);
         } else {
             // Desactivar el menú
@@ -707,14 +752,11 @@ window.addEventListener('load', function() {
   const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
   const isLowPower = isMobile && (navigator.deviceMemory < 4 || navigator.hardwareConcurrency < 4);
   
-  if (isLowPower || isMobile) { // Extendemos la condición a todos los móviles para mejorar el rendimiento
-    // En dispositivos de baja potencia, usamos un fondo estático en lugar de la animación 3D
-    const canvas = document.getElementById('bg-canvas');
-    if (canvas) {
-      canvas.style.background = 'radial-gradient(circle at 50% 50%, rgba(67, 97, 238, 0.15) 0%, rgba(13, 19, 33, 0.95) 70%)';
-    }
-    
-    // Aseguramos que todas las secciones fade-in sean visibles en dispositivos móviles
+  // Iniciamos la animación 3D independientemente del dispositivo
+  initCosmicRiver();
+  
+  // Aseguramos que todas las secciones fade-in sean visibles en dispositivos móviles
+  if (isMobile) {
     document.querySelectorAll('section.fade-in').forEach(section => {
       section.classList.add('visible');
     });
@@ -726,9 +768,6 @@ window.addEventListener('load', function() {
       blogSection.style.opacity = '1';
       blogSection.style.transform = 'translateY(0)';
     }
-  } else {
-    // Solo iniciar la animación en dispositivos con suficiente potencia
-    initCosmicRiver();
   }
 });
 

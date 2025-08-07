@@ -1,0 +1,35 @@
+{
+  "name": "axon-app",
+  "version": "1.0.0",
+  "description": "Axon.app - Soluciones digitales innovadoras para aplicaciones móviles, desarrollo web y software a medida",
+  "main": "index.html",
+  "scripts": {
+    "dev": "live-server --port=3000 --entry-file=index.html --open=/ --watch=. --ignore=node_modules,package-lock.json,.git",
+    "start": "live-server --port=3000 --entry-file=index.html --open=/ --watch=. --ignore=node_modules,package-lock.json,.git",
+    "build": "echo 'Static site - no build needed'",
+    "serve": "live-server --port=3000 --entry-file=index.html --open=/ --watch=. --ignore=node_modules,package-lock.json,.git"
+  },
+  "keywords": [
+    "development",
+    "web",
+    "mobile",
+    "software",
+    "applications",
+    "AI",
+    "static-site"
+  ],
+  "author": "Axon.app",
+  "license": "MIT",
+  "devDependencies": {
+    "live-server": "^1.2.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Axon-app/Axon.app.git"
+  },
+  "homepage": "https://axon-app.github.io/Axon.app/",
+  "engines": {
+    "node": ">=14.0.0",
+    "npm": ">=6.0.0"
+  }
+}

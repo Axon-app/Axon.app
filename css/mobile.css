@@ -76,7 +76,7 @@
   .mv-item h3 {
     font-size: 1.2rem;
   }educir el espacio entre portafolio y blog */
-  }
+  
   
   #blog {
     margin-top: 2rem; /* Reducir el espacio entre portafolio y blog */
@@ -605,6 +605,7 @@
     width: 24px;
     height: 24px;
     margin-right: 8px;
+    animation: neonSpinGlow 8s infinite linear; /* Mantenemos la animación en móvil */
   }
   
   .logo-symbol i {
