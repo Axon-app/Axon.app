@@ -123,7 +123,8 @@
   
   /* ===== About Values ===== */
   .about-values-grid { 
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); 
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
   }
   
   /* ===== Footer ===== */
@@ -512,6 +513,16 @@
   
   .tech p {
     margin-bottom: 1.5rem; /* Menos espacio debajo del párrafo */
+  }
+  
+  /* ===== About Values ===== */
+  .about-values-grid {
+    grid-template-columns: 1fr; /* Una columna en móviles pequeños */
+    gap: 1rem;
+  }
+  
+  .value-item {
+    padding: 1.2rem;
   }
   
   /* ===== Contact Section ===== */
