@@ -1,0 +1,21 @@
+{
+  "name": "Axon.app - SOFTWARE DEVELOPMENT",
+  "short_name": "Axon.app",
+  "description": "Soluciones digitales innovadoras para aplicaciones móviles, desarrollo web y software a medida con las últimas tecnologías",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#1a1a1a",
+  "theme_color": "#4361ee",
+  "icons": [
+    {
+      "src": "assets/images/logo.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "assets/images/logo.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
