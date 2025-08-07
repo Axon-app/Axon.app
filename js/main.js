@@ -241,8 +241,11 @@ function showCustomMessage(message, isSuccess = true) {
   setTimeout(() => {
     messageBox.style.opacity = '0';
     messageBox.style.transform = 'translate(-50%, -50%) scale(0.8)';
-    messageBox.addEventListener('transitionend', () => {
-      document.body.removeChild(messageBox);
+    messageBox.addEventListener('transitionend', function handler() {
+      if (messageBox.parentNode === document.body) {
+        document.body.removeChild(messageBox);
+      }
+      messageBox.removeEventListener('transitionend', handler);
     });
   }, 3500);
 }

@@ -92,6 +92,9 @@
   <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/UnrealBloomPass.js" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/shaders/LuminosityHighPassShader.js" defer></script>
 
+  <!-- Preload critical images - solo las que se usan inmediatamente -->
+  <link rel="preload" href="assets/images/logo.png" as="image">
+
   <!-- CSS Base - Estilos comunes para todos los dispositivos -->
   <link rel="stylesheet" href="css/config.css">
   <link rel="stylesheet" href="css/styles.css">
@@ -988,15 +991,18 @@
             <div class="contact-details">
               <div class="contact-item">
                 <div class="contact-icon"><i class="fas fa-envelope"></i></div>
-                <div class="contact-text"><strong>Email:</strong> axonapp.info@gmail.com</div>
+                <div class="contact-label">Email</div>
+                <div class="contact-text">axonapp.info@gmail.com</div>
               </div>
               <div class="contact-item">
                 <div class="contact-icon"><i class="fas fa-phone-alt"></i></div>
-                <div class="contact-text"><strong>Teléfono:</strong> +57 (323) 393-2071</div>
+                <div class="contact-label">Teléfono</div>
+                <div class="contact-text">+57 (323) 393-2071</div>
               </div>
               <div class="contact-item">
                 <div class="contact-icon"><i class="fas fa-map-marker-alt"></i></div>
-                <div class="contact-text"><strong>Oficina:</strong> Colombia, Bogotá D.C</div>
+                <div class="contact-label">Oficina</div>
+                <div class="contact-text">Colombia, Bogotá D.C</div>
               </div>
             </div>
             <button class="btn-contact-modal" onclick="openModal('modal-contact-form-overlay')">

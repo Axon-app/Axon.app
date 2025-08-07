@@ -1743,33 +1743,41 @@ section:nth-child(even) {
 /* Nuevos estilos para alinear los elementos de contacto */
 .contact-item {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 1rem;
+  gap: 0.5rem;
   width: 100%;
   max-width: 350px;
+  padding: 1rem;
 }
 
 .contact-icon {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 40px;
+  width: 50px;
+  height: 50px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 50%;
+  margin-bottom: 0.5rem;
 }
 
 .contact-icon i {
   color: var(--primary-light);
-  font-size: 1.3rem;
+  font-size: 1.5rem;
+}
+
+.contact-label {
+  color: var(--primary-light);
+  font-weight: 600;
+  font-size: 1.1rem;
+  margin-bottom: 0.3rem;
 }
 
 .contact-text {
-  display: flex;
-  align-items: center;
-  text-align: left;
-}
-
-.contact-text strong {
-  color: white;
-  margin-right: 0.5rem;
+  color: rgba(255, 255, 255, 0.9);
+  text-align: center;
+  font-size: 1rem;
 }
 
 /* New button for opening contact form modal */

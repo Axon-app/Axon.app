@@ -57,24 +57,46 @@ document.addEventListener('DOMContentLoaded', function() {
   // Optimizar imágenes existentes
   optimizeLoadedImages();
 
-  // Precargar imágenes críticas
+  // Precargar imágenes críticas solo si es necesario
   function preloadCriticalImages() {
-    const criticalImages = [
-      'assets/images/logo.png',
-      // Agregar aquí otras imágenes críticas que necesiten carga inmediata
-    ];
-
-    criticalImages.forEach(src => {
-      const link = document.createElement('link');
-      link.rel = 'preload';
-      link.as = 'image';
-      link.href = src;
-      document.head.appendChild(link);
-    });
+    // Verificar si el logo ya está siendo usado en la página
+    const logoImages = document.querySelectorAll('img[src*="logo.png"]');
+    
+    if (logoImages.length > 0) {
+      // Si hay imágenes de logo en la página, no necesitamos precargar
+      return;
+    }
+    
+    // Solo precargar si no está ya precargado en el HTML
+    const existingPreloads = document.querySelectorAll('link[rel="preload"][href*="logo.png"]');
+    if (existingPreloads.length > 0) {
+      return;
+    }
+    
+    // Crear precarga solo si es necesario
+    const link = document.createElement('link');
+    link.rel = 'preload';
+    link.as = 'image';
+    link.href = 'assets/images/logo.png';
+    document.head.appendChild(link);
   }
 
-  // Ejecutar precarga de imágenes críticas
-  preloadCriticalImages();
+  // Ejecutar precarga de imágenes críticas solo si es necesario
+  requestAnimationFrame(() => {
+    preloadCriticalImages();
+    
+    // Forzar el uso inmediato del logo precargado
+    const logoImages = document.querySelectorAll('img[src*="logo.png"]');
+    logoImages.forEach(img => {
+      if (!img.complete) {
+        img.addEventListener('load', function() {
+          this.classList.add('loaded');
+        });
+      } else {
+        img.classList.add('loaded');
+      }
+    });
+  });
 
   // Función para manejar cambios de tamaño de ventana
   function handleResize() {
@@ -117,7 +139,7 @@ document.addEventListener('DOMContentLoaded', function() {
       transition: opacity 0.3s ease-in-out;
     }
     
-    img.loaded {
+    img.loaded, img[src*="logo.png"] {
       opacity: 1;
     }
     
@@ -129,4 +151,11 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   `;
   document.head.appendChild(style);
+  
+  // Asegurar que todas las imágenes de logo estén visibles inmediatamente
+  const logoImages = document.querySelectorAll('img[src*="logo.png"], .logo-img, .hero-logo-img');
+  logoImages.forEach(img => {
+    img.classList.add('loaded');
+    img.style.opacity = '1';
+  });
 });
